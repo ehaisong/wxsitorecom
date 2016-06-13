@@ -1,0 +1,51 @@
+# 以下目录是配置、缓存目录、上传文件目录等，禁止提交到GIT
+# 部署时注意创建目录，以防程序没有自动创建这些目录而报错
+/log
+/uploads
+/Conf/db.php
+/Conf/info.php
+/Conf/Home/config.php
+/Conf/logs
+/cms/cache
+/cms/upload
+/cms/smarty/templates_c
+/vifnnData/install.lock
+
+# 以下目录或文件是静态资源，文件较大，禁止提交到GIT
+# 部署的时候请使用FTP手动上传的方式上传到服务器
+/Conf/etc/dict.utf8.xdb
+/vifnn/Lib/ORG/phpexcel
+/cms/editor
+/cms/smarty
+/cms/smarty/templates/tpls
+/cms/templates
+/cms/manage
+/tpl/Home
+/tpl/static
+/tpl/User/default/common
+
+# phpstorm project files
+.idea
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer itself is not needed
+composer.phar
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+
+# local phpunit config
+/phpunit.xml
