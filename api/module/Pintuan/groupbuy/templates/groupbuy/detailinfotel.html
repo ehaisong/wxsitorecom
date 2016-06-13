@@ -1,0 +1,158 @@
+<div ng-show="groupbuytypenostart" class="shop-infotype shop-infotype-no"><span>待开团</span></div>
+<div ng-show="groupbuytypeok" class="shop-infotype shop-infotype-ok"><span>拼团中</span></div>
+<div ng-show="groupbuytypeno" class="shop-infotype shop-infotype-no"><span>拼团结束</span></div>
+<div class="detailinfo-standard" ng-show="isstandarddata">
+    <p>内含规格</p>
+    <ul>
+        <li ng-repeat="x in shopcon.property_list">
+            {{x.name}}：
+            <span ng-repeat="j in x.values">{{j.value}}</span>
+        </li>
+    </ul>
+</div>
+<div class="press">
+    <div class="press-tit">
+        <div class="press-tit-left fl">本团进度 <span class="detail-press-type-top" style="background: #45A8FF" ng-hide="pressType">人缘</span><span style="background: #FE6262" class="detail-press-type-top" ng-show="pressType">最优</span></div>
+        <div class="press-tit-right fr">
+            <span class="nowcountnum" ng-if="detailnowcount == -1">尚未达标</span>
+            <span class="nowcountnum" ng-if="detailnowcount > -1">{{detailnowcount | numFilter}}级达标</span>
+            ( {{shopcon.tuan_config.count}} / {{shopcon.tuan_config.number}} )</div>
+        <div class="clear"></div>
+    </div>
+    <div class="press-con">
+        <div class="press-press">
+            <div class="press-press-con"></div>
+        </div>
+        <ul class="press-con-ul">
+            <li class="fl press-iconUl" style="width: {{liwidth}}%;" ng-repeat="x in shopinfocon.tuan_config_list">
+                <div class="press-icon"></div>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="detail-day">
+    <span class="fl">本团有效期</span>
+    <span class="fl" style="text-align: left" ng-show="shoptext.tuan.start_time != null">{{shoptext.tuan.start_time * 1000 | date:'yyyy-MM-dd' }}&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;{{shoptext.tuan.end_time * 1000 | date:'yyyy-MM-dd' }}</span>
+    <div class="clear"></div>
+</div>
+<div class="yctper yctpertip">
+    <div class="yctper-left">当前规则</div>
+    <ul class="yctper-ul" ng-if="nowgroupbuyid > 0">
+        <li ng-repeat="x in detaildata.tuan_config_list" ng-if="detaildata.tuan_config_list[$index].item_id == nowgroupbuyid">
+            <span class="color" style="margin-right: 3px;">{{ $index | numFilter }}级达标：</span>{{ x.number }}人
+            <span style="color: #f15353;margin: 0;margin-left: 7px;">团价：</span>
+            <span style="margin-left: 3px;">{{ x.price | currency : "￥"}}</span></li>
+    </ul>
+    <ul class="yctper-ul" ng-if="nowgroupbuyid < 0">
+        <li ng-repeat="x in detaildata.tuan_config_list">
+            <span class="color" style="margin-right: 3px;">{{ $index | numFilter }}级达标：</span>{{ x.number }}人
+            <span style="color: #f15353;margin: 0;margin-left: 7px;">团价：</span>
+            <span style="margin-left: 3px;">{{ x.price | currency : "￥"}}</span></li>
+    </ul>
+</div>
+<div class="state">
+    <div class="state-tit">参团模式</div>
+    <div class="state-con">
+        <div class="fl state-box state-box-first">
+            <div class="state-con-tit"><span style="background: #ffae00;">人缘开团</span></div>
+            <div class="state-box-con">
+                <div class="fl state-con-fl">参团价：</div>
+                <div class="fl state-con-fr">本团最高参团价  <span>{{ peoplePrice | currency : "￥"}}</span></div>
+                <div class="clear"></div>
+            </div>
+            <div class="state-box-con">
+                <div class="fl state-con-fl">成&nbsp;&nbsp;&nbsp;功：</div>
+                <div class="fl state-con-fr">本团任意级别达标，并退出超出部分的团价</div>
+                <div class="clear"></div>
+            </div>
+            <div class="state-box-con">
+                <div class="fl state-con-fl">失&nbsp;&nbsp;&nbsp;败：</div>
+                <div class="fl state-con-fr">开团失败，退回全部款项</div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="fl state-box state-box-last">
+            <div class="state-con-tit"><span>最优开团</span></div>
+            <div class="state-box-con">
+                <div class="fl state-con-fl">参团价：</div>
+                <div class="fl state-con-fr">当前所选级别团价  <span>{{ detailSactorPrice | currency : "￥"}}</span></div>
+                <div class="clear"></div>
+            </div>
+            <div class="state-box-con">
+                <div class="fl state-con-fl">成&nbsp;&nbsp;&nbsp;功：</div>
+                <div class="fl state-con-fr">所选及更高级别达标，并退回超出部分团价</div>
+                <div class="clear"></div>
+            </div>
+            <div class="state-box-con">
+                <div class="fl state-con-fl">失&nbsp;&nbsp;&nbsp;败：</div>
+                <div class="fl state-con-fr">开团失败或低于所选级别达标，退回全部款项</div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<tab></tab>
+<div class="detailinfotelfooter">
+    <div class="detailinfotelfooter-bj"></div>
+    <div class="detailinfotelfooter-con">
+        <div class="fl isshare" ng-click="share()">分享</div>
+        <div class="fl ycttype-other" ng-show="isintuan" ng-click="detailclick()">参团</div>
+        <div class="fl ycttype-other" ng-click="openClick()">开团</div>
+        <div class="fl ycttype-other" ng-click="gomybuy()">我的拼团</div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<div class="clearing" ng-show="isnext">
+    <div class="clearing-bj"></div>
+    <div class="clearing-con">
+        <div class="clearing-shopinfo">
+            <img class="fl" ng-src="{{ shopcon.product.image }}" alt="">
+            <div class="right fl">
+                <div class="clearing-tit" ng-bind="shopinfocon.product.name"></div>
+                <div class="clearing-price" ng-show="isbuypriceshow" ng-bind="price * confirmNumber | currency : '￥'"></div>
+                <div class="clearing-price" ng-hide="isbuypriceshow">{{shopcon.product.min_price | currency : '￥'}} - {{shopcon.product.max_price | currency : '￥'}}</div>
+            </div>
+            <div class="clearing-close" ng-click="isnext = !isnext"><img src="images/closed.png" alt=""></div>
+            <div class="clear"></div>
+        </div>
+        <div class="clearing-standard" ng-repeat="x in shopcon.property_list">
+            <p class="clearing-standard-tit" data-titid="{{x.pid}}" ng-bind="x.name"></p>
+            <p class="clearing-standard-con"><span class="fl isclick" data-isclick="0" ng-repeat="j in x.values" data-shopid="{{j.vid}}">{{j.value}}<input type="hidden" value="{{x.pid+':'+j.vid}}"></span><div class="clear"></div></p>
+        </div>
+        <div class="clearing-bothnum">
+            <div class="fl">数量</div>
+            <div class="fr clearing-js">
+                <span class="fl clearing-num-click-left" ng-click="removesNumber()">-</span>
+                <input type="text" class="fl" ng-model="confirmNumber" ng-blur="numblur()">
+                <span class="fl clearing-num-click-right" ng-click="addNumber()">+</span>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <ul class="custom-con">
+            <li ng-repeat="x in shopcon.custom_field_list" class="custom-con-li">
+                <div class="fl custom-con-tit">{{x.field_name}}</div>
+                <div class="fl custom-con-inp" datatype="{{x.field_name}}">
+                    <input type="text" class="inputval" ng-show="{{x.field_type == 'text' && x.multi_rows != '1'}}" data-detailtype="text" datarequired="{{x.required}}">
+                    <input type="text" class="inputval" ng-show="{{x.field_type == 'number' && x.multi_rows != '1'}}" data-detailtype="number" datarequired="{{x.required}}">
+                    <input type="text" class="inputval" ng-show="{{x.field_type == 'email'}}" data-detailtype="email" datarequired="{{x.required}}">
+                    <input type="text" class="inputval" ng-show="{{x.field_type == 'id_no'}}" data-detailtype="idno" datarequired="{{x.required}}">
+                    <input type="text" class="inputval seldatadetail" ng-show="{{x.field_type == 'date'}}" data-detailtype="date" mobiscroll-date datarequired="{{x.required}}" readonly />
+                    <input type="text" class="inputval" ng-show="{{x.field_type == 'time'}}" data-detailtype="time" mobiscroll-time datarequired="{{x.required}}" readonly />
+                    <textarea class="inputval" ng-show="{{x.field_type == 'text' && x.multi_rows == '1'}}" data-detailtype="text" datarequired="{{x.required}}"></textarea>
+                    <textarea class="inputval" ng-show="{{x.field_type == 'number' && x.multi_rows == '1'}}" data-detailtype="number" datarequired="{{x.required}}"></textarea>
+                    <textarea class="inputval" ng-show="{{x.field_type == 'id_no' && x.multi_rows == '1'}}" data-detailtype="id_no" datarequired="{{x.required}}"></textarea>
+                    <textarea class="inputval" ng-show="{{x.field_type == 'date' && x.multi_rows == '1'}}" mobiscroll-date datarequired="{{x.required}}"></textarea>
+                    <textarea class="inputval" ng-show="{{x.field_type == 'time' && x.multi_rows == '1'}}" mobiscroll-time data-detailtype="time" datarequired="{{x.required}}"></textarea>
+                </div>
+                <div id="datePlugin"></div>
+                <div class="time"></div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+        <div class="next" ng-click="next()">下一步</div>
+    </div>
+</div>

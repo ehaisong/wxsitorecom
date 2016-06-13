@@ -1,0 +1,91 @@
+<div ng-show="groupbuytypenostart" class="shop-infotype shop-infotype-no"><span>未开始</span></div>
+<div ng-show="groupbuytypeok" class="shop-infotype shop-infotype-ok"><span>拼团中</span></div>
+<div ng-show="groupbuytypeno" class="shop-infotype shop-infotype-no"><span>拼团结束</span></div>
+<div class="shop-price-all">
+    <div class="shop-price-left fl">
+        <h2 ng-bind="detaildata.product.name"></h2>
+        <div>市场价：{{ detaildata.product.price | currency : '￥'}}</div>
+    </div>
+    <div class="shop-price-right fr">已售：{{detaildata.product.sales}}件</div>
+    <div class="clear"></div>
+</div>
+
+<div class="standard">
+    <ul>
+        <li class="fl" ng-repeat="standdata in detaildata.tuan_config_list" ng-click="detailSrc($index, standdata.item_id)" >
+            <div class="stand-sprice">{{standdata.price | currency : "￥"}}</div>
+            <div class="stand-name">{{$index | numFilter}}级达标（{{standdata.number}}人购买）</div>
+        </li>
+    </ul>
+</div>
+<div class="clear"></div>
+<div class="detail-day">
+    <span class="fl">本团有效期</span>
+    <span class="fl"><span ng-if="detaildata.tuan.start_time != null">{{detaildata.tuan.start_time * 1000 | date:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;<span ng-if="detaildata.tuan.end_time != null">{{detaildata.tuan.end_time * 1000 | date:'yyyy-MM-dd'}}</span></span>
+    <div class="clear"></div>
+</div>
+<tab></tab>
+
+<div class="detail-play">
+    <div class="detail-play-tit" style="margin-top: 8px;">
+        <div class="detail-play-tit-left fl">拼团玩法</div>
+        <a ng-href="#/flow/{{backid}}/{{backtoken}}/{{backtit}}">
+            <div class="detail-play-tit-right fr">
+                查看详情
+                <span class="icon-angle-right"></span>
+            </div>
+        </a>
+        <div class="clear"></div>
+    </div>
+    <ul>
+        <li class="fl detail-play-active">
+            <span class="fl">1</span>
+            <span class="fl">选择心仪商品</span>
+        </li>
+        <li class="fl">
+            <span class="fl">2</span>
+            <span class="fl">支付开团或参团</span>
+        </li>
+        <li class="fl">
+            <span class="fl">3</span>
+            <span class="fl">邀请好友参团支付</span>
+        </li>
+        <li class="fl">
+            <span class="fl">4</span>
+            <span class="fl">达到人数团购成功</span>
+        </li>
+    </ul>
+    <div class="clear"></div>
+</div>
+
+<div class="infodialog" ng-show="isdialogShow">
+    <div class="infodialog-bj" ng-click="isdialogShow=false"></div>
+    <div class="infodialog-con">
+        <p class="infodialog-xztype">选择开团类型</p>
+        <div class="infodialog-type" ng-click="goDetail(1)">
+            <div class="fl infodialog-type-left">
+                <p class="infodialog-type-tit infodialog-type-tit-ry"><span class="infodialog-type-tit-rya fl">人缘开团</span><span class="infodialog-type-tit-ryb fl"></span><div class="clear"></div></p>
+                <p class="infodialog-type-con">参团价：本团最高参团价 <span>{{peoplePrice | currency : '￥'}}</span> </p>
+                <p class="infodialog-type-con">成&nbsp;&nbsp;&nbsp;功：本团任意级别达标，并退出超回部分的团价</p>
+                <p class="infodialog-type-con">失&nbsp;&nbsp;&nbsp;败：开团失败，退回全部款项</p>
+            </div>
+            <div class="fr infodialog-type-right"><span class="infodialog-icon icon-angle-right"></span></div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="infodialog-type" ng-click="goDetail(2)">
+            <div class="fl infodialog-type-left">
+                <p class="infodialog-type-tit"><span class="infodialog-type-tit-zya fl">最优开团</span><span class="infodialog-type-tit-zyb fl"></span><div class="clear"></div></p>
+                <p class="infodialog-type-con">参团价：当前所选级别团价 <span>{{detailSactorPrice | currency : '￥'}}</span></p>
+                <p class="infodialog-type-con">成&nbsp;&nbsp;&nbsp;功：所选及更高级别达标，并退回超出部分团价</p>
+                <p class="infodialog-type-con">失&nbsp;&nbsp;&nbsp;败：开团失败或低于所选级别达标，退回全部款项</p>
+            </div>
+            <div class="fr infodialog-type-right"><span class="infodialog-icon icon-angle-right"></span></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<dialog></dialog>
+<div class="fixfloor" ng-click="gomybuy()">
+    <img src="images/mybuyclick.png" alt="">
+</div>

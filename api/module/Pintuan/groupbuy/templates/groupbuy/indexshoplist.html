@@ -1,0 +1,28 @@
+<nav class="index-nav" ng-hide="indexhide">
+    <ul class="index-nav-top">
+        <li class="indexnav-active indexlistClick" ng-click="mainClick('全部')">全部</li>
+        <li ng-repeat="x in mainnav" class="indexlistClick" ng-click="mainClick($index, x.group_id)">{{x.group_name}}</li>
+        <li class="isshowicon" ng-show="islen" ng-click="down()"><span class="iconup icon-caret-down"></span></li>
+    </ul>
+    <ul class="index-nav-more" ng-show="isshow"><li class="indexlistClick" ng-repeat="j in sonnav" ng-click="sonClick($index, j.group_id)" >{{ j.group_name }}</li></ul>
+</nav>
+
+<ul class="index-shop" ng-show="isshoplist">
+    <li ng-repeat="shop in shoplistdata" ng-click="isnextpage(shop.tuan_id)" repeat-finish>
+        <div class="index-shop-img">
+            <img src="images/a.png" datasrc="{{shop.image}}" alt=""/>
+            <div class="index-shop-purchase">
+                <p ng-bind="shop.config_2.discount+'折'"></p>
+                <p ng-bind="shop.config_2.number+'人团'"></p>
+            </div>
+        </div>
+        <shopinfo></shopinfo>
+    </li>
+</ul>
+<div class="shoplistnone" ng-hide="isshoplist">
+    <img src="images/none.png" alt=""><br>
+    暂无商品
+    <p>您可以过会儿再来看看</p>
+</div>
+
+<div class="indexlistmore">正在加载中...</div>

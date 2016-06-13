@@ -1,0 +1,36 @@
+<div class="detail-nav">
+    <span class="detail-nav-active detail-navspan detailnavclick fl" ng-click="shopInfoShow = true; shopstateShow = false; istabchilshowa = false">{{tabtitObj.firstName}}</span>
+    <span class="fl detailnavclick detail-navspan" id="userlist" ng-hide="istabchilshow" ng-click="showtab()">{{tabtitObj.lastName}}</span>
+    <span class="fl detailnavclick detail-navspan" ng-show="istabchilshow" ng-click="showtuaninfo()">拼团说明</span>
+    <div class="clear"></div>
+    <div ng-show="shopInfoShow" class="nav-shopinfo" ng-bind-html="detaildata.product.info"></div>
+    <div ng-if="tabisshowdetail"><div class="nav-shopinfo" ng-show="shopstateShow" ng-bind-html="detaildata.tuan.description"></div></div>
+    <div ng-if="tabisshowdetailinfo"  ng-hide="istabchilshowa">
+        <div class="nav-shopinfoa" ng-show="shopstateShow">
+        <ul ng-if="usericona">
+            <li class="filtime filtimefirst">
+                <div class="fl fl-ex">团员</div>
+                <div class="fl fl-ex">参团模式</div>
+                <div class="fl fl-ex">参团时间</div>
+                <div class="clear"></div>
+            </li>
+            <li class="filtime" ng-repeat="x in detailorderinfo.order_list track by $index">
+                <div class="fl fl-ex fl-ex-img">
+                    <img class="filimg fl" ng-src="{{ detailorderinfo.user_list[x.uid].avatar}}" alt="">
+                    <span class="fl fl-ex-img-text">{{ detailorderinfo.user_list[x.uid].nickname }}</span>
+                    <span class="colonel" ng-show="x.is_leader == true">团长</span>
+                    <div class="clear"></div>
+                </div>
+                <div class="fl fl-ex">{{ x.data_type | typeFilter }}</div>
+                <div class="fl fl-ex">{{ x.add_time * 1000 | date:'yyyy-MM-dd HH:mm:ss' }}</div>
+                <div class="clear"></div>
+            </li>
+            <li ng-show="nextpageisok" class="nextmore detailinfonextmore">滚动加载更多...</li>
+        </ul>
+        <div class="tabtext" ng-if="usericonb">
+            暂未开团
+        </div>
+    </div>
+    </div>
+    <div class="nav-shopinfo" ng-bind-html="detaildata.tuan.description" ng-show="istabchilshowa"></div>
+</div>

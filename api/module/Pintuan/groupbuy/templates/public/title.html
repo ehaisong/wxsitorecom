@@ -1,0 +1,11 @@
+<!--
+    通用头部标题组件
+    属性：
+        navtitle ： 标题上的文字
+    方法：
+        back : 返回上一级页面操作,该功能已在link中完成
+-->
+<header class="index-header">
+    <div class="tit" ng-bind="navtitle"></div>
+    <div class="back fl" ng-hide="backhide" ng-click="back()"><img src="images/back.png" alt=""/></div>
+</header>

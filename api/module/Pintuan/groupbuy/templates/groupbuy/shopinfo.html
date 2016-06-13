@@ -1,0 +1,16 @@
+<div class="index-shop-info">
+    <div class="index-shop-info-left fl">
+        <div class="index-shop-info-left-left fl">
+            <h2>{{shop.name}}</h2>
+            <div class="fl" ng-show="shopinfo.type">{{shop.config_1.number}}人团：{{shop.config_1.discount | currency : '￥'}}</div>
+            <div class="fl lastpricedetailinfo" ng-hide="shopinfo.type">最高拼团价：<span>{{ lastprice | currency : '￥'}}</span>&nbsp;&nbsp;市场价：<span>{{ shop.price | currency : '￥' }}<span></div>
+            <div ng-hide="shopinfo.pricee" class="index-shop-info-left-right fl index-shop-detail-left-right">原价：{{ shop.price | currency : '￥' }}</div>
+            <!--div ng-show="shopinfo.price" class="index-shop-info-left-right lastpricedetailinfoa fr index-shop-info-right-text-go" style="margin-left: 5px;">市场价：{{ shop.price | currency : '￥' }}</div-->
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div ng-show="shopinfo.go" class="index-shop-info-right fr"><div class="index-shop-info-right-text">去开团</div></div>
+    <div ng-click="share()" ng-hide="shopinfo.go" class="index-shop-info-right fr"><div style="padding: 3px 13px; letter-spacing: 1px;" class="index-shop-info-right-text index-shop-lapeople index-shop-list-ordera">分享</div></div>
+    <div class="clear"></div>
+</div>

@@ -1,0 +1,92 @@
+
+<style>
+    .return_btn {margin-top:16px; margin-left:5px; border:1px solid #f60; padding:0px 2px;border-radius:3px; color:#fff; background:#f60}
+    .detail .return_btn {color:#FFF;}
+</style>
+<div class="container js-page-content wap-page-order">
+    <div class="content confirm-container">
+        <div class="app app-order">
+            <div class="app-inner inner-order" id="js-page-content">
+                <!-- 订单状态 -->
+                <div class="important-message">
+                    <!-- 客户看 -->
+                    <h3>
+                        订单状态：{{data.status}}
+                    </h3>
+                </div>
+                <!-- 商品列表 -->
+                <div class="block block-order block-border-top-none">
+                    <div class="header">
+                        {{data.title}}
+                    </div>
+                    <hr class="margin-0 left-10"/>
+                    <div class="block block-list block-border-top-none block-border-bottom-none">
+                        <div class="block-item name-card name-card-3col clearfix js-product-detail">
+                            <a href="{{APIURL}}api/module/Pintuan/groupbuy/#/details/{{tuan_id}}/{{token}}" class="thumb">
+                                <img class="js-view-image" src="{{data.image}}" alt="欢迎使用"/>
+                            </a>
+                            <div class="detail">
+                                <a href="{{APIURL}}api/module/Pintuan/groupbuy/#/details/{{tuan_id}}/{{token}}">   <h3>{{data.name}}</h3></a>
+                            </div>
+                            <div class="right-col">
+                                <div class="price">￥{{data.price}}</div>
+
+                                <div class="num">
+                                    ×<span class="num-txt">{{data.count}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="margin-0 left-10"/>
+                    <div class="order-message">
+                        <span class="font-size-12">买家留言：</span><p class="message-content font-size-12">{{data.message}}</p>
+                    </div>
+                    <hr class="margin-0 left-10"/>
+
+                    <div class="bottom">总价<span class="c-orange pull-right">￥{{data.total}}</span></div>
+                </div>
+                <!-- 物流信息 -->
+                <div class="block block-form">
+                    <!-- 快递 -->
+                    <div class="block-item " style="padding:5px 0;">
+                        <ul class="address_detail">
+                            <li>收件人：{{data.user_name}}</li>
+                            <li>电&nbsp;&nbsp;&nbsp;话：<a href="javascript:;" style="display: inline-block; margin-right: 0;overflow: inherit;padding: 0;">{{data.user_tel}}</a></li>
+                            <li>地&nbsp;&nbsp;&nbsp;址：{{data.user_address}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 满送优惠信息 -->
+                <!-- 支付 -->
+                <div class="block block-bottom-0">
+                    <div class="block-item paid-time">
+                        <div class="paid-time-inner">
+                            <p>支付方式：{{data.pay_type}}</p>
+                            <hr class="margin-0 left-10"/>
+                            <p>订单号：{{data.orderid}}</p>
+                            <hr class="margin-0 left-10"/>
+                            <div class="header">
+                                <span>配送信息</span>
+                            </div>
+                            <hr class="margin-0 left-10"/>
+                            <div class="block block-list block-border-top-none block-border-bottom-none">
+                                <ul class="block-item name-card name-card-3col clearfix js-product-detail">
+                                    <li>快递公司：{{data.express_name}}</li>
+                                    <li>快递单号：{{data.express_num}}</li>
+                                    <li>联系商家：{{data.tel}}</li>
+                                </ul>
+                            </div>
+                            <p class="c-gray">
+                                {{data.addtime * 1000 | date:'yyyy-MM-dd hh:mm:ss'}}<br/>{{data.pay_state}}
+                            </p>
+                        </div>
+                    </div>
+                    <button style="margin-top:0;" ng-click="share()" type="button" class="btn btn-block btn-large btn-yellow js-open-share">分享拉人参团</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<dialog></dialog>
+<loading></loading>
+<wxshare></wxshare>
