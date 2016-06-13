@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <title>{vifnn:$metaTitle}</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v3.0.css" />
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.reveal.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/func.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/Common.js"></script>
+</head>
+
+<body class="body-gray">
+
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" style="display: none;" id="errerMsg">请输入微店名！<a href="{vifnn::U('DrpStore/add')}#" class="close">×</a></div>
+    <!--submit errow tip end-->
+
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a onclick="window.history.go(-1)" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">设置店铺</h1>
+            </section>
+            <section class="right-small right-small-text3">
+                <a href="javascript:void(0)" class="button [radius round] top-button" id="nextBtn">下一步</a>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--step01 begin-->
+    <ul class="breadcrumbs step-store" id="ul">
+        <li class="first current" id="settitle"><a href="javascript:void(0)"><i class="step-number">1</i>设置微店信息</a></li>
+        <li class="second" id="setproduct"><a href="javascript:void(0)"><i class="step-number">2</i>选择分销商品</a></li>
+        <li class="third"><a href="javascript:void(0)"><i class="step-number">3</i>完成</a></li>
+    </ul>
+    <!--step01 end-->
+    <!--form begin-->
+    <form id="form1" class="setstroe-form">
+        <!--01 begin-->
+        <div class="row">
+            <div class="large-12 columns">
+                <label>
+                    店铺名称
+            <input type="text" placeholder="请输入店铺名称" id="title" />
+                </label>
+            </div>
+        </div>
+        <!--01 end-->
+        <div class="row">
+            <div class="large-12 columns">
+                <label>
+                    真实姓名
+                    <input type="text" placeholder="请输入真实名称" id="name" />
+                </label>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="large-12 columns">
+                <label>
+                    手机号
+                    <input type="text" placeholder="请输入手机号" id="phone" />
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+
+                <input type="checkbox" style="height: auto;line-height: normal" class="agreement-checked" value="1" /> 我已阅读并同意<a href="javascript:;" class="agreement">分销协议</a>
+                <textarea readonly="true" style="resize: none;font-size: 14px;line-height: 25px;height: 200px;display: none" class="agreement-info">{vifnn:$agreement}</textarea>
+            </div>
+        </div>
+    </form>
+    <!--form end-->
+    <!--form begin-->
+    <div class="ml-15" id="form2" style="display: none;">
+        <h6>选择分销商品</h6>
+        <div class="tip-means mb-20 mr-15">
+            <h2 class="tip-means-title"><i class="icon-light"></i><span>温馨提示</span><i class="icon-close" onclick="tip_means_close(this)"></i></h2>
+            <div class="tip-means-c">
+                <span>亲，您的佣金由三部分组成：</span>
+                <ol class="tip-means-ol">
+                    <li>自己分销的产品所获得佣金（即本店销售佣金）。</li>
+                    <li>发展下级分店，我所获得的佣金（即渠道商佣金）。</li>
+                    <li>下级分店销售的商品，我所获得佣金（即下级分店佣金）。</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row catselect">
+            <div class="large-12 columns pl0">
+                <input id="checkbox1" type="checkbox" onclick="checkAll(this)"><label for="checkbox1">全选</label>
+            </div>
+        </div>
+        <!--row01 begin-->
+
+        <div id="device" class="category">
+
+        </div>
+
+        <div style="text-align: center">
+            <a class="more" id="show_more" page="2" style="display: none;" href="javascript:void(0);">加载更多</a>
+            <input type="hidden" id="canScroll" value="1" />
+        </div>
+
+
+        <!--row01 end-->
+    </div>
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.grid-a-licious.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#form2").hide();
+            $('.agreement').click(function(){
+                $('.agreement-info').removeClass('hide');
+                $('.agreement-info').slideDown(300)
+            })
+        });
+    </script>
+
+
+
+<script type="text/javascript">
+    var title = "";
+    var name = "";
+    var phone = "";
+    var pids = new Array();
+    var pidcount = $("div [name='columns']").length;
+
+    $("#nextBtn").click(function () {
+        name = $("#name").val().trim();
+        phone = $("#phone").val().trim();
+        //手机11位
+        var reg = /^\d{11}$/;
+        var tempbl = "false";
+        var tempid = $(".current").attr("id");
+        if (tempid == "settitle") {
+            title = $("#title").val().trim();
+            if (title == "") {
+                ShowMsg("店铺名称不可为空");
+                return;
+            } else if (name == "") {
+                ShowMsg("真实姓名不可为空");
+                return;
+            } else if (phone == "") {
+                ShowMsg("手机号码不可为空");
+                return;
+            } else if (!reg.test(phone)) {
+                ShowMsg("请输入正确的手机号码");
+                return;
+            } else if (!$('.agreement-checked:checked').val()) {
+                ShowMsg("不同意分销协议无法继续下一步");
+                return;
+            } else {
+                $.ajax({
+                    url: "{vifnn::U('DrpStore/check_name')}",
+                    data: {"name": title},
+                    async: false,
+                    cache: false,
+                    type: 'POST',
+                    success: function (res) {
+                        tempbl = res;
+                    }
+                })
+            }
+            if (tempbl != true) {
+                ShowMsg("店铺名称已存在");
+                return;
+            }
+
+            $("#ul li").removeClass("current");
+            $("#setproduct").addClass("current");
+            $("#form1").hide();
+            $("#form2").show();
+            
+            //获取可以分销的商品
+            $.post("{vifnn::U('DrpStore/ajax_products')}", '', function(data){
+                $('#device').html(data);
+                $("#device").gridalicious({
+                    gutter: 10,
+                    width: 130,
+                    animationOptions: {
+                        speed: 150,
+                        duration: 400,
+                        complete: null
+                    },
+                });
+            })
+            $("#checkbox1").click();
+            $("#nextBtn").text("保存");
+            $("#nextBtn").parent().removeClass("right-small-text3").addClass("right-small-text2")
+        } else if (tempid == "setproduct") {
+            /*if (pids.length == 0) {
+                ShowMsg("选择分销商品");
+                return;
+            } else {*/
+                //添加分销商和店铺
+                $.ajax({
+                    url: "{vifnn::U('DrpStore/add')}",
+                    data: {"name": title, "pids": pids, "truename": name, "tel": phone },
+                    async: false,
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        if (data) {
+                            window.location.href = "{vifnn::U('DrpUcenter/drp_index')}";
+                        } else { }
+                    }
+                })
+            //}
+        }
+    })
+
+/*function checkAll(obj) {
+    if (obj.checked) {
+        pids = new Array();
+        $("div[name=columns]").each(function () {
+            $(this).addClass("current");
+            pids.push($(this).attr("pid"));
+        })
+    } else {
+        $("div[name=columns]").each(function () {
+            $(this).removeClass("current");
+        })
+        pids = new Array();
+    }
+}*/
+
+function checkAll(obj) {
+    if (obj.checked) {
+        $("div[name=columns]").each(function () {
+            $(this).addClass("current");
+        })
+        pids = new Array();
+    } else {
+        pids = new Array();
+        $("div[name=columns]").each(function () {
+            $(this).removeClass("current");
+            pids.push($(this).attr("pid"));
+        })
+    }
+}
+
+
+$(document).on('click', "div[name=columns]", function () {
+    pidcount = $("div [name='columns']").length;
+    if (!$(this).hasClass('current')) {
+        pids.splice(pids.indexOf($(this).attr('pid')), 1);
+        $(this).addClass("current");
+    } else {
+        pids.push($(this).attr('pid'));
+        $(this).removeClass("current");
+    }
+    if (pids.length > 0) {
+        document.getElementById("checkbox1").checked = false;
+    } else {
+        document.getElementById("checkbox1").checked = true;
+    }
+});
+
+/*---------------------加载更多--------------------*/
+var total = {vifnn:$count}, pagesize = 10, pages = Math.ceil(total / pagesize);
+if (pages > 1) {
+    var _page = $('#show_more').attr('page');
+    $(window).bind("scroll",function() {
+        if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+            $('#show_more').show().html('加载中...');
+            if (_page > pages) {
+                $('#show_more').show().html('没有更多了').delay(2300).slideUp(1600);
+                return;
+            }
+            if($('#canScroll').val()==0){//不要重复加载
+                return;
+            }
+            $('#canScroll').attr('value',0);
+            $.post("{vifnn::U('DrpStore/ajax_products')}",{'page' : _page, 'pagesize' : pagesize}, function(data) {
+                $('#canScroll').attr('value',1);
+                $('#show_more').hide().html('加载更多');
+                if (data) {
+                    $('#show_more').attr('page',parseInt(_page)+1);
+                }
+                _page = $('#show_more').attr('page');
+                $('#device').append(data);
+                $("#device").gridalicious({
+                    gutter: 10,
+                    width: 130,
+                    animationOptions: {
+                        speed: 150,
+                        duration: 400,
+                        complete: null
+                    },
+                });
+                /*pids = new Array();
+                $("div[name=columns]").each(function () {
+                    if ($(this).hasClass('current')) {
+                        pids.push($(this).attr('pid'));
+                    }
+                });*/
+            })
+        }
+    })
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<html style="overflow: hidden;" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8" />
+
+  <title>{vifnn:$f_siteName}-{vifnn:$f_siteTitle}</title>
+  <link href="{vifnn::RES}/vifnn/js/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+  <link href="{vifnn::RES}/vifnn/css/main.css" rel="stylesheet" type="text/css" />
+  <link href="{vifnn::RES}/vifnn/css/global.css" rel="stylesheet" type="text/css" />
+  <link href="{vifnn::RES}/vifnn/css/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="{vifnn::RES}/vifnn/js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="{vifnn::RES}/vifnn/js/jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="{vifnn::RES}/vifnn/js/jquery.jscrollpane.js"></script>
+  <script type="text/javascript" src="{vifnn::RES}/js/sys.js"></script>
+  <script type="text/javascript">
+//<![CDATA[
+  var SITEURL='';
+  //]]>
+  </script>
+  <script type="text/javascript" src="{vifnn::RES}/vifnn/js/global.js"></script>
+  <script type="text/javascript" src="{vifnn::RES}/vifnn/js/main2.js"></script>
+</head>
+
+<body style="overflow: hidden;">
+  <div id="header">
+<div class="logo">
+<a href="/" class="f_l" style="font-size: 48px;"><img src="{vifnn:$f_logo}" /></a>
+</div>
+
+<ul>
+<li class="ico-0 cur"><a href="{vifnn::U('User/Index/info')}">我的帐号</a></li>
+
+<li class="ico-6"><a href="{vifnn::U('Index/useredit')}" target="mainpage">修改密码</a></li>
+<li class=ico-4><a href="https://mp.weixin.qq.com" target=blank>公众平台</a></li>
+<li class=ico-5><a href="javascript:void(0)" class="sqty" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_self')" >安全退出</a>
+</ul>
+  </div>
+
+  <div id="main">
+<div class="menu">
+<dl>
+	<dt group="gk">↓系统功能导航菜单↓</dt>
+
+
+	<dt group="wechat"><img src="{vifnn::RES}/images/main/m-ico-25.png" />基础设置</dt>
+
+  <dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Function/welcome',array('token'=>$token,'id'=>session('wxid')))}" target="mainpage">管理首页</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Areply/index',array('token'=>$token))}" target="mainpage">关注－自动回复</a></li>
+			<li class="lisit "><a href="{vifnn::U('Text/index',array('token'=>$token))}" target="mainpage">微信－文本回复</a></li>
+			<li class="lisit "><a href="{vifnn::U('Img/index',array('token'=>$token))}" target="mainpage">微信－图文回复</a></li>
+			<li class="lisit "><a href="{vifnn::U('Img/multi',array('token'=>$token))}" target="mainpage">微信－多图文回复</a></li>
+			<li class="lisit "><a href="{vifnn::U('Voiceresponse/index',array('token'=>$token))}" target="mainpage">微信－语音回复</a></li>
+			<li class="lisit "><a href="{vifnn::U('Message/sendHistory',array('token'=>$token))}" target="mainpage">微信－群发消息</a></li>
+			<li class="lisit "><a href="{vifnn::U('TemplateMsg/index',array('token'=>$token))}" target="mainpage">微信－模板消息</a></li>
+			<li class="lisit "><a href="{vifnn::U('Company/index',array('token'=>$token))}" target="mainpage">门店管理(LBS)</a></li>
+			<li class="lisit "><a href="{vifnn::U('Assistente/index',array('token'=>$token))}" target="mainpage">店员管理</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Jiejing/index',array('token'=>$token))}" target="mainpage">街景导航</a></li>					
+			<li class="lisit "><a href="{vifnn::U('Daohang/index',array('token'=>$token))}" target="mainpage">导航到店</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Diymen/index',array('token'=>$token))}" target="mainpage">自定义菜单</a></li>
+			<li class="lisit "><a href="{vifnn::U('Conditionalmenu/index',array('token'=>$token))}" target="mainpage">个性化自定义菜单</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Auth/index',array('token'=>$token))}" target="mainpage">微信用户信息授权</a></li>
+			<li class="lisit "><a href="{vifnn::U('Api/index',array('token'=>$token))}" target="mainpage">融合第三方</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Other/index',array('token'=>$token))}" target="mainpage">答不上来配置</a></li>
+			<li class="lisit "><a href="{vifnn::U('Vifnnemail/index',array('token'=>$token))}" target="mainpage">邮件通知配置</a></li>
+			<!--li class="lisit "><a href="{vifnn::U('Kefu/index',array('token'=>$token))}" target="mainpage">在线客服配置</a></li-->	
+			<li class="lisit "><a href="{vifnn::U('Quick/index',array('token'=>$token))}" target="mainpage">一键关注配置</a></li>
+			<li class="lisit "><a href="{vifnn::U('Quick/cpshortlink',array('token'=>$token))}" target="mainpage">原生链接生存工具</a></li>
+			</ul>
+	</dd>
+
+	<dt group="web"><img src="{vifnn::RES}/images/main/m-ico-3.png" target="mainpage" />微 官 网</dt>
+
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Home/set',array('token'=>$token))}" target="mainpage">首页配置</a></li>
+			<li class="lisit "><a href="{vifnn::U('Classify/index',array('token'=>$token))}" target="mainpage">分类管理</a></li>
+			<li class="lisit "><a href="{vifnn::U('Img/index',array('token'=>$token))}" target="mainpage">文章管理</a></li>	
+			<li class="lisit "><a href="{vifnn::U('CustomTmpls/dynamic',array('token'=>$token))}" target="mainpage">H5动态模板</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Tmpls/index',array('token'=>$token))}" target="mainpage">静态模板管理</a></li>
+			<li class="lisit "><a href="/cms/manage/index.php" target="blank">高级模板</a></li>
+			<li class="lisit "><a href="{vifnn::U('Flash/index',array('token'=>$token,'tip'=>1))}" target="mainpage">首页幻灯片</a></li>
+			<li class="lisit "><a href="{vifnn::U('Flash/index',array('token'=>$token,'tip'=>2))}" target="mainpage">轮播背景图</a></li>
+			<li class="lisit "><a href="{vifnn::U('Catemenu/index',array('token'=>$token))}" target="mainpage">底部导航菜单</a></li>
+			<li class="lisit "><a href="{vifnn::U('Home/plugmenu',array('token'=>$token))}" target="mainpage">微站版权设置</a></li>
+			<li class="lisit "><a href="{vifnn::U('Vifnn/index',array('token'=>$token))}" target="mainpage">实用工具网址</a></li>
+			<li class="lisit "><a href="{vifnn::U('Yulan/index',array('token'=>$token))}" target="mainpage">微网站预览</a></li>		
+		</ul>
+	</dd>
+
+	<dt group="yingyong"><img src="{vifnn::RES}/images/main/m-ico-23.png" />场景应用</dt>
+
+	<dd>
+		<ul class="rounded-list">
+		<!--<li class="lisit "><a href="{vifnn::U('SeniorScene/highLive',array('token'=>$token))}" target="mainpage">创建场景</a></li>		
+		<li class="lisit "><a href="{vifnn::U('SeniorScene/highLive',array('token'=>$token,'v'=>'myscene'))}" target="mainpage">我的场景</a></li>
+		<li class="lisit "><a href="{vifnn::U('SeniorScene/index',array('token'=>$token))}" target="mainpage">场景关键词</a></li>-->		
+		<li class="lisit "><a href="{vifnn::U('Live/index',array('token'=>$token))}" target="mainpage">微场景(简单)</a></li>  
+		</ul>
+	</dd>
+	
+	<dt group="baidu"><IMG src="{vifnn::RES}/images/main/m-ico-1.png">手机站</dt>
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Phone/baseSet',array('token'=>$token))}" target="mainpage">手机站配置</a></li>
+		</ul>
+	</dd>	
+	
+	<dt group="baidu"><IMG src="{vifnn::RES}/images/main/m-ico-2.png">百度直达号</dt>
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Zhida/index',array('token'=>$token))}" target="mainpage">直达号配置</a></li>
+		</ul>
+	</dd>
+	
+	<dt group="baidu"><IMG src="{vifnn::RES}/images/main/m-ico-8.png">摇一摇.周边</dt>
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Shakearound/index',array('token'=>$token))}" target="mainpage">设备管理</a></li>
+			<li class="lisit "><a href="{vifnn::U('Shakearound/page_index',array('token'=>$token))}" target="mainpage">页面管理</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Shakearound/statistics',array('token'=>$token))}" target="mainpage">统计信息</a></li>			
+		</ul>
+	</dd>	
+
+	<dt group="shop"><img src="{vifnn::RES}/images/main/m-ico-7.png" />电商系统</dt>
+
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Store/index',array('token'=>$token))}" target="mainpage">微信商城系统</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Store/setting',array('token'=>$token))}" target="mainpage">商城风格设置</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Store/twitter',array('token'=>$token))}" target="mainpage">商城分佣管理</a></li>
+			<li class="lisit "><a href="{vifnn::U('Groupon/index',array('token'=>$token))}" target="mainpage">微信团购系统</a></li>
+			<li class="lisit "><a href="{vifnn::U('Unitary/index',array('token'=>$token))}" target="mainpage">一元夺宝</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Crowdfunding/index',array('token'=>$token))}" target="mainpage">微众筹</a></li>
+			<li class="lisit "><a href="{vifnn::U('Bargain/index',array('token'=>$token))}" target="mainpage">微砍价</a></li>
+            <li class="lisit "><a href="{vifnn::U('Seckill/index',array('token'=>$token))}" target="mainpage">微秒杀</a></li>
+            <li class="lisit "><a href="{vifnn::U('Cutprice/index',array('token'=>$token))}" target="mainpage">降价拍</a></li>	
+            <li class="lisit "><a href="{vifnn::U('Auction/index',array('token'=>$token))}" target="mainpage">微拍卖</a></li>		
+            <li class="lisit "><a href="{vifnn::U('Pintuan/index',array('token'=>$token))}" target="mainpage">拼团购</a></li>					
+			<li class="lisit "><a href="{vifnn::U('Alipay_config/index',array('token'=>$token))}" target="mainpage">在线支付设置</a></li>
+			<li class="lisit "><a href="{vifnn::U('Alipay_cert/index',array('token'=>$token))}" target="mainpage">微信支付证书</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Platform/index',array('token'=>$token))}" target="mainpage">平台支付对帐</a></li>
+			<li class="lisit "><a href="{vifnn::U('WeixinBill/index',array('token'=>$token))}" target="mainpage">微信支付账单</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Taobao/index',array('token'=>$token))}" target="mainpage">第三方店铺配置</a></li>
+			<li class="lisit "><a href="{vifnn::U('LivingCircle/index',array('token'=>$token))}" target="mainpage">微信生活圈</a></li>
+			<li class="lisit "><a href="{vifnn::U('Market/index',array('token'=>$token))}" target="mainpage">微商圈</a></li>
+		</UL>
+	</dd>
+	
+	<dt group="baidu"><IMG src="{vifnn::RES}/images/main/m-ico-6.png">三级分销[独立]</dt>
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Micrstore/index',array('token'=>$token,'infotype'=>'Micrstore'))}" target="mainpage">微店设置</a></li>
+			<li class="lisit "><a href="{vifnn::U('Micrstore/api',array('token'=>$token,'infotype'=>'Micrstore'))}" target="mainpage">微店管理</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Micrstore/dis',array('token'=>$token,'infotype'=>'Micrstore'))}" target="mainpage">三级分销</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Micrstore/withdraw',array('token'=>$token))}" target="mainpage">提现管理</a></li>				
+		</ul>
+	</dd>	
+<!--
+	<dt group="baidu"><IMG src="{vifnn::RES}/images/main/m-ico-1.png">收银台[独立]</dt>
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Cashier/index',array('token'=>$token,'infotype'=>'Micrstore'))}" target="blank">收银台管理</a></li>				
+		</ul>
+	</dd>
+-->
+	<dt group="action"><img src="{vifnn::RES}/images/main/m-ico-20.png" />微 活 动</dt>
+
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Donation/index',array('token'=>$token))}" target="mainpage">微募捐</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Cashbonus/index',array('token'=>$token))}" target="mainpage">一元现金红包</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Dajiangsai/index',array('token'=>$token))}" target="mainpage">分享大奖赛</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Weizhaohuan/index',array('token'=>$token))}" target="mainpage">微召唤</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Aaactivity/index',array('token'=>$token))}" target="mainpage">AA活动报名</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Pengyouquanad/index',array('token'=>$token))}" target="mainpage">朋友圈AD</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Collectword/index',array('token'=>$token))}" target="mainpage">集字游戏</a></li>
+			<li class="lisit "><a href="{vifnn::U('FrontPage/index',array('token'=>$token))}" target="mainpage">我要上头条</a></li>	
+			<li class="lisit "><a href="{vifnn::U('CoinTree/index',array('token'=>$token))}" target="mainpage">摇钱树</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Lottery/index',array('token'=>$token))}" target="mainpage">幸运大转盘</a></li>
+			<li class="lisit "><a href="{vifnn::U('Jiugong/index',array('token'=>$token))}" target="mainpage">幸运九宫格</a></li>
+			<li class="lisit "><a href="{vifnn::U('Coupon/index',array('token'=>$token))}" target="mainpage">优惠券</a></li>
+			<li class="lisit "><a href="{vifnn::U('Guajiang/index',array('token'=>$token))}" target="mainpage">刮刮卡</a></li>
+			<li class="lisit "><a href="{vifnn::U('LuckyFruit/index',array('token'=>$token))}" target="mainpage">幸运水果机</a></li>
+			<li class="lisit "><a href="{vifnn::U('GoldenEgg/index',array('token'=>$token))}" target="mainpage">砸金蛋</a></li>
+			<li class="lisit "><a href="{vifnn::U('AppleGame/index',array('token'=>$token))}" target="mainpage">走鹊桥</a></li>
+			<li class="lisit "><a href="{vifnn::U('Lovers/index',array('token'=>$token))}" target="mainpage">摁死小情侣</a></li>
+			<li class="lisit "><a href="{vifnn::U('Autumn/index',array('token'=>$token))}" target="mainpage">中秋吃月饼</a></li>
+			<li class="lisit "><a href="{vifnn::U('Autumns/index',array('token'=>$token))}" target="mainpage">拆礼盒</a></li>
+			<li class="lisit "><a href="{vifnn::U('Problem/index',array('token'=>$token))}" target="mainpage">一战到底</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Red_packet/index',array('token'=>$token))}" target="mainpage">微信红包</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Punish/index',array('token'=>$token))}" target="mainpage">惩罚台</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Helping/index',array('token'=>$token))}" target="mainpage">分享助力</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Popularity/index',array('token'=>$token))}" target="mainpage">人气冲榜</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Hongbao/index',array('token'=>$token))}" target="mainpage">微信合体红包</a></li>				
+			<li class="lisit "><a href="{vifnn::U('Test/index',array('token'=>$token))}" target="mainpage">趣味测试</a></li>						
+		</ul>
+	</dd>
+
+	<dt group="hudong"><img src="{vifnn::RES}/images/main/m-ico-22.png" />微 互 动</dt>
+
+	<dd>
+		<ul class="rounded-list">
+
+			<li class="lisit "><a href="{vifnn::U('Shake/index',array('token'=>$token))}" target="mainpage">摇一摇</a></li>
+			<li class="lisit "><a href="{vifnn::U('Wall/index',array('token'=>$token))}" target="mainpage">微信墙</a></li>
+			<li class="lisit "><a href="{vifnn::U('Scene/index',array('token'=>$token))}" target="mainpage">现场活动</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Reply/index',array('token'=>$token))}" target="mainpage">留言板</a></li>
+			<li class="lisit "><a href="{vifnn::U('Forum/index',array('token'=>$token))}" target="mainpage">微论坛</a></li>
+			<li class="lisit "><a href="{vifnn::U('Signin/index',array('token'=>$token))}" target="mainpage">微信签到</a></li>
+			<li class="lisit "><a href="{vifnn::U('Person_card/index',array('token'=>$token))}" target="mainpage">微名片</a></li>
+			<li class="lisit "><a href="{vifnn::U('Greeting_card/index',array('token'=>$token))}" target="mainpage">祝福贺卡</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Card/index',array('token'=>$token))}" target="mainpage">微信贺卡库</a></li>				
+
+			</ul>
+	</dd>
+
+<dt group="site_app"><img src="{vifnn::RES}/images/main/m-ico-23.png" />微 应 用</dt>
+
+<dd>
+		<ul class="rounded-list">
+
+<li class="lisit "><a href="{vifnn::U('Photo/index',array('token'=>$token))}" target="mainpage">3G图集(相册)</a></li>
+<li class="lisit "><a href="{vifnn::U('Vote/index',array('token'=>$token))}" target="mainpage">3G微投票</a></li>
+<li class="lisit "><a href="{vifnn::U('Voteimg/index',array('token'=>$token))}" target="mainpage">图文投票</a></li>
+<li class="lisit "><a href="{vifnn::U('Panorama/index',array('token'=>$token))}" target="mainpage">360°全景</a></li>
+<li class="lisit "><a href="{vifnn::U('Custom/index',array('token'=>$token))}" target="mainpage">微预约(万能表单)</a></li-->
+<!--li class="lisit "><a href="{vifnn::U('Selfform/index',array('token'=>$token))}" target="mainpage">万能表单（OLD）</a></li-->
+<li class="lisit "><a href="{vifnn::U('Research/index',array('token'=>$token))}" target="mainpage">微调研</a></li>
+<li class="lisit "><a href="{vifnn::U('Invite/add',array('token'=>$token))}" target="mainpage">邀请函</a></li>
+<li class="lisit "><a href="{vifnn::U('Invites/index',array('token'=>$token))}" target="mainpage">微邀请</a></li>
+<li class="lisit "><a href="{vifnn::U('Jikedati/index',array('token'=>$token))}" target="mainpage">极客答题</a></li>
+<li class="lisit "><a href="{vifnn::U('Jingcai/index',array('token'=>$token))}" target="mainpage">微竞猜</a></li>
+<li class="lisit "><a href="{vifnn::U('Baoming/index',array('token'=>$token))}" target="mainpage">主题活动报名</a></li>
+
+
+</ul>
+</dd>
+
+
+	<dt group="hardware"><img src="{vifnn::RES}/images/main/m-ico-24.png" />微 硬 件</dt>
+
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Hardware/wifi',array('token'=>$token))}" target="mainpage">微信wifi介绍</a></li>	
+			<li class="lisit "><a href="{vifnn::U('Hardware/orderprint',array('token'=>$token))}" target="mainpage">小票打印机</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Hardware/photoprint',array('token'=>$token))}" target="mainpage">照片打印机</a></li>		
+			<!--li class="lisit "><a href="{vifnn::U('Yml/index',array('token'=>$token))}" target="mainpage">印美丽打印机</a></li-->					
+		</ul>
+	</dd>
+
+	<dt group="hangye"><img src="{vifnn::RES}/images/main/m-ico-26.png" />微 行 业</dt>
+
+	<dd>
+		<ul class="rounded-list">
+			<li class="lisit "><a href="{vifnn::U('Numqueue/index',array('token'=>$token))}" target="mainpage">微排号</a></li>		
+			<li class="lisit "><a href="{vifnn::U('Repast/index',array('token'=>$token,'id'=>session('wxid')))}" target="mainpage">微订餐</a></li>
+			<li class="lisit "><a href="{vifnn::U('DishOut/index',array('token'=>$token))}" target="mainpage">微外卖[新版]</a></li>
+			<li class="lisit "><a href="{vifnn::U('MicroBroker/index',array('token'=>$token))}" target="mainpage">全民经纪人</a></li>					
+			<li class="lisit "><a href="{vifnn::U('Estate/index',array('token'=>$token))}" target="mainpage">楼盘房产</a></li>			
+			<li class="lisit "><a href="{vifnn::U('Wedding/index',array('token'=>$token))}" target="mainpage">微喜帖</a></li>
+			<li class="lisit "><a href="{vifnn::U('Car/index',array('token'=>$token))}" target="mainpage">微汽车</a></li>
+			<li class="lisit "><a href="{vifnn::U('Medical/index',array('token'=>$token))}" target="mainpage">微医疗</a></li>
+			<li class="lisit "><a href="{vifnn::U('School/index',array('token'=>$token,'type'=>'semester'))}" target="mainpage">微教育</a></li>
+			<li class="lisit "><a href="{vifnn::U('Hotels/index',array('token'=>$token))}" target="mainpage">微酒店</a></li>
+			<li class="lisit "><a href="{vifnn::U('Host/index',array('token'=>$token))}" target="mainpage">通用订单(酒店,KTV)</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'beauty'))}" target="mainpage">微美容</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'fitness'))}" target="mainpage">微健身</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'gover'))}" target="mainpage">微政务</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'food'))}" target="mainpage">微食品</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'travel'))}" target="mainpage">微旅游</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'flower'))}" target="mainpage">微花店</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'property'))}" target="mainpage">微物业</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'ktv'))}" target="mainpage">微KTV</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'bar'))}" target="mainpage">微酒吧</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'fitment'))}" target="mainpage">微装修</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'wedding'))}" target="mainpage">微婚庆</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'affections'))}" target="mainpage">微宠物</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'housekeeper'))}" target="mainpage">微家政</a></li>
+			<li class="lisit "><a href="{vifnn::U('Business/index',array('token'=>$token,'type'=>'lease'))}" target="mainpage">微租赁</a></li>
+			<li class="lisit "><a href="{vifnn::U('Fangchan/index',array('token'=>$token))}" target="mainpage">微租房</a></li>
+			<li class="lisit "><a href="{vifnn::U('Zhaopin/index',array('token'=>$token))}" target="mainpage">微招聘</a></li>
+
+		</ul>
+	</dd>
+
+	<dt group="hangye"><img src="{vifnn::RES}/images/main/m-ico-21.png" />微 游 戏</dt>
+
+	<dd>
+	<ul class="rounded-list">
+	<li class="lisit "><a href="{vifnn::U('Game/config',array('token'=>$token))}" target="mainpage">信息设置</a></li>
+	<li class="lisit "><a href="{vifnn::U('Game/index',array('token'=>$token))}" target="mainpage">我的游戏</a></li>
+	<li class="lisit "><a href="{vifnn::U('Game/gameLibrary',array('token'=>$token))}" target="mainpage">游戏库</a></li>
+	<li class="lisit "><a href="{vifnn::U('Czz/index',array('token'=>$token))}" target="mainpage">吃粽子大赛</a></li>			
+	<li class="lisit "><a href="{vifnn::U('Fanyan/index',array('token'=>$token))}" target="mainpage">方言考试</a></li>
+</ul>
+	</dd>
+
+
+<dt group="trade_app"><img src="{vifnn::RES}/images/main/m-ico-5.png" />会员管理</dt>
+
+<dd>
+		<ul class="rounded-list">
+<li class="lisit "><a href="{vifnn::U('Member_card/index',array('token'=>$token))}" target="mainpage">会员卡管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/coupons',array('token'=>$token))}" target="mainpage">卡券管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/consume_record',array('token'=>$token))}" target="mainpage">卡券核销</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/center',array('token'=>$token))}" target="mainpage">会员中心</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/member',array('token'=>$token))}" target="mainpage">消费记录</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/replyInfoSet',array('token'=>$token))}" target="mainpage">回复设置</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/focus',array('token'=>$token))}" target="mainpage">广告管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Member_card/custom',array('token'=>$token))}" target="mainpage">自定义输入项</a></li>
+		  </ul>
+</dd>
+
+<dt group="user"><img src="{vifnn::RES}/images/main/m-ico-1.png" />粉丝管理</dt>
+
+<dd>
+		<ul class="rounded-list">
+<li class="lisit "><a href="{vifnn::U('Wechat_group/index',array('token'=>$token))}" target="mainpage">粉丝管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Wechat_group/groups',array('token'=>$token))}" target="mainpage">分组管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Message/index',array('token'=>$token))}" target="mainpage">群发消息</a></li>
+<li class="lisit "><a href="{vifnn::U('Share/index',array('token'=>$token))}" target="mainpage">分享管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Wechat_group/info',array('token'=>$token))}" target="mainpage">会员信息管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Fuwu/index',array('token'=>$token))}" target="mainpage">服务窗粉丝管理</a></li>
+		  </ul>
+</dd>
+
+<dt group="user"><img src="{vifnn::RES}/images/main/m-ico-8.png" />微 渠 道</dt>
+
+<dd>
+		<ul class="rounded-list">
+<li class="lisit "><a href="{vifnn::U('Extension/index',array('token'=>$token))}" target="mainpage">推广海报</a></li>	
+<li class="lisit "><a href="{vifnn::U('Recognition/index',array('token'=>$token))}" target="mainpage">渠道二维码</a></li>
+<li class="lisit "><a href="{vifnn::U('RecognitionData/index',array('token'=>$token))}" target="mainpage">二维码扫描分析</a></li>
+<li class="lisit "><a href="{vifnn::U('Adma/index',array('token'=>$token))}" target="mainpage">二维码宣传页</a></li>
+		  </ul>
+</dd>
+
+<dt group="kefu"><img src="{vifnn::RES}/images/main/m-ico-11.png" />在线客服</dt>
+
+<dd>
+		<ul class="rounded-list">
+
+<li class="lisit "><a href="{vifnn::U('ServiceUser/wechatService',array('token'=>$token))}" target="mainpage" rel="Kefu">微信多客服</a></li>
+<li class="lisit "><a href="{vifnn::U('Service/servicelist',array('token'=>$token))}" target="mainpage" rel="Kefu">网页客服管理</a></li>
+<li class="lisit "><a href="{vifnn::U('Service/preferentiallist',array('token'=>$token))}" target="mainpage" rel="Kefu">聊天推广内容</a></li>
+<li class="lisit "><a href="{vifnn::U('Service/my',array('token'=>$token))}" target="mainpage" rel="Kefu">聊天个人板块</a></li>
+
+<!--li class="lisit "><a href="{vifnn::U('Kefu/index',array('token'=>$token))}" target="mainpage" rel="Kefu">第三方客服</a></li-->
+		  </ul>
+</dd>
+
+<dt group="statistics"><img src="{vifnn::RES}/images/main/m-ico-10.png" />统计分析</dt>
+
+<dd>
+		<ul class="rounded-list">
+<li class="lisit "><a href="{vifnn::U('Requerydata/index',array('token'=>$token))}" target="mainpage">请求数详情</a></li>
+<li class="lisit "><a href="{vifnn::U('Wechat_behavior/statistics',array('token'=>$token))}" target="mainpage">粉丝行为分析</a></li>
+		</ul>
+</dd>
+</dl>
+</div>
+
+<div class="iframe">
+<iframe id="pagepreview" src="about:blank" frameborder="0"></iframe>
+
+<div class="sonnav">
+
+</div><iframe id="mainpage" src="{vifnn::U('User/Function/welcome',array('token'=>$token,'id'=>session('wxid')))}" frameborder="0" name="mainpage" scrolling="auto"></iframe>
+</div>
+
+<div class="clear"></div>
+  </div>
+
+  <div id="footer">
+<div class="oem"></div>
+  </div>
+ <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f1df238552a2693bb59ed55bb258fd49";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script> 
+</body>
+</html>

@@ -1,0 +1,57 @@
+<include file="Public:head" />
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left">退款记录</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right">
+			<input type="text" id="search" class="px search" placeholder="输入昵称"  name="search" value="{vifnn:$_GET['search']}" style="margin-top:10px">
+			<a href="javascript:search()" class="btnGrayS" title="搜索">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="300px">昵称</th>
+					<th width="280px">返还金额</th>
+					<th width="">返还时间</th>
+				</tr>
+			</thead>
+			<tbody>
+			<vifnnif where="$list">
+				<volist name="list" id="lv">
+				<tr>
+					<td>{vifnn:$lv.nick_name}</td>
+					<td><if condition="$lv['money'] gt 0">￥{vifnn:$lv.money}</if></td>
+					<td>{vifnn:$lv['refundtime']|date="Y-m-d H:i:s",###}</td>
+				</tr>
+				</volist>
+				<else />
+				<tr><td colspan="3" align="center">暂无记录</td></tr>
+				</vifnnif>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator" style="float: right;">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+function search(){
+	var search = $("#search").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Pintuan/refundlog',array('token'=>$token,'team_id'=>$_GET['team_id'],'tid'=>$_GET['tid']))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Pintuan/refundlog',array('token'=>$token))}";
+	}
+}
+</script>
+<include file="Public:footer"/>

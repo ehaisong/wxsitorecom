@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>编辑收货地址</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v4.0.css" />
+
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/Common.js"></script>
+</head>
+
+<body class="body-gray">
+
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" style="display: none;" id="errerMsg">请填写姓名！<a href="{vifnn::U('DrpUcenter/shipping_address_add')}#" class="close">×</a></div>
+    <!--submit errow tip end-->
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a href="javascript:window.history.go(-1)" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">修改收货地址</h1>
+            </section>
+            <section class="right-small right-small-text2">
+                <a href="javascript:void(0)" onclick="save('{vifnn:$address.id}')" class="button [radius round] top-button">保存</a>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--form begin-->
+    <form class="mt-55 mlr-15">
+        <div class="panel callout radius formstyle addressnm">
+            <!--01 begin-->
+            <div class="row collapse">
+                <div class="small-3 large-2 columns">
+                    <span class="prefix">姓名</span>
+                </div>
+                <div class="small-9 large-10 columns">
+                    <input type="text" placeholder="输入收件人姓名" class="pl0" id="name" value="{vifnn:$address.name}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--01 end-->
+            <!--02 begin-->
+            <div class="row collapse">
+                <div class="small-3 large-2 columns">
+                    <span class="prefix last">手机</span>
+                </div>
+                <div class="small-9 large-10 columns">
+                    <input type="text" placeholder="手机号" class="pl0 last" id="tel" value="{vifnn:$address.tel}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--02 end-->
+        </div>
+        <label class="address-label">收货地址</label>
+        <div class="panel callout radius formstyle">
+            <!--03 begin-->
+            <div class="row collapse">
+                <div class="small-3 large-2 columns">
+                    <span class="prefix">详细</span>
+                </div>
+                <div class="small-9 large-10 columns">
+                    <input type="text" placeholder="输入详细地址" class="pl0" id="address" value="{vifnn:$address.address}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--03 end-->
+            <!--04 begin-->
+            <div class="row collapse">
+                <div class="small-3 large-2 columns">
+                    <span class="prefix last">邮编</span>
+                </div>
+                <div class="small-9 large-10 columns">
+                    <input type="text" placeholder="输入邮编" class="pl0 last" id="postcode" value="{vifnn:$address.postcode}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--04 end-->
+        </div>
+    </form>
+    <!--form end-->
+<script type="text/javascript">
+
+    function save(id) {
+        if (!check()) {
+            return false;
+        }
+        var url = "{vifnn::U('DrpUcenter/shipping_address_edit', array('id' => $address['id']))}";
+        var address = $("#address").val();
+        var name = $('#name').val();
+        var tel = $('#tel').val();
+        var postcode = $('#postcode').val();
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: url,
+            data: {'id': id, 'name': name, 'tel': tel, 'address': address, 'postcode': postcode},
+            success: function (data) {
+                if (data) {
+                    window.location.href = "{vifnn::U('DrpUcenter/shipping_address')}";
+                } else {
+                    ShowMsg('收货地址修改失败');
+                }
+            }
+        });
+    }
+
+    function check() {
+        var reg = /^\d{11}$/;
+        if ($("#name").val() == "") {
+            ShowMsg("收货人姓名不能为空");
+            $("#name").focus();
+            return false;
+        } else if ($("#tel").val() == "") {
+            ShowMsg("手机号码不能为空");
+            $("#tel").focus();
+            return false;
+        } else if (!reg.test($("#tel").val())) {
+            ShowMsg("请输入正确的手机号码");
+            $("#tel").focus();
+            return false;
+        } else if ($("#address").val() == "") {
+            ShowMsg("详细地址不能为空");
+            $("#address").focus();
+            return false;
+        } else if ($("#postcode").val() != "" && isNaN($("#postcode").val())) {
+            ShowMsg("邮编格式不正确");
+            $("#postcode").focus();
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>
+</body>
+</html>

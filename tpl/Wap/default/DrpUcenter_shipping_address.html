@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>收货地址</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v4.0.css" />
+
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/Common.js"></script>
+</head>
+<body class="body-gray">
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" id="errerMsg" style="display: none;"><a href="{vifnn::U('DrpUcenter/shipping_address')}" class="close">×</a></div>
+    <!--submit errow tip end-->
+
+
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a href="{vifnn::U('DrpUcenter/profile')}" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">地址</h1>
+            </section>
+            
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--button add begin-->
+    <div class="listAdd-btn">
+        <a id="editaddressurl" href="{vifnn::U('DrpUcenter/shipping_address_add')}" class="button [radius round]"><i>+</i>添加地址</a>
+    </div>
+    <!--button add begin-->
+    <!--content begin-->
+    <ul class="side-nav address" id="ul">
+        <volist name="addresses" id="address">
+        <li <if condition="$address.default_address eq 1">class="current"</if> id="{vifnn:$address.id}">
+            <a href="javascript:void(0)" class="classnone">
+                <span class="payInfo">{vifnn:$address.name}<span class="mobile">{vifnn:$address.tel}</span><br>
+                    {vifnn:$address.address} {vifnn:$address.postcode}</span>
+                <if condition="$address.default_address eq 1">
+                <span class="payStatus">默认</span>
+                </if>
+            </a>
+            <div class="opera">
+                <a href="{vifnn::U('DrpUcenter/shipping_address_edit', array('id' => $address['id']))}" class="a-edit"><i class="icon-edit-gray"></i></a>
+                
+                <a href="javascript:void(0);" onclick="DelAddress('{vifnn:$address.default_address}', '{vifnn:$address.id}')" class="a-del"><i class="icon-del-gray"></i></a>
+                
+            </div>
+        </li>
+        </volist>
+    </ul>
+    <!--content end-->
+
+<script type="text/javascript">
+    function DelAddress(default_address, addressID) {
+        var default_address = parseInt(default_address);
+        var addressID = parseInt(addressID);
+        if (default_address == 1) {
+            ShowMsg("默认地址不可删除");
+            return false;
+        } else {
+            $.ajax({
+                url: "{vifnn::U('DrpUcenter/shipping_address')}",
+                data: { "remove": true, "id": addressID },
+                async: false,
+                cache: false,
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+                        window.location.href = "{vifnn::U('DrpUcenter/shipping_address')}";
+                    } else {
+                        ShowMsg("删除失败,请稍候再试");
+                    }
+                }
+            })
+        }
+
+    }
+    $(function () {
+
+        $("#ul li .classnone").click(function (event) {
+            var obj = this;
+            if (getEventTarget(event, 1).tagName != "A" || getEventTarget(event, 1).className == "classnone") {
+
+                var addressID = $(this).parent('li').attr("id");
+                if (addressID != "0") {
+                    $.ajax({
+                        url: "{vifnn::U('DrpUcenter/shipping_address')}",
+                        data: {"id": addressID, "default": true},
+                        async: false,
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            if (data) {
+                                $("#list li").removeClass("current");
+                                $(obj).parent('li').addClass("current");
+                                window.location.href = "{vifnn::U('DrpUcenter/shipping_address')}"
+                            } else {
+                                ShowMsg("修改失败,请稍候再试");
+                            }
+                        }
+                    })
+                }
+            }
+        })
+        function getEventTarget(event, targetType) {
+            event = event || window.event;
+            if (targetType == 1) {// 获得触发的对象
+                return event.target || event.srcElement;
+            } else if (targetType == 2) {// 获得处理事件的对象
+                return event.currentTarget;
+            }
+        }
+    })
+</script>
+
+</body></html>

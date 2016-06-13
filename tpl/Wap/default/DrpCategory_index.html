@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common2.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/showcase.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/mall.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/showcase.css" />
+    <title>商品分类-{vifnn:$store.name}商城</title>
+    </head>
+    <body>
+            <!--mask begin-->
+            <div class="mask"></div>
+            <!--mask end-->
+
+            <div class="header">
+
+                <div class="js-mp-info share-mp-info">
+                    <a class="page-mp-info" href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}">
+                        <img class="mp-image" width="24" height="24" src="{vifnn:$store.logourl}" />
+                        <i class="mp-nickname">{vifnn:$store.name}</i>
+                    </a>
+                    <div class="links"><a class="mp-homepage" href="{vifnn::U('DrpCategory/index', array('id' => $_GET['id']))}">商品分类</a></div>
+                </div>
+
+            </div>
+
+            <div style="clear: both;"></div>
+            <div class="user_itlist_nb">
+                <div class="title">
+                    <h2><if condition="$name neq ''">{vifnn:$name}<else/>商品分类</if></h2>
+                </div>
+            </div>
+
+            <div class="WX_con" id="J_main">
+                <div class="jx">
+                    <div class="jx_list">
+                    </div>
+                    <div class="jx_map">
+
+                        <div class="jx_map_bd WX_cat_list">
+                            <volist name="categories" id="category">
+                            <a href="{vifnn:$category.url}" class="J_ytag WX_cat_sp">{vifnn:$category.name}</a>
+                            </volist>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<include file="Public:head"/>
+<div class="msgWrap form">
+<div class="content">
+<div class="cLineC" style="line-height: 32px;"> 
+<a href="{vifnn::U('Voteimg/add_voteimg',array('token'=>$token,'id'=>$id))}" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 添加图片投票</a>  
+</div>
+    <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<thead>
+	<tr>
+	  <th style="width:10%;">活动标题</th>
+	  <th style="width:10%;">回复关键词</th>
+	  <th style="width:13%;">报名起止时间</th>
+	  <th style="width:13%;">投票起止时间</th>
+	  <th style="width:14%;">活动状态</th>
+	</th>
+	<th>操作</th>
+	</tr>
+	</thead>
+	<volist name="list" id="vo">
+	  <tbody><tr>
+		  <td>{vifnn:$vo.action_name}</td>
+		  <td>{vifnn:$vo.keyword}</td>
+		  <td>{vifnn:$vo.apply_start_time|date="Y-m-d H:i",###}<br>{vifnn:$vo.apply_end_time|date="Y-m-d H:i",###}</td>
+		  <td>{vifnn:$vo.start_time|date="Y-m-d H:i",###}<br>{vifnn:$vo.end_time|date="Y-m-d H:i",###}</td>
+		  <td>
+		  <php>if($_SERVER['REQUEST_TIME'] > $vo['apply_start_time'] && $_SERVER['REQUEST_TIME'] < $vo['apply_end_time']){ echo '<span style="color:green">报名期</span>';}else{ echo '<span style="color:red">非报名期</span>';}</php>
+		  /
+		  <php>if($_SERVER['REQUEST_TIME'] > $vo['start_time'] && $_SERVER['REQUEST_TIME'] < $vo['end_time']){ echo '<span style="color:green">投票期</span>';}else{ echo '<span style="color:red">非投票期</span>';}</php>
+		  </td>
+		  <td class="norightborder">
+		  <script type="text/javascript">
+   $(document).ready(function(){
+      var bheight=document.body.clientHeight;
+      $("#lay{vifnn:$vo.id}").click(function(){
+   $("#brg{vifnn:$vo.id}").css("display","block");
+   $("#showdiv{vifnn:$vo.id}").css("display","block");
+   //$("#testdiv").load("test.html");
+   });
+   $("#close{vifnn:$vo.id}").click(function(){
+      $("#brg{vifnn:$vo.id}").css("display","none");
+   $("#showdiv{vifnn:$vo.id}").css("display","none");
+   });
+   });
+ </script>
+ <style type="text/css">
+   #brg{vifnn:$vo.id}{ z-index:9999;width:100%; height:100%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
+   #showdiv{vifnn:$vo.id}{z-index:9999; display:none;position:fixed; *position:absolute; width:100px; height:100px; top:20%; left:50%; margin:-50px 0 0 -50px;}
+   #testdiv{vifnn:$vo.id}{ width:300px; height:300px; margin:0 auto; border:1px solid #4d4d4d; background:#f2f2f2;}
+   #close{vifnn:$vo.id}{width:300px; height:27px; line-height:27px; font-size:14px; font-weight:bold; border:1px solid #4d4d4d; text-align:center; cursor:pointer; margin:0 auto; background:#333; color:#fff;margin-top: 15%;}
+ </style>
+    <div id="brg{vifnn:$vo.id}"></div>
+ <div id="showdiv{vifnn:$vo.id}">
+   <div id="close{vifnn:$vo.id}">您想关闭就点我吧</div>
+   <div id="testdiv{vifnn:$vo.id}"><img src="{vifnn:$Think.session.source_domain}/wap.php?c=Wxapp&a=qrcode&id={vifnn:$vo.id}&modle=Voteimg" width="300" height="300" class="cateimg_small"></div>
+ </div>
+<if condition="$Think.session.is_syn eq 2">
+<if condition="$usertplid neq 2">
+   <a id="lay{vifnn:$vo.id}" style="width:191px;">查看二维码</a>
+</if>
+</if>
+		<a href="{vifnn::U('Voteimg/add_voteimg',array('id'=>$vo['id'],'token'=>$token))}" class="btnGreen">编辑</a>
+		  <a href="{vifnn::U('Voteimg/item_list',array('vote_id'=>$vo['id'],'token'=>$token))}" class="btnGreen">投票选项</a>
+		  <a href="{vifnn::U('Voteimg/apply_list',array('vote_id'=>$vo['id'],'token'=>$token))}" class="btnGreen">报名管理</a>
+		 <a href="{vifnn::U('Voteimg/vote_log',array('vote_id'=>$vo['id'], 'token'=>$token))}" class="btnGreen">投票记录</a>
+		 <if condition="$vo.onoff_hongbao eq 1">
+		 <a href="{vifnn::U('Voteimg/fansPayLog',array('vote_id'=>$vo['id'], 'token'=>$token))}" class="btnGreen">充值退款记录</a>
+		 </if>
+		  <a href="{vifnn::U('Voteimg/action_del',array('id'=>$vo['id'],'token'=>$token))}" onclick="return(confirm('确定要删除吗？'))" class="btnGreen">删除</a>
+		<a href="{vifnn::U('Voteimg/apply_custom_field',array('cid'=>$vo['id'],'token'=>$token))}" class="btnGreen">自定义报名项</a>
+		  </td>
+		</tr>
+	  </tbody>
+	</volist> 
+	</table>
+	<div class="footactions" style="padding-left:10px">
+	  <div class="pages" style="text-align:right;"> {vifnn:$page}</div>
+	</div>
+    </div>
+  </div>
+<include file="Public:footer"/>

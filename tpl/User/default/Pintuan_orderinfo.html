@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> 微信公众平台源码,微信机器人源码,微信自动回复源码 vifnn多用户微信营销系统</title>
+<meta http-equiv="MSThemeCompatible" content="Yes" />
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/style_2_common.css?BPm" />
+<script src="{vifnn::RES}/js/common.js" type="text/javascript"></script>
+<link href="{vifnn::RES}/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body id="nv_member">
+<div style="line-height:200%;padding:10px 20px;">
+订单号：{vifnn:$thisOrder['orderid']|htmlspecialchars_decode=ENT_QUOTES}<br>
+姓名：{vifnn:$thisOrder['user_name']|htmlspecialchars_decode=ENT_QUOTES}<br>
+电话：{vifnn:$thisOrder['user_tel']|htmlspecialchars_decode=ENT_QUOTES}<br>
+地址：{vifnn:$thisOrder['user_address']|htmlspecialchars_decode=ENT_QUOTES}<br>
+数量：{vifnn:$thisOrder['num']}<br>
+订单金额：<span style="color:#f30;font-size:16px;font-weight:bold">{vifnn:$thisOrder['price']}</span>元<br/>
+支付方式：{vifnn:$thisOrder['paystr']}<br>
+状态：{vifnn:$thisOrder['state_text']}<br>
+备注:{vifnn:$thisOrder.message|htmlspecialchars_decode=ENT_QUOTES}<br/>
+</div>
+
+<form class="form" method="post" id="form" action=""> 
+<input type="hidden" name="id" value="{vifnn:$thisOrder.id}" />
+    <div class="msgWrap bgfc"> 
+     <table class="userinfoArea" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%"> 
+      <tbody>
+	   <tr> 
+        <th><span class="red">*</span>发货状态：</th> 
+        <td><select name="state" style="width: 100px;"><option value="1" <if condition="$thisOrder.state eq 1">selected</if>>未发货</option><option value="2" <if condition="$thisOrder.state eq 2">selected</if>>已发货</option></select></td> 
+       </tr>
+	   <!--tr> 
+        <th><span class="red">*</span>退款状态：</th> 
+        <td><select name="isbucha" style="width: 100px;"><option value="0" <if condition="$thisOrder.isbucha eq 0">selected</if>>未退款</option><option value="1" <if condition="$thisOrder.isbucha eq 1">selected</if>>已退款</option></select></td> 
+       </tr-->
+	   <tr>
+	   <th><span class="red">*</span>快递公司：</th>
+	   <td>
+		<input type="text" class="px" name="express_name" style="width:100px" value="{vifnn:$thisOrder['express_name']}"/>
+	   </td>
+	   </tr>
+	   <tr> 
+        <th><span class="red">*</span>快递单号：</th> 
+        <td><input type="text" class="px" name="express_num" style="width:200px" value="{vifnn:$thisOrder['express_num']}"/></td> 
+       </tr>
+       <tr>         
+       <th>&nbsp;</th>
+       <td>
+       <button type="submit" class="btnGreen">更新状态</button>
+	   </td> 
+       </tr>
+      </tbody> 
+     </table> 
+     </div>
+    
+   </form> 
+   
+
+</body>
+ <script src="{vifnn::STATICS}/jquery-1.4.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+</script>
+</html>

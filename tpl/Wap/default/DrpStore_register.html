@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>会员登录</title>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/groupbuying.css" media="all" />
+    <script type="text/javascript" src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <script type="text/javascript">
+        var _global = {"url":{}};
+        _global.spm = {};
+    </script>
+    <style type="text/css">
+        .motify {
+            display: none;
+            position: fixed;
+            top: 35%;
+            left: 50%;
+            width: 220px;
+            padding: 0;
+            margin: 0 0 0 -110px;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.5em;
+            border-radius: 6px;
+            -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .motify .motify-inner {
+            padding: 10px 10px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body class="sanckbg">
+    <div class="motify"><div class="motify-inner"></div></div>
+    <div class="menu_header">
+      <div class="menu_topbar"> <span class="head-title">会员注册</span> <span class="head_btn_left"><a href="javascript:history.go(-1);">返回</a></span> <a class="head_btn_right" <if condition="$_GET['id'] neq ''">href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}"<else/>href="{vifnn::U('Store/select', array('token' => $_GET['token'], 'wecha_id' => $_GET['wecha_id'], 'twid' => $_GET['twid']))}"</if>> <i class="menu_header_home"></i> </a> </div>
+    </div>
+    <form <if condition="$Think.get.id neq ''">action="{vifnn::U('DrpStore/register',array('id'=>$_GET['id']))}"<else />action="{vifnn::U('DrpStore/register',array('token' => $_GET['token'], 'wecha_id' => $_GET['wecha_id'], 'twid' => $_GET['twid']))}"</if> method="post">
+
+        <h2 class="fhdtl_h m15">个人信息</h2>
+        <div class="fhdtl_c">
+            <ul class="biao2">
+                <li>
+                    <p class="pl">账号</p>
+                    <p class="pr"><input id="username" placeholder="请输入账号" name="username" type="text" class="px" tag="input" /></p>
+                </li>
+                <li>
+                    <p class="pl">手机</p>
+                    <p class="pr"><input id="tel" placeholder="请输入手机号" name="tel" type="text" class="px" tag="input" /></p>
+                </li>
+                <li>
+                    <p class="pl">姓名</p>
+                    <p class="pr"><input id="truename" placeholder="请输入姓名" name="truename" type="text" class="px" tag="input" /></p>
+                </li>
+                <li>
+                    <p class="pl">地址</p>
+                    <p class="pr"><input id="address" placeholder="请输入地址" name="address" type="text" class="px" tag="input" /></p>
+                </li>
+                <li>
+                    <p class="pl">密码</p>
+                    <p class="pr"><input id="password" placeholder="请输入密码" name="password" type="password" class="px" tag="input" /></p>
+                </li>
+                <li>
+                    <p class="pl">确认密码</p>
+                    <p class="pr"><input id="password2" placeholder="请输入确证密码" name="password2" type="password" class="px" tag="input" /></p>
+                </li>
+            </ul>
+        </div>
+        <div class="footReturn">
+            <ul>
+                <li class="footerbtn"><a id="showcard2" class="return right3" href="javascript:history.go(-1);">取消</a></li>
+                <li class="footerbtn"><input type="submit" id="BtnOrder" class="submit" style="width:100%" value="注册"> </li>
+            </ul>
+        </div>
+    </form>
+    <script src="{vifnn:$staticFilePath}/js/zepto.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/style_3.js"></script>
+
+    <section id="tipMessage" class="Fh_qdown_apv box-shadow" style="text-align: right;padding: 10px">
+        <a <if condition="$Think.get.id neq ''">href="{vifnn::U('DrpStore/login', array('id' => $_GET['id']))}"<else/>href="{vifnn::U('DrpStore/login', array('token' => $_GET['token'], 'wecha_id' => $_GET['wecha_id'], 'twid' => $_GET['twid']))}"</if> class="F_red F_font">已有账号，现在登录</a>
+    </section>
+    <script type="text/javascript">
+        $('.submit').click(function(){
+            if ($('#username').val() == '') {
+                motify.log('请输入您的账号！');
+                return false;
+            } else {
+                var flag = true;
+                $.ajaxSetup({async:false});
+                $.post("{vifnn::U('DrpStore/check_user')}", {'name' : $('#username').val()}, function(data){
+                    if (!data) {
+                        flag = false;
+                        motify.log('您输入的用户名已存在！');
+                    }
+                })
+                if (!flag) {
+                    return false;
+                }
+            }
+
+            if ($('#tel').val() == '') {
+                motify.log('请输入您的手机号！');
+                return false;
+            }
+
+            if ($('#password').val() == '') {
+                motify.log('请输入您的密码！');
+                return false;
+            }
+
+            if ($('#password2').val() != $('#password').val()) {
+                motify.log('两次密码输入不一致！');
+                return false;
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<include file="Public:head"/>
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<form class="form" method="post" action=""  target="">
+<div class="content">
+<!--活动开始-->
+<div class="cLineB">
+    <h4>设置审核人</h4><a href="javascript:history.go(-1);"  class="right btnGrayS vm" style="margin-top:-27px" >返回</a>
+</div>
+ <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;"></if>温馨提示：1.如果你未购买短信包或短信包余额不足，请将手机号和验证码留空<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 2.如果你填写了手机号但验证码没有及时收到，可以到总后台的公众号管理里面直接手动绑定审核人的手机号
+</div>
+<div class="msgWrap bgfc">
+<div style="float:left;width:60%;">
+<TABLE class="userinfoArea" style=" margin:0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
+<TBODY>
+<if condition="$set['openid'] eq ''">
+<tr>
+  <th>粉丝昵称：</th> 
+  <td>
+	<input type="text" class="px" value="{vifnn:$set.nickname}" id="name" name="nickname" style="width:205px;" />
+	<a href="javascript:void(0);" class="btnGreen" id="search">搜索</a>
+  </td> 
+</tr>
+<tr> 
+  <th><span class="red">*</span>openid：</th> 
+  <td><input type="text" name="openid" value="{vifnn:$set.openid}" class="px" id="openid" style="width:205px;" /></td> 
+</tr> 
+<tr> 
+  <th>绑定手机号：</th> 
+  <td><input type="text" name="verifier_phone" value="" class="px" id="verifier_phone" style="width:205px;" /><button type="button" onclick="sendMsg()" id="a_verify" class="btnGreen">获取验证码</button></td> 
+</tr> 
+<tr> 
+  <th>输入验证码：</th> 
+  <td><input type="text" name="verifier_code" value="" class="px" id="verifier_code" style="width:205px;" /></td> 
+</tr> 
+<else />
+<tr>
+  <th>粉丝昵称：</th> 
+  <td>
+	<span>{vifnn:$set.nickname}</span>
+		<input type="hidden" name="nickname" value="{vifnn:$set.nickname}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" fid="1" class="btnGreen verify">更换审核人</a>
+  </td> 
+</tr>
+<tr> 
+  <th>openid：</th> 
+  <td>
+  <input type="hidden" name="openid" value="{vifnn:$set.openid}" />
+ <span>{vifnn:$set.openid}</span></td> 
+</tr> 
+<if condition="$set['verifier_phone'] neq 0">
+<tr> 
+  <th>绑定的手机号:</th> 
+  <td><span style="font-size:16px;"><?php echo str_replace(substr($set['verifier_phone'],3,4),'****',$set['verifier_phone'])?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" fid="2" class="btnGreen verify">更换手机号</a></td> 
+</tr> 
+<else />
+<tr> 
+  <th>绑定手机号：</th> 
+  <td><input type="text" name="verifier_phone" value="" class="px" id="verifier_phone" style="width:205px;" /><button type="button" onclick="sendMsg()" id="a_verify" class="btnGreen">获取验证码</button></td> 
+</tr> 
+<tr> 
+  <th>输入验证码：</th> 
+  <td><input type="text" name="verifier_code" value="" class="px" id="verifier_code" style="width:205px;" /></td> 
+</tr> 
+</if>
+</if>
+<if condition="$set['openid'] eq '' || $set['verifier_phone'] eq 0">
+<tr>    
+	<th valign="top"></th>     
+	<td>
+	<if condition="$set['id'] neq ''"><input type="hidden" name="id" value="{vifnn:$set['id']}" /></if>
+		<input type="hidden" name="token" value="{vifnn:$token}" />
+        <button type="submit" name="button" class="btnGreen">确定</button>
+        &nbsp;&nbsp;&nbsp; 
+        <a href="" class="btnGray vm">取消</a>
+   	</td> 
+</tr> 
+</if>
+</TBODY>
+</TABLE>
+</div>
+<div class="clr"></div>
+</div>
+</form>
+<div class="clr"></div>
+</div>
+<script>
+$(function(){
+    $('#search').click(function(){
+      var name  = $('#name').val();
+      if(name != ''){
+        $.getJSON("{vifnn::U('Message/getOpenid',array('token'=>$token))}&name="+name,function(res){
+            if(res.error == 0){
+              $('#openid').val(res.openid);
+            }else{
+              alert(res.info);
+            }
+        },JSON)
+      }else{
+        alert('请填写粉丝昵称');
+      }
+    });
+	//验证码验证窗口
+	$(".verify").click(function(){
+		var phone = '{vifnn:$set.verifier_phone}';
+		if(phone == 0 || phone == ''){
+			art.dialog.open('?g=User&m=Message&a=change_verifier&token={vifnn:$token}&id={vifnn:$set.id}',{lock:true,title:'更换审核人',width:600,height:250,yesText:'关闭',background: '#000',opacity: 0.45});
+			return false;
+		}
+		var settype = $(this).attr('fid');
+		var win_name = (settype ==1 )? '更换审核人' : '更换手机号';
+		if(confirm('是否发送短信给绑定的手机号:'+phone+'?')){
+			var reg=/^0{0,1}1[0-9]{10}$/i;
+			if( phone == '' || !reg.test(phone)){
+				alert('手机号格式不正确');
+				return false;
+			}
+			jQuery(function($) {
+				var token = '{vifnn:$token}';
+				$.ajax({
+					url:"{vifnn::U('Message/commonSmsVerify')}",
+					type:"post",
+					data:"mobile="+phone+"&token="+token,
+					success:function(data){
+						if(data == 'done'){
+							art.dialog.open('?g=User&m=Message&a=commonphone&token={vifnn:$token}&id={vifnn:$set.id}&phone='+phone+"&settype="+settype,{lock:true,title:win_name,width:600,height:250,yesText:'关闭',background: '#000',opacity: 0.45});
+						}else if(data == 'not_buy'){
+							alert('未购买短信，短信无法发送');
+						}else{
+							alert(data);
+						}
+				 }
+				});
+			});
+		}
+	})
+})
+	
+function sendMsg(){
+	var num = $(":input[name='verifier_phone']").val();
+	var reg=/^0{0,1}1[0-9]{10}$/i;
+	if( num == '' || !reg.test(num)){
+		alert('请输入正确的手机号！');
+		return false;
+	}
+   if (confirm("将会发送验证码到 "+num)){
+		jQuery(function($) {
+			var token = '{vifnn:$token}';
+			$.ajax({
+				url:"{vifnn::U('Message/commonSmsVerify')}",
+				type:"post",
+				data:"mobile="+num+"&token="+token,
+				beforeSend: function(){ 
+					$("#a_verify").attr("disabled","disabled");
+				},
+				success:function(data){
+					if(data == 'done'){
+						alert('获取验证码成功,请及时查收,验证码保留30分钟');
+						$("#a_verify").removeClass('btnGreen').addClass('btnGrayS');
+						fun_timedown(60);
+					}else if(data == 'not_buy'){
+						alert('未购买短信，短信无法发送');
+					}else{
+						alert(data);
+					}
+			 },
+			complete: function(){$("#a_verify").removeAttr("disabled");}
+			});
+		});
+	}else{
+		return false;
+	}
+	return false;
+}
+
+function fun_timedown(time){
+	if(time=='undefined'){
+		time = 60;
+	}
+
+	$("#a_verify").text(time+"秒");
+	$("#a_verify").attr("disabled","disabled");
+	
+	time = time-1;
+	if(time>=0){
+		setTimeout("fun_timedown("+time+")",1000);
+	}else{
+		$("#a_verify").removeAttr("disabled");
+		$("#a_verify").addClass('btnGreen');
+		$("#a_verify").text('获取验证码');
+	}
+}
+</script>
+<include file="Public:footer"/>

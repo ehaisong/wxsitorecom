@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>订单详细</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+
+
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn:$staticFilePath}/js/foundation.alert.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/Common.js"></script>
+</head>
+
+<body>
+    <!--alert begin-->
+    
+    <!--alert end-->
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" style="display: none;" id="errerMsg"><a href="{vifnn::U('DrpUcenter/profile')}#" class="close">×</a></div>
+    <!--submit errow tip end-->
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="javascript:window.history.go(-1);"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title" id="title">订单详细</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <div class="personal-complete">
+        <!--side nav begin-->
+        <div class="personal-center" id="divInfo">
+            <ul class="side-nav" id="list">
+                <li isnew="False">
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">单号</span></div>
+                    <div class="cont-value"><span class="value">{vifnn:$order.orderid}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">金额</span></div>
+                    <div class="cont-value"><span class="value" style="color:#c40000;font-weight: bold">￥{vifnn:$order.price|number_format=###, 2, '.', ''}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">数量</span></div>
+                    <div class="cont-value"><span class="value">{vifnn:$order.total}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">留言</span></div>
+                    <div class="cont-value"><span class="value" id="qqno">{vifnn:$order.comment|default='无'}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <div class="title"><span class="text">手机</span></div>
+                        <div class="cont-value"><span class="value">{vifnn:$order.tel}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                        <div class="title"><span class="text">收货人</span></div>
+                        <div class="cont-value"><span class="value">{vifnn:$order.truename}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">收货地址</span></div>
+                    <div class="cont-value"><span class="value">{vifnn:$order.address}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">支付状态：</span></div>
+                    <div class="cont-value"><span class="value"><if condition="$order.paid eq 0">未支付<else/>已支付</if></span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">发货状态：</span></div>
+                    <div class="cont-value"><span class="value"><if condition="$order.sent eq 0">未发货<else/>已发货</if></span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">快递公司：</span></div>
+                    <div class="cont-value"><span class="value">{vifnn:$order.logistics}</span></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">
+                    <div class="title"><span class="text">快递单号：</span></div>
+                    <div class="cont-value"><span class="value">{vifnn:$order.logisticsid}</span></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+
+        <table width="100%">
+            <volist name="products" id="product">
+            <tr>
+                <td width="80"><a href="{vifnn::U('DrpProduct/index', array('id' => $store_id, 'pid' => $product['id']))}"><img src="{vifnn:$product.logourl}" width="80" /></a></td>
+                <td align="left">
+                    <if condition="$product['skus'] neq ''">
+                        <volist name="product['skus']" id="sku">
+                            - <span style="color: green">{vifnn:$key}：{vifnn:$sku}</span><br/>
+                        </volist>
+                    </if>
+                    <span style="color: gray">{vifnn:$product.comment}</span>
+                </td>
+                <td align="right">
+                    <span style="color:#c40000;font-weight: bold">￥{vifnn:$product.price}</span><br/>
+                    x {vifnn:$product.quantity}
+                    <br/>
+                    <if condition="$product.shipping gt 0">
+                        运费：￥{vifnn:$product.shipping}
+                    <else />
+                        免运费
+                    </if>
+                </td>
+            </tr>
+                <tr><td colspan="3"><a href="{vifnn::U('DrpProduct/index', array('id' => $store_id, 'pid' => $product['id']))}">{vifnn:$product.name}</a></td></tr>
+            </volist>
+        </table>
+        <if condition="$order.paid eq 0">
+        <div class="button-exit" id="exit"><a href="{vifnn:$pay_url}" class="button [radius red round]">(￥{vifnn:$ordertotal})去付款</a></div>
+        </if>
+    </div>
+
+
+
+
+    <!--form begin-->
+    <!--form end-->
+    <!--side nav end-->
+    <script>
+        $(document).foundation().foundation('joyride', 'start');
+    </script>
+
+
+
+
+</body></html>

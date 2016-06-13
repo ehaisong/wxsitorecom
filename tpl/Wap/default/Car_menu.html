@@ -1,0 +1,21 @@
+
+
+    <div class="copyright" >
+    <if condition="$iscopyright eq 1">
+    <center>{vifnn:$homeInfo.copyright}</center>
+    <else/>
+    <center>{vifnn:$siteCopyright} </center>
+    </if>
+    </div>
+
+<script type="text/javascript">
+window.shareData = {
+            "moduleName":"Car",
+            "moduleID":"0",
+            "imgUrl": "",
+            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Car/index',array('token'=>$token))}",
+            "tTitle": "微汽车",
+            "tContent": "微汽车"
+        };
+</script>
+{vifnn:$shareScript}

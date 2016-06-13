@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>提现账号</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+
+
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/Common.js"></script>
+</head>
+<body class="body-gray">
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" style="display: none;" id="errerMsg"><a href="{vifnn::U('DrpUcenter/withdraw_account')}#" class="close">×</a></div>
+    <!--submit errow tip end-->
+    <!--submit success tip end-->
+    <div data-alert="" class="alert-box success" style="display: none;">保存成功！</div>
+    <!--submit success tip end-->
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a href="javascript:;" onclick="window.history.go(-1);" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">提现账号</h1>
+            </section>
+            <section class="right-small right-small-text2">
+                <a href="javascript:void(0)" id="btnSave" class="button [radius round] top-button">保存</a>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--content begin-->
+    <form class="mt-55 mlr-15">
+        <div class="panel callout radius formstyle">
+            <!--01 begin-->
+            <div class="row collapse">
+                <div class="small-12 large-12 columns">
+                    <input type="text" placeholder="持卡人" id="CashRealName" name="CashRealName" value="{vifnn:$store.payee}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--01 end-->
+            <!--02 begin-->
+            <div class="row collapse">
+                <div class="small-12 large-12 columns">
+                    <input type="text" placeholder="开户银行" id="CashBank" name="CashBank" value="{vifnn:$store.bankname}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--02 end-->
+            <!--03 begin-->
+            <div class="row collapse">
+                <div class="small-12 large-12 columns">
+                    <input type="text" placeholder="银行卡号" id="CashAccount" name="CashAccount" value="{vifnn:$store.bankcard}" />
+                    <span class="close-input" style="display: none;"></span>
+                </div>
+            </div>
+            <!--03 end-->
+        </div>
+    </form>
+    <!--content end-->
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSave").click(function () {
+            $("#errerMsg").hide(300, "linear");
+            var CashRealName = $("#CashRealName").val().trim();
+            if (CashRealName == "") {
+                $("#CashRealName").focus();
+                ShowMsg("持卡人姓名不能为空");
+                return false;
+            }
+            var CashBank = $("#CashBank").val().trim();
+            if (CashBank == "") {
+                $("#CashBank").focus();
+                ShowMsg("开户银行名称不能为空");
+                return false;
+            }
+            var CashAccount = $("#CashAccount").val().trim();
+            if (CashAccount == "") {
+                $("#CashAccount").focus();
+                ShowMsg("银行卡号不能为空");
+                return false;
+            }
+
+            $.ajax({
+                url: "{vifnn::U('DrpUcenter/withdraw_account')}",
+                data: {"payee": CashRealName, "bankcard": CashAccount, "bankname": CashBank},
+                async: false,
+                cache: false,
+                type: 'POST',
+                success: function (data) {
+                    if (data) {
+                        window.location.href = "{vifnn::U('DrpUcenter/profile')}";
+                    } else {
+                        ShowMsg("保存失败,请稍候再试");
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+</body></html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="no-js  mobile" lang="zh-CN">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="keywords" content="收货地址" />
+    <meta name="description" content="收货地址" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="cleartype" content="on" />
+
+    <title>收货地址 - {vifnn:$storeSet.name}</title>
+    <!-- _global -->
+    <script type="text/javascript">
+
+    var _global = {
+        "url":{}
+    };
+    _global.spm = {};
+    
+    
+    </script>
+
+
+    <!-- meta viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/base.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/trade.css" />
+    <style type="text/css">
+        body,a {
+            font-family: "\5fae\8f6f\96c5\9ed1","Microsoft YaHei",Helvetica,Arial,sans-serif!important;
+        }
+        .address-list {
+            cursor: pointer;
+        }
+        .check {
+            float: left;
+            width: 20px;
+            height: 20px;
+            background:url('{vifnn:$staticFilePath}/images/icon_check_circle@2x.png') center center no-repeat;
+            background-size: contain;
+            padding-top:43px;
+            margin-left: 10px;
+        }
+        .checked {
+            background:url('{vifnn:$staticFilePath}/images/icon_check_circle_checked@2x.png') center center no-repeat;
+            background-size: contain;
+        }
+        .address-info {
+            float: left;
+            width: 270px;
+            word-wrap: break-word;
+            word-break: normal;
+        }
+    </style>
+</head>
+
+<body class=" ">
+    <!-- container -->
+    <!-- JS -->
+    <script src="{vifnn:$staticFilePath}/js/zepto.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/style_3.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <div class="motify"><div class="motify-inner"></div></div>
+
+    <script src="{vifnn:$staticFilePath}/js/other.js"></script>
+
+
+
+    <div id="tL0i4xOMsr" class="modal order-modal active">
+        <div>
+
+            <volist name="addresses" id="address">
+                <div class="block address-list">
+                    <div class="check <if condition='$i eq 1'>checked</if>" data="{vifnn:$address.id}"></div>
+                    <div class="adress-{vifnn:$i} block-item address-info">地 址：<span class="address-exist">{vifnn:$address.address}</span> <span class="postcode-exist">{vifnn:$address.postcode}</span><br/>收货人：<span class="name-exist">{vifnn:$address.name}</span>&nbsp;&nbsp;电话：<span class="tel-exist">{vifnn:$address.tel}</span></div>
+                </div>
+            </volist>
+            <if condition="count($addresses) lt 3">
+            <form class="js-address-fm address-ui address-fm">
+            <div class="block address-add" <if condition="count($addresses) gt 0">style="display: none"</if>>
+                <div class="block-item">
+                    <label class="form-row form-text-row">
+                        <em class="form-text-label">收货人</em>
+                        <span class="input-wrapper"><input name="user_name" class="form-text-input user-name" placeholder="姓名" type="text" <if condition="$shipping_address.name neq ''">value="{vifnn:$shipping_address.name}"</if> /></span>
+                    </label>
+                </div>
+                <div class="block-item">
+                    <label class="form-row form-text-row">
+                        <em class="form-text-label">联系电话</em>
+                        <span class="input-wrapper"><input name="tel" class="form-text-input tel" placeholder="手机或固话" type="text" <if condition="$shipping_address.tel neq ''">value="{vifnn:$shipping_address.tel}"</if> /></span>
+                    </label>
+                </div>
+                <div class="block-item">
+                    <label class="form-row form-text-row">
+                        <em class="form-text-label">详细地址</em>
+                        <span class="input-wrapper"><input name="address_detail" class="form-text-input address-detail" placeholder="省、市、街道门牌信息" type="text" <if condition="$shipping_address.address neq ''">value="{vifnn:$shipping_address.address}"</if> /></span>
+                    </label>
+                </div>
+                <div class="block-item">
+                    <label class="form-row form-text-row">
+                        <em class="form-text-label">邮政编码</em>
+                        <span class="input-wrapper"><input maxlength="6" name="postal_code" class="form-text-input postcode" placeholder="邮政编码" type="text" <if condition="$shipping_address.postcode neq ''">value="{vifnn:$shipping_address.postcode}"</if> /></span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <div class="action-container">
+                    <a class="js-address-save btn btn-block btn-blue">保存</a>
+                    <if condition="count($addresses) lt 3 && count($addresses) gt 0">
+                    <a class="js-address-add btn btn-block btn-red">添加收货地址</a>
+                    </if>
+                    <a class="js-address-cancel btn btn-block">取消</a>
+                </div>
+            </div>
+            </form>
+            </if>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $('.js-address-add').click(function(){
+                $('.check').removeClass('checked');
+                $('.address-add').slideDown(300);
+                $('.user-name').focus();
+            })
+            $('.address-list').click(function(){
+                $(this).children('.check').addClass('checked');
+                $(this).siblings('.address-list').children('.check').removeClass('checked');
+                $('.address-add').slideUp(300);
+            })
+            $('.js-address-save').click(function(){
+                if ($('.address-list .checked').length == 0) {
+                    if ($('.address-add:visible').length == 0) {
+                        if ($('.address-list').length > 0) {
+                            motify.log("请选择收货地址！");
+                            return false;
+                        } else {
+                            motify.log("请填写收货地址！");
+                            return false;
+                        }
+                    } else {
+                        if ($('.user-name').val() == '') {
+                            motify.log("请填写收货人！");
+                            return false;
+                        } else if ($('.tel').val() == '') {
+                            motify.log("请填写联系电话！");
+                            return false;
+                        } else if ($('.address-detail').val() == '') {
+                            motify.log("请填写详细地址！");
+                            return false;
+                        } else if ($('.postcode').val() == '') {
+                            motify.log("请填写邮政编码！");
+                            return false;
+                        } else if (isNaN($('.postcode').val())) {
+                            motify.log("邮政编码输入有误！");
+                            return false;
+                        }
+                    }
+
+                    //新增收货地址
+                    var name = $('.user-name').val();
+                    var tel = $('.tel').val();
+                    var address = $('.address-detail').val();
+                    var postcode = $('.postcode').val();
+                    var action = 'add';
+                    var address_id = 0;
+                } else { //已选择收货地址
+                    var address = $('.address-list .checked').siblings('.address-info').find('.address-exist').text();
+                    var name = $('.address-list .checked').siblings('.address-info').find('.name-exist').text();
+                    var tel = $('.address-list .checked').siblings('.address-info').find('.tel-exist').text();
+                    var postcode = $('.address-list .checked').siblings('.address-info').find('.postcode-exist').text();
+                    var action = 'select';
+                    var address_id = $('.address-list .checked').attr('data');
+                }
+
+                $.post("{vifnn::U('DrpCheckout/shipping_address', array('id' => $_GET['id']))}", {'action' : action, 'name' : name, 'tel' : tel, 'address' : address, 'postcode' : postcode, 'address_id' : address_id}, function(data){
+                    var data = $.parseJSON(data);
+                    if (data.status) {
+                        window.location.href = "{vifnn::U('DrpCheckout/index', array('id' => $_GET['id']))}";
+                    }
+                })
+            })
+            $('.js-address-cancel').click(function(){
+                window.history.back();
+            })
+        })
+    </script>
+</body>
+</html>

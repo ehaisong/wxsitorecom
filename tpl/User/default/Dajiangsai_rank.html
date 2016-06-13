@@ -1,0 +1,64 @@
+<include file="Public:head"/> 
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+        <div class="content">
+<div class="cLineB">
+<h4 class="left">分享大奖赛排行榜</h4>
+<a href="javascript:history.go(-1);" class="right btnGrayS vm">返回</a>
+<div class="clr"></div>
+</div>
+<!-- 
+<div class="cLine">
+<div class="pageNavigator left"> <a href="{vifnn::U('Popularity/set',array('token'=>$token))}" title="添加活动" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/product/add.png" width="16" class="vm">添加活动</a></div> 
+<div class="searchbar right">
+	<form method="post" action="">
+		<input type="text" id="msgSearchInput" class="txt left" placeholder="输入关键词搜索" name="search" value="">
+		<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+	</form>
+</div>
+<div class="clr"></div>
+</div> -->
+<div class="msgWrap">
+<form method="post" action="" id="info">
+<input name="delall" type="hidden" value="">
+<input name="wxid" type="hidden" value="">
+<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+<thead>
+<tr>
+<th width="60">排名</th>
+<th width="160">姓名</th>
+<th width="160">邀请人(来源)</th>
+<th width="160">手机号码</th>
+<th width="220">助力值</th>
+<th width="150">加入时间</th>
+<th width="100" class="norightborder">操作</th>
+</tr>
+</thead>
+<tbody>
+<tr></tr>
+<volist name="list" id="item" key="key"> 
+<tr>
+<td>{vifnn:$key}</td>
+<td>{vifnn:$item.username}<br><if condition="$item.sub neq 1"><font color=red>未关注</font></if></td>
+<td>{vifnn:$item.sharename}</td>
+<td>{vifnn:$item.mobile}</td>
+<td>{vifnn:$item.help_count}点<br>分享：{vifnn:$item.sharecount}次<br>给力值：{vifnn:$item.number}%<br>积分：{vifnn:$item.help_score}</td>
+<td>{vifnn:$item.add_time|date="Y-m-d H:i:s",###}</td> 
+<td class="norightborder">
+		<a href="{vifnn::U('Dajiangsai/rankid',array('pid'=>$pid,'token'=>$token,'share_key'=>$item['share_key'],))}">统计</a>
+	<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Dajiangsai/rank_del',array('id'=>$item['id'],'token'=>$token))}');">删除</a>
+</td>
+</tr>
+</volist>
+</tbody>
+</table>
+</form>
+
+</div>
+<div class="cLine">
+<div class="pageNavigator right">
+<div class="pages">{vifnn:$page}</div>
+</div>
+<div class="clr"></div>
+</div>
+</div>
+<include file="Public:footer"/>

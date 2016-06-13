@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html style="overflow: hidden;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>微信公众平台管理系统</title>
+<link href="{vifnn::RES}/vifnn/css/style.css" rel="stylesheet" type="text/css">
+<link href="{vifnn::RES}/vifnn/js/jquery.jscrollpane.css" rel="stylesheet" type="text/css">
+<link href="{vifnn::RES}/vifnn/css/main_info.css" rel="stylesheet" type="text/css" />
+<link href="{vifnn::RES}/vifnn/css/global.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{vifnn::RES}/vifnn/js/jquery-1.7.2.min.js"></script>
+<!-- <script type="text/javascript" src="{vifnn::RES}/vifnn/js/jquery.mousewheel.js"></script> -->
+<script type="text/javascript" src="{vifnn::RES}/vifnn/js/jquery.jscrollpane.js"></script>
+<script type="text/javascript" src="{vifnn::RES}/vifnn/js/global.js"></script>
+<script type="text/javascript" src="{vifnn::RES}/vifnn/js/main2.js"></script>
+<script type="text/javascript" src="{vifnn::RES}/js/sys.js"></script>
+
+ <script>
+    var isChrome = navigator.userAgent.toLowerCase().match(/chrome/) != null;
+      if (isChrome) {
+		} else {
+        alert("您使用的不是Chrome内核的浏览器，请更换chrome内核浏览器获取最佳体验效果！（如谷歌浏览器、360浏览器极速模式、搜狗浏览器等）");
+        }
+  </script>
+  
+</head>
+<body style="overflow: hidden;">
+<div id=header>
+<div class=logo><a href="/" class="f_l"><img src="{vifnn:$f_logo}" /></a>
+</div>
+<ul>
+  <li class="ico-0 cur"><a href="{vifnn::U('Index/info',array('token'=>$token))}" target=_self>我的帐号</a></li>
+  <li class=ico-6><a  href="{vifnn::U('Index/useredit')}" target=iframe>修改密码</a></li>
+  <!--<li class=ico-1><a 
+  href="http://www.vifnn.com/member/?m=html&amp;a=anstructions" 
+  target=iframe>使用说明</a></li>
+  <li class=ico-2><a 
+  href="#rar">使用手册下载</a></li>
+  <li class=ico-3><a href="http://www.vifnn.com/member/?m=html&amp;a=vedio" 
+  target=iframe>视频教程</a></li>-->
+  <li class=ico-4><a href="https://mp.weixin.qq.com" 
+  target=blank>公众平台</a></li>
+  <li class=ico-5><a href="javascript:void(0)" class="sqty" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_self')" >安全退出</a>
+</ul>
+</div>
+<div id=main>
+<div class=menu>
+	<dl>
+	  <dt group="wechat0" style="display: block;"><img src="{vifnn::RES}/images/main/m-ico-0.png">管理平台</dt>
+	  <dd>
+		<ul class="rounded-list">
+				<li class=" lisit "> <a class="secnav_2" href="{vifnn::U('Index/index')}" target=iframe>我的公众号</a></li> 
+                <li class="lisit"> <a class="secnav_1" href="{vifnn::U('Index/useredit')}" target=iframe>修改密码</a> </li>
+				<li class=" lisit "> <a class="secnav_3" href="{vifnn::U('Index/add')}" target=iframe>添加公众号</a> </li>
+				<li class=" lisit "> <a class="secnav_4" href="{vifnn::U('Alipay/index')}" target=iframe>会员充值</a> </li>
+				<li class=" lisit "> <a class="secnav_5" href="{vifnn::U('Alipay/vip')}" target=iframe>会员升级</a> </li>
+				<li class=" lisit "> <a class="secnav_6" href="{vifnn::U('Sms/index')}" target=iframe>短信管理</a> </li>
+				<vifnnif where="$thisUser['invitecode']"><li class=" lisit "> <a class="secnav_7" href="{vifnn::U('Index/invite')}" target=iframe>邀请朋友</a> </li></vifnnif>
+        <!--li class=" lisit "> <a class="secnav_9" href="<if condition="C('open_biz') eq 0">javascript:alert('企业号开发中。。。');<else />{vifnn::U('Index/add',array('biz'=>1))}</if>" target=iframe>添加企业号</a> </li-->
+		</ul>
+	</dl>
+</div>
+<div class=iframe><iframe id="mainpage" src="{vifnn::U('User/Index/index')}" frameBorder=0 
+name=iframe scrolling=auto></iframe></div>
+<div class=clear></div></div>
+<div id=footer>
+<div class=oem></div></div>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?f1df238552a2693bb59ed55bb258fd49";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</BODY></HTML>
+

@@ -1,0 +1,128 @@
+	<!-- <link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/dashang/css/base.css"> -->
+	<link href="{vifnn:$staticPath}/tpl/static/comment/css/comstyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/dashang/css/index.css">
+    <script src="{vifnn:$staticPath}/tpl/static/dashang/js/jquery-1.7.2.js" type="text/javascript" charset="utf-8"></script>
+	<style>
+    .dComment{padding-bottom: 10px;}
+    .dComment .dsMoney{text-align: center;font-size: 15px;color: #999;padding: 10px 0}
+    .dComment .dsMoney em{color: #5182c0;font-style: normal}
+    .dComment .userList{overflow: hidden;padding:0 20px 0 32px;border-bottom: 1px solid #e1e1e1;padding-bottom: 5px;}
+    .dComment .userList ul li{float: left;margin: 0 5px 5px 5px;width: 32px;height: 32px;list-style: none}
+    .dComment .userList ul li img{width: 32px;height: 32px;}
+	</style>
+	<?php $dpcount = 0;
+	for($i = 1;$i <= 6;$i++){
+		if($res['dashang_price_'.$i] > 0){
+			$dpcount++;    
+			$last_price = $res['dashang_price_'.$i];
+		}  
+	}; ?>
+	<script type="text/javascript">
+    $(function() {
+        $(".reward_icon").click(function() {
+            $(".layer").show();
+            $(".layer_content").show();
+        });
+        $(".close").click(function() {
+            $(".layer").hide();
+            $(".layer_content").hide();
+        });
+        $(".layer_active li").click(function(){
+        	$(this).addClass('active').siblings('').removeClass('active');
+
+        });
+        $(".layer_input input").focus(function(){
+           $(".layer_active li.active").removeClass('active');
+        });
+		$(".layer_button").click(function(){
+			<?php if($res['dashang_price_type'] == 2 && ($dpcount > 1)){?>
+			var price = $(".layer_active li.active").text();
+			<?php }elseif($res['dashang_price_type'] == 2 && ($dpcount == 1)){?>
+			var price = $(".layer_txt p").text();
+			<?php }elseif($res['dashang_price_type'] == 1){?>
+			var price = $(".layer_txt p").text();
+			<?php }?>
+			var myprice = $("input[name='myprice']").val();
+			if((myprice*1) > 0){
+				price = myprice;
+			}else{
+				prices = price.split('元');
+				price = prices[0];
+				if(price == ''){
+					alert('至少输入0.01元');return;
+				}
+			}
+			location.href='<?php echo U('Wap/Index/dashang',array('token'=>$token,'imgid'=>$_GET['id']));?>&price='+price;
+		});
+		var ac_len=$(".layer_active li").length;
+ 
+		switch(ac_len){
+			case 2:$(".layer_active").css("padding","10px 0");$(".layer_active li").css("margin","4px 26px");break;
+			case 3:$(".layer_active").css("padding","10px 0");$(".layer_active li").css("margin","4px "); break;
+			case 4:$(".layer_active li").css("margin","4px 26px");break;
+		    case 5:$(".layer_active li:nth-child(1)").css("margin","4px 26px");$(".layer_active li:nth-child(2)").css("margin","4px 26px");break;
+			};
+    })
+    </script>
+    <asid>
+        <div class="layer"></div>
+		<?php if($res['dashang_price_type'] == 2){?>
+        <div class="layer_content">
+            <i class="close"></i>
+            <div class="layer_head"><img src="{vifnn:$wxuser['qr']}"></div>
+            <div class="layer_txt">
+				<?php if($dpcount == 1){?>				
+				<p><?php echo ($last_price/100);?>元</p>
+				<?php }else{ ?>
+                <ul class="clearfix layer_active">
+					
+                    <?php if($res['dashang_price_1'] > 0){?><li><?php echo $res['dashang_price_1']/100;?>元</li><?php }?>
+                    <?php if($res['dashang_price_2'] > 0){?><li><?php echo $res['dashang_price_2']/100;?>元</li><?php }?>
+                    <?php if($res['dashang_price_3'] > 0){?><li><?php echo $res['dashang_price_3']/100;?>元</li><?php }?>
+                    <?php if($res['dashang_price_4'] > 0){?><li><?php echo $res['dashang_price_4']/100;?>元</li><?php }?>
+                    <?php if($res['dashang_price_5'] > 0){?><li><?php echo $res['dashang_price_5']/100;?>元</li><?php }?>
+                    <?php if($res['dashang_price_6'] > 0){?><li><?php echo $res['dashang_price_6']/100;?>元</li><?php }?>
+                </ul>
+				<?php }; ?>
+                <div class="layer_input">
+                    <input name="myprice" type="text" value="请输入其他金额" onFocus="if (value =='请输入其他金额'){value =''}" onBlur="if (value ==''){value='请输入其他金额'}" style="color:#fff7c4"><i style="font-style: normal;">元</i></input>
+                </div>
+            </div>
+            <div class="layer_button">赏</div>
+        </div>
+		<?php }elseif($res['dashang_price_type'] == 1){?>
+        <div class="layer_content">
+            <i class="close"></i>
+            <div class="layer_head"><img src="{vifnn:$wxuser['qr']}"></div>
+            <div class="layer_txt">
+                <p><?php echo (rand($res['dashang_price_min'],$res['dashang_price_max']))/100;?>元</p>
+                <div class="layer_input">
+                    <input name="myprice" type="text" value="请输入其他金额" onFocus="if (value =='请输入其他金额'){value =''}" onBlur="if (value ==''){value='请输入其他金额'}" style="color:#fff7c4"><i style="font-style: normal;">元</i></input>
+                </div>
+            </div>
+            <div class="layer_button">赏</div>
+        </div>
+		<?php }?>
+    </asid>
+    <article class="reward_content">
+        <section class="reward_article">
+            <!-- <p><span class="already_reward_icon"><i>已赏</i><i>200元</i></span></p> -->
+            <p><span class="reward_icon">赏</span></p>
+        </section>
+		<?php if($dashang_count > 0){?>	
+		<section class="dComment" style="padding-bottom:0;max-height: 158px;overflow: hidden;">
+			<div class="dsMoney">
+				<p><em>{vifnn:$dashang_count}</em>人打赏</p>
+			</div>
+			<div class="userList">
+				<ul>	
+				<volist name="dashang_list" id="dv">		
+					<li>
+						<img src="{vifnn:$dv['userinfo']['portrait']|default=$staticPath.'/tpl/static/comment/images/avatar.png'}"/>
+					</li>
+				</volist>	
+				</ul>
+			</div>		
+		</section>
+		<?php }?>
+    </article>	

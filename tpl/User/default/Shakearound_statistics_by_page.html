@@ -1,0 +1,69 @@
+<script src="{vifnn:$staticPath}/tpl/static/myChart/js/echarts-plain.js"></script>
+<div id="shakearound_page" style="height:400px;width:960px;"></div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('shakearound_page')); 
+    var option = {
+        title : {
+            text: '以页面为维度的数据统计',
+            x:'left'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['打开页面次数','打开页面人数','摇出页面次数','摇出页面人数'],
+            x: 'right'
+        },
+        toolbox: {
+            show : false,
+            feature : {
+                mark : {show: false},
+                dataView : {show: false, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore : {show: false} ,
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : [{vifnn:$pagecharts.xAxis}]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'打开页面次数',
+                type:'line',
+                tiled: '总量',
+                data: [{vifnn:$pagecharts.click_pv}]
+            },    
+            {
+                "name":'打开页面人数',
+                "type":'line',
+                "tiled": '总量',
+                data:[{vifnn:$pagecharts.click_uv}]
+            },
+            {
+                "name":'摇出页面次数',
+                "type":'line',
+                "tiled": '总量',
+                data:[{vifnn:$pagecharts.shake_pv}]
+            },         
+			{
+                "name":'摇出页面人数',
+                "type":'line',
+                "tiled": '总量',
+                data:[{vifnn:$pagecharts.shake_uv}]
+            }
+
+        ]
+    };                   
+    myChart.setOption(option); 
+</script>

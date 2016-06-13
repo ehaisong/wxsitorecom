@@ -1,0 +1,90 @@
+<include file="Public:head" />
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">募捐活动列表</h4>
+		<div class="clr"></div>
+	</div>
+	 <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;">温馨提示：1.请确保“在线支付设置”中的<a href="{vifnn::U('Alipay_config/index',array('token'=>$token))}" target="_blank"><span style="color:green;">微信支付</span></a>配置正常。<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.当活动到了开始时间或活动已经产生了捐款时，该活动就不可以删除了。<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.本功能使用了模板消息中的“成功付款通知”模板消息，其模板编号:OPENTM207528726。<br />
+</div>
+	<!--tab start-->
+	<div class="tab">
+		<ul>
+			<li class="current tabli" id="tab0"><a href="{vifnn::U('Donation/index')}">募捐活动</a></li>
+		</ul>
+	</div>
+	<!--tab end-->
+	<div class="msgWrap">
+		<div class="cLine">
+			<div class="pageNavigator left"> <a href="{vifnn::U('Donation/creat',array('token' => $token))}" title="添加" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 新增募捐活动</a></div>
+			<div class="clr"></div>
+		</div>
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="80">募捐名称</th>
+					<th width="80">募捐接受机构</th>
+					<if condition="$Think.session.is_syn ELT 0"><th width="80">关键字</th></if>
+					<th width="100" nowrap>开始/结束时间</th>
+					<th width="50" nowrap>状态</th>
+					<th width="300">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="donations" id="o"> 
+				<tr>
+					<td>{vifnn:$o.name}</td> 
+					<td>{vifnn:$o.company}</td> 
+					<if condition="$Think.session.is_syn ELT 0"><td>{vifnn:$o.keyword}</td></if>
+					<td>{vifnn:$o.starttime|date="Y-m-d H:i",###}<br/>{vifnn:$o.endtime|date="Y-m-d H:i",###}</td>
+					<td>{vifnn:$o['status']}</td>
+					<td class="norightborder">
+							<script type="text/javascript">
+						   $(document).ready(function(){
+							  var bheight=document.body.clientHeight;
+							  $("#lay{vifnn:$o.id}").click(function(){
+						   $("#brg{vifnn:$o.id}").css("display","block");
+						   $("#showdiv{vifnn:$o.id}").css("display","block");
+						   //$("#testdiv").load("test.html");
+						   });
+						   $("#close{vifnn:$o.id}").click(function(){
+							  $("#brg{vifnn:$o.id}").css("display","none");
+						   $("#showdiv{vifnn:$o.id}").css("display","none");
+						   });
+						   });
+						 </script>
+						 <style type="text/css">
+						   #brg{vifnn:$o.id}{z-index: 9999;width:100%; height:100%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
+						   #showdiv{vifnn:$o.id}{z-index:9999; display:none;position:fixed; *position:absolute; top:20%; left:50%; margin:-50px 0 0 -50px;}
+						   #testdiv{vifnn:$o.id}{ width:300px; height:300px; margin:0 auto; border:1px solid #4d4d4d; background:#f2f2f2;}
+						   #close{vifnn:$o.id}{width:300px; height:27px; line-height:27px; font-size:14px; font-weight:bold; border:1px solid #4d4d4d; text-align:center; cursor:pointer; margin:0 auto; background:#333; color:#fff;margin-top: 15%;}
+						 </style>
+							<div id="brg{vifnn:$o.id}"></div>
+						 <div id="showdiv{vifnn:$o.id}">
+						   <div id="close{vifnn:$o.id}">您想关闭就点我吧</div>
+						   <div id="testdiv{vifnn:$o.id}"><img src="{vifnn:$Think.session.source_domain}/wap.php?c=Wxapp&a=qrcode&id={vifnn:$o.id}&modle=Donation" width="300" height="300" class="cateimg_small"></div>
+						 </div>
+						<if condition="$Think.session.is_syn eq 2">
+						<if condition="$usertplid neq 2">
+						   <a id="lay{vifnn:$o.id}" style="width:191px;">查看二维码</a><br>
+						</if>
+						</if>
+						<a href="{vifnn::U('Donation/creat', array('id' => $o['id']))}">修改</a> 
+						<a href="{vifnn::U('Donation/dynamic', array('did' => $o['id']))}">动态列表</a> 
+						<a href="{vifnn::U('Donation/set', array('did' => $o['id']))}">活动设置</a> 
+						<a href="{vifnn::U('Donation/order', array('did' => $o['id']))}">捐款详情</a>
+						<if condition="empty($o['is_delete'])">
+						<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Donation/deldonation', array('id' => $o['id']))}');">删除</a> 
+						</if>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+</div>
+<include file="Public:footer"/>

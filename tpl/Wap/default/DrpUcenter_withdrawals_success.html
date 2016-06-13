@@ -1,0 +1,46 @@
+<html><head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>我的佣金</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+
+
+</head>
+<body class="body-gray">
+<!--topbar begin-->
+<div class="fixed">
+    <nav class="tab-bar">
+        <section class="left-small">
+            <a href="{vifnn::U('DrpUcenter/withdrawals')}" class="menu-icon"><span></span></a>
+        </section>
+        <section class="middle tab-bar-section">
+            <h1 class="title">提取佣金</h1>
+        </section>
+    </nav>
+</div>
+<!--topbar end-->
+<!--content begin-->
+
+<!--success begin-->
+<div class="panel tippage">
+    <span class="icon-success"></span>
+    <p class="text-success">提现成功！</p>
+    <p class="text-gray">
+        提现金额<b>￥{vifnn:$amount}</b><br>
+        预计到账时间 <b>{vifnn:$paid_day}</b> 工作日
+    </p>
+    <a href="{vifnn::U('DrpUcenter/commission_log', array('type' => 1))}">查看提现记录</a>
+</div>
+<!--success end-->
+
+<!--content end-->
+
+
+</body></html>

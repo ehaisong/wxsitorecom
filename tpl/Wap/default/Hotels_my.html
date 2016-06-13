@@ -1,0 +1,124 @@
+<include file="Hotels:header"/>
+<body>
+	<div class="html">
+		<div class="main">
+<header>
+	<a href="{vifnn::U('Hotels/order',array('token' => $_GET['token']))}" class="ico-hd arr-hd"></a>
+	<h1>我的订单</h1>
+	<a href="{vifnn::U('Hotels/index',array('token' => $_GET['token']))}" class="ico-hd ico-order">首页</a>
+</header>
+<div class="contxt cont-artical">
+	<div class="box-cont box-list-order page-cont">
+	<volist name="list" id="order">
+    <div class="list-li" onclick="javascript:showOrder('{vifnn:$order['id']}')">
+	<div class="hd box-txt">
+		<b>在线预订客房{vifnn:$company['name']}</b>
+		<p><span>入住日期</span><b>{vifnn:$order['startdate']}</b></p>
+		<p><span>离店日期</span><b>{vifnn:$order['enddate']}</b></p>
+		<p><span>状态</span>
+		<if condition="$order['paytype'] eq 'daofu' or $order['paytype'] eq 'dianfu'">
+			<span style="color:green">到店付款</span>
+		<elseif condition="$order['paid'] eq 1" />
+			<if condition="$order['status'] eq 1">
+			<span style="color:green">已入住</span>
+			<elseif condition="$order['status'] eq 2" />
+			<span style="color:red">已取消</span>
+			<else />
+			<span style="color:green">已预定</span>
+			</if>
+		<else />
+			<span style="color:red">未支付</span>
+		</if>
+		</p>
+	</div>
+	<div class="bd">
+		<span class="arrow arr-small"><em>￥{vifnn:$order['price']}</em><br><i>{vifnn:$order['day']}晚</i></span>
+	</div>
+	</div>
+	</volist>
+	</div>
+	<if condition="$totalpage gt 1">
+	<div class="tcenter"><a href="javascript:void(0);" class="loading" data-remote="true" id="more_loading" rel="next">点击查看更多...</a></div>
+	</if>
+<div class="tcenter"><div class="isloading loading" style="display: none">加载中...</div></div>
+</div>
+
+<script>
+var page = 2;
+$(document).ready(function(){
+	$("#more_loading").click(function(){
+		$(".isloading").css("display",'');
+		$("#more_loading").css("display","none");
+		$.get("{vifnn::U('Hotels/ajaxorder',array('token' => $_GET['token']))}&page=" + page, function(response) {
+			if (response.page == 0) {
+				$("#more_loading").hide();
+			} else {
+				page = response.page;
+				$("#more_loading").css("display","block");
+			}
+			var html = '';
+			$.each(response.data, function(i, v){
+			    html += '<div class="list-li" onclick="javascript:showOrder(' + v.id + ')">';
+			    html += '<div class="hd box-txt">';
+			    html += '<b>在线预订客房' + v.hotelname + '</b>';
+			    html += '<p><span>入住日期</span><b>' + v.startdate + '</b></p>';
+			    html += '<p><span>离店日期</span><b>' + v.enddate + '</b></p>';
+			    html += '<p><span>状态</span>';
+			    if (v.paytype == 'daofu' || v.paytype == 'dianfu') {
+			    	html += '<span style="color:green">到店付款</span>';
+			    } else if (v.paid == 1) {
+			    	if (v.status == 1) {
+			    		html += '<span style="color:green">已入住</span>';
+			    	} else if (v.status == 2) {
+			    		html += '<span style="color:red">订单已取消</span>';
+			    	} else {
+			    		html += '<span style="color:green">已预定</span>';
+			    	}
+			    } else {
+			    	html += '<span style="color:red">未支付</span>';
+			    }
+			    html += '</p>';
+			    html += '</div>';
+			    html += '<div class="bd">';
+			    html += '<span class="arrow arr-small"><em>￥' + v.price + '</em><br><i>' + v.day + '晚</i></span></div></div>';
+			});
+			$(".box-cont").append(html);
+			$(".isloading").css("display",'none');
+		}, 'json');
+	});
+});
+
+
+$( document ).ajaxStart(function() {
+	$(".isloading").css("display",'');
+	$("#more_loading").css("display","none");
+});
+
+$( document ).ajaxStop(function() {
+	$(".isloading").css("display",'none');
+	$("#more_loading").css("display","block");
+});
+
+function showOrder(order_id){
+	window.location.href = "{vifnn::U('Hotels/detail',array('token' => $token))}&oid=" + order_id;
+}
+</script>
+
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+window.shareData = {  
+            "moduleName":"Hotels",
+            "moduleID":"{vifnn:$company[0]['id']}",
+            "imgUrl": "{vifnn:$company[0]['logourl']}", 
+            "timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U('Hotels/my',array('token' => $_GET['token']))}",
+            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Hotels/my',array('token' => $_GET['token']))}",
+            "weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('Hotels/my',array('token' => $_GET['token']))}",
+            "tTitle": "{vifnn:$metaTitle}",
+            "tContent": "{vifnn:$metaTitle}"
+        };
+</script>
+{vifnn:$shareScript}
+</html>

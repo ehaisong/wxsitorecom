@@ -1,0 +1,65 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="{vifnn::STATICS}/jingcai/css/todc_bootstrap_button.css" media="all" />
+<link rel="stylesheet" type="text/css" href="{vifnn::STATICS}/jingcai/css/themes.css" media="all" />
+<link rel="stylesheet" type="text/css" href="{vifnn::STATICS}/jingcai/css/inside.css" media="all" />
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/jQuery.js"></script>
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/bootstrap_min.js"></script>
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/jquery_form_min.js"></script>
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/jquery_validate_min.js"></script>
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/jquery_validate_methods.js"></script>
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/inside.js"></script>
+<script type="text/javascript" src="{vifnn::STATICS}/jingcai/src/highcharts.js?=2015"></script>
+<div class="content">	
+<h4 class="left">竞猜结果统计</h4>
+	<div class="clr"></div>
+	<div class="cLine">
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<div id="visitData" style="width: 97.5%; height: 300px;"></div>
+	</div>
+</div>
+</div>
+    <script type="text/javascript">
+
+        $(function () {
+
+            var chart;
+
+            $(document).ready(function () {
+
+                new Highcharts.Chart({
+
+                    chart: { renderTo: 'visitData', type: 'line', marginRight: 30, marginBottom: 25 },
+
+                    title: { text: '竞猜结果统计', x: -20 },
+
+                    xAxis: { categories: ['{vifnn:$info.zhuduiname}','平','{vifnn:$info.keduiname}'] },
+
+                    yAxis: {
+
+                        title: { text: '竞猜结果统计' },
+
+                        plotLines: [{ value: 0, width: {vifnn:$maxvalue},allowDecimals:false, color: '#808080' }]
+
+                    },
+
+                    tooltip: {
+
+                        formatter: function () { return this.x + ': ' + this.y + '人'; }
+
+                    },
+
+                    series: [{ name: "竞猜结果统计", data: [{vifnn:$result.zhuduinums|default='0'},{vifnn:$result.pingnums|default='0'},{vifnn:$result.funums|default='0'}] }],
+
+                    legend: { enabled: false }
+
+                });
+
+               
+
+            });
+
+        });
+</script>
+<include file="Public:footer"/>

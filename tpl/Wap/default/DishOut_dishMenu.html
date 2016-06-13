@@ -1,0 +1,154 @@
+<include file="DishOut:header" />
+<script>var wecha_idd="{vifnn:$wecha_id}"</script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/dishout/js/scroller.js"></script>
+
+<style type="text/css">
+#mymenu_lists .dztj_c{display:none}
+#mymenu_lists .nodztj_c{display:block}
+#mymenu_lists img{height:60px}
+#mymenu_lists .ishot{
+    font-size: 10px;
+    display: inline-block;
+    width: 35px;
+    height: 30px;
+    background: url("{vifnn:$staticPath}/tpl/static/repastnew/image/popular.png") no-repeat center center;
+    -webkit-background-size: 100% auto;
+    background-size: 100% auto;
+    position: absolute;
+    left: 7px;
+    top: 0px;
+    color: #fff;
+    line-height: 22px;
+    font-size: 12px;
+    text-align: center;
+}
+</style>
+<body onselectstart="return true;" ondragstart="return false;">
+<div class="container">
+	<header class="nav menu">
+		<div>
+			<a href="javascript:;" class="on">菜单</a>
+			<a href="{vifnn::U('DishOut/MyShop',array('token' => $token,'cid'=>$cid,'wecha_id' => $wecha_id))}">门店详情</a>
+		</div>
+	</header>
+	<form name="cart_form" action="{vifnn::U('DishOut/sureOrder',array('token' => $token,'wecha_id' => $wecha_id))}" method="post">
+	<section class="menu_wrap" id="menuWrap">
+	<div id="menuNav" class="menu_nav">
+		 <div class="ico_menu_wrap clearfix"><span class="ico_menu" id="icoMenu"><i></i></span></div>
+			<div class="side_nav" id="sideNav" style="overflow-y:scroll;padding-bottom: 10px;height: 666px;">
+				<ul>
+				<if condition="!empty($fenleiarr)">
+				 <vifnnlist array="fenleiarr" key="ik" foreach="item">
+				<li><a href="javascript:void(0);" title="{vifnn:$ik}">{vifnn:$item}</a></li>
+				</vifnnlist>
+				<if condition="$dz_tj">
+				<li><a href="javascript:void(0);" title="dztj" class="dztj_a">店长推荐</a></li>
+				</if>
+				</if>
+				</ul>
+			</div>
+		 </div>
+		
+	 <div class="menu_container" id="mymenu_lists">
+	 <if condition="!empty($disharr)">
+		<vifnnlist array="disharr" key="dk" foreach="ditem">
+		 <if condition="$key eq 'dztj' AND !empty($ditem)">
+		  <php>$dztj=true;</php>
+			<div class="menu_tt dztj_c">
+			<h2>店长推荐</h2></div>
+			<ul class="menu_list dztj_c">
+		   <else/>
+		   <php>$dztj=false;</php>
+			<div class="menu_tt nodztj_c">
+			<h2>{vifnn:$ditem['0']['sortname']}</h2></div>
+			<ul class="menu_list nodztj_c">
+		   </if>
+			<vifnnlist array="ditem" key="ddk" foreach="dditem">
+			<li>
+				<div style="position: relative;">
+					<if condition="!empty($dditem['image'])">
+					<img src="{vifnn:$dditem['image']}" alt="" url="{vifnn:$dditem['image']}">
+					</if>
+					<if condition="$isMember AND $discount gt 0 AND $dditem['isdiscount']">
+					<span class="ishot" style="left: -5px;">{vifnn:$discount}折</span>
+					</if>
+				</div>
+				<div>
+					<h3>{vifnn:$dditem['name']}</h3>
+					<p class="salenum">月售：<span class="sale_num">{vifnn:$dditem['m_sale']}</span><span class="theunit" style="display:none"><if condition="!empty($dditem['unit'])">{vifnn:$dditem['unit']}<else/>份</if></span>
+					<if condition="$kconoff eq 1"></br>库存：{vifnn:$dditem['instock']}</if>
+					<!--<span class="sales"><strong class="sale_8"></strong></span>--></p>
+					<div class="info">{vifnn:$dditem['des']|htmlspecialchars_decode=ENT_QUOTES}</div>
+				</div>
+				<div class="price_wrap" style="width:100px">
+					<strong>￥<span class="unit_price">{vifnn:$dditem['price']}<input type="hidden" class="tureunit_price" <if condition="isset($dditem['zkprice']) AND $dditem['zkprice'] gt 0">value="{vifnn:$dditem['zkprice']}"<else/>value="{vifnn:$dditem['price']}"</if>></span><if condition="!empty($dditem['unit'])">/{vifnn:$dditem['unit']}</if></strong>
+					<div class="fr" <if condition="$kconoff eq 1"> max="{vifnn:$dditem['instock']}" <else/>max="-1"</if>>
+				    <if condition="$kconoff eq 0 OR $dditem['instock'] gt 0">
+					 <a href="javascript:void(0);" class="btn add" <php> if(isset($dditem['ornum']) && !empty($dditem['ornum'])) echo "data-num=".$dditem['ornum']; else echo "data-num=''";</php>></a>
+					</if>
+					</div>
+					<if condition="$dztj">
+					<input autocomplete="off" class="number" type="hidden" name="dzdish[{vifnn:$dditem['id']}]" value="">
+					<else/>
+					<input autocomplete="off" class="number" type="hidden" name="dish[{vifnn:$dditem['id']}]" value="">
+					</if>
+				</div>
+			</li>
+			</vifnnlist>
+			</ul>
+		</vifnnlist>
+
+	 </if>
+	</div>
+	</section>
+	<input type="hidden" name="mycid" value="{vifnn:$cid}">
+	<footer class="shopping_cart">
+		<div class="fixed">
+			<div class="cart_bg">
+			<span class="cart_num" id="cartNum"></span></div>
+			<div>￥<span id="totalPrice">0</span><?php if($delivery_fee > 0){?><br><span id="delivery_fee" style="color:#888;font-size:13px">配送费￥{vifnn:$delivery_fee}</span><?php }?></div>
+			<div><span class="comm_btn disabled">还差 <span id="sendCondition"><if condition="$stype eq 1">{vifnn:$pricing}<else/>0</if></span> 起送</span>
+			<a id="settlement" href="javascript:document.cart_form.submit();" class="comm_btn" style="display: none;">去结算</a></div>
+			<if condition="$stype eq 2">
+			<p style="padding:10px;"><span>温馨提示：</span>商家设定了外送起步价为{vifnn:$pricing}元，订单金额不超过{vifnn:$pricing}元的将按{vifnn:$pricing}元收取</p>
+			</if>
+		</div>
+	</footer>
+	</form>
+
+	<div class="menu_detail" id="menuDetail">
+		<img style="display: none;">
+		<div class="nopic"></div>
+		<a href="javascript:void(0);" class="comm_btn" id="detailBtn">来一份</a>
+		<dl>
+			<dt>价格：</dt>
+			<dd class="highlight">￥<span class="price"></span></dd>
+		</dl>
+		<p class="sale_desc">月售<span class="sale_num"></span>份</p>
+		<dl>
+			<dt>介绍：</dt>
+			<dd class="info"></dd>
+		</dl>
+	</div>
+
+</div>
+<script type="text/javascript" src="./tpl/static/dishout/js/menu.js"></script>
+<script type="text/javascript">
+ <if condition="$stype eq 1">
+   var Pricing="{vifnn:$pricing}";
+   <else/>
+   var Pricing="0";
+ </if>
+
+	window.shareData = {  
+		"moduleName":"DishOut",
+		"moduleID":"{vifnn:$company['id']}",
+		"imgUrl": "{vifnn:$company['logourl']}", 
+		"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('DishOut/dishMenu',array('token' => $token,'cid'=>$cid))}",
+		"tTitle": "{vifnn:$metaTitle}",
+		"tContent": "{vifnn:$metaTitle}"
+     };
+</script>
+</body>
+{vifnn:$shareScript}
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>会员管理</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn::$staticFilePath}/js/foundation.tab.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.accordion.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/func.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/dis-v3.0.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v3.0.css" />
+
+    <style type="text/css">
+        .member {
+            border-bottom: 1px solid #e2e2e2;
+            background: #fff;
+            font-size: 14px;
+        }
+        .member a {
+            display: block;
+            padding: 12px 0;
+            text-align: center;
+            color: #333;
+        }
+        .member .columns {
+            padding-right: 0;
+            border-right: 1px solid #f1f1f1;
+        }
+    </style>
+    <script>
+        var _type = 'Day';
+        var _sort = '';
+        $(function () {
+            //FillData(_type, _sort);
+            $("#divList div a").click(function () {
+                if ($(this).attr("cid") == "x") {
+                    if ($(this).hasClass("current")) {
+                        _sort = "x2";
+                        $("#divList div a").removeClass("current");
+                    } else {
+                        $("#divList div a").removeClass("current");
+                        $(this).addClass("current");
+                        _sort = "x1";
+                    }
+                } else if ($(this).attr("cid") == "y") {
+                    if ($(this).hasClass("current")) {
+                        _sort = "y2";
+                        $("#divList div a").removeClass("current");
+                    } else {
+                        $("#divList div a").removeClass("current");
+                        $(this).addClass("current");
+                        _sort = "y1";
+                    }
+                } else {
+                    $("#divList div a").removeClass("current");
+                    $(this).addClass("current");
+                }
+                FillData(_type, _sort);
+            })
+        })
+        function FillData(_type, _sort) {
+            $.ajax({
+                url: "{vifnn::U('DrpMember/index', array('type' => $_GET['type']))}",
+                type: "post",
+                dataType: "html",
+                async: false,
+                data: { type: _type, sort: _sort },
+                success: function (response) {
+                    $("#memberList").html("");
+                    $("#memberList").append(response);
+                }
+            })
+        }
+
+    </script>
+</head>
+<body class="body-gray my-memvers-list">
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="{vifnn::U('DrpMember/my')}"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">会员({vifnn:$usercount|default=0})</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--sort-->
+    <div class="row sort" id="divList">
+        <div class="columns small-4"><a href="javascript:;" cid="" style="text-align: left">会员</a></div>
+        <div class="columns small-4"><a href="javascript:;" cid="x" style="text-align: right">订单数<i class="icon-arrow2"></i></a></div>
+        <div class="columns small-4"><a href="javascript:;" cid="y" style="text-align: right">金额（元）<i class="icon-arrow2"></i></a></div>
+    </div>
+    <!--list-->
+    <div class="member-list" id="memberList">
+        <if condition="empty($users)">
+        <!--none begin-->
+        <div class="nocontent-tip">
+            <i class="icon-nocontent-laugh"></i>
+            <p class="nocontent-tip-text">
+                你还没有会员，<br>
+                别人都开始数钱啦，快发展会员赚钱去！
+            </p>
+        </div>
+        <!--none end-->
+        <else />
+            <volist name="users" id="user">
+            <div class="row member">
+                <div class="columns small-4"><a href="javascript:void(0)" cid="" style="text-align: left">{vifnn:$user.username}</a></div>
+                <div class="columns small-4"><a href="javascript:void(0)" cid="x" style="text-align: right">{vifnn:$user.ordercount|default=0}</a></div>
+                <div class="columns small-4"><a href="javascript:void(0)" cid="y" style="text-align: right">{vifnn:$user.ordertotal|number_format=###, 2, '.', ''}</a></div>
+            </div>
+            </volist>
+        </if>
+    </div>
+
+    <script type="text/javascript">
+        $(document).foundation().foundation('joyride', 'start');
+    </script>
+
+
+</body>
+</html>

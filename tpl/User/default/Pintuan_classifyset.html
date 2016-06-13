@@ -1,0 +1,91 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<link rel="stylesheet" href="{vifnn::STATICS}/kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="{vifnn::STATICS}/kindeditor/plugins/code/prettify.css" />
+<script src="{vifnn::STATICS}/kindeditor/kindeditor.js" type="text/javascript"></script>
+<script src="{vifnn::STATICS}/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
+<script src="{vifnn::STATICS}/kindeditor/plugins/code/prettify.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="{vifnn:$staticPath}/tpl/static/cutprice/js/DatePicker/WdatePicker.js"></script>
+<script>
+</script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left"><?php echo $set['name']?'修改分组【'.$set['name'].'】':'添加一个分组'?></h4>
+		<a href="<?php echo U('User/Pintuan/classify',array('token'=>$token));?>"  class="right btnGrayS" >返回</a>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap bgfc">
+	<form class="form" method="post"   action="" enctype="multipart/form-data" >
+		<table class="userinfoArea" style=" margin:0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
+			<tbody>
+				<tr>
+					<th valign="top"><span class="red">*</span>分组名称：</th>
+					<td>
+						<input type="text" class="px" id="name" name="name" value="<?php echo $set['name']?$set['name']:'';?>" style="width:400px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top">排序：</th>
+					<td>
+						<input type="number" class="px" id="sort" name="sort" value="<?php echo $set['sort']?$set['sort']:'0';?>" style="width:400px;" />
+						&nbsp;排序越大越靠前
+					</td>
+				</tr>
+				<tr>
+					<th>&nbsp;</th>
+					<td><button type="submit" class="btnGreen" >保存</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+	$("form").submit(function(){
+		var is_error = true;
+		var is_error_msg = "";
+		var error_id = new Array();
+		var error_i = 0;
+		
+		var name = $('#name').val();
+		if(name == ''){
+			is_error_msg += "请填写分组名称！<br>";
+			buterror("#name");
+			error_id[error_i] = "#name";
+			error_i++;
+			is_error = false;
+		}
+		if(is_error == false){
+			_alert(is_error_msg);
+			//$("html,body").animate({scrollTop: $(error_id[0]).offset().top}, 500);
+			return false;
+		}else{
+			return true;
+		}
+	});
+});
+function _alert(content){
+	layer.alert(content,{icon:5});
+}
+function buterror(id){
+	$(id).css("border","2px solid red");
+	$(id).css("background-color","rgb(255, 223, 221)");
+	$(id).focus(function(){
+		$(id).css("background-color","#fff");
+		$(id).css("border","1px solid");
+		$(id).css("border-color","#848484 #E0E0E0 #E0E0E0 #848484");
+	});
+}
+</script>
+<include file="Public:footer"/>

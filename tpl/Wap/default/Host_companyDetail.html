@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>在线预订</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+<link href="{vifnn::RES}/css/style/css/hotels.css" rel="stylesheet" type="text/css">
+<script src="{vifnn::RES}/css/style/js/jquery.min.js" type="text/javascript"></script>
+<script src="{vifnn::RES}/js/tel.js" type="text/javascript"></script> 
+</head>
+<body id="hotelsmore" >
+<div class="qiandaobanner"><vifnnif where="$set['headpic']"><img src="{vifnn:$set['headpic']}" ><else/><img src="{vifnn::RES}/css/style/images/RTqs2yHIc9.jpg" ></vifnnif></div>
+<div class="cardexplain">
+
+<ul class="round">
+<li class="title"><span class="none">商家详情</span></li>
+<li>
+<div class="text">
+{vifnn:$set['info']}
+</div>
+</li>
+</ul>
+<!--连锁店-->
+<ul class="round">
+ <volist name="list" id="vo"> 
+    <li><a href="index.php?g=Wap&m=Host&a=index&token={vifnn:$vo.token}&hid={vifnn:$vo.id}&wecha_id={vifnn:$Think.get.wecha_id}"><span>{vifnn:$vo.title}</span></a></li>     
+</volist>
+</ul>
+     </div>
+<script>
+function dourl(url){
+location.href= url;
+}
+</script>
+
+<script type="text/javascript">
+window.shareData = {  
+            "moduleName":"Host",
+            "moduleID":"0",
+            "imgUrl": "", 
+            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Host/index',array('token'=>$token))}",
+            "tTitle": "预定",
+            "tContent": ""
+};
+</script>
+{vifnn:$shareScript}
+</body>
+</html>

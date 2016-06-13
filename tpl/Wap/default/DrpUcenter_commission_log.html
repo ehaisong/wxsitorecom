@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>会员中心</title>
+     <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+</head>
+
+<body>
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a href="{vifnn::U('DrpUcenter/commission')}" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">佣金</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--table begin-->
+    <dl class="tabs tab-title2">
+        <dd <if condition="$type neq true">class="active"</if> id="brokeragetab">
+            <a href="javascript:void(0)" onclick="brokeragelistshow(this)"><i class="icon-comdetail"></i>本店佣金明细</a>
+        </dd>
+        <dd id="extracttab" <if condition="$type eq true">class="active"</if>>
+            <a href="javascript:void(0)" onclick="extractlistshow(this)"><i class="icon-extract"></i>提现记录</a>
+        </dd>
+    </dl>
+    <!--table end-->
+    <!--content begin-->
+    <div class="tabs-content">
+        <!--commission begin-->
+        <div class="content <if condition="$type neq true">active</if>" id="brokeragelist">
+            <if condition="$commission_records neq ''">
+            <table width="100%">
+                <thead>
+                <tr>
+                    <th>编号</th>
+                    <th style="text-align: right">金额（元）</th>
+                    <th>备注</th>
+                    <th align="center">时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="commission_records" id="commission_record">
+                <tr>
+                    <td>{vifnn:$commission_record.id}</td>
+                    <td align="right">{vifnn:$commission_record.amount}</td>
+                    <td>{vifnn:$commission_record.bak}</td>
+                    <td>{vifnn:$commission_record.addtime|date="Y-m-d", ###}</td>
+                </tr>
+                </volist>
+                </tbody>
+            </table>
+                <else />
+                <!--none begin-->
+                <div class="disorder-none"><i class="icon-none"></i><span class="nonetext">您还没有佣金！</span></div>
+                <!--none end-->
+            </if>
+        </div>
+        <!--commission end-->
+        <!--wait recevie begin-->
+        <div class="content <if condition="$type eq true">active</if>" id="extractlist">
+
+            <if condition="$withdraw_records neq ''">
+                <table width="100%">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th style="text-align: right">金额（元）</th>
+                        <th style="text-align: center">状态</th>
+                        <th style="text-align: center">时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="withdraw_records" id="withdraw_record">
+                        <tr>
+                            <td>{vifnn:$withdraw_record.id}</td>
+                            <td align="right">{vifnn:$withdraw_record.amount}</td>
+                            <td align="center">
+                                <if condition="$withdraw_record.status eq 0"><span style="color:red">已申请</span></if>
+                                <if condition="$withdraw_record.status eq 1"><span style="color:green">已打款</span></if>
+                                <if condition="$withdraw_record.status eq 2"><span style="color:blue">已收款</span></if>
+                            </td>
+                            <td align="center">{vifnn:$withdraw_record.time|date="Y-m-d", ###}</td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <else />
+                <!--none begin-->
+                <div class="disorder-none"><i class="icon-none"></i><span class="nonetext">您还没有提现记录！</span></div>
+                <!--none end-->
+            </if>
+            
+        </div>
+        <!--wait recevie end-->
+    </div>
+    <!--content begin-->
+    <script type="text/javascript">
+        $('a[name="list"]').click(function () {
+            //  alert(1)
+            $(this).parent().children("div").toggle();
+            $(this).parent().toggleClass("current");
+        })
+
+        $('div[name="listext"]').click(function () {
+            $(this).toggleClass("current");
+        })
+        function brokeragelistshow() {
+            $("#brokeragelist").show();
+            $("#extractlist").hide();
+            $("#brokeragetab").addClass("active");
+            $("#extracttab").removeClass("active");
+        }
+        function extractlistshow() {
+            $("#brokeragelist").hide();
+            $("#extractlist").show();
+            $("#extracttab").addClass("active");
+            $("#brokeragetab").removeClass("active");
+        }
+    </script>
+
+
+</body></html>

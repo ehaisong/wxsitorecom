@@ -1,0 +1,124 @@
+<include file="DrpStore:header"/>
+<!-- _global -->
+    <script type="text/javascript">
+
+    var _global = {
+        "url":{}
+    };
+    _global.spm = {};
+
+    </script>
+
+<style type="text/css">
+    .market-price {
+        text-decoration: line-through;
+        color: gray;
+    }
+    .sorted a {
+        font-size: 12px;
+        color: gray;
+        padding: 2px;
+        border: 1px solid #CDCDCD;
+    }
+    .sorted .current {
+        font-size: 12px;
+        color: #BA1A16;
+        padding: 2px;
+        border: 1px solid #BA1A16;
+    }
+    .sorted .current-asc {
+        font-size: 12px;
+        color: #BA1A16;
+        padding: 2px;
+        border: 1px solid #BA1A16;
+    }
+    .f-ico-arrow-d {
+        display: inline-block;
+        width: 9px;
+        height: 13px;
+        background: url("/tpl/Wap/default/common/css/drpstore/images/icons.png") no-repeat;
+        background-position: -20px -21px;
+    }
+    .sorted .current .f-ico-arrow-d {
+        display: inline-block;
+        width: 9px;
+        height: 13px;
+        background: url("/tpl/Wap/default/common/css/drpstore/images/icons.png") no-repeat;
+        background-position: -29px -21px;
+    }
+    .sorted .current-asc .f-ico-arrow-d {
+        display: inline-block;
+        width: 9px;
+        height: 13px;
+        background: url("/tpl/Wap/default/common/css/drpstore/images/icons.png") no-repeat;
+        background-position: -45px -21px;
+    }
+</style>
+    <div class="motify"><div class="motify-inner"></div></div>
+    <div class="content ">
+        <div class="content-body">
+            <div class="custom-title">
+            <h2 class="title">{vifnn:$metaTitle}</h2>
+        </div>
+        <div class="custom-richtext sorted">
+            <a href="{vifnn::U('DrpStore/hot', array('id' => $_GET['id'], 'sort' => 'new-desc'))}" <if condition="$_GET['sort'] eq 'new-desc'">class="current"</if>>新品<i class="f-ico-arrow-d"></i></a>&nbsp;&nbsp;
+            <a href="{vifnn::U('DrpStore/hot', array('id' => $_GET['id'], 'sort' => 'sales-desc'))}" <if condition="$_GET['sort'] eq 'sales-desc' OR $_GET['sort'] eq ''">class="current"</if>>销量<i class="f-ico-arrow-d"></i></a>&nbsp;&nbsp;
+            <a <if condition="$_GET['sort'] eq 'price-asc'">class="current-asc"</if> <if condition="$_GET['sort'] eq 'price-desc'">class="current"</if> <if condition="$_GET['sort'] eq 'price-asc'">href="{vifnn::U('DrpStore/hot', array('id' => $_GET['id'], 'sort' => 'price-desc'))}"<elseif condition="$_GET['sort'] eq 'price-desc'" />href="{vifnn::U('DrpStore/hot', array('id' => $_GET['id'], 'sort' => 'price-asc'))}"<else/>href="{vifnn::U('DrpStore/hot', array('id' => $_GET['id'], 'sort' => 'price-asc'))}"</if> style="font-size:12px">价格<i class="f-ico-arrow-d"></i></a>
+        </div>
+
+        <!-- 商品区域 -->
+        <!-- 展现类型判断 -->
+        <ul class="sc-goods-list clearfix list size-3">
+
+            <volist name="products" id="product">
+            <li class="goods-card goods-list card">
+                <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $product['pid']))}" class="link js-goods clearfix" title="{vifnn:$product.name}">
+                   <div class="photo-block">
+                       <img class="goods-photo js-goods-lazy" src="{vifnn:$product.logourl}" style="display: block;">
+                   </div>
+                   <div class="info">
+                        <p class="goods-title">{vifnn:$product.name}</p>
+                        <p class="market-price">￥{vifnn:$product.oprice|number_format=###, 2, '.', ''}</p>
+                        <p class="goods-price"><em>{vifnn:$product.price|number_format=###, 2, '.', ''}</em></p>
+                        <div class="goods-buy btn1"></div>
+                        <div class="js-goods-buy buy-response"></div>
+                   </div>
+                </a>
+            </li>
+            </volist>
+        </ul>
+
+        <div style="text-align: center">
+            <a class="more" id="show_more" page="2" style="display: none;" href="javascript:void(0);"></a>
+            <input type="hidden" id="canScroll" value="1" />
+        </div>
+    </div>
+    <include file="DrpStore:footer"/>
+    <script type="text/javascript">
+    /*---------------------加载更多--------------------*/
+    var total = {vifnn:$count}, pagesize = 5, pages = Math.ceil(total / pagesize);
+    if (pages > 1) {
+        var _page = $('#show_more').attr('page');
+        $(window).bind("scroll",function() {
+            if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+                motify.log("加载中...");
+                if (_page > pages) {
+                    motify.log("没有更多了！");
+                    return;
+                }
+                if($('#canScroll').val()==0){//不要重复加载
+                    return;
+                }
+                $('#canScroll').attr('value',0);
+                $.post("{vifnn::U('DrpStore/hot', array('id' => $_GET['id'], 'sort' => $_GET['sort'], 'type' => 'ajax'))}",{'page' : _page, 'pagesize' : pagesize}, function(data) {
+                    $('#canScroll').attr('value',1);
+                    if (data) {
+                        $('#show_more').attr('page',parseInt(_page)+1);
+                    }
+                    _page = $('#show_more').attr('page');
+                    $('.sc-goods-list').append(data);
+                })
+            }
+        })
+    }
+    </script>

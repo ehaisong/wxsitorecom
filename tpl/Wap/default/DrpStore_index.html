@@ -1,0 +1,74 @@
+    <include file="DrpStore:header"/>
+        <style type="text/css">
+            .market-price {
+                text-decoration: line-through;
+                color: gray;
+            }
+        </style>
+        <div class="content " style="min-height: 794px;">
+            <div class="content-body">
+                <div class="tpl-11-11">
+                    <div class="tpl-11-11-banner" style="background-image: url('{vifnn:$store.banner}')"></div>
+                    <div class="tpl-11-11-title clearfix">
+                        <span class="tpl-11-11-team-name">{vifnn:$store.name}</span>
+                    </div>
+                    <if condition="$store.notice neq ''">
+                    <div class="tpl-11-11-notice">
+                        <div class="tpl-11-11-notice-inner">
+                            <div class="tpl-11-11-notice-scroll">
+                                <span class="js-scroll-notice">公告：{vifnn:$store.notice}</span>
+                            </div>
+                        </div>
+                    </div>
+                    </if>
+                </div>
+            
+                <!-- 商品区域 -->
+                <!-- 展现类型判断 -->
+                <ul class="sc-goods-list clearfix list size-3">
+                    <li>最新商品</li>
+                    <volist name="new_products" id="new_product">
+                    <li class="goods-card goods-list card">
+                        <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $new_product['pid']))}" class="link js-goods clearfix" data-goods-id="5817888" title="{vifnn:$new_product.name}">
+                           <div class="photo-block">
+                               <img class="goods-photo js-goods-lazy" data-src="{vifnn:$new_product.logourl}" src="{vifnn:$new_product.logourl}" style="display: block;">
+                           </div>
+                           <div class="info">
+                                <p class="goods-title">{vifnn:$new_product.name}</p>
+                                <p class="market-price">￥{vifnn:$new_product.oprice|number_format=###, 2, '.', ''}</p>
+                                <p class="goods-price"><em>￥{vifnn:$new_product['price']|number_format=###, 2, '.', ''}</em></p>
+                                <div class="goods-buy btn4"></div>
+                           </div>
+                        </a>
+                    </li>
+                    </volist>
+                </ul>
+                        
+                <div class="custom-line-wrap">
+                    <hr class="custom-line">
+                </div>
+
+                <!-- 商品区域 -->
+                <!-- 展现类型判断 -->
+                <ul class="sc-goods-list pic clearfix size-1 ">
+                    <li>最热商品</li>
+                    <volist name="hot_products" id="hot_product">
+                    <li class="goods-card goods-list small-pic card ">
+                        <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $hot_product['pid']))}" class="link js-goods clearfix" data-goods-id="{vifnn:$hot_product.id}" title="{vifnn:$hot_product.name}">
+                            <div class="photo-block">
+                                <img class="goods-photo js-goods-lazy" data-width="787" data-height="627" data-src="{vifnn:$hot_product.logourl}" src="{vifnn:$hot_product.logourl}" />
+                            </div>
+                            <div class="info clearfix info-title info-price btn4">
+                                <p class=" goods-title ">{vifnn:$hot_product.name}</p>
+                                <p class="goods-sub-title c-black hide"></p>
+                                <p class="market-price">￥{vifnn:$hot_product.oprice|number_format=###, 2, '.', ''}</p>
+                                <p class="goods-price"><em>￥{vifnn:$hot_product['price']|number_format=###, 2, '.', ''}</em></p>
+                            </div>
+                            <div class="goods-buy btn4 info-title"></div>
+                        </a>
+                    </li>
+                    </volist>
+                </ul>
+            </div>
+
+            <include file="DrpStore:footer"/>

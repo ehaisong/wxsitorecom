@@ -1,0 +1,44 @@
+
+	<if condition="ACTION_NAME eq 'index'">
+		<script type="text/javascript">
+			window.shareData = {  
+					"moduleName":"Index",
+					"moduleID": "0",
+					"imgUrl": "{vifnn:$homeInfo.picurl}", 
+					"timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$_GET['token'],'type'=>$_GET['type'],'bid'=>$_GET['bid'],'id'=>$_GET['id'],'wecha_id'=>$_GET['wecha_id']))}",
+					"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$_GET['token'],'type'=>$_GET['type'],'bid'=>$_GET['bid'],'id'=>$_GET['id'],'wecha_id'=>$_GET['wecha_id']))}",
+					"weiboLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$_GET['token'],'type'=>$_GET['type'],'bid'=>$_GET['bid'],'id'=>$_GET['id'],'wecha_id'=>$_GET['wecha_id']))}",
+					"tTitle": "{vifnn:$homeInfo.title}",
+					"tContent": "{vifnn:$homeInfo.info}"
+				};
+		</script>
+	<elseif condition="MODULE_NAME eq 'Store' AND ACTION_NAME eq 'cats'" />
+	<script type="text/javascript">
+		window.shareData = {  
+		            "moduleName":"Store",
+		            "moduleID":"{vifnn:$cats[0]['id']}",
+		            "imgUrl": "{vifnn:$cats[0]['logourl']}", 
+		            "timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U('Store/index',array('token' => $_GET['token'], 'twid' => $mytwid, 'cid' => $cid))}",
+		            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Store/index',array('token' => $_GET['token'], 'twid' => $mytwid, 'cid' => $cid))}",
+		            "weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('Store/index',array('token' => $_GET['token'], 'twid' => $mytwid, 'cid' => $cid))}",
+		            "tTitle": "{vifnn:$metaTitle}",
+		            "tContent": "{vifnn:$metaTitle}"
+		        };
+	</script>
+	<else />
+		<script type="text/javascript">
+			window.shareData = {  
+				"moduleName":"NewsList",
+				"moduleID": "{vifnn:$_GET['classid']|intval}",
+				"imgUrl": "{vifnn:$thisClassInfo.img}", 
+				"timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$_GET['token'],'classid'=>$_GET['classid']))}",
+				"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$_GET['token'],'classid'=>$_GET['classid']))}",
+				"weiboLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$_GET['token'],'classid'=>$_GET['classid']))}",
+				"tTitle": "{vifnn:$thisClassInfo.name}",
+				"tContent": "{vifnn:$thisClassInfo.info}"
+			};
+		</script>	
+	
+	</if>
+	
+{vifnn:$shareScript}

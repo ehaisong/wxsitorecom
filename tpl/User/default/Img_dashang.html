@@ -1,0 +1,67 @@
+<include file="Public:head"/>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">【{vifnn:$img['title']}】打赏记录</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="tab">
+		<ul>
+			<li class="<?php if($_GET['list_type'] == '' || $_GET['list_type'] == 1){?>current <?php }?>tabli" id="tab1"><a href="<?php echo U('User/Img/dashang',array('token'=>$token,'id'=>$_GET['id'],'list_type'=>1,'rank_type'=>$_GET['rank_type']));?>">按照每人的总金额查看</a></li>
+			<li class="<?php if($_GET['list_type'] == 2){?>current <?php }?>tabli" id="tab1"><a href="<?php echo U('User/Img/dashang',array('token'=>$token,'id'=>$_GET['id'],'list_type'=>2,'rank_type'=>$_GET['rank_type']));?>">按照每人的详细记录查看</a></li>
+		</ul>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<!-- <a href="" class="btnGrayS">按照每人的总金额查看</a>
+			<a href="" class="btnGrayS">按照每人的详细记录查看</a> -->
+			<a href="<?php echo U('User/Img/dashang',array('token'=>$token,'id'=>$_GET['id'],'rank_type'=>1,'list_type'=>$_GET['list_type']));?>" class="btnGrayS">按照时间排序</a>
+			<a href="<?php echo U('User/Img/dashang',array('token'=>$token,'id'=>$_GET['id'],'rank_type'=>2,'list_type'=>$_GET['list_type']));?>" class="btnGrayS">按照金额排序</a>
+		</div>
+		<div class="pageNavigator right">
+			<input type="text" id="name" class="px name" placeholder="搜索粉丝昵称"  name="name" value="{vifnn:$_GET['name']}" style="margin-top:10px">
+			<a href="javascript:seach()" id="seach" href="" class="btnGrayS" title="搜索">搜索</a>
+		</div>
+		<script>
+			function seach(){
+				var name = $("#name").val();
+				if(name != ""){
+					window.location.href="{vifnn::U('Img/dashang',array('token'=>$token,'id'=>$_GET['id']))}&name="+name;
+				}else{
+					window.location.href="{vifnn::U('Img/dashang',array('token'=>$token,'id'=>$_GET['id']))}";
+				}
+			}
+		</script>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="">头像</th>
+					<th width="">昵称</th>
+					<th width="">赏金</th>
+					<th width="">时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="dashang_list" id="dv" empty="没有找到数据">
+				<tr>
+					<td><img src="<?php if($dv['userinfo']['portrait']){echo $dv['userinfo']['portrait'];}else{?>{vifnn:$staticPath}/tpl/static/dashang/images/ui_1_03_03.png<?php }?>" height="60px"/></td>
+					<td><?php echo $dv['userinfo']['wechaname']?$dv['userinfo']['wechaname']:'匿名';?></td>
+					<td><?php echo $dv['price'];?>元</td>
+					<td>{vifnn:$dv['addtime']|date="Y-m-d H:i:s",###}</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<include file="Public:footer"/>

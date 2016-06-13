@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html class="no-js js-footer-autoheight" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript">
+        window.l_createElement = document.createElement;
+        window.l_Function = window.Function;
+        window.l_open = window.open;
+        window.l_adoptNode = document.adoptNode;
+        window.l_defineProperty = Object.defineProperty;
+    </script>
+
+    <meta charset="utf-8" />
+    <meta name="keywords" content="{vifnn:$store.name}">
+    <meta name="description" content="{vifnn:$store.name}">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="cleartype" content="on">
+    <title>{vifnn:$metaTitle}-{vifnn:$store.name}商城</title>
+
+    <!-- meta viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/base.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/showcase.css" />
+    <style type="text/css">
+        .content {
+            background-color: #f5fcf7;
+        }
+        body {
+            font-family: "\5fae\8f6f\96c5\9ed1","Microsoft YaHei",Helvetica,Arial,sans-serif;
+        }
+    </style>
+</head>
+
+<body class=" " style="padding-bottom: 45px;">
+<!-- container -->
+<div class="container ">
+    <div class="header">
+
+        <div class="js-mp-info share-mp-info">
+            <a class="page-mp-info" href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}">
+                <img class="mp-image" width="24" height="24" src="{vifnn:$store.logourl}" />
+                <i class="mp-nickname">{vifnn:$store.name}</i>
+            </a>
+            <div class="links"><a class="mp-homepage" href="{vifnn::U('DrpCategory/index', array('id' => $store['id']))}">商品分类</a></div>
+        </div>
+
+    </div>

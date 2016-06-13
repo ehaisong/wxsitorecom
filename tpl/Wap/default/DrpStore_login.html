@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>会员登录</title>
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/groupbuying.css" media="all" />
+    <script type="text/javascript" src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+</head>
+
+<body class="sanckbg">
+    <div class="menu_header">
+      <div class="menu_topbar"> <span class="head-title">会员登录</span> <span class="head_btn_left"><a href="javascript:history.go(-1);">返回</a></span> <a class="head_btn_right" <if condition="$_GET['id'] neq ''">href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}"<else/>href="{vifnn::U('Store/select', array('token' => $_GET['token'], 'wecha_id' => $_GET['wecha_id'], 'twid' => $_GET['twid']))}"</if>> <i class="menu_header_home"></i> </a> </div>
+    </div>
+    <form <if condition="$Think.get.id neq ''">action="{vifnn::U('DrpStore/login',array('id' => $_GET['id']))}"<else />action="{vifnn::U('DrpStore/login', array('token' => $_GET['token'], 'wecha_id' => $_GET['wecha_id'], 'twid' => $_GET['twid']))}"</if> method="post">
+
+        <h2 class="fhdtl_h m15">账号信息</h2>
+        <div class="fhdtl_c">
+            <ul class="biao2">
+                <li>
+                    <p class="pl">账号</p>
+                    <p class="pr"><input id="username" placeholder="请输入账号" name="username" type="text" class="px" tag="input" /></p>
+                </li>
+                <li>
+                    <p class="pl">密码</p>
+                    <p class="pr"><input id="password" placeholder="请输入密码" name="password" type="password" class="px" tag="input" /></p>
+                </li>
+            </ul>
+        </div>
+        <div class="footReturn">
+            <ul>
+                <li class="footerbtn"><a id="showcard2" class="return right3" href="javascript:history.go(-1);">取消</a></li>
+                <li class="footerbtn"><input type="submit" id="BtnOrder" class="submit" style="width:100%" value="登录"> </li>
+            </ul>
+        </div>
+    </form>
+    <section id="tipMessage" class="Fh_qdown_apv box-shadow" style="text-align: right;padding: 10px">
+        <if condition="$Think.get.id neq ''">
+        <a href="{vifnn::U('DrpStore/register', array('id' => $_GET['id']))}" class="F_red F_font">还没有账号，现在注册</a>
+        <else/>
+        <a href="{vifnn::U('DrpStore/register', array('token' => $_GET['token'], 'wecha_id' => $_GET['wecha_id'], 'twid' => $_GET['twid']))}" class="F_red F_font">还没有账号，现在注册</a>
+        </if>
+    </section>
+    <script type="text/javascript">
+        $(function(){
+            $('.submit').click(function(){
+                if ($('#username').val() == '' || $('#password').val() == '') {
+                    return false;
+                }
+            })
+        })
+    </script>
+</body>
+</html>

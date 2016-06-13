@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>回复详情</title>
+<meta http-equiv="MSThemeCompatible" content="Yes" />
+<link href="{vifnn::RES}/css/style.css" rel="stylesheet" type="text/css" />
+	<style>
+		.content
+		{
+			padding: 10px;
+		}
+		.content_list
+		{
+			padding: 0px;
+			margin: 0px;
+			list-style: none;
+		}
+		.content_list li
+		{
+			font-size: 14px;
+			line-height: 30px;
+		}
+		.content_textarea
+		{
+			width: 450px;
+			height: 100px;
+			padding: 5px;
+			border: solid 1px #DCDCDC;
+		}
+		.content_submit
+		{
+			width: 100px;
+			height: 35px;
+			line-height: 35px;
+			text-align: center;
+			background: #F5F5F5;
+			border: solid 1px #DCDCDC;
+			cursor: pointer;
+			border-radius: 5px;
+			display: inline-block;
+			margin-top: 10px;
+		}
+		.content_title
+		{
+			line-height: 30px;
+			color: #0a6aa1;
+			font-size: 14px;
+			border-bottom: solid 1px #0a6aa1;
+		}
+		.reply_list li
+		{
+			color: #555;
+			font-size: 14px;
+			margin-top: 5px;
+			border-bottom: solid 1px #DCDCDC;
+			padding-bottom: 5px;
+		}
+		.reply_list li p
+		{
+			line-height: 25px;
+		}
+		.reply_delete
+		{
+			color: #0a6aa1;
+			float: right;
+		}
+	</style>
+	<script src="{vifnn:$staticPath}/tpl/static/jquery.min.js"></script>
+</head>
+<body>
+<div class="content">
+	<ul class="content_list">
+		<li>回复内容：</li>
+		<li>
+			<textarea name="reply_content" class="content_textarea">{vifnn:$_info['reply_content']}</textarea>
+			<p style="text-align: right;width: 462px;">还能输入<span class="content_num">0</span>个字符</p>
+			<input type="hidden" name="info_id" value="{vifnn:$_info['info_id']}" />
+		</li>
+		<li style="text-align: center;"><div class="content_submit">提交</div></li>
+	</ul>
+	<div class="content_title">回复记录</div>
+	<empty name="_list">
+		<p style="line-height: 30px;font-size: 14px;text-align: center;">暂无回复记录</p>
+		<else/>
+		<ul class="reply_list">
+			<volist name="_list" id="reply">
+				<li>
+					<p>{vifnn:$reply.create_time|format_time}<a style="display: none;" reply-id="{vifnn:$reply.id}" class="reply_delete" href="javascript:;">删除</a></p>
+					<p>{vifnn:$reply.reply_content}</p>
+				</li>
+			</volist>
+		</ul>
+	</empty>
+
+</div>
+
+<script>
+	$('.content_submit').click(function()
+	{
+		if(countNum()<0)
+		{
+			alert('回复内容不能超出300个字符');
+			return false;
+		}
+		var data={};
+		data['reply_content']=$('[name=reply_content]').val();
+		data['info_id']=$('[name=info_id]').val();
+		$.post('{vifnn::U("reply")}',data,function(result)
+		{
+			try {
+				result=JSON.parse(result);
+			}catch (e)
+			{
+				result={};
+			}
+			if(result&&result['status']=='1')
+			{
+				alert(result['info']);
+				location.reload();
+			}
+			else if(result&&result['info'])
+			{
+				alert(result['info']);
+			}
+			else
+			{
+				alert('提交失败');
+			}
+		})
+	});
+
+	$('.reply_delete').click(function()
+	{
+		var data={};
+		data['id']=$(this).attr('reply-id');
+		$.post('{vifnn::U("delReply")}',data,function(result)
+		{
+			try {
+				result=JSON.parse(result);
+			}catch (e)
+			{
+				result={};
+			}
+			if(result&&result['status']=='1')
+			{
+				location.reload();
+			}
+			else if(result&&result['info'])
+			{
+				alert(result['info']);
+			}
+			else
+			{
+				alert('删除失败');
+			}
+		})
+	});
+
+	countNum();
+	$('[name=reply_content]').keyup(function()
+	{
+		countNum();
+	});
+
+	function countNum()
+	{
+		var content=$('[name=reply_content]').val();
+		var num=300-strlen(content);
+		$('.content_num').text(num);
+		if(num<0)
+		{
+			$('.content_num').css({color:'#f00'});
+		}
+		else
+		{
+			$('.content_num').css({color:'#555'});
+		}
+		return num;
+	}
+
+	//字数
+	function strlen(str)
+	{
+		var strlen = 0;
+		for(var i = 0;i < str.length; i++)
+		{
+			if(str.charCodeAt(i) > 255) //如果是汉字，则字符串长度加2
+				strlen += 3;
+			else
+				strlen++;
+		}
+		return   strlen;
+	}
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>我的佣金</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/Common.js"></script>
+    <style type="text/css">
+        .side-nav li {
+            padding: 5px;
+        }
+        .bank-info {
+            display: inline-block;
+            font-weight: bold;
+            width: 60px;
+            font-family: "微软雅黑","Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif!important;
+            color: #999;
+        }
+        .arrow {
+            margin-top: -15px!important;
+        }
+    </style>
+</head>
+<body class="body-gray">
+
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" id="errerMsg" style="display: none;"><a href="{vifnn::U('DrpUcenter/withdrawals')}" class="close">×</a></div>
+    <!--submit errow tip end-->
+
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a href="{vifnn::U('DrpUcenter/commission')}" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">提取佣金</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--content begin-->
+    <div class="panel extract">
+        <div class="commision-total"><span class="span-title">佣金总额</span><span class="number">￥{vifnn:$commission_total}</span></div>
+        <div class="extract-number"><span class="span-title">可提现金额</span><span class="number" id="MaxCashAmount">￥{vifnn:$commission_balance}</span><i class="icon-horn"></i></div>
+        
+        <div class="panel extract-account">
+            <ul class="side-nav">
+                <li><span class="bank-info">开户行：</span>{vifnn:$store.bankname}<br/>
+                    <span class="bank-info">银行卡：</span>{vifnn:$store.bankcard}<br/>
+                    <span class="bank-info">持卡人：</span>{vifnn:$store.payee}<a href="{vifnn::U('DrpUcenter/withdraw_account')}" style="display:inline"><i class="arrow"></i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="row extract-monynumber">
+            <div class="large-12 columns">
+                <input type="text" class="" id="CashAmount" placeholder="输入提现金额">
+                <span class="close-input" style="display: ;"></span>
+            </div>
+        </div>
+        <div class="tip-text">最低提现金额为<b id="MinaAmountCash">100.00</b>元，必须为<b id="IntTimes">100</b>的整数倍</div>
+        <a href="javascript:void(0)" onclick="btnSave()" class="button [radius round] red">立即提取</a>
+    </div>
+    <!--content end-->
+    <script type="text/javascript">
+        function btnSave() {
+            var CashAmount = $("#CashAmount").val().trim();
+            var MaxCashAmount = $("#MaxCashAmount").text().trim();
+            var MinaAmountCash = $("#MinaAmountCash").text().trim();
+            var IntTimes = $("#IntTimes").html().trim();
+            MaxCashAmount = MaxCashAmount.substr(1);
+            var reg = /^[0-9]*(\.[0-9]{1,2})?$/;
+            if (reg.test(CashAmount)) {
+                CashAmount = Number(CashAmount);
+                MaxCashAmount = Number(MaxCashAmount);
+                MinaAmountCash = Number(MinaAmountCash);
+                if (CashAmount > 0) {
+                    if (CashAmount <= MaxCashAmount) {
+                        if (CashAmount >= MinaAmountCash) {
+                            if (CashAmount % parseInt(IntTimes) == 0) {
+                                $.ajax({
+                                    url: "{vifnn::U('DrpUcenter/withdrawals')}",
+                                    data: {"amount": CashAmount },
+                                    async: false,
+                                    cache: false,
+                                    type: 'POST',
+                                    success: function (data) {
+                                        var data = $.parseJSON(data);
+                                        if (data.status) {
+                                            window.location.href = "{vifnn::U('DrpUcenter/withdrawals', array('status' => true))}&amount=" + data.data;
+                                        } else {
+                                            window.location.href = "{vifnn::U('DrpUcenter/withdrawals', array('status' => false))}&amount=" + data.data;
+                                            return false;
+                                        }
+                                    }
+                                })
+                            } else {
+                                ShowMsg("提现金额必须是" + IntTimes + "的整数倍");
+                                return false;
+                            }
+                        } else {
+                            //$("#CashAmount").focus();
+                            ShowMsg("提现金额必须大于￥" + MinaAmountCash);
+                            return false;
+                        }
+
+
+                    } else {
+                        ShowMsg("可提现金额为:￥" + MaxCashAmount);
+                        return false;
+                    }
+                } else {
+                    ShowMsg("当前不可提现");
+                    return false;
+                }
+            } else {
+                ShowMsg("输入金额不合法");
+                return false;
+            }
+        }
+
+    </script>
+
+
+</body></html>

@@ -1,0 +1,238 @@
+<include file="Public:head"/>
+<div class="content" <if condition="session('isQcloud') eq true">style="float:center;"</if>>
+<div class="cLineB">
+	<h4>报名输入项管理 <span class="FAQ">（默认字段只允许修改名称，如默认为“上传图片”，可以更改为“上传房型”、“上传美图”）
+</span></h4>
+</div>
+ <div class="msgWrap form">
+	<form class="form" method="post" action="{vifnn::U('Voteimg/customSave')}">	 
+		<table class="ListProduct" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<tbody>
+				<tr>
+					<td width="120">字段名称</td>
+					<if condition="$usertplid eq 2">
+					<td width="110">详情页是否展示</td>
+					<td width="120">是否必填</td>
+					<else />
+					<td width="100">详情页是否展示</td>
+					<td>是否必填</td>
+					</if>
+					<td>输入类型 </td>
+					<td>排序</td>
+					<td>输入限制<span style="color:red">&nbsp;&nbsp;&nbsp;(日期类型不需要验证)</span>　　　</td>
+				</tr>
+				<tr class="custom">
+					<td width="120">
+						<input name="vote_title" class="px" <if condition="$apply_fields_name['vote_title'] neq ''">value="{vifnn:$apply_fields_name['vote_title']}"<else />value="选项标题"</if>/>
+					</td>
+					<td>展示</td>
+					<td>必填</td>
+					<td>单行文本</td>
+					<td>0</td>
+					<td>英文数字汉字</td>
+				</tr>
+				<tr class="custom">
+					<td width="120">
+					<input name="contact" class="px" <if condition="$apply_fields_name['contact'] neq ''">value="{vifnn:$apply_fields_name['contact']}"<else />value="联系电话"</if>/>
+					</td>
+					<td>不展示</td>
+					<td>必填</td>
+					<td>单行文本</td>
+					<td>0</td>
+					<td>手机号格式</td>
+				</tr>
+				<tr class="custom">
+					<td width="120">
+					<input name="filename" class="px" <if condition="$apply_fields_name['filename'] neq ''">value="{vifnn:$apply_fields_name['filename']}"<else />value="上传图片"</if>/>
+					</td>
+					<td>展示</td>
+					<td>必填</td>
+					<td>按钮</td>
+					<td>0</td>
+					<td>---</td>
+				</tr>
+				<tr class="custom">
+					<td width="120">
+					<input name="manifesto" class="px" <if condition="$apply_fields_name['manifesto'] neq ''">value="{vifnn:$apply_fields_name['manifesto']}"<else />value="参赛宣言"</if>/>
+					</td>
+					<td>展示</td>
+					<td>必填</td>
+					<td>多行文本</td>
+					<td>0</td>
+					<td>英文数字汉字</td>
+				</tr>
+				<tr class="custom">
+					<td width="120">
+					<input name="voice_path" class="px" <if condition="$apply_fields_name['voice_path'] neq ''">value="{vifnn:$apply_fields_name['voice_path']}"<else />value="参赛语音"</if>/>
+					</td>
+					<td>展示</td>
+					<td>选填</td>
+					<td>按钮</td>
+					<td>0</td>
+					<td>---</td>
+				</tr>
+				<vifnnif where="$fields">
+				<volist name="fields" id="fd">
+				<tr class="custom">
+					<td width="120">
+						<input name="field_name[{vifnn:$i}]" class="px" value="{vifnn:$fd['field_name']}"/>
+						<input name="field_id[{vifnn:$i}]" value="{vifnn:$fd['field_id']}" type="hidden" />
+					</td>
+					<td>
+						<label><input type="radio" name="is_details[{vifnn:$i}]" <if condition="$fd['is_details'] eq 1 or $fd['is_details'] eq null">checked</if> value="1" /> 展示</label>
+						<label><input type="radio" name="is_details[{vifnn:$i}]" <if condition="$fd['is_details'] eq 0">checked</if> value="0" /> 隐藏 </label>
+					</td>
+					<td>
+						<label><input type="radio" name="is_empty[{vifnn:$i}]" <if condition="$fd['is_empty'] eq 1">checked</if> value="1" /> 必填</label>
+						<label><input type="radio" name="is_empty[{vifnn:$i}]" <if condition="$fd['is_empty'] eq 0">checked</if> value="0" /> 可不填</label>
+					</td>
+					<td>
+						<select name="field_type[{vifnn:$i}]">{vifnn:$fd['field_type_html']}</select>
+						<span <if condition="!in_array($fd['field_type'], array('select', 'checkbox', 'radio'))">style="display:none"</if>>
+							<br />多个选项值，多个用“|”隔,请不要使用空格！<br />
+							<textarea name="field_option[{vifnn:$i}]" class="px" style="width:240px; height:70px" cols="60" rows="8">{vifnn:$fd['field_option']}</textarea>
+						</span>
+					</td>
+					<td>
+						<input name="item_name[{vifnn:$i}]" class="px" value="{vifnn:$fd['item_name']}" type="hidden" />
+						<input name="sort[{vifnn:$i}]" value="{vifnn:$fd['sort']}" class="px" style="width:40px"/>
+					</td>
+					<td>
+					<select name="field_match[{vifnn:$i}]">{vifnn:$fd['field_match_html']}</select>
+					<input value="删除" type="button" did="{vifnn:$fd.field_id}" class="btnGreen del"/>
+					</td>
+				</tr>
+				</volist>
+				<else />
+				<tr class="custom"><td width="120">
+				<input name="field_name[1]" class="px" value="" />
+				<input name="field_id[1]" value="0" type="hidden" />
+				</td>
+				<td>
+					<label><input type="radio" name="is_details[1]" checked value="1" /> 展示</label>
+					<label><input type="radio" name="is_details[1]" value="0" /> 隐藏 </label>
+				</td>
+				<td>
+				<label><input type="radio" name="is_empty[1]" checked value="1" /> 必填</label>
+				<label><input type="radio" name="is_empty[1]" value="0" /> 可不填</label>
+				</td>
+				<td>
+				<select name="field_type[1]"><option value="">请选择类型</option><option value="text" selected="">单行文本框</option><option value="textarea">多行文本框</option><option value="checkbox">多选选框</option><option value="radio">单选按钮</option><option value="select">下拉框</option><option value="date">日期选择</option></select>
+				<span style="display:none">
+				多个选项值，多个用“|”隔,请不要使用空格！<br />
+				<textarea name="field_option[1]" class="px" style="width:300px; height:70px" cols="60" rows="8"></textarea>
+				</span>
+				</td>
+				<td>
+				<input name="item_name[1]" class="px" value="" type="hidden" />
+				<input name="sort[1]" value="" class="px" style="width:40px"/>
+				</td>
+				<td>
+				<select name="field_match[1]"><option value="">请选择验证方式</option><option value="^[\\u4e00-\\u9fa5\\a-zA-Z0-9]+$" selected="">英文数字汉字</option><option value="^[A-Za-z]+$">英文大小写字符</option><option value="^[1-9]\\d*|0$">0或正整数</option><option value="^[A-Za-z0-9_]+$">字母数字下滑线</option><option value="^[0-9]{1,30}$">正整数</option><option value="^[-\\+]?\\d+(\\.\\d+)?$">整数或小数</option><option value="\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*">邮箱</option><option value="^13[0-9]{9}$|^15[0-9]{9}$|^18[0-9]{9}$">手机</option></select>
+				<input value="删除" type="button" did="0" class="btnGreen del"/></td>
+				</tr>
+				</vifnnif>
+				<tr id="add_new">
+					<td colspan="8" style="text-align: center">
+						<input type="hidden" name="token" value="{vifnn:$_GET['token']}" />
+						<input type="hidden" name="action_id" value="{vifnn:$action_id}" />
+						<button type="submit" class="btnGreen">保存</button>　　　　
+						<a href="" class="btnGray vm">取消</a>　　　
+						<button type="button" class="btnGreen" id="add_a_tr">增加一项</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>  
+</div>
+   
+        <div class="clr"></div>
+      </div>
+    </div>
+  </div> 
+  <!--底部-->
+  	</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('select').on('change', function(){
+		var attr = $(this).val();
+		if (attr == 'select' || attr == 'checkbox' || attr == 'radio') {
+			$(this).next().css("display", "block");
+		} else {
+			$(this).next().css("display", "none");
+		}
+	});
+	
+	var i = 0;
+	$('#add_a_tr').click(function(){
+		if (i == 0) {
+			i = parseInt($('.custom').length) + 1;
+		} else {
+			i++;
+		}
+		
+		var html = '<tr class="custom"><td width="120">';
+			html += '<input name="field_name[' + i + ']" class="px" value="" />';
+			html += '<input name="field_id[' + i + ']" value="0" type="hidden" />';
+			html += '</td>';
+			html += '<td>';
+			html += '<label><input type="radio" name="is_details[' + i + ']" checked value="1" /> 展示 </label>';
+			html += '<label><input type="radio" name="is_details[' + i + ']" value="0" /> 隐藏</label>';
+			html += '</td>';
+			html += '<td>';
+			html += '<label><input type="radio" name="is_empty[' + i + ']" checked value="1" /> 必填 </label>';
+			html += '<label><input type="radio" name="is_empty[' + i + ']" value="0" /> 可不填</label>';
+			html += '</td>';
+			html += '<td>';
+			html += '<select name="field_type[' + i + ']" onchange="inputtypeChange(this,'+i+')"><option value="">请选择类型</option><option value="text" selected="">单行文本框</option><option value="textarea">多行文本框</option><option value="checkbox">多选选框</option><option value="radio">单选按钮</option><option value="select">下拉框</option><option value="date">日期选择</option></select>';
+			html += '<span style="display:none">';
+			html += '多个选项值，多个用“|”隔,请不要使用空格！<br />';
+			html += '<textarea name="field_option[' + i + ']" class="px" style="width:300px; height:70px" cols="60" rows="8"></textarea>';
+			html += '</span>';
+			html += '</td>';
+			html += '<td>';
+			html += '<input name="item_name[' + i + ']" class="px" value="" type="hidden" />';
+			html += '<input name="sort[' + i + ']" value="" class="px" style="width:40px"/>';
+			html += '</td>';
+			html += '<td>';
+			html += '<select name="field_match[' + i + ']" id="field_'+i+'_match"><option value="">请选择验证方式</option><option value="^[\\u4e00-\\u9fa5\\a-zA-Z0-9]+$" selected="">英文数字汉字</option><option value="^[A-Za-z]+$">英文大小写字符</option><option value="^[1-9]\\d*|0$">0或正整数</option><option value="^[A-Za-z0-9_]+$">字母数字下滑线</option><option value="^[0-9]{1,30}$">正整数</option><option value="^[-\\+]?\\d+(\\.\\d+)?$">整数或小数</option><option value="\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*">邮箱</option><option value="^13[0-9]{9}$|^15[0-9]{9}$|^18[0-9]{9}$">手机</option></select>';
+			html += '<input value="删除" type="button" did="0" class="btnGreen" onclick="delfield(this)"/></td>';
+			html += '</tr>';
+			$('#add_new').before(html);
+	});
+	$('.del').on('click', function(){
+		var did = $(this).attr("did");
+		var custom = $(this).parents('.custom');
+		if(did != 0){
+			$.get("/index.php?g=User&m=Voteimg&a=delcustom&did="+did,function(data){
+				if(data == 'success'){
+					custom.remove();
+				}else{
+					alert(data);
+				}
+			})
+		}else{
+			$(this).parents('.custom').remove();
+		}
+	});
+});
+
+function delfield(obj){
+	$(obj).parents('.custom').remove();
+}
+function inputtypeChange(obj,index){
+  var attr = $(obj).val();
+	if(attr == 'select' || attr == 'checkbox' || attr == 'radio'){
+		$(obj).next().css("display", "block");
+	}else{
+		$(obj).next().css("display", "none");
+	}
+	if(attr =='date'){
+		$("#field_"+index+"_match").get(0).selectedIndex = 0;
+	}
+}
+</script>
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
+<include file="Public:footer"/>
+<if condition="session('isQcloud') neq true"></if>

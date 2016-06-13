@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="telephone=no" name="format-detection" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+<link href="{vifnn:$staticPath}/tpl/static/donation/css/index.css" type="text/css" rel="stylesheet" />
+<script src="{vifnn:$staticPath}/tpl/static/donation/js/jquery-1.7.2.js"></script>
+<title>{vifnn:$donation['name']}</title>
+<style>
+.ctx_right{float: right; margin-top: -20px;}
+</style>
+</head>
+<body>
+<div id="pageContainer" style="padding-bottom:47px;">
+    <div class="create_share">
+        <div class="top"> <img src="{vifnn:$staticPath}/tpl/static/donation/images/create_share_top.jpg" /> </div>
+        <div class="content">
+            <div class="share_info">
+            	<a href="{vifnn::U('Donation/index', array('token' => $token, 'wecha_id' => $wecha_id, 'id' => $donation['id']))}" style="color:#fe5842;  text-decoration: inherit;">
+                <div class="img_info"> <img src="{vifnn:$donation['pic']}">
+                	<div class="ctx_con_t_l">{vifnn:$donation['name']}</div>
+                    <p class="pdesc">已捐赠: <span>{vifnn:$total}</span>元</p>
+                    <p class="pdesc ctx_right"> 截止: <span>{vifnn:$donation['day']}</span>天 </p>
+                </div>
+                </a>
+                <div class="word_info">
+                    <div>筹款口号：
+                        <p class="words">{vifnn:$share['content']}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer"><img src="{vifnn:$donation['logo']}" /></div>
+        </div>
+    </div>
+</div>
+<div class="mask_level"></div>
+</body>
+<script>
+window.shareData = {  
+	"moduleName":"Donation",
+	"moduleID":"{vifnn:$donation['id']}",
+	"imgUrl": "{vifnn:$donation['share_pic']}", 
+	"timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U('Donation/share', array('id' => $id, 'token' => $token, 'sid' => $share['id']))}",
+	"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Donation/share', array('id' => $id, 'token' => $token, 'sid' => $share['id']))}",
+	"weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('Donation/share', array('id' => $id, 'token' => $token, 'sid' => $share['id']))}",
+	"tTitle": "{vifnn:$donation['name']|shareFilter}",
+	"tContent": "{vifnn:$share['content']|shareFilter}",
+	"fTitle": "{vifnn:$donation['name']|shareFilter}",
+	"isShareNum":1,
+	"ShareNumData":"donation,id,{vifnn:$id},share_num"
+};
+</script>
+{vifnn:$shareScript}
+</html>

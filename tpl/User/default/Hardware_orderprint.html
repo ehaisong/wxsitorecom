@@ -1,0 +1,61 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="./tpl/User/default/common/css/cymain.css" />
+<script src="/tpl/static/fushionCharts/JSClass/FusionCharts.js" type="text/javascript"></script>   
+
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+
+<div class="content">
+          <div class="cLineB"><h4>无线订单打印机（小票打印机）</h4></div>
+<include file="Hardware:header"/>
+ <div class="ftip" style="margin:25px auto 5px auto;">无线订单打印机（小票打印机）是指无需人工处理，有微信订单的时候会自动打印订单信息的小型打印机</div>
+ <style>
+.dtas{padding:20px}
+.dtas p{line-height:30px;}
+</style>
+ 
+ 
+ <script>
+function showWxhelp(){
+	art.dialog.open('http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes',{lock:true,title:'购买',width:1366,height:768,yesText:'Y',background: '#000',opacity: 0.45});
+}
+</script>
+
+ <div style="line-height: 32px;margin:10px 0">
+ <a href="{vifnn::U('Hardware/orderprintSet')}" class="btnGrayS vm bigbtn" >添加打印机</a> <a href="###" onclick="showWxhelp()" class="btnGrayS vm bigbtn" >购买订单云打印机</a>　 
+</div>
+
+<table class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+<thead>
+<tr>
+<th style=" width:150px;">打印机品牌</th>
+<th style=" width:100px;">机器序列号1</th>
+<th style=" width:100px;">机器序列号2</th>              
+<th style=" width:300px;" class="norightborder">二维码</th>
+</tr>
+</thead>
+<volist name="info" id="actinfo">
+<tr>
+<td>订单云打印机</td>
+<td>{vifnn:$actinfo.mp}</td>
+<td>{vifnn:$actinfo.mcode}</td>
+    <td>{vifnn:$actinfo.mkey}</td>
+<td class="norightborder">
+<a href="{vifnn::U('Hardware/orderprintSet',array('id'=>$actinfo['id'],'token'=>$_SESSION['token']))}" >修改</a>&nbsp;<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Hardware/orderprintDelete',array('token'=>$token,'id'=>$actinfo['id']))}');">删除</a>
+</td>
+</volist>
+</tr>
+
+</table>
+
+
+          
+          
+         <div class="dtas" style="line-height:30px;font-size:14px;">
+
+
+
+         </div>
+          
+        </div>
+<include file="Public:footer"/>

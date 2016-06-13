@@ -1,0 +1,454 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<link rel="stylesheet" href="{vifnn::STATICS}/kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="{vifnn::STATICS}/kindeditor/plugins/code/prettify.css" />
+<script src="{vifnn::STATICS}/kindeditor/kindeditor.js" type="text/javascript"></script>
+<script src="{vifnn::STATICS}/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
+<script src="{vifnn::STATICS}/kindeditor/plugins/code/prettify.js" type="text/javascript"></script>
+<script language="javascript" type="text/javascript" src="{vifnn:$staticPath}/tpl/static/cutprice/js/DatePicker/WdatePicker.js"></script>
+<script>
+</script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left"><?php echo $set['title']?'修改拼团【'.$set['title'].'】':'添加一个拼团'?></h4>
+		<a href="<?php echo U('User/Pintuan/index',array('token'=>$token));?>"  class="right btnGrayS" >返回</a>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap bgfc">
+	<form class="form" method="post"   action="" enctype="multipart/form-data" >
+		<table class="userinfoArea" style=" margin:0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
+			<tbody>
+				<tr>
+					<th valign="top"><span class="red">*</span>开团名称：</th>
+					<td>
+						<input type="text" class="px" id="title" name="title" value="<?php echo $set['title']?$set['title']:'';?>" style="width:400px;" />
+						&nbsp;既是微信图文回复标题名称也是团购名称
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>回复关键词：</th>
+					<td>
+						<input type="text" class="px" id="keyword" name="keyword" value="<?php echo $set['keyword']?$set['keyword']:'';?>" style="width:400px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>回复描述：</th>
+					<td>
+						<input type="text" class="px" id="info" name="info" value="<?php echo $set['info']?$set['info']:'';?>" style="width:400px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>市场价：</th>
+					<td>
+						<input type="text" class="px" id="price" name="price" value="<?php echo $set['price']?$set['price']/100:'';?>" style="width:100px;" />&nbsp;元 <span style="color:red;">请输入数字,小数点不要超过2位</span>
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>库存：</th>
+					<td>
+						<input type="number" class="px" id="quantity" name="quantity" value="<?php echo $set['quantity']?$set['quantity']:'';?>" style="width:100px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>封面图片：</th>
+					<td>
+						<input type="text" class="px" id="facepic" name="facepic" value="<?php echo $set['facepic']?$set['facepic']:'';?>" style="width:250px;" />
+						<a href="###" onclick="upyunPicUpload('facepic',900,500,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('facepic')">预览</a>
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>开团时间段：</th>
+					<td>
+						<input type="text" class="px" id="startdate" value="<if condition="$set['startdate'] neq ''">{vifnn:$set.startdate|date="Y-m-d",###}<else/><?php echo date('Y-m-d',time());?></if>" <if condition="$set['id'] eq '' || ($set['id'] neq '' && $set['display'] == 1)">onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"<else />readonly</if> name="startdate" />
+						到
+						<input type="text" class="px" id="enddate" value="<if condition="$set['enddate'] neq ''">{vifnn:$set.enddate|date="Y-m-d",###}<else/><?php echo date('Y-m-d',time()+2592000);?></if>" name="enddate"  <if condition="$set['id'] eq '' || ($set['id'] neq '' && $set['display'] == 1)">onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"<else />readonly</if>  />  <if condition="$set['id'] eq '' || ($set['id'] neq '' && $set['display'] == 1)"><span style="color:red;">拼团开启之后时间段不能再修改</span></if>
+					</td>
+				</tr>
+				<?php if($changepic_list == ''){?>
+				<tr class="changepic">
+					<th valign="top"><span class="red">*</span>轮播图片1：</th>
+					<td>
+						<input type="input" class="px" id="changepic1"  name="changepic[]" value=""  style="width:250px"/><a href="###" onclick="upyunPicUpload('changepic1',0,0,'{vifnn:$token}')" class="a_upload">上传</a>&nbsp;<a href="###" onclick="viewImg('changepic1')">预览</a><span class="red">&nbsp;请让每个轮播图片的尺寸相同！否则会导致页面错位！</span>
+					</td>
+				</tr>
+				<?php }else{?>
+				<volist name="changepic_list" id="changepic" key="changepic_i">
+				<tr class="changepic">
+					<th valign="top"><span class="red">*</span>轮播图片{vifnn:$changepic_i}：</th>
+					<td>
+						<input type="input" class="px" id="changepic{vifnn:$changepic_i}"  name="changepic[]" value="{vifnn:$changepic.pic}"  style="width:250px"/><a href="###" onclick="upyunPicUpload('changepic{vifnn:$changepic_i}',0,0,'{vifnn:$token}')" class="a_upload">上传</a>&nbsp;<a href="###" onclick="viewImg('changepic{vifnn:$changepic_i}')">预览</a><span class="red">&nbsp;请让每个轮播图片的尺寸相同！否则会导致页面错位！</span>
+					</td>
+				</tr>
+				</volist>
+				<?php }?>
+				<tr>
+					<td></td>
+					<td><a href="javascript:changepic_more()" class="a_choose">+&nbsp;添加更多轮播图片</a>&nbsp;<a href="javascript:changepic_del()" class="a_choose">-&nbsp;删除一个轮播图片</a></td>
+				</tr>
+				<?php if($guize_list == ''){?>
+				<tr class="guize">
+					<th valign="top"><span class="red">*</span>开团规则：</th>
+					<td>
+						参团人数1：<input type="number" name="number[]" id="number1" class="px" style="width:100px">&nbsp;&nbsp;&nbsp;开团折扣1：<input type="text" name="discount[]" id="discount1" class="px" style="width:100px"> 折
+						&nbsp;<span class="red">（折扣例如：9折、8.5折）此拼团开启之后不能再修改开团规则</span>
+					</td>
+				</tr>
+				<?php }else{?>
+					<?php if($tuan_count < 1 && $set['display'] == 1){?>
+					<volist name="guize_list" id="guize" key="guize_i">
+					<tr class="guize">
+						<th valign="top"><?php if($guize_i == 1){?><span class="red">*</span>开团规则：<?php }?></th>
+						<td>
+							参团人数{vifnn:$guize_i}：<input type="number" name="number[]" id="number{vifnn:$guize_i}" class="px" style="width:100px" value="{vifnn:$guize.number}">&nbsp;&nbsp;&nbsp;开团折扣{vifnn:$guize_i}：<input type="text" name="discount[]" id="discount{vifnn:$guize_i}" class="px" style="width:100px" value="<?php echo $guize['discount']/10;?>"> 折
+							<?php if($guize_i == 1){?>&nbsp;<span class="red">（折扣例如：9折、8.5折）此拼团开启之后不能再修改开团规则</span><?php }?>
+						</td>
+					</tr>
+					</volist>
+					<?php }else{?>
+					<volist name="guize_list" id="guize" key="guize_i">
+					<tr class="guize">
+						<th valign="top"><?php if($guize_i == 1){?><span class="red">*</span>开团规则：<?php }?></th>
+						<td>
+							参团人数{vifnn:$guize_i}：{vifnn:$guize.number}&nbsp;&nbsp;&nbsp;开团折扣{vifnn:$guize_i}：<?php echo $guize['discount']/10;?> 折
+						</td>
+					</tr>
+					</volist>
+					<?php }?>
+				<?php }?>
+				<?php if($tuan_count < 1 && $set['display'] == 1 || $set == ''){?>
+				<tr>
+					<td></td>
+					<td><a href="javascript:guize_more()" class="a_choose">+&nbsp;添加更多开团规则</a>&nbsp;<a href="javascript:guize_del()" class="a_choose">-&nbsp;删除一个开团规则</a></td>
+				</tr>
+				<?php }?>
+				<tr>
+					<th valign="top">商品详情：</th>
+					<td><textarea name="goods_info" id="goods_info"  rows="5" style="width:590px;height:360px">{vifnn:$set.goods_info}</textarea></td>
+				</tr>
+				<tr>
+					<th valign="top">团购说明：</th>
+					<td><textarea name="tuan_info" id="tuan_info"  rows="5" style="width:590px;height:360px">{vifnn:$set.tuan_info}</textarea></td>
+				</tr>
+				<tr>
+			  <th valign="top">分享标题自定义：</th>
+			  <td><input type="input" class="px" id="custom_sharetitle" value="{vifnn:$set.custom_sharetitle}" name="custom_sharetitle" style="width:470px"><br /> 	
+			<p>不填则默认为：我正在参加“xxx”拼团购活动，快来参与吧！</p>
+			<p>填写时可带参数{{活动名称}}</p>
+			<p>例如：我正在参加“{{活动名称}}”拼团购活动，快来参与吧！</p>
+			<p>分享标题变为：我正在参加“测试”拼团购活动，快来参与吧！</p> </td> 	
+			</tr>
+			<tr>
+			  <th valign="top">分享描述自定义：</th>
+			  <td><input type="input" class="px" id="custom_sharedsc" value="{vifnn:$set.custom_sharedsc}" name="custom_sharedsc" style="width: 470px;"><br />
+			<p>分享朋友圈或者分享给朋友时标题下面显示的描述，不填则默认为“回复描述”里的内容。</p>
+			<p>填写时可带参数{{活动名称}}</p>
+			<p>例如：我正在参加“{{活动名称}}”拼团购活动，快来参与吧！</p>
+			<p>分享描述变为：我正在参加“测试”拼团购活动，快来参与吧！</p>  </td> 	
+			</tr>
+				<tr>
+					<th valign="top">排序：</th>
+					<td>
+						<input type="number" class="px" id="sort" name="sort" value="<?php echo $set['sort']?$set['sort']:'0';?>" style="width:100px;" />
+						&nbsp;排序越大越靠前
+					</td>
+				</tr>
+				<tr>
+					<th valign="top">联系电话：</th>
+					<td>
+						<input type="text" class="px" id="tel" name="tel" value="<?php echo $set['tel']?$set['tel']:'0';?>" style="width:100px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red"></span>是否开启：</th>
+					<td colspan="2">
+						<input type="radio" name="display" id="display1" value="1" <if condition="($set['display'] eq 1)">checked</if>><label for="display1">否</label>
+						&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="display" id="display2" value="2" <if condition="($set['display'] eq 2)OR($set['display'] eq '')">checked</if>><label for="display2">是</label>
+					</td>
+				</tr>
+				<tr>
+					<th>&nbsp;</th>
+					<td><button type="submit" class="btnGreen" >保存</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	</div>
+</div>
+<script>
+var editor;
+KindEditor.ready(function(K) {
+	editor = K.create('#goods_info', {	
+		debug : true,
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		allowUpload : true,
+		postParams:{'PHPSESSID':"<?php echo session_id();?>"},
+		uploadJson : "{vifnn::U('Upyun/kindedtiropic')}",
+		items : [
+		'fontsize','forecolor','hilitecolor','bold',
+		'italic','underline','strikethrough','|',
+		'source','undo','clearhtml','hr',
+		'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+		'insertunorderedlist', '|', 'emoticons', 'image' ,'multiimage', 'link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut']
+	});
+});
+var editor2;
+KindEditor.ready(function(K) {
+	editor2 = K.create('#tuan_info', {	
+		debug : true,
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		allowUpload : true,
+		postParams:{'PHPSESSID':"<?php echo session_id();?>"},
+		uploadJson : "{vifnn::U('Upyun/kindedtiropic')}",
+		items : [
+		'fontsize','forecolor','hilitecolor','bold',
+		'italic','underline','strikethrough','|',
+		'source','undo','clearhtml','hr',
+		'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+		'insertunorderedlist', '|', 'emoticons', 'image' ,'multiimage', 'link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut']
+	});
+});
+function isRepeat(arr){
+	var hash = {};
+	for(var i in arr) {
+		if(hash[arr[i]])
+		return i;
+		hash[arr[i]] = true;
+	}
+	return false;
+}
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+	$("form").submit(function(){
+		var is_error = true;
+		var is_error_msg = "";
+		var error_id = new Array();
+		var error_i = 0;
+		
+		
+		var title = $('#title').val();
+		if(title == ''){
+			is_error_msg += "请填写开团名称！<br>";
+			buterror("#title");
+			error_id[error_i] = "#title";
+			error_i++;
+			is_error = false;
+		}
+		var keyword = $('#keyword').val();
+		if(keyword == ''){
+			is_error_msg += "请填写回复关键词！<br>";
+			buterror("#keyword");
+			error_id[error_i] = "#keyword";
+			error_i++;
+			is_error = false;
+		}
+		var info = $('#info').val();
+		if(info == ''){
+			is_error_msg += "请填写回复描述！<br>";
+			buterror("#info");
+			error_id[error_i] = "#info";
+			error_i++;
+			is_error = false;
+		}
+		var price = $('#price').val();
+		var pregprice = /^\d+\.{0,1}(\d{1,2})?$/;
+		if(price == ""){
+			is_error_msg += "请填写市场价！<br>";
+			buterror("#price");
+			error_id[error_i] = "#price";
+			error_i++;
+			is_error = false;
+		}else if(!pregprice.test(price)){
+			is_error_msg += "市场价请输入数字,小数点不要超过2位！<br>";
+			buterror("#price");
+			error_id[error_i] = "#price";
+			error_i++;
+			is_error = false;
+		}
+		var quantity = $('#quantity').val();
+		if(quantity*1 <= 0){
+			is_error_msg += "请填写库存！<br>";
+			buterror("#quantity");
+			error_id[error_i] = "#quantity";
+			error_i++;
+			is_error = false;
+		}
+		var facepic = $('#facepic').val();
+		if(facepic*1 <= 0){
+			is_error_msg += "请添加封面图片！<br>";
+			buterror("#facepic");
+			error_id[error_i] = "#facepic";
+			error_i++;
+			is_error = false;
+		}
+		var startdate = $('#startdate').val();
+		if(startdate == ''){
+			is_error_msg += "请填写开始时间！<br>";
+			buterror("#startdate");
+			error_id[error_i] = "#startdate";
+			error_i++;
+			is_error = false;
+		}
+		var enddate = $('#enddate').val();
+		if(enddate == ''){
+			is_error_msg += "请填写结束时间！<br>";
+			buterror("#enddate");
+			error_id[error_i] = "#enddate";
+			error_i++;
+			is_error = false;
+		}
+		var _startdate = datetime_to_unix(startdate+' 00:00:00');
+		var _enddate = datetime_to_unix(enddate+' 00:00:00');
+		if(_enddate < _startdate){
+			is_error_msg += "结束时间不能小于开始时间！<br>";
+			buterror("#enddate");
+			error_id[error_i] = "#enddate";
+			error_i++;
+			is_error = false;
+		}
+		for(i=1;i<=changepicnum;i++){
+			var changepic = $('#changepic'+i).val();
+			if(changepic == ''){
+				is_error_msg += "请添加轮播图片"+i+"的图片！<br>";
+				buterror("#changepic"+i);
+				error_id[error_i] = "#changepic"+i;
+				error_i++;
+				is_error = false;
+			}
+		}
+		var allnumber = new Array();
+		var alldiscount = new Array();
+		$("input[name='number[]']").each(function(i,d){
+			allnumber.push(d.value);
+		});
+		$("input[name='discount[]']").each(function(i,d){
+			alldiscount.push(d.value);
+		});
+		var renum = isRepeat(allnumber);
+		if(renum != false){
+			renum = parseInt(renum)+1;
+			is_error_msg += "开团人数有相同值！<br>";
+			buterror("#number"+renum);
+			error_id[error_i] = "#number"+renum;
+			error_i++;
+			is_error = false;
+		}
+		var redis = isRepeat(alldiscount);
+		if(redis != false){
+			redis = parseInt(redis)+1;
+			is_error_msg += "开团折扣有相同值！<br>";
+			buterror("#discount"+redis);
+			error_id[error_i] = "#discount"+redis;
+			error_i++;
+			is_error = false;
+		}
+		for(j=1;j<=guizenum;j++){
+			var number = $('#number'+j).val();
+			if(number*1 <= 0){
+				is_error_msg += "请填写参团人数"+j+"！<br>";
+				buterror("#number"+j);
+				error_id[error_i] = "#number"+j;
+				error_i++;
+				is_error = false;
+			}
+			var discount = $('#discount'+j).val();
+			if(discount*1 <= 0){
+				is_error_msg += "请填写开团折扣"+j+"！<br>";
+				buterror("#discount"+j);
+				error_id[error_i] = "#discount"+j;
+				error_i++;
+				is_error = false;
+			}
+			if(discount*1 > 10){
+				is_error_msg += "开团折扣"+j+"不能大于10折！<br>";
+				buterror("#discount"+j);
+				error_id[error_i] = "#discount"+j;
+				error_i++;
+				is_error = false;
+			}
+		}
+		if(is_error == false){
+			_alert(is_error_msg);
+			$("html,body").animate({scrollTop: $(error_id[0]).offset().top}, 500);
+			return false;
+		}else{
+			return true;
+		}
+	});
+});
+var changepicnum = <?php echo $changepicnum?$changepicnum:1;?>;
+function changepic_more(){
+	if(changepicnum < 6){
+	changepicnum++;
+		var changepic_html = '<tr class="changepic"><th valign="top"><span class="red">*</span>轮播图片'+changepicnum+'：</th><td><input type="input" class="px" id="changepic'+changepicnum+'"  name="changepic[]" value=""  style="width:250px"/><a href="###" onclick="upyunPicUpload(\'changepic'+changepicnum+'\',0,0,\'{vifnn:$token}\')" class="a_upload">上传</a>&nbsp;<a href="###" onclick="viewImg(\'changepic'+changepicnum+'\')">预览</a><span class="red">&nbsp;请让每个轮播图片的尺寸相同！否则会导致页面错位！</span></td></tr>';
+		$('.changepic').last().after(changepic_html);
+	}else{
+		_alert('最多6个轮播图片');
+	}
+}
+function changepic_del(){
+	if(changepicnum > 1){
+		changepicnum--;
+		$('.changepic').last().detach();
+	}else{
+		_alert('必须有一个轮播图片');
+	}
+}
+var guizenum = <?php echo $guizenum?$guizenum:1;?>;
+function guize_more(){
+	if(guizenum < 8){
+		guizenum++;
+		var guize_html = '<tr class="guize"><th></th><td>参团人数'+guizenum+'：<input type="number" name="number[]" id="number'+guizenum+'" class="px" style="width:100px">&nbsp;&nbsp;&nbsp;开团折扣'+guizenum+'：<input type="text" name="discount[]" id="discount'+guizenum+'" class="px" style="width:100px"> 折</td></tr>';
+		$('.guize').last().after(guize_html);
+	}else{
+		_alert('最多8个开团规则');
+	}
+}
+function guize_del(){
+	if(guizenum > 1){
+		guizenum--;
+		$('.guize').last().detach();
+	}else{
+		_alert('必须有一个开团规则');
+	}
+}
+function _alert(content){
+	layer.alert(content,{icon:5});
+}
+function buterror(id){
+	$(id).css("border","2px solid red");
+	$(id).css("background-color","rgb(255, 223, 221)");
+	$(id).focus(function(){
+		$(id).css("background-color","#fff");
+		$(id).css("border","1px solid");
+		$(id).css("border-color","#848484 #E0E0E0 #E0E0E0 #848484");
+	});
+}
+//转为时间戳
+function datetime_to_unix(datetime){
+    var tmp_datetime = datetime.replace(/:/g,'-');
+    tmp_datetime = tmp_datetime.replace(/ /g,'-');
+    var arr = tmp_datetime.split("-");
+    var now = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3]-8,arr[4],arr[5]));
+    return parseInt(now.getTime()/1000);
+}
+//转为时间格式
+function unix_to_datetime(unix) {
+    var now = new Date(parseInt(unix) * 1000);
+    return now.toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+}
+</script>
+<include file="Public:footer"/>

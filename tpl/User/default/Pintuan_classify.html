@@ -1,0 +1,78 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left">拼团分组列表</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<a href="{vifnn::U('User/Pintuan/classifyset',array('token'=>$token))}" title="添加分组" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 添加分组</a>
+		</div>
+		<div class="pageNavigator right">
+			<input type="text" id="search" class="px search" placeholder="输入分组名称"  name="search" value="{vifnn:$_GET['search']}" style="margin-top:10px">
+			<a href="javascript:search()" class="btnGrayS" title="搜索">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="">排序</th>
+					<th width="">名称</th>
+					<th class="norightborder">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td>{vifnn:$lv.sort}</td>
+					<td>{vifnn:$lv.name}</td>
+					<td class="norightborder">
+						<a href="{vifnn::U('User/Pintuan/classifyset',array('token'=>$token,'id'=>$lv['id']))}">编辑</a>
+						<a href="javascript:fwy_confirm('确定删除分组【{vifnn:$lv.name}】吗？','{vifnn::U('User/Pintuan/classifydel',array('token'=>$token,'id'=>$lv['id']))}');">删除</a>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator" style="float: right;">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+});
+function search(){
+	var search = $("#search").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Pintuan/classify',array('token'=>$token))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Pintuan/classify',array('token'=>$token))}";
+	}
+}
+function fwy_confirm(msg,url){
+	layer.confirm(msg, {
+		btn: ['确定','取消']
+	}, function(){
+		location.href=url;
+	}, function(){
+	
+	});
+}
+</script>
+<include file="Public:footer"/>

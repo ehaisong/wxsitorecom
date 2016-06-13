@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> {vifnn:$f_siteTitle} {vifnn:$f_siteName}</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="keywords" content="{vifnn:$f_metaKeyword}" />
+<meta name="description" content="{vifnn:$f_metaDes}" />
+<meta http-equiv="MSThemeCompatible" content="Yes" />
+<script>var SITEURL='';</script>
+<script src="{vifnn::RES}/js/common.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/newswelcome/js/jquery-1.10.2.min.js"  type="text/javascript"></script>
+<!--<script src="{vifnn::STATICS}/jquery-1.4.2.min.js" type="text/javascript"></script> @xulinyang-->
+<php>if($usertplid == 0){</php>
+    <link href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style.css?id=103" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style_2_common.css?BPm" />
+<php>}elseif($usertplid == 1){</php>
+    <link href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style-{vifnn:$usertplid}.css?id=103" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style_2_common.css?BPm" />
+<php>}else{</php>
+    <script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
+    <link href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style-{vifnn:$usertplid}.css?id=103" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style_2_common_2.css?BPm" />
+    <link href="{vifnn:$staticPath}/tpl/static/new/css/bootstrap.css" rel="stylesheet">
+    <link href="{vifnn:$staticPath}/tpl/static/new/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{vifnn:$staticPath}/tpl/static/new/css/style.css" rel="stylesheet">
+    <script>
+      $(function(){
+        var width = $('.func').width();
+        $('.func').css('width',(width-11)+"px");
+        
+        var fwidth = $('.welcome1').width();
+        var a = fwidth%120;
+        var b = parseInt(fwidth/120);
+        var c = a + 360;
+        var d = b - 3;
+        var e = parseInt(c/d);
+        $('.img1').css('margin-left',(e/2)+'px');
+        $('.img1').css('margin-right',(e/2)+'px');
+      });
+    </script>
+    <style>
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        margin-left: 13px;
+        margin-right: 5px;
+    }
+    @-webkit-keyframes fadeInRight {
+        0% {
+            opacity: 0;
+            -webkit-transform: translateX(200px);
+            transform: translateX(200px);
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+    }
+    .fadeInRight {
+        -webkit-animation-name: fadeInRight;
+    }
+
+    .alink a:link {color: #fff}
+    .alink a:hover {color: #000}
+    .pace-done{min-width:1345px;overflow-x:auto;}
+    .alert h4 {color: #000;}
+    </style>
+<php>}</php>
+<style type="text/css">
+  .content1{
+    margin:80px auto;
+    top:80px;
+  }
+  .img1{
+    margin-top:60px;
+    width:120px;
+    height:150px;
+    float: left;
+    text-align: center;
+  }
+  .img1 a {
+    line-height: 50px;
+  }
+  .img1 a:hover{
+    text-decoration:none;  
+  } 
+   .content ul li.guanzhu {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 25.23%;
+    background:#7cbae5;
+  }
+
+ .content ul li.huiyuanka {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 24.8%;
+    background:#cec0f4;
+  }
+ .content ul li.liulan {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 24.8%;
+    background:#81d2cf;
+  }
+ .content ul li.fangke {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 24.8%;
+    background:#92bf77;
+  }
+ .content ol li{
+  float: left;
+    height:120px;
+    overflow: hidden;
+    width:120px;
+  padding:0px 15px;
+  }
+ .content ul li.guanzhu a,
+ .content ul li.huiyuanka a,
+ .content ul li.liulan a,
+ .content ul li.fangke a
+ {
+    color: #fff;
+    display: block;
+    font-size:22px;
+    height: 96px;
+    overflow: hidden;
+    /*width: 224px;*/
+    padding-top:10px;
+  text-align:center;
+}
+ .content ul li a:hover {
+  text-decoration:none;
+}
+</style>
+<style>
+.topbg{background:url({vifnn:$staticPath}/tpl/static/newskin/images/top.gif) repeat-x; height:101px; /*box-shadow:0 0 10px #000;-moz-box-shadow:0 0 10px #000;-webkit-box-shadow:0 0 10px #000;*/}
+.top {
+    margin: 0px auto; width: 988px; height: 101px;
+}
+.toplink{ height:30px; line-height:27px; color:#999; font-size:12px;}
+.toplink .welcome{ float:left;}
+.toplink .memberinfo{ float:right;}
+.toplink .memberinfo a{ color:#999;}
+.toplink .memberinfo a:hover{ color:#F90}
+.toplink .memberinfo a.green{ background:none; color:#0C0}
+.logo { color: #333; height:70px; font-size:16px;}
+h1{ font-size:25px;float:left; width:230px; margin:0; padding:0; margin-top:6px; }
+.navr {width:auto;overflow:hidden;}
+.navr li {text-align:center; float: left; height:25px; font-size:1em; width:12%; margin-right:5px;}
+.navr li a {width:100%; line-height:25px; float: left;height:100%; color: #333; font-size: 1em; text-decoration:none;}
+.navr li a:hover { background:#44b549;}
+.navr li.menuon {background:#44b549; display:block; width:12%;}
+.navr li.menuon a{color:#333;}
+.navr li.menuon a:hover{color:#333;}
+.banner{height:200px; text-align:center; border-bottom:2px solid #ddd;}
+.hbanner{ background: url(img/h2003070126.jpg) center no-repeat #B4B4B4;}
+.gbanner{ background: url(img/h2003070127.jpg) center no-repeat #264C79;}
+.jbanner{ background: url(img/h2003070128.jpg) center no-repeat #E2EAD5;}
+.dbanner{ background: url(img/h2003070129.jpg) center no-repeat #009ADA;}
+.nbanner{ background: url(img/h2003070130.jpg) center no-repeat #ffca22;}
+</style>
+</head>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/gameconfig.css">
+
+<script src="./tpl/User/default/common/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/game/js/application7.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/jquery.qrcode.min.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js" type="text/javascript"></script>
+
+<script>
+	var clip1 = '';
+	function qrcode (url, id) {
+		url = url.replace('{changjingUrl}', 'http://' + window.location.host);
+		$("#minCode" + id).qrcode({
+			render: "canvas",
+			width:  22,
+			height: 22,
+			text:   url
+		});
+		$("#bigCode" + id).qrcode({
+			render: "canvas",
+			width:  145,
+			height: 145,
+			text:   url
+		});
+	}
+
+	$(function(){
+		clip1 = new ZeroClipboard( document.getElementById("basic-addon2"), {
+			moviePath: "{vifnn:$staticPath}/tpl/static/game/js/ZeroClipboard.swf"
+		});
+		clip1.on( "load", function(client) {
+			client.on( "complete", function(client, args) {
+				$('.setWindow').hide();
+
+				var $copysuc = $("<div class='copy-tips'><div class='copy-tips-wrap'>☺ 复制成功</div></div>");
+
+				$("body").find(".copy-tips").remove().end().append($copysuc);
+				$(".copy-tips").fadeOut(3000);
+			});
+		} );
+	});
+</script>
+<style>
+	#qrcode{
+		padding:3px;
+	}
+
+	/* 复制提示 */
+	.copy-tips{position:fixed;z-index:999;bottom:50%;left:50%;margin:0 0 -20px -80px;background-color:rgba(0, 0, 0, 0.2);filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#30000000, endColorstr=#30000000);padding:6px;}
+	.copy-tips-wrap{padding:10px 20px;text-align:center;border:1px solid #F4D9A6;background-color:#FFFDEE;font-size:14px;}
+</style>
+
+<div class="content">
+	<!--div class="cLineB">
+		<h4 class="left">微游戏</h4>
+
+		<div class="clr"></div>
+	</div-->
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<a href='{vifnn::U('Game/gameLibrary',array('token'=>$token))}' class='btnGrayS vm bigbtn'>从游戏库中添加游戏</a>
+		</div>
+
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<form method="post"  action="" id="info" >
+			<input name="delall"  type="hidden" value="" />
+			<input name="wxid"  type="hidden" value="" />
+
+			<div class="fiterDiv" style="display: none; ">
+				<span class="searchInput">
+	                <input type="search"/>
+	                <button>搜索</button>
+                </span>
+				<span>邀请类型：
+	                <select>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+	                </select>
+                </span>
+				<span>奖励类型：
+	                <select>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+	                </select>
+                </span>
+				<span>活动状态：
+	                <select>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+	                </select>
+                </span>
+			</div>
+			<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+				<THEAD>
+				  <TR>
+				      <TH>活动名称</TH>
+				      <TH>关键字</TH>
+				      <TH>
+					      <!--<a href="##">活动时间<i class="rankBtn"></i></a>-->
+					      活动时间
+				      </TH>
+				      <TH>邀请奖励</TH>
+				      <TH>奖励状态</TH>
+				      <TH>
+					      <!--<a href="##">参与人数<br />（真实）<i class="rank-up"></i></a>-->
+					      参与人数<br />（真实）
+				      </TH>
+				      <!--<TH>-->
+					      <!--<a href="##">分享人数<i class="rank-down"></i></a>-->
+					      <!--分享人数-->
+				      <!--</TH>-->
+				      <TH>发布状态</TH>
+				      <TH>游戏版本</TH>
+				      <TH class="norightborder" width="140">操作</TH>
+				  </TR>
+				</THEAD>
+				<TBODY>
+					<TR></TR>
+					<volist id="list" name="list">
+						<TR>
+							<TD class="gameImgDiv">
+								<div class="minCode" id="minCode{vifnn:$list.id}" style="display: inline-block; "></div>
+								<img class="gameImg" src="{vifnn:$list.picurl}" <if condition="$isNewGame[$list['id']] eq 0 || $list['picurl'] eq ''">style="display: none; "</if>/>
+								<em class="ganmeName">{vifnn:$list.title}</em>
+								<div class="bigCode" style="width: 145px; height: 145px; ">
+									<div class="minCode"  id="bigCode{vifnn:$list.id}" style="display: inline-block; "></div>
+								</div>
+								<img src="1" onerror="qrcode('{changjingUrl}/index.php?g=Wap&m=Game&a=jump&id={vifnn:$list.gameid}&uid={vifnn:$wxUser.uid}&ugameid={vifnn:$list.id}&token={vifnn:$token}', '{vifnn:$list.id}')" style="display: none; ">
+							</TD>
+							<TD>
+								<em class="ganmeName">{vifnn:$list.keyword}</em>
+							</TD>
+							<TD>{vifnn:$list.start_time|date='Y-m-d H:i:s',###}<br/>{vifnn:$list.end_time|date='Y-m-d H:i:s',###}</TD>
+							<TD class="hasTip" style="text-align: center;">
+								<if condition="$isShare[$list['id']] eq 1">
+									送
+									<if condition="$list.share_callback eq 1">
+										红包
+									<elseif condition="$list.share_callback eq 2" />
+										卡券
+									<elseif condition="$list.share_callback eq 3" />
+										积分
+									<elseif condition="$list.share_callback eq 4" />
+										可玩机会
+									</if>
+								<else />
+									——
+								</if>
+							</TD>
+							<TD style="text-align: center;">
+								<if condition="$isShare[$list['id']] eq 1">
+									<if condition="$list['end_time'] lt time()">
+										停止派发
+									<else />
+										<if condition="$list['is_release'] eq 0">
+											——
+										<else />
+											<if condition="($list.share_callback eq 1 || $list.share_callback eq 2) && $sendType[$list['id']]">
+												已送完
+											<else />
+												派发中
+											</if>
+										</if>
+									</if>
+								<else />
+									——
+								</if>
+							</TD>
+							<TD style="text-align: center;">{vifnn:$totalStatistics[$list['id']]['join']|default='——'}</TD>
+							<!--<TD style="text-align: center;">{vifnn:$totalStatistics[$list['id']]['share']|default='——'}</TD>-->
+							<TD style="text-align: center;">
+								<if condition="$isNewGame[$list['id']] eq 0">
+									<if condition="$list['end_time'] lt time()">
+										已结束
+									<else />
+										——
+									</if>
+								<else />
+									<if condition="$list['is_release'] eq 0">
+										未发布
+									<else />
+										<if condition="$list['end_time'] lt time()">
+											已结束
+										<else />
+											已发布
+										</if>
+									</if>
+								</if>
+							</TD>
+							<TD style="text-align: center;">
+								<if condition="$isNewGame[$list['id']] eq 0">
+									<span style="color: red;">老版本</span>
+								<else />
+									新版本
+								</if>
+							</TD>
+							<TD class="">
+								<if condition = "$list['is_release'] eq 0 && $list['end_time'] gt time() && $isNewGame[$list['id']] eq 1">
+									<a href="index.php?g=User&m=Game&a=release&id={vifnn:$list.id}">发布</a>--
+								</if>
+								<if condition="$Think.session.is_syn eq 2">
+									<if condition="$usertplid neq 2">
+										<script type="text/javascript">
+											$(document).ready(function(){
+												var bheight=document.body.clientHeight;
+
+												$("#lay{vifnn:$list.id}").click(function(){
+													$("#brg{vifnn:$list.id}").css("display","block");
+													$("#showdiv{vifnn:$list.id}").css("display","block");
+													//$("#testdiv").load("test.html");
+												});
+
+												$("#close{vifnn:$list.id}").click(function(){
+													$("#brg{vifnn:$list.id}").css("display","none");
+													$("#showdiv{vifnn:$list.id}").css("display","none");
+												});
+											});
+										</script>
+
+										<style type="text/css">
+											#brg{vifnn:$list.id}{ width:100%; height:100%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
+											#showdiv{vifnn:$list.id}{z-index:20; display:none;position:fixed; *position:absolute;top:20%; left:50%; margin:-50px 0 0 -50px;}
+											#testdiv{vifnn:$list.id}{ width:300px; height:300px; margin:0 auto; border:1px solid #4d4d4d; background:#f2f2f2;}
+											#close{vifnn:$list.id}{width:300px; height:27px; line-height:27px; font-size:14px; font-weight:bold; border:1px solid #4d4d4d; text-align:center; cursor:pointer; margin:0 auto; background:#333; color:#fff;margin-top: 15%;}
+										</style>
+
+										<div id="brg{vifnn:$list.id}"></div>
+										<div id="showdiv{vifnn:$list.id}">
+											<div id="close{vifnn:$list.id}">您想关闭就点我吧</div>
+											<div id="testdiv{vifnn:{vifnn:$list.id}">
+												<img src="{vifnn:$Think.session.source_domain}/wap.php?c=Wxapp&a=qrcode&id={vifnn:$list.id}&modle=Game" width="300" height="300" class="cateimg_small">
+											</div>
+										</div>
+										<a id="lay{vifnn:$list.id}" style="width:70px;">查看二维码</a>
+									</if>
+								</if>
+
+								<a href="index.php?g=User&m=Game&a=gameSet&id={vifnn:$list.id}">编辑</a>--
+
+								<if condition="$list['is_release'] eq 0 || $list['end_time'] lt time()">
+									<a href="index.php?g=User&m=Game&a=delGame&id={vifnn:$list.id}" onclick="return confirm('你确定要删除该活动吗？删除后不会保留活动数据！');">删除</a>--
+								</if>
+								<a href="{vifnn::U('Game/record',array('id'=>$list['id'],'gid'=>$list['gameid'],'token'=>$token))}">参与管理</a>--
+								<if condition="$isNewGame[$list['id']] eq 1">
+									<a href="{vifnn::U('Game/convert',array('id'=>$list['id'],'token'=>$token))}">兑换管理</a>--
+									<a href="{vifnn::U('Game/statistics',array('id'=>$list['id'],'token'=>$token))}">统计</a>--
+								</if>
+								<a onclick="showTip('{changjingUrl}/index.php?g=Wap&m=Game&a=jump&id={vifnn:$list.gameid}&uid={vifnn:$wxUser.uid}&ugameid={vifnn:$list.id}&token={vifnn:$token}')" href="javascript:void(0)">复制链接地址</a>
+							</TD>
+						</TR>
+					</volist>
+				</TBODY>
+			</TABLE>
+		</form>
+	</div>
+
+    <div class="cLine">
+        <div class="pageNavigator right">
+	        <div class="pages">{vifnn:$page}</div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+<div class="clr"></div>
+
+<!--复制链接地址弹窗-->
+<div id="copyLink" class="windowBg setWindow" style="display:none; background: rgba(0, 0, 0, 0.298039)">
+	<div class="uploadDown uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit">
+				<span class="uploadBoxTitle">链接地址</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="setStyle">
+				<div class="input-group" style="width: 370px; ">
+					<input type="text" id="linkInput" class="form-control" placeholder="" aria-describedby="basic-addon2" style="width: 295px; ">
+					<span class="input-group-addon" id="basic-addon2" style="cursor: pointer; " data-clipboard-text="">复制</span>
+				</div>
+
+				<h3>可将链接复制到您的公众号菜单中</h3>
+				<p>未发布时，请勿将此链接分享到朋友圈或者朋友</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!--复制链接地址弹窗-->
+<script>
+	function showTip (url) {
+		url = url.replace('{changjingUrl}', 'http://' + window.location.host);
+
+		$("#linkInput").val(url);
+		clip1.setText(url);
+		$('#copyLink').show();
+	}
+
+	$('.editPicClose').click(function (e) {
+		$('.setWindow').hide();
+	});
+</script>
+</div>
+</div>
+</div>
+  <!--底部-->
+</div>
+
+<include file="Public:footer"/>

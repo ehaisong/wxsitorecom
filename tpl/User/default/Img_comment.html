@@ -1,0 +1,162 @@
+<include file="Public:head"/>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script>
+/*$(function(){
+	$(".tips").mouseover(function(){
+		var content = $(this).attr("data-content");
+		  layer.tips(content, $(this), {
+			tips: [2, '#44b549'],
+			shift:5,
+			area:'auto',
+			maxWidth:500,
+			time: 60000
+		});
+	})
+	$(".tips").mouseleave(function(){
+		layer.closeAll();
+	})
+})*/
+
+function selectall(name) {
+	var checkItems=$('.cbitem');
+	if ($("#check_box").attr('checked')==false) {
+		$.each(checkItems, function(i,val){
+			val.checked=false;
+		});
+		
+	} else {
+		$.each(checkItems, function(i,val){
+			val.checked=true;
+		});
+	}
+}
+</script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">【{vifnn:$img['title']}】评论记录</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator">
+			<a href="###" onclick="if(confirm('您确定要删除吗?')){$('#info').submit();}else{ return false;}" title="批量删除" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-random"></i><else /><img src="{vifnn::RES}/images/product/arrow_switch.png" class="vm"></if> 批量删除</a>
+				<if condition="$_GET['list_type'] eq 0"><a href="###" onclick="$('#info').attr('action','/index.php?g=User&m=Img&a=comment_passall');$('#info').submit();" title="批量审核" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-random"></i><else /><img src="{vifnn::RES}/images/product/arrow_switch.png" class="vm"></if> 批量精选</a></if>
+			<spa class="right">
+              <form name="search" id="search" action="{vifnn::U('Img/comment',array('token'=>$token,'id'=>$_GET[id]))}" method="post">
+				  精选状态：
+				  <select name="status" id="statusf">
+					  <option value="">全部</option>
+					  <option <eq name="_REQUEST['status']" value="1">selected</eq> value="1">精选</option>
+					  <option <eq name="_REQUEST['status']" value="0">selected</eq> value="0">未精选</option>
+				  </select>
+				  回复状态：
+				  <select name="reply" id="replyf">
+					  <option value="">全部</option>
+					  <option <eq name="_REQUEST['reply']" value="1">selected</eq> value="1">已回复</option>
+					  <option <eq name="_REQUEST['reply']" value="0">selected</eq> value="0">未回复</option>
+				  </select>
+				  <input type="button" onclick="search.submit()" class="btnGrayS" value="搜索">
+			  </form>
+            </span>
+		</div>
+
+		<div class="clr"></div>
+	</div>
+
+	<div class="msgWrap">
+		<form method="post" action="{vifnn::U('Img/comment_del')}" id="info">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th class="select"><input type="checkbox" value="" id="check_box" onclick="selectall('id[]');"></th>
+					<th width="70">头像</th>
+					<th width="120">昵称</th>
+					<th width="">评论内容</th>
+					<th width="130">时间</th>
+					<th width="60">点赞</th>
+					<th width="60">精选状态</th>
+					<th width="60">回复状态</th>
+					<th width="140">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="cvo" empty="没有找到数据">
+				<tr>
+					<td><input type="checkbox" value="{vifnn:$cvo.id}" class="cbitem" name="id[]"></td>
+					<td><img src="{vifnn:$cvo['wheaderimg']|default='./tpl/static/dashang/images/ui_1_03_03.png'}" height="60px"/></td>
+					<td>{vifnn:$cvo['wname']|default='匿名'}</td>
+					<td class="tips"  data-content="{vifnn:$cvo['content']}">{vifnn:$cvo['content']}</td>
+					<td>{vifnn:$cvo['ctime']|date="Y-m-d H:i:s",###}</td>
+					<td>{vifnn:$cvo['support']}</td>
+					<td><eq name="cvo['status']" value="1"><span style="color:green">已精选</span><else /><span style="color:red">未精选</span></eq></td>
+					<td><if condition="!empty($cvo['reply'])"><span style="color:green">已回复</span><else /><span style="color:red">未回复</span></if></td>
+					<td class="norightborder">
+					<eq name="cvo['status']" value="1" >
+					<a href="javascript:dostatus({vifnn:$cvo['id']},0)">取消精选</a>
+					</eq>
+					<eq name="cvo['status']" value="0" >
+					<a href="javascript:dostatus({vifnn:$cvo['id']},1)">精选</a>
+					</eq>
+					<a href="javascript:showReplay({vifnn:$cvo['id']})">回复</a>
+					<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Img/comment_del',array('id'=>$cvo['id']))}');">删除</a>
+				    </td>					
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+		</form>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+<script>
+function dostatus(id,status){
+	$.post("{vifnn::U('Img/comment_pass')}&id="+id+"&status="+status,{id:id,status:status},function(msg){
+			window.location.reload();
+	},'json')
+}
+ 
+function showReplay(id){
+	var api = art.dialog.open("{vifnn::U('Img/comment_replay')}&id="+id,{lock:false,title:'是否立即回复该评论?',width:'600px',height:'300px',yesText:'关闭',background: '#000',opacity: 0.87,ok: function () {
+		if(confirm("留言内容确认没有问题?")){
+    	var iframe = this.iframe.contentWindow;
+    	var form = iframe.document.getElementById('reform');
+        var   reply = iframe.document.getElementById('replycontent');
+		var   id = iframe.document.getElementById('formid');
+		var idval = id.value; var replyval = reply.value;
+        if (check(reply)){
+			$.post("{vifnn::U('Img/comment_replay')}",{id:idval,replycontent:replyval},function(msg){
+						window.location.reload()
+			},'json');
+			return true;
+		}
+			return false;
+		}else{
+		    return false;
+		}
+    },
+    cancel:function(){
+		return true;
+	}});
+}
+// 表单验证
+var check = function (input) {
+    if (input.value === '') {
+        inputError(input);
+        input.focus();
+        return false;
+    } else {
+        return true;
+    };
+};
+</script>
+<style>
+.aui_state_highlight{background: #44b549 !important;border: solid 1px #1A9C20 !important;}
+</style>	
+</div>
+<include file="Public:footer"/>

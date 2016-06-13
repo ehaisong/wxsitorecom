@@ -1,0 +1,107 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left">拼团购列表</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<a href="{vifnn::U('User/Pintuan/set',array('token'=>$token))}" title="添加拼团" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 添加拼团</a>
+		</div>
+		<div class="pageNavigator right">
+			<input type="text" id="search" class="px search" placeholder="输入拼团名称"  name="search" value="{vifnn:$_GET['search']}" style="margin-top:10px">
+			<a href="javascript:search()" class="btnGrayS" title="搜索">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="">排序</th>
+					<th width="100px">拼团名称</th>
+					<th width="">有效时间</th>
+					<th width="80px">关键词</th>
+					<th width="">库存</th>
+					<th width="">拼团状态</th>
+					<th width="">是否开启</th>
+					<th width="">参与人数</th>
+					<th class="norightborder">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td>{vifnn:$lv.sort}</td>
+					<td>{vifnn:$lv.title}</td>
+					<td>
+						{vifnn:$lv.startdate|date="Y-m-d",###}
+						至
+						{vifnn:$lv.enddate|date="Y-m-d",###}
+					</td>
+					<td>{vifnn:$lv['keyword']}</td>
+					<td>{vifnn:$lv.quantity}</td>
+					<td>
+						<?php
+							if($lv['startdate'] > time()){
+								echo "未开始";
+							}elseif($lv['enddate'] < time()){
+								echo "已结束";
+							}else{
+								echo "进行中";
+							}
+						?>
+					</td>
+					<td><?php echo $lv['display']==2?'已开启':'已关闭';?></td>
+					<td>{vifnn:$lv.tuan_count}</td>
+					<td class="norightborder">
+						<a href="{vifnn::U('User/Pintuan/record',array('token'=>$token,'id'=>$lv['id']))}">记录</a>
+						<a href="{vifnn::U('User/Pintuan/set',array('token'=>$token,'id'=>$lv['id']))}">编辑</a>
+						<?php if($lv['tuan_count'] < 1 && $lv['display'] == 1){?>
+						<a href="javascript:fwy_confirm('确定删除拼团【{vifnn:$lv.title}】吗？','{vifnn::U('User/Pintuan/del',array('token'=>$token,'id'=>$lv['id']))}');">删除</a>
+						<?php }?>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator" style="float: right;">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+});
+function search(){
+	var search = $("#search").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Pintuan/index',array('token'=>$token))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Pintuan/index',array('token'=>$token))}";
+	}
+}
+function fwy_confirm(msg,url){
+	layer.confirm(msg, {
+		btn: ['确定','取消']
+	}, function(){
+		location.href=url;
+	}, function(){
+	
+	});
+}
+</script>
+<include file="Public:footer"/>

@@ -1,0 +1,209 @@
+<include file="Public:head"/>
+<style>#Export_excel_pop li{ padding: 10px 0 10px 35px;color:#fff;padding-left: 80px;}</style>
+<script src="{vifnn:$staticPath}/tpl/static/jquery.min.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/vote/common.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<div class="msgWrap form">
+<div class="content">
+<div class="cLineC" style="line-height: 22px;"> 
+<a href="{vifnn::U('Voteimg/vote_log',array('token'=>$token,'vote_id'=>$vote_id,'type'=>'voter'))}" class="btnGrayS vm <php>if($type == 'voter' || $type == ''){ echo 'addclore';}</php>">投票者统计信息</a>  <a href="{vifnn::U('Voteimg/vote_log',array('token'=>$token,'vote_id'=>$vote_id,'type'=>'baobao'))}" class="btnGrayS vm <php>if($type == 'baobao'){ echo 'addclore';}</php>">投票选项统计信息</a>  
+<if condition="$type eq 'baobao'">
+<a class="right btnGrayS vm" href="/index.php?g=User&m=Voteimg&a=exExcel_item&token={vifnn:$token}&vote_id={vifnn:$vote_id}">导出投票选项统计数据</a>
+<else />
+<a class="right btnGrayS vm" href="#" onclick="Export_excel();">导出投票者统计数据</a>
+</if>
+<a href="javascript:history.go(-1);" class="right btnGrayS vm" style="margin-top:1px">返回</a>
+<div class="searchbar right">
+<if condition="$type eq 'baobao'">
+<form method="GET" action="/index.php">
+<input type="text" style="height:24px;" id="msgSearchInput" class="txt left" placeholder="输入编号或名字或描述" name="key_word" value="{vifnn:$key_word}">
+<input type="hidden" name="g" value="User" />
+<input type="hidden" name="m" value="Voteimg" />
+<input type="hidden" name="a" value="vote_log" />
+<input type="hidden" name="vote_id" value="{vifnn:$vote_id}" />
+<input type="hidden" name="token" value="{vifnn:$token}" />
+<input type="hidden" name="type" value="baobao" />
+<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+</form>
+<else />
+<form method="GET" action="/index.php">
+<input type="text" style="height:24px;" id="msgSearchInput" class="txt left" placeholder="输入投票者名称" name="key_word" value="{vifnn:$key_word}">
+<input type="hidden" name="g" value="User" />
+<input type="hidden" name="m" value="Voteimg" />
+<input type="hidden" name="a" value="vote_log" />
+<input type="hidden" name="vote_id" value="{vifnn:$vote_id}" />
+<input type="hidden" name="token" value="{vifnn:$token}" />
+<input type="hidden" name="type" value="voter" />
+<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+</form>
+</if>
+</div>
+</div>
+<style type="text/css" >
+.addclore{ background-color: #E6E7EC !important;}
+</style>
+<if condition="$type eq 'baobao'">
+    <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<thead>
+	<tr>
+	<th style="width:5%;">编号</th>
+	  <th style="width:10%;">名字或描述</th>
+	  <th style="width:20%;">拉票宣言或介绍</th>
+	  <th style="width:20%;">缩略图</th>
+	  <th style="width:10%;">手机号</th>
+	  <th style="width:9%;">获得票数</th>
+	</th>
+	<th>操作</th>
+	</tr>
+	</thead>
+	<vifnnif where="$vote_logs">
+	<volist name="vote_logs" id="vo">
+	  <tbody><tr>
+	   <td>{vifnn:$vo.baby_id}</td>
+		  <td>{vifnn:$vo.vote_title}</td>
+		  <td><if condition="$vo.manifesto neq ''">{vifnn:$vo.manifesto|html_entity_decode|strip_tags|mb_substr=0,30,'utf-8'}<else />---</if> &nbsp;&nbsp;&nbsp;&nbsp; <a onclick="art.dialog.open('{vifnn::U('Voteimg/introduction_view',array('id'=>$vo['id']))}',{lock:false,title:'自我介绍预览',width:800,height:600,yesText:'关闭',background: '#000',opacity: 0.87});" href="###" style="color:#1FC419;">预览</a></td>
+		  <td> <img src="{vifnn:$vo.vote_img}" style="width:50px;height:50px"/>   <input type="hidden" value="{vifnn:$vo.vote_img}" id="img_{vifnn:$vo.id}">&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="viewImg('img_{vifnn:$vo.id}')" href="###">预览</a></td>
+		  <td><if condition="$vo.contact eq ''">暂无<else />{vifnn:$vo.contact}</if></td>
+		  <td>{vifnn:$vo.vote_count}<if condition="$vo['vote_count'] gt 0">&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="art.dialog.open('{vifnn::U('Voteimg/get_vote_details',array('item_id'=>$vo['id'],'vote_id'=>$vo['vote_id'],'token'=>$vo['token']))}',{lock:false,title:'查看被投票数详情',width:800,height:600,yesText:'关闭',background: '#000',opacity: 0.87});" href="###" style="color:#1FC419;">查看详情</a></if></td>
+		  <td class="norightborder">
+		  <a href="{vifnn::U('Voteimg/clear_votecount',array('id'=>$vo['id'],'vote_id'=>$vo['vote_id'],'token'=>$vo['token']))}" onclick="return(confirm('确定要清空该选项票数吗？'))" class="btnGreen">清空票数</a> </td>
+		</tr>
+	  </tbody>
+	</volist> 
+	<else />
+	<tr><td colspan="7" style="text-align:center;">暂无记录</td></tr>
+	</vifnnif>
+	</table>
+	<else />
+	    <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+	<thead>
+	<tr>
+	  <th style="width:20%;">活动名称</th>
+	  <th style="width:15%;">投票者</th>
+	  <th style="width:15%;">手机号</th>
+	  <th style="width:13%;">已投票数</th>
+	  <th style="width:13%;">今日投票数</th>
+	  <th style="width:15%;">最后投票时间</th>
+	</th>
+	<th>操作</th>
+	</tr>
+	</thead>
+	<vifnnif where="$vote_logs">
+	<volist name="vote_logs" id="lo">
+	  <tbody><tr>
+		  <td>{vifnn:$lo.action_name}
+		  </td>
+		  <td>
+		  <if condition="$lo.nick_name eq 'anonymous' || $lo.nick_name eq 'no'">
+				匿名用户
+			  <else/>
+			  {vifnn:$lo.nick_name}
+		  </if>
+		  <td><if condition="$lo.phone eq '' || $lo.phone eq 'no'">
+				暂无
+			  <else/>
+			  {vifnn:$lo.phone}
+		  </if></td>
+		  </td>
+		  <td>{vifnn:$lo.votenum} <if condition="$lo['votenum'] gt 0">&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="art.dialog.open('{vifnn::U('Voteimg/vote_details',array('user_id'=>$lo['user_id'],'type_view'=>'all','action_name'=>$lo['action_name'],'nick_name'=>$lo['nick_name']))}',{lock:false,title:'查看已投票的详情',width:800,height:600,yesText:'关闭',background: '#000',opacity: 0.87});" href="###" style="color:#1FC419;">查看详情</a></if></td>
+		  <td>{vifnn:$lo.votenum_day} <if condition="$lo['votenum_day'] gt 0">&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="art.dialog.open('{vifnn::U('Voteimg/vote_details',array('user_id'=>$lo['user_id'],'type_view'=>'today','action_name'=>$lo['action_name'],'nick_name'=>$lo['nick_name']))}',{lock:false,title:'查看今日投票的详情',width:800,height:600,yesText:'关闭',background: '#000',opacity: 0.87});" href="###" style="color:#1FC419;">查看详情</a></if></td>
+		  <td>{vifnn:$lo.vote_time|date='Y-m-d H:i:s',###}</td>
+		  <td class="norightborder">
+		  <a href="{vifnn::U('Voteimg/clear_votelog',array('id'=>$lo['user_id'],'vote_id'=>$lo['vote_id'],'token'=>$lo['token']))}" onclick="return(confirm('确定要删除吗？'))" class="btnGreen">删除</a> </td>
+		</tr>
+	  </tbody>
+	</volist> 
+	<else />
+	<tr><td colspan="7" style="text-align:center;">暂无记录</td></tr>
+	</vifnnif>
+	</table>
+	</if>
+	<div class="footactions" style="padding-left:10px">
+	  <div class="pages" style="text-align:right;"> {vifnn:$page}</div>
+	</div>
+    </div>
+  </div>
+ <!------导出弹窗---------------->
+<div class="pop_pub" id="Export_excel_pop" style="background: #777 none repeat scroll 0 0;height: 160px; margin: 0 auto;position: absolute;width: 352px;display:none;z-index:99;left:30%;top:20%;">
+    <h2><a href="javascript:;" title="关闭" onclick="$('#Export_excel_pop').hide();">×</a></h2>
+    <ul class="pop_pub-main">
+      <li style="padding-top:20px;">正在导出您的数据，请稍等......</li>
+    </ul>
+   <div class="pop_pub-bot">
+    	<button class="btn" onclick="$('#Export_excel_pop').hide();" style="  font-size: 16px;height: 36px;margin: 25px 118px;width: 98px;">取 消</button>
+	</div>
+</div>
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
+<script>
+var tipshtm='';
+var excellock=false;
+function Export_excel(){
+if(excellock){
+	$('#Export_excel_pop').show();
+	return false;
+}
+excellock=true;
+var vote_id = '{vifnn:$vote_id}';
+var token = '{vifnn:$token}';
+$('#Export_excel_pop ul').html('<li style="padding-top:20px;">正在导出您的数据，请稍等......</li>');
+   $('#Export_excel_pop').show(); 
+      $.get('/index.php?g=User&m=Voteimg&a=exExcel&vote_id='+vote_id+'&token='+token, function(resp){
+			 if (resp.error_code){
+				tipshtm="<li>导出失败</li>";
+				$('#Export_excel_pop ul').html(tipshtm);
+			 } else {
+				if(resp.tt>0){
+				  tipshtm="<li>已经导出1到5000数据......."+
+				                 "<li id='extpage_1'>正在为您导出5001到10000条数据......</li>";
+								 $('#Export_excel_pop ul').html(tipshtm);
+				  Run_Export_excel(vote_id,token,2);
+				}else{
+				  tipshtm="<li>数据导出完成&nbsp;&nbsp;&nbsp;<a href='"+resp.fileurl+"' style=\"color:#fff;font-size:16px;\">下载<a></li>"
+				  $('#Export_excel_pop ul').html(tipshtm);
+				  excellock=false;
+				}
+			 }                                     	
+        }, 'json');
+   
+    return false;
+}
+
+function Run_Export_excel(vote_id,token,page){
+      $.post('/index.php?g=User&m=Voteimg&a=exExcel&vote_id='+vote_id+'&token='+token+'&page='+page, function(resp){
+			 if (resp.error_code){
+				 return false;
+			 } else {
+				var tmp= resp.p +1;
+				var idxs=(page-1);
+				if((tmp<=resp.tt)){
+				  var mc1=5000*idxs +1;
+				  var mc2=5000*page;
+				  var mc3=5000*tmp;
+				    $('#extpage_'+idxs).html('已经导出'+mc1+'到'+mc2+'数据.......');
+					mc2=mc2+1;
+				    tipshtm="<li id='extpage_"+page+"'>正在为您导出"+mc2+"到"+mc3+"条数据......</li>";
+					$('#Export_excel_pop ul').html(tipshtm);
+				    Run_Export_excel(vote_id,token,tmp);
+				}else{
+				  tipshtm="<li id='extpage_end'>完成导出，正在为你打包导出的文件......</li>";
+				  $('#Export_excel_pop ul').html(tipshtm);
+				    if(true){
+				    $.post('/index.php?g=User&m=Voteimg&a=export_excel_zip', {vote_id:vote_id,page:resp.p,token:token}, function(rest){
+				         if (rest.error_code){
+							return false;
+							} else {
+									 tipshtm="<li>打包完成&nbsp;&nbsp;&nbsp;<a href='"+rest.fileurl+"' style=\"color:#fff;font-size:16px;\">下载<a></li>";
+								    $('#Export_excel_pop ul').html(tipshtm);
+									excellock=false;
+							}
+				    }, 'json');
+					}
+				}
+				 //window.location.reload();
+			 }                                     	
+        }, 'json');
+}
+</script>
+<include file="Public:footer"/>

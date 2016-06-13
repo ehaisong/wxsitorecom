@@ -1,0 +1,159 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+<link href="{vifnn:$staticPath}/tpl/static/fancyBox/source/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn::RES}/js/date/WdatePicker.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/fancyBox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/fancyBox/source/jquery.fancybox.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+
+<style>
+	#tags .btnGreen{background-image:none;background-color: #5BA607;color:#ffffff;height:30px;line-height: 30px;}
+	#tags .btnGreen:hover{background-color: #2F8BC9}
+	.thumb_img
+	{
+		border: solid 1px #dcdcdc;background: #fff;padding: 2px;display: inline-block;width: 60px;height: 60px; cursor: pointer;
+	}
+	.thumb_img img
+	{
+		width: 60px;height: 60px;
+	}
+</style>
+
+<div class="content">
+	<div class="cLineB">
+		<h4>用户提交信息列表 </h4>
+		<div class="clr"></div>
+	</div>
+	<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
+		本功能使用了模板消息中的“收到回复通知”模板消息，其模板编号:OPENTM203574543
+	</div>
+
+	<div class="msgWrap form">
+		<ul id="tags" style="width:100%">
+			<li <vifnnif where="ACTION_NAME neq 'record'">class="selectTag"</vifnnif>>
+                <a href="{vifnn::U('Custom/index')}">表单设置项</a> 
+            </li>
+			<li <vifnnif where="ACTION_NAME eq 'record'">class="selectTag"</vifnnif>>
+			<a href="{vifnn::U('Custom/record')}">表单数据统计</a>
+			</li>
+            <li><a href="{vifnn::U('Custom/index',array('token'=>$token))}" class="btnGreen">返回</a></li>
+			<div class="clr" style="height:1px;background:#eee;margin-bottom:20px;"></div>
+		</ul>
+	</div>
+
+	<eq name="thisForm['is_pay']" value="1">
+		<p style="font-size: 14px;line-height: 35px;border: solid 1px #DCDCDC;padding: 0px 10px; margin-top: 10px;">
+			已支付订单：<span style="font-weight: bold;color: #00a600">{vifnn:$payNum}</span>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			未支付订单：<span style="font-weight: bold;color: #f00">{vifnn:$notPayNum}</span>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			已支付总额：<span style="font-weight: bold;color: #00a600">{vifnn::$totalAmount}元</span>
+		</p>
+	</eq>
+
+	<div class="cLine">
+		<eq name="thisForm['is_pay']" value="1">
+			支付状态：
+			<select name="paid" class="finder" selectedval="{vifnn:$Think.get.paid}">
+				<option value="">不限</option>
+				<option value="1">已支付</option>
+				<option value="0">未支付</option>
+			</select>
+			&nbsp;订单号：<input style="width:90px;" class="px finder" name="orderid" value="{vifnn:$Think.get.orderid}" />
+		</eq>
+		&nbsp;昵称：<input style="width:90px;" class="px finder" name="user_name" value="{vifnn:$Think.get.user_name}" />
+		&nbsp;<input type="text" style="width:90px;" class="px finder" name="start_time" placeholder="搜索开始时间" value="{vifnn:$Think.get.start_time}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" />&nbsp;到&nbsp;
+		<input type="text" style="width:90px;" class="px finder" name="end_time" placeholder="搜索结束时间" value="{vifnn:$Think.get.end_time}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" />
+		&nbsp;<input type="button" value="搜索" class="btnGrayS finder" title="搜索" style="height:30px;">
+		<a href='{vifnn::U("exportForms",array("set_id"=>$set_id,"token"=>$token,"paid"=>$_GET["paid"],"orderid"=>$_GET["orderid"],"user_name"=>$_GET["user_name"],"start_time"=>$_GET["start_time"],"end_time"=>$_GET["end_time"]))}' class="btnGrayS vm" type="button" style="height:25px;float: right;display: inline-block;">导出表格</a>
+		<div class="clr"></div>
+	</div>
+
+	<div class="msgWrap">
+		<form method="post" action="" id="info">
+			<input name="delall" type="hidden" value="">
+			<input name="wxid" type="hidden" value="">
+			<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+				<thead>
+				<tr>
+					<th width="40">用户昵称</th>
+					<th width="30">提交时间</th>
+					<volist name="fields" id="fd">
+						<th width="30">{vifnn:$fd.field_name}</th>
+					</volist>
+					<eq name="thisForm['is_pay']" value="1">
+						<th width="30">{vifnn:$thisForm.pay_name}</th>
+						<th width="30">订单号</th>
+					</eq>
+					<th width="40" class="norightborder">操作</th>
+				</tr>
+				</thead>
+				<tbody>
+
+				<volist name="list" id="item">
+					<tr>
+						<td>{vifnn:$item.user_name}</td>
+						<td>{vifnn:$item.add_time|date="Y-m-d H:i",###}</td>
+						<volist name="item['valueList']" id="vl">
+							<td>
+								<eq name="vl['type']" value="image">
+									<eq name="vl['value']" value="未上传">
+										未上传
+										<else/>
+										<volist name="vl['value']" id="vimg">
+											<eq name="key" value="0">
+												<a class="fancybox thumb_img" rel="group_{vifnn:$vl['name']}_{vifnn:$item['info_id']}" href="{vifnn:$vimg|img_url='650_950'}" ><img src="{vifnn:$vimg|img_url='200_200'}" /></a>
+												<else/>
+												<a style="display: none;" class="fancybox thumb_img" rel="group_{vifnn:$vl['name']}_{vifnn:$item['info_id']}" href="{vifnn:$vimg|img_url='650_950'}" >
+
+												</a>
+											</eq>
+										</volist>
+									</eq>
+									<else/>
+									{vifnn:$vl['value']|short=25|default='--'}
+								</eq>
+							</td>
+						</volist>
+						<eq name="thisForm['is_pay']" value="1">
+							<td>{vifnn::$thisForm['price']/100}元</td>
+							<td>{vifnn::$item['paid']=='1'?'<span style="color:green;">'.$item['orderid'].'</span>':'<span style="color: red;">未支付</span>'}</td>
+						</eq>
+						<td class="norightborder">
+							<a href="javascript:void(0);" onclick="showIntroDetail({vifnn:$item.info_id})">查看详情</a>|
+							<a href="javascript:void(0);" onclick="reply({vifnn:$item.info_id})">回复</a>|<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Custom/infoDel',array('info_id'=>$item['info_id'],'token'=>$token))}');">删除</a>
+						</td>
+					</tr>
+				</volist>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right"><div class="pages">{vifnn:$page}</div></div>
+		<div class="clr"></div>
+	</div>
+</div>
+
+<script>
+	function showIntroDetail(id){
+		art.dialog.open('{vifnn::U('Custom/detail',array('token'=>$token))}&info_id='+id,{lock:false,title:'信息详情',width:600,height:500,yesText:'关闭',background: '#000',opacity: 0.87});
+	}
+	var artReply;
+	function reply(id)
+	{
+		artReply=art.dialog.open('{vifnn::U('Custom/reply',array('token'=>$token))}&info_id='+id,{lock:false,title:'回复详情',width:500,height:400,yesText:'关闭',background: '#000',opacity: 0.87});
+	}
+	function closeReply()
+	{
+		if(artReply) {
+			artReply.close();
+		}
+	}
+	$(".fancybox").fancybox({});
+	$s.finderController('.finder','{vifnn::U("info",array("set_id"=>$set_id,"token"=>$token))}');
+</script>
+
+<include file="Public:footer"/>

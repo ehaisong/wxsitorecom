@@ -1,0 +1,21 @@
+	<if condition="$usertplid eq 2">
+	<div class="alert alert-success alert-dismissable" style="margin-top:20px;">
+	<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+	<else />
+	<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;"></if>
+	<div>
+		<span>温馨提示：</span>
+		<p>1、本功能使用了模板消息中的“订单发货提醒”知模板消息，模板编号OPENTM200565259。
+			  开通微信支付功能的公众号在使用此功能的时候可以在”基本设置——微信模板消息“中配置对应的模板消息</p>
+		
+	</div>
+	</div>
+	<div class="tab">
+		<ul>
+			<li class="<?php if(ACTION_NAME == 'index' || ACTION_NAME == 'set'){?>current <?php }?>tabli" id="tab1"><a href="{vifnn::U('User/Pintuan/index',array('token'=>$token))}">拼团管理</a></li>
+			<?php if(ACTION_NAME == 'record'){ ?>
+			<li class="current tabli" id="tab1"><a href="{vifnn::U('User/Pintuan/record',array('token'=>$token,'id'=>$_GET['id']))}">拼团记录</a></li><?php } ?>
+			<?php if(ACTION_NAME == 'order'){ ?>
+			<li class="current tabli" id="tab1"><a href="{vifnn::U('User/Pintuan/order',array('token'=>$token,'team_id'=>$_GET['team_id']))}">拼团记录</a></li><?php } ?>
+		</ul>
+	</div>

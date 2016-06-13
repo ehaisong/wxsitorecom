@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html class="no-js  mobile" lang="zh-CN">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <meta charset="utf-8" />
+    <meta name="keywords" content="购物车" />
+    <meta name="description" content="购物车" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="cleartype" content="on" />
+
+    <title>购物车 - {vifnn:$storeSet.name}</title>
+    <!-- _global -->
+    <script src="{vifnn::$staticFilePath}/js/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <!-- meta viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body,a {
+            font-family: "\5fae\8f6f\96c5\9ed1","Microsoft YaHei",Helvetica,Arial,sans-serif!important;
+        }
+        .props {
+            color:green!important;
+        }
+        .response-area-minus {
+            cursor: pointer;
+        }
+        .response-area-plus {
+            cursor: pointer;
+        }
+        .select-all {
+            cursor: pointer;
+        }
+        .check {
+            cursor: pointer;
+        }
+        .remove {
+            text-align: right;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            float: right;
+        }
+        .shipping {
+            text-align: right;
+        }
+    </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/base.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/trade.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/cart.css" />
+</head>
+
+<body class=" body-fixed-bottom">
+        <!-- container -->
+    <div class="container ">
+        <div class="content clearfix">
+	        <div class="tabber tabber-bottom tabber-n4 tabber-double-11 clearfix">
+	            <a class="active" href="{vifnn::U('DrpCart/index', array('id' => $_GET['id']))}">购物车</a>
+            </div>
+
+	        <div id="cart-container" class="block block-order">
+		        <div class="header js-list-header">
+			        <span>店铺：<a href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}">{vifnn:$storeSet.name}</a></span>
+                    <a href="javascript:;" class="j-edit-list pull-right c-blue font-size-12 <if condition='count($products) eq 0'>hide</if>">编辑</a>
+		        </div>
+		        <hr class="margin-0 left-10">
+		        <ul class="list block block-list block-list-cart block-border-top-none block-border-bottom-none">
+                    <volist name="products" id="product">
+                    <li class="block-item block-item-cart relative clearfix revert">
+                        <div class="check-container">
+                            <span class="check checked" key="{vifnn:$product.session_key}"></span>
+                        </div>
+                        <div class="name-card name-card-3col clearfix">
+                            <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $product['id']))}" class="thumb"><img src="{vifnn:$product.logourl}"></a>
+                            <div class="detail">
+                                <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $product['id']))}"><h3>{vifnn:$product.name}</h3></a>
+                                <p class="props">
+                                    <foreach name="product['props']" item="prop">
+                                    - {vifnn:$prop.name} : {vifnn:$prop.value}<br/>
+                                    </foreach>
+                                </p>
+                                <if condition="$product.comment neq ''">
+                                <p class="comment">
+                                    留言：{vifnn:$product.comment}
+                                </p>
+                                </if>
+                                <p class="stock-txt hide">库存：<span class="stock stock-{vifnn:$product.id}" data="{vifnn:$product.stock}">{vifnn:$product['stock'] - $product['quantity']}</span></p>
+                            </div>
+                            <div class="right-col">
+                                <div class="price">￥&nbsp;<span>{vifnn:$product.price}</span></div>
+                                <if condition="$product.shipping gt 0">
+                                <div class="shipping">运费：￥&nbsp;{vifnn:$product.shipping}</div>
+                                    <else />
+                                    <div class="shipping">免运费</div>
+                                </if>
+                                <div class="num">
+                                    <div class="quantity-show">
+                                        ×<span class="num-txt">{vifnn:$product.quantity}</span>&nbsp;&nbsp;
+                                        <div class="remove" data="{vifnn:$product.session_key}">
+                                            <img src="{vifnn:$staticFilePath}/images/icon_delete@2x.png" width="20" height="20" alt="删除" title="删除" />
+                                        </div>
+                                    </div>
+                                    <div class="num hide quantity-edit">
+                                        <div class="quantity">
+                                            <div class="response-area response-area-minus" data="{vifnn:$product.id}"></div>
+                                            <button class="minus" type="button"></button>
+                                            <input class="txt qty" data="{vifnn:$product.quantity}" key="{vifnn:$product.session_key}" value="{vifnn:$product.quantity}" type="text" readonly="true" />
+                                            <button class="plus" type="button"></button>
+                                            <div class="response-area response-area-plus" data="{vifnn:$product.id}"></div>
+                                            <div class="txtCover"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </li>
+                    </volist>
+                </ul>
+                <div class="js-bottom-opts bottom-opts" style="padding:0;">
+                    <div class="bottom-cart clear-fix">
+                        <div class="select-all <if condition='count($products) gt 0'>checked</if>"><span class="check <if condition='count($products) gt 0'>checked</if>"></span>全选</div>
+                        <div class="total-price">合计：<span class="js-total-price" data="{vifnn:$total_amount}">{vifnn:$total_amount}</span>元</div>
+                        <button href="javascript:;" class="js-go-pay btn btn-orange-dark font-size-14 <if condition='count($products) eq 0'>disabled</if>">结算(<span class="js-total-quantity" data="{vifnn:$total_quantity}">{vifnn:$total_quantity}</span>)</button>
+                    </div>
+                </div>
+	        </div>
+
+</div>                    </div>
+    
+<script type="text/javascript">
+    $(function() {
+        $('.j-edit-list').click(function() {
+            if ($(this).hasClass('save')) {
+                $(this).removeClass('save');
+                $(this).html('编辑');
+                var keys ='';
+                var key_qty = '';
+                $.ajaxSetup({async:false});
+                $('.qty').each(function(i){
+                    var obj = this;
+                    if ($(this).val() != $(this).attr('data')) { //判断是否修改了商品购买数量
+                        $.post("{vifnn::U('DrpCart/edit', array('id' => $_GET['id']))}", {"key" : $(this).attr('key'), 'quantity' : $(this).val()}, function(data) {
+                            var data = $.parseJSON(data);
+                            if (data.status) { //修改成功
+                                $(obj).attr('data', $(obj).val());
+                                var data = $.parseJSON(data.data);
+                                if(data.total_amount != '' && data.total_amount != undefined) {
+                                    $('.js-total-price').text(data.total_amount); //购物车商品总额
+                                    $('.js-total-price').attr('data', data.total_amount);
+                                }
+                                if(data.total_quantity != '' && data.total_quantity != undefined) {
+                                    $('.js-total-quantity').text(data.total_quantity); //购物车商品总量
+                                    $('.js-total-quantity').attr('data', data.total_quantity);
+                                }
+
+                                $('.quantity-show .num-txt').eq(i).text($(obj).val());
+
+                                $('.check-container .check').eq(i).removeClass('cancel');
+
+                            } else { //修改失败，购买商品数量恢复到添加购物车时的数量
+                                $(obj).val($(obj).attr('data'));
+                            }
+                        })
+                    }
+                })
+                $('.quantity-show').removeClass('hide');
+                $('.quantity-edit').addClass('hide');
+                $('.check-container .check').not('.cancel').addClass('checked');
+                $('.select-all').addClass('checked');
+                $('.stock-txt').addClass('hide');
+                $('.js-go-pay').attr('disabled', false);
+                $('.total-price').removeClass('hide');
+                $('.select-all .check').addClass('checked');
+            } else {
+                $(this).addClass('save');
+                $(this).html('完成');
+                $('.quantity-show').addClass('hide');
+                $('.quantity-edit').removeClass('hide');
+                $('.check-container .check').removeClass('checked');
+                $('.select-all').removeClass('checked');
+                $('.stock-txt').removeClass('hide');
+                $('.js-go-pay').attr('disabled', true);
+                $('.total-price').addClass('hide');
+                $('.select-all .check').removeClass('checked');
+            }
+        })
+
+        $('.response-area-minus').click(function(){
+            var obj = $(this).siblings('.qty');
+            var product_id = $(this).attr('data');
+            var stock = 0;
+            if ($(obj).val() <= 1) {
+                return false;
+            } else {
+                stock = parseInt($('.stock-' + product_id).attr('data')) - parseInt($(obj).val()) + 1;
+                $(obj).val(parseInt($(obj).val()) - 1);
+                var product_id = $(this).attr('data');
+                $('.stock-' + product_id).html(stock);
+            }
+        })
+
+        $('.response-area-plus').click(function(){
+            var obj = $(this).siblings('.qty');
+            var product_id = $(this).attr('data');
+            var stock = 0;
+            stock = parseInt($('.stock-' + product_id).attr('data')) - parseInt($(obj).val()) - 1;
+            if (stock >= 0) { //判断库存
+                $(obj).val(parseInt($(obj).val()) + 1);
+                $('.stock-' + product_id).html(stock);
+            } else {
+                return false;
+            }
+        })
+
+        $('.select-all').click(function(){
+            if ($('.j-edit-list').hasClass('save')) {
+                return false;
+            }
+            if ($(this).hasClass('checked')) {
+                $(this).removeClass('checked');
+                $(this).children('.check').removeClass('checked');
+
+                $('.check-container .check').removeClass('checked');
+
+                $('.js-total-price').text('0.00');
+                $('.js-total-quantity').text(0);
+                $('.js-go-pay').attr('disabled', true);
+            } else {
+                $(this).addClass('checked');
+                $(this).children('.check').addClass('checked');
+                $('.check-container .cancel').removeClass('cancel');
+                $('.check-container .check').addClass('checked');
+
+                $.post("{vifnn::U('DrpCart/ajax_all', array('id' => $_GET['id']))}", '', function(data){
+                    var data = $.parseJSON(data);
+                    if (data.status) { //修改成功
+                        var data = $.parseJSON(data.data);
+                        if(data.total_amount != undefined) {
+                            $('.js-total-price').text(data.total_amount); //购物车商品总额
+                            $('.js-total-price').attr('data', data.total_amount);
+                        }
+                        if(data.total_quantity != undefined) {
+                            $('.js-total-quantity').text(data.total_quantity); //购物车商品总量
+                            $('.js-total-quantity').attr('data', data.total_quantity);
+                        }
+                    }
+                })
+
+
+                $('.js-go-pay').attr('disabled', false);
+            }
+        })
+
+        $('.check-container .check').click(function(){
+            if ($('.j-edit-list').hasClass('save')) {
+                return false;
+            }
+            var key = $(this).attr('key');
+            if ($(this).hasClass('checked')) {
+                $.post("{vifnn::U('DrpCart/ajax_cancel', array('id' => $_GET['id']))}", {'key' : key}, function(data){
+                    var data = $.parseJSON(data);
+                    if (data.status) { //修改成功
+                        var data = $.parseJSON(data.data);
+                        if(data.total_amount != undefined) {
+                            $('.js-total-price').text(data.total_amount); //购物车商品总额
+                            $('.js-total-price').attr('data', data.total_amount);
+                        }
+                        if(data.total_quantity != undefined) {
+                            $('.js-total-quantity').text(data.total_quantity); //购物车商品总量
+                            $('.js-total-quantity').attr('data', data.total_quantity);
+                            if (data.total_quantity == 0) {
+                                $('.js-go-pay').attr('disabled', true);        
+                            }
+                        }
+                    }
+                })
+                $(this).removeClass('checked');
+                $(this).addClass('cancel');
+                $('.select-all').removeClass('checked');
+                $('.select-all .check').removeClass('checked');
+            } else {
+                $(this).addClass('checked');
+                $(this).removeClass('cancel');
+                $.post("{vifnn::U('DrpCart/ajax_restore', array('id' => $_GET['id']))}", {'key' : key}, function(data){
+                    var data = $.parseJSON(data);
+                    if (data.status) { //修改成功
+                        var data = $.parseJSON(data.data);
+                        if(data.total_amount != undefined) {
+                            $('.js-total-price').text(data.total_amount); //购物车商品总额
+                            $('.js-total-price').attr('data', data.total_amount);
+                        }
+                        if(data.total_quantity != undefined) {
+                            $('.js-total-quantity').text(data.total_quantity); //购物车商品总量
+                            $('.js-total-quantity').attr('data', data.total_quantity);
+                            if (data.total_quantity > 0) {
+                                $('.js-go-pay').attr('disabled', false);
+                            }
+                        }
+                    }
+                })
+
+                if ($('.check-container .check').not('.checked').length == 0) {
+                    $('.select-all').addClass('checked');
+                    $('.select-all .check').addClass('checked');
+                }
+            }
+        })
+
+        //删除商品
+        $('.remove').click(function(){
+            var key = $(this).attr('data');
+            var obj = this;
+            $.post("{vifnn::U('DrpCart/remove', array('id' => $_GET['id']))}", {'key' : key}, function(data){
+                var data = $.parseJSON(data);
+                if (data.status) { //删除成功
+                    $(obj).parents('.block-item').remove();
+                    var data = $.parseJSON(data.data);
+                    if(data.total_amount != undefined) {
+                        $('.js-total-price').text(data.total_amount); //购物车商品总额
+                        $('.js-total-price').attr('data', data.total_amount);
+                    }
+                    if(data.total_quantity != undefined) {
+                        $('.js-total-quantity').text(data.total_quantity); //购物车商品总量
+                        $('.js-total-quantity').attr('data', data.total_quantity);
+                    }
+
+                    if (data.total_quantity == 0) {
+                        $('.j-edit-list').addClass('hide');
+                        $('.select-all').removeClass('checked');
+                        $('.select-all .check').removeClass('checked');
+                        $('.js-go-pay').addClass('disabled');
+                    }
+                }
+            })
+        })
+
+        //收货地址
+        $('.js-go-pay').click(function(){
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+            window.location.href = "{vifnn::U('DrpCheckout/shipping_address', array('id' => $_GET['id']))}";
+        })
+    })
+
+</script>
+
+</body>
+</html>

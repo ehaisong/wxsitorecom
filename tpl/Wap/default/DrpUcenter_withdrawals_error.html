@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>我的佣金</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css">
+
+
+</head>
+<body class="body-gray">
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a href="{vifnn::U('DrpUcenter/withdrawals')}" class="menu-icon"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">提取佣金</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--content begin-->
+    
+    <!--fail begin-->
+    <div class="panel tippage">
+        <span class="icon-fail"></span>
+        <p class="text-fail">提现失败！</p>
+        <a href="javascipt:void(0)" class="text-blue">请与店铺管理员联系</a>
+        <a href="{vifnn::U('DrpUcenter/withdrawals')}">再试一次</a>
+    </div>
+    <!--fail end-->
+    
+    <!--content end-->
+
+
+</body></html>

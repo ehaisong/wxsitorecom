@@ -1,0 +1,57 @@
+<include file="Public:head"/> 
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+        <div class="content">
+<div class="cLineB">
+<h4 class="left">排行榜</h4>
+<a href="<?php echo U('Collectword/index',array('token'=>$token));?>" class="right btnGrayS vm">返回</a>
+<div class="clr"></div>
+</div>
+<div class="msgWrap">
+<form method="post" action="" id="info">
+<input name="delall" type="hidden" value="">
+<input name="wxid" type="hidden" value="">
+<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+<thead>
+<tr>
+<th width="160">排名</th>
+<th width="160">昵称</th>
+<th width="160">手机号码</th>
+<th width="100">收集字数</th>
+<th width="100">打开次数</th>
+<th width="150">参与时间</th>
+<th width="160" class="norightborder">操作</th>
+</tr>
+</thead>
+<tbody>
+<tr></tr>
+<volist name="list" id="item" key="key"> 
+<tr>
+<?php 
+$p = $_GET['p']?$_GET['p']:1;
+$p = $p - 1;
+$i = $key + ($p*15);
+?>
+<td>{vifnn:$key}</td>
+<td>{vifnn:$item.nickname}</td>
+<td>{vifnn:$item.mobile}</td>
+<td>{vifnn:$item.word_count}</td>
+<td>{vifnn:$item.share_num}</td>
+<td>{vifnn:$item.addtime|date="Y-m-d H:i:s",###}</td> 
+<td class="norightborder">
+	<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Collectword/rank_del',array('id'=>$item['id'],'token'=>$token))}');">删除</a>
+</td>
+</tr>
+</volist>
+</tbody>
+</table>
+</form>
+
+</div>
+<div class="cLine">
+<div class="pageNavigator right">
+<div class="pages">{vifnn:$page}</div>
+</div>
+<div class="clr"></div>
+</div>
+</div>
+<include file="Public:footer"/>

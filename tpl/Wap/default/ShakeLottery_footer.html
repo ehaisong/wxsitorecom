@@ -1,0 +1,30 @@
+<params 
+	AjaxReturnPrizeUrl = "{vifnn::U('ShakeLottery/AjaxReturnPrize',array('token'=>$actioninfo['token'],'id'=>$actioninfo['id']))}"
+	enddate = "<?php echo date('m/d/Y H:i:s', $actioninfo['endtime'])?>"
+	starttime = "<?php echo date('m/d/Y H:i:s', $actioninfo['starttime'])?>"
+	other_source = "{vifnn:$actioninfo['other_source']}"
+	notice_content = '{vifnn:$notice_content}'
+	staticPath = '{vifnn:$staticPath}'
+	aid		   = '{vifnn:$actioninfo['id']}';
+	token		   = '{vifnn:$actioninfo['token']}'
+	user_id		   = '{vifnn:$user_id}'
+	MyRecordUrl 	= "{vifnn::U('ShakeLottery/LotteryMyRecord',array('token'=>$actioninfo['token']))}"
+	OtherRecordUrl 	= "{vifnn::U('ShakeLottery/LotteryRecord',array('token'=>$actioninfo['token'],'record_nums'=>$actioninfo['record_nums']))}"
+/>
+<div class="weiba-footer"><div class="weiba-copyright"></div></div>
+<script>
+window.shareData = {  
+	"moduleName":"ShakeLottery",
+	"moduleID":"{vifnn:$actioninfo.id}",
+	"imgUrl": "{vifnn:$actioninfo.reply_pic}", 
+	"timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U('ShakeLottery/index',array('token'=>$actioninfo['token'],'id'=>$actioninfo['id']))}",
+	"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('ShakeLottery/index',array('token'=>$actioninfo['token'],'id'=>$actioninfo['id']))}",
+	"weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('ShakeLottery/index',array('token'=>$actioninfo['token'],'id'=>$actioninfo['id']))}",
+	"tTitle": "{vifnn:$actioninfo['custom_sharetitle']|shareFilter}",
+	"tContent": "{vifnn:$actioninfo['custom_sharedsc']|shareFilter}",
+	"fTitle": "{vifnn:$actioninfo['custom_sharedsc']|shareFilter}",
+	"isShareNum":1,
+	"ShareNumData":"shakelottery,id,{vifnn:$actioninfo.id},share_count",
+};
+</script>
+{vifnn:$shareScript}

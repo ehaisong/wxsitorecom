@@ -1,0 +1,105 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left">拼团<?php if($pintuan!=''){echo "【".$pintuan['title']."】";}?>记录</h4>
+		<a href="javascript:history.go(-1)"  class="right btnGrayS" >返回</a>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="100px">拼团名称</th>
+					<th width="">拼团类型</th>
+					<th width="">拼团目标</th>
+					<th width="">团长</th>
+					<th width="">参与人数</th>
+					<th width="">拼团状态</th>
+					<th width="">开团时间</th>
+					<th class="norightborder">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td>{vifnn:$lv['pintuan']['title']}</td>
+					<td><?php echo $lv['type']?'最优开团':'人缘开团';?></td>
+					<td><?php echo $lv['guize']['number'].'人--'.($lv['pintuan']['price']*$lv['guize']['discount']/10000).'元'?></td>
+					<td>{vifnn:$lv['order']['user_name']}</td>
+					<td>{vifnn:$lv['count']}</td>
+					<td>
+						<?php
+							if($lv['pintuan']['enddate'] > time()){
+								echo "拼团中";
+							}elseif($lv['count'] >= $lv['guize']['number']){
+								echo "成功";
+								$this_guize = array();
+								foreach($lv['guize_list'] as $con){
+									if($con['discount'] <= $lv['guize']['discount'] && $team['count'] >= $con['number']){
+										$this_guize[] = $con;
+									}
+								}
+								if(count($this_guize) > 0){
+									$guize = $this_guize[(count($this_guize))-1];
+								}else{
+									$guize = $lv['guize'];
+								}
+								echo "--".($lv['pintuan']['price']*$guize['discount']/10000)."元";
+							}else{
+								echo "失败";
+							}
+						?>
+					</td>
+					<td>{vifnn:$lv['addtime']|date="Y-m-d H:i:s",###}</td>
+					<td class="norightborder">
+						<a href="{vifnn::U('User/Pintuan/order',array('token'=>$token,'team_id'=>$lv['id']))}">参团记录</a>
+						<if condition="$lv['isrefund'] != 1">
+						<a href="{vifnn::U('User/Pintuan/refund',array('token'=>$token,'team_id'=>$lv['id'],'tid'=>$lv['tid']))}">一键退款</a>
+						<else />
+						<a href="{vifnn::U('User/Pintuan/refundlog',array('token'=>$token,'team_id'=>$lv['id'],'tid'=>$lv['tid']))}">退款记录</a>
+						</if>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator" style="float: right;">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+});
+function search(){
+	var search = $("#search").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Pintuan/index',array('token'=>$token))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Pintuan/index',array('token'=>$token))}";
+	}
+}
+function fwy_confirm(msg,url){
+	layer.confirm(msg, {
+		btn: ['确定','取消']
+	}, function(){
+		location.href=url;
+	}, function(){
+	
+	});
+}
+</script>
+<include file="Public:footer"/>

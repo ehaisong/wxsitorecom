@@ -1,0 +1,129 @@
+<include file="Public:head1"/>
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css"/>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+
+<div class="content">
+    <div class="cLineB">
+        <h4 class="left">推广海报</h4>
+        <div class="clr"></div>
+    </div>
+
+    <if condition="$usertplid eq 2">
+        <div class="alert alert-success alert-dismissable" style="margin-top:20px;">
+            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+            <else />
+            <div class="ftip" style="margin:25px auto 5px auto;"></if>只有认证服务号才能使用（向微信官方交过300元认证费的服务号），发放积分奖励使用了模板消息中的“积分提醒”模板，模板编号:TM00335</div>
+
+    <div class="cLine">
+
+        <div class="left">
+            <a href="{vifnn::U('add',array('token'=>$token))}" title="添加" class="btnGrayS vm bigbtn">
+                <img src="{vifnn::RES}/images/product/add.png" class="vm">
+                添加推广海报
+            </a>
+        </div>
+
+        <div class="searchbar right">
+            <input type="text" id="msgSearchInput" class="txt left finder" placeholder="输入海报名称搜索" name="keyword" value="{vifnn:$Think.get.keyword}"
+                   style="height:22px;">
+            <input type="button" value="搜索" id="msgSearchBtn" href="javascript:;" class="btnGrayS finder" title="搜索"
+                   style="height:30px;">
+        </div>
+
+        <div class="clr"></div>
+    </div>
+
+    <div class="msgWrap">
+        <form method="post" action="" id="info">
+            <input name="delall" type="hidden" value="">
+            <input name="wxid" type="hidden" value="">
+            <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <thead>
+                <tr>
+                    <th>海报名称</th>
+                    <th>关键词</th>
+                    <th >活动时间</th>
+                    <th >推广奖励</th>
+                    <th >奖励机制</th>
+                    <th >推广人数</th>
+                    <th>发布状态</th>
+                    <th class="norightborder">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <empty name="_list">
+                    <tr>
+                        <td colspan="8">
+                            <p style="line-height: 60px;text-align: center;">您还没有推广海报！请 <a href="{vifnn::U('add',array('token'=>$token))}">添加推广海报</a></p>
+                        </td>
+                    </tr>
+                    <else/>
+                    <volist name="_list" id="vo">
+                        <tr>
+                            <td>{vifnn:$vo.name}</td>
+                            <td>{vifnn:$vo.keyword}</td>
+                            <td >
+                                {vifnn:$vo.start_time|format_time='未设置','date'}至
+                                <br/>{vifnn:$vo.end_time|format_time='未设置','date'}
+                            </td>
+                            <td >
+                                <eq name="vo['reward_type']" value="cash">
+                                    红包类型<br/>
+                                    发放总金额：{vifnn::$vo["max_cash"]/100}元
+                                    <else/>
+                                    积分类型
+                                </eq>
+                            </td>
+                            <td >
+                                <eq name="vo['reward_type']" value="cash">
+                                    一级：{vifnn::$vo["reward_lv1_cash"]/100}元<br/>
+                                    二级：{vifnn::$vo["reward_lv2_cash"]/100}元
+                                    <else/>
+                                    一级：{vifnn:$vo.reward_lv1_score}分<br/>
+                                    二级：{vifnn:$vo.reward_lv2_score}分
+                                </eq>
+                            </td>
+                            <td >
+                                {vifnn:$vo.promoter_num|default=0}
+                            </td>
+                            <td>
+                                <eq name="vo['status']" value="1">
+                                    <switch name="vo.time_status">
+                                        <case value="0">未开始</case>
+                                        <case value="1"><span style="color: green;">已发布</span></case>
+                                        <default /><span style="color: red;">已结束</span>
+                                    </switch>
+                                    <else/>
+                                    <span style="color: red;">未发布</span>
+                                </eq>
+                            </td>
+                            <td class="norightborder">
+                                <eq name="vo['status']" value="1">
+                                    <!--<a ajax="get" href="javascript:;" url="{vifnn::U('changeStatus',array('id'=>$vo['id'],'status'=>'0','token'=>$_GET['token']))}">关闭</a>-->
+                                    <else/>
+                                    <a ajax="get" href="javascript:;" url="{vifnn::U('changeStatus',array('id'=>$vo['id'],'status'=>'1','token'=>$_GET['token']))}">发布</a>
+                                </eq>
+                                <a href="{vifnn::U('edit',array('id'=>$vo['id'],'token'=>$_GET['token']))}">修改</a>
+                                <a confirm href="javascript:;" ajax="get" url="{vifnn::U('del',array('id'=>$vo['id'],'token'=>$_GET['token']))}">删除</a>
+                                <a href="{vifnn::U('promote',array('id'=>$vo['id'],'token'=>$_GET['token']))}">推广管理</a>
+                            </td>
+                        </tr>
+                    </volist>
+                </empty>
+                </tbody>
+            </table>
+        </form>
+
+    </div>
+    <div class="cLine">
+        <div class="pageNavigator right">
+            <div class="pages">{vifnn:$page}</div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+<script>
+    $s.finderController('.finder','{vifnn::U("index",array("token"=>$_GET["token"]))}');
+</script>
+<include file="Public:footer"/>

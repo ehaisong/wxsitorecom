@@ -1,0 +1,128 @@
+<include file="DrpStore:header"/>
+
+<form id="search_form" name="search_form" action="" method="post">
+	<div class="m-l-search">
+		<input type="hidden" name="wecha_id" value="{vifnn:$wecha_id}" />
+		<input type="hidden" name="token" value="{vifnn:$token}" />
+		<input type="hidden" name="twid" value="{vifnn:$twid}" /> 
+		<input id="search_name" class="inp-search" name="search_name" type="search" <if condition="$search_name neq ''">value="{vifnn:$search_name}"</if> placeholder="输入关键字搜索" />
+		<input class="btn-search" name="search-btn" type="submit" value="" />
+	</div>
+</form>
+
+
+<ul id="m_list" class="m-list ">
+<volist name="products" id="product">
+	<li>
+		<span class="pic">
+			<a href="{vifnn::U('Store/product',array('token' => $_GET['token'], 'id' => $product['id'], 'wecha_id' => $_GET['wecha_id']))}">
+			<img src="{vifnn:$product.logourl}" data-original="{vifnn:$product.logourl}">
+		</a>
+		</span>
+		<span class="con">
+			<a class="t" href="{vifnn::U('Store/product',array('token' => $_GET['token'], 'id' => $product['id'], 'wecha_id' => $_GET['wecha_id']))}" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{vifnn:$product.name}</a>
+			<b>￥{vifnn:$product.price}</b>
+			<span style="color:#999;font-size:8px;margin-top:5px;">佣金：<if condition="$product.commission_type eq 'fixed'">{vifnn:$product.commission}元</if><if condition="$product.commission_type eq 'float'">{vifnn:$product.commission}%</if></span>
+            <span style="color:#999;font-size:8px;margin-top:5px;">库存：{vifnn:$product.num|default=0}(件)</span>
+		</span>
+        <span>
+            <a href=""><b>下架</b></a>
+        </span>
+	</li>
+</volist>
+</ul>
+<a class="more" id="show_more" page="2" style="display: none;" href="javascript:void(0);">加载更多</a>
+<input type="hidden" value="1" id="pageid" />
+<input type="hidden" id="canScroll" value="1" />
+<script type="text/javascript">
+$(function() {
+	$('#search_form').submit(function() {
+		var search_name = $('#search_name').val();
+		if (search_name == '') {
+			return false;
+		}
+	});
+
+	var base_url = '{vifnn::U('DrpProduct/my',array('token'=>$_GET['token'],'wecha_id'=>$_GET['wecha_id']))}';
+	var b_url = '{vifnn::U('DrpProduct/my_ajax',array('token'=>$_GET['token'],'wecha_id'=>$_GET['wecha_id']))}</if>'
+
+	/*---------------------加载更多--------------------*/
+	var total = {vifnn:$count},
+		pagesize = 8,
+		pages = Math.ceil(total / pagesize);
+    if ('{vifnn:$search_name}' != '') {
+        var com_link = '{vifnn::U('Store/product',array('token'=>$_GET['token'],'wecha_id'=>$_GET['wecha_id'],'search_name'=>$search_name))}';
+    } else {
+        var com_link = '{vifnn::U('Store/product',array('token'=>$_GET['token'],'wecha_id'=>$_GET['wecha_id']))}';
+    }
+	var label_arr = ["\u8bf7\u9009\u62e9\u6807\u7b7e","\u70ed\u5356","\u7206\u6b3e"];
+	if (pages > 1) {
+		var _page = $('#show_more').attr('page');
+		$(window).bind("scroll",function() {
+			if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+				$('#show_more').show().html('加载中...');
+				if (_page > pages) {
+					$('#show_more').show().html('没有更多了').delay(2300).slideUp(1600);
+					return;
+				}
+				if($('#canScroll').val()==0){//不要重复加载
+					return;
+				}
+				$('#canScroll').attr('value',0);
+				$.ajax({
+					type : "GET",
+					data : {'page' : _page, 'inajax' : 1},
+					url :  b_url + '&pagesize='+pagesize,
+					dataType : "json",
+					success : function(RES) {
+						$('#canScroll').attr('value',1);
+						$('#show_more').hide().html('加载更多');
+						data = RES.products;
+						if(data.length){
+							$('#show_more').attr('page',parseInt(_page)+1);
+						}
+						_page = $('#show_more').attr('page');
+						var _tmp_html = '';
+						$.each(data, function(x, y) {
+                            if (y.commission_type == 'fixed') {
+                                var commission = y.commission + '元';
+                            }
+                            if (y.commission_type == 'float') {
+                                var commission = y.commission + '%';
+                            }
+                            if (y.num > 0) {
+                                var stock = y.num;
+                            } else {
+                                var stock = 0;
+                            }
+							_tmp_html +=    '<li><span class="pic">' +
+							'<a href="' + com_link + '&id=' + y.id + '">' +
+							'<img src="' +y.logourl + '" />' +
+							'</a></span><span class="con"><a class="t" href="' + com_link + '&id=' + y.id + '">' + y.name + '</a><b>￥'+ y.price +'&nbsp;元</b>' +
+							'<span style="color:#999;font-size:8px;margin-top:5px;">佣金：' + commission + '</span>' +
+                            '<span style="color:#999;font-size:8px;margin-top:5px;">库存：' + stock + '(件)</span></span>' +
+                            '<span><a href=""><b>下架</b></a></span></li>';
+						});
+						$('#m_list').append(_tmp_html);
+					}
+				});
+			}
+		});
+	}
+});
+</script>
+</body>
+<script type="text/javascript">
+window.shareData = {  
+            "moduleName":"Store",
+            "moduleID":"{vifnn:$products[0]['id']}",
+            "imgUrl": "{vifnn:$products[0]['logourl']}", 
+            "timeLineLink": "{vifnn::C('site_url') .  U('Store/products',array('token' => $_GET['token'], 'catid' => $thisCat['id'], 'twid' => $mytwid))}",
+            "sendFriendLink": "{vifnn::C('site_url') .  U('Store/products',array('token' => $_GET['token'], 'catid' => $thisCat['id'], 'twid' => $mytwid))}",
+            "weiboLink": "{vifnn::C('site_url') .  U('Store/products',array('token' => $_GET['token'], 'catid' => $thisCat['id'], 'twid' => $mytwid))}",
+            "tTitle": "{vifnn:$metaTitle}",
+            "tContent": "{vifnn:$metaTitle}"
+        };
+</script>
+{vifnn:$shareScript}
+</html>

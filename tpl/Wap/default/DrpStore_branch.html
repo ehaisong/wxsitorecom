@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>{vifnn:$metaTitle}</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/dis-v4.0.css" />
+
+
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn:$staticFilePath}/js/foundation.tab.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.accordion.js"></script>
+
+</head>
+<body>
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="{vifnn::U('DrpUcenter/drp_index')}"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">{vifnn:$metaTitle}</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--acount begin-->
+    <div class="disstore-amount">
+        <p><i class="icon-organization"></i>{vifnn:$subTitle}</p>
+        <span>{vifnn:$storecount}</span>
+    </div>
+    <!--total money begin-->
+    <div class="disstore-acount">
+        <span class="disstore-acount-label">累计销售（元）</span><span class="disstore-acount-number">{vifnn:$saletotal}</span>
+    </div>
+
+    <div class="bro-group row">
+        <div class="small-6 columns">
+            <span class="bro-group-label">累计订单数</span>
+            <span class="bro-group-money">{vifnn:$ordercount}</span>
+        </div>
+        <div class="small-6 columns">
+            <span class="bro-group-label">累计会员数</span>
+            <span class="bro-group-money">{vifnn:$membercount}</span>
+        </div>
+    </div>
+
+   
+    <!--button begin-->
+    <div class="bro-extract-btn">
+        <a href="{vifnn::U('DrpStore/branch_list', array('level' => $_GET['level']))}" class="button [radius round] red">{vifnn:$viewButton}</a>
+    </div>
+
+</body>
+</html>

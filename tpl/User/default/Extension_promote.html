@@ -1,0 +1,97 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css"/>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+<style>
+    .avatar_box
+    {
+        width: 70px;
+        height: 70px;
+        padding: 2px;
+        border: solid 1px #dcdcdc;
+        background: #ffffff;
+        display: inline-block;
+    }
+
+    .avatar_box img
+    {
+        width: 70px;
+        height: 70px;
+        border: none;
+    }
+</style>
+
+<div class="content">
+    <div class="cLineB">
+        <h4>[{vifnn:$_info.name}]推广人管理</h4>
+        <a href="javascript:history.back();" class="right btnGrayS vm" style="margin-top:-27px">返回</a>
+    </div>
+
+    <div class="msgWrap">
+        <form method="post" action="" id="info">
+            <input name="delall" type="hidden" value="">
+            <input name="wxid" type="hidden" value="">
+            <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <thead>
+                <tr>
+                    <th >头像</th>
+                    <th >推广人</th>
+                    <eq name="_info['reward_type']" value="cash">
+                        <th >获得红包</th>
+                        <else/>
+                        <th >获得积分</th>
+                    </eq>
+                    <th style="display: none;">生成时间</th>
+                    <th style="display: none;">关注人数</th>
+                    <th class="norightborder">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <empty name="_list">
+                    <tr>
+                        <td colspan="4">
+                            <p style="line-height: 60px;text-align: center;">暂无推广人！</p>
+                        </td>
+                    </tr>
+                    <else/>
+                    <volist name="_list" id="vo">
+                        <tr>
+                            <td>
+                                <div class="avatar_box">
+                                    <img src="{vifnn::img_url($vo['user_info']['portrait'],'','/tpl/User/default/common/images/portrait.jpg')}" />
+                                </div>
+                            </td>
+                            <td >{vifnn:$vo.user_info.wechaname}</td>
+                            <eq name="_info['reward_type']" value="cash">
+                                <td >{vifnn::$vo["cash"]/100}元</td>
+                                <else/>
+                                <td>{vifnn::$vo["score"]}分</td>
+                            </eq>
+                            <td style="display: none;">{vifnn:$vo.create_time|format_time}</td>
+                            <td style="display: none;">
+                                一级：{vifnn::$vo["follower1_num"]}<br/>
+                                二级：{vifnn::$vo["follower2_num"]}
+                            </td>
+                            <td class="norightborder">
+                                <elt name="vo['follower1_num']" value="0">
+                                    <span style="color: #888;">暂未有人帮TA推广</span>
+                                    <else/>
+                                    <a href="{vifnn::U('follower',array('uid'=>$vo['user_info']['id'],'pid'=>$vo['user_info']['id'],'aid'=>$vo['aid'],'token'=>$_GET['token']))}">查看帮TA推广的人({vifnn::$vo["follower1_num"]})</a>
+                                </elt>
+                            </td>
+                        </tr>
+                    </volist>
+                </empty>
+                </tbody>
+            </table>
+        </form>
+
+    </div>
+    <div class="cLine">
+        <div class="pageNavigator right">
+            <div class="pages">{vifnn:$page}</div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+<include file="Public:footer"/>

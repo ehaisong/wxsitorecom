@@ -1,0 +1,244 @@
+<include file="Public:head"/>
+<script src="{vifnn:$staticPath}/tpl/static/vote/common.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default" type="text/javascript"></script>
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/kindeditor/plugins/code/prettify.css" />
+<script src="{vifnn:$staticPath}/tpl/static/kindeditor/kindeditor.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/kindeditor/plugins/code/prettify.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js" type="text/javascript"></script>
+<script src="{vifnn::RES}/js/date/WdatePicker.js" type="text/javascript"></script>
+<div class="content">
+<div class="cLineB">
+  <h4> 
+    图文投票---编辑选项
+</h4>
+<if condition="$_GET['upload_type'] neq '' && $_GET['upload_type'] eq 'phone'">
+<a href="{vifnn::U('Voteimg/apply_list',array('vote_id'=>$set['vote_id'],'token'=>$token))}" class="right btnGrayS vm" style="margin-top:-27px">返回报名列表</a>
+<else />
+<a href="{vifnn::U('Voteimg/item_list',array('vote_id'=>$set['vote_id'],'token'=>$token))}" class="right btnGrayS vm" style="margin-top:-27px">返回选项列表</a>
+</if>
+</div>
+
+<div class="msgWrap bgfc">
+<form class="form" method="POST" action="{vifnn::U('Voteimg/edit_item',array('id'=>$id,'token'=>$token))}" enctype="multipart/form-data">
+<if condition="$set['id'] neq ''">
+  <input type="hidden" name="id" value="{vifnn:$set['id']}">
+</if>
+<table class="userinfoArea" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%"><tbody>
+<tr>
+<th width="120">选项编号：</th>
+<td>{vifnn:$set.baby_id}</td>
+</tr>
+<tr>
+<th width="120"><span class="red">*</span><if condition="$apply_fields_name['vote_title'] neq ''">{vifnn:$apply_fields_name['vote_title']}<else />选项标题</if>：</th>
+<td><input type="text" name="vote_title" id="vote_title" value="{vifnn:$set.vote_title}" class="px" style="width:350px;">&nbsp;&nbsp;&nbsp;<span id="vote_title_msg">(不超过8个汉字)</span></td>
+</tr>
+<tr>
+<th width="120"><span class="red">*</span><if condition="$apply_fields_name['filename'] neq ''">{vifnn:$apply_fields_name['filename']}<else />上传图片</if>：</th>
+<td><input type="text" name="vote_img[]" value='{vifnn:$vote_imgs[0]}' id="pic" class="px" style="width:350px;" >
+  <a href="###" onclick="upyunPicUpload('pic',0,0,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('pic')">预览</a><if condition="$vote_imgs[1] neq ''">&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="show_other_img(this)">显示其他照片</a></if>&nbsp;&nbsp;&nbsp;(图片最佳尺寸700px*500px)&nbsp;&nbsp;&nbsp;<span id="vote_img_msg"></span></td>
+</tr>
+<tbody id="other_img" style="display:none;">
+  <volist name="vote_imgs" id="img" offset="1">
+  <tr>
+  <th width="120"></th>
+<td><input type="text" name="vote_img[]" value='{vifnn:$img}' id="pic{vifnn:$key}" class="px" style="width:350px;" > <a href="###" onclick="upyunPicUpload('pic{vifnn:$key}',0,0,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('pic{vifnn:$key}')">预览</a></td></tr>
+</volist>
+<tr>
+</tbody>
+<th width="120">图片跳转地址：</th>
+<td><input type="text" name="jump_url" id="jump_url" value="{vifnn:$set.jump_url}" class="px" style="width:350px;"><if condition="session('isQcloud') neq true"><a href="###" onclick="addLink('jump_url',0)" class="a_choose">从功能库添加</a></if>&nbsp;&nbsp;&nbsp;(如果填写,首页点击选项图片会跳转到该地址,如果不填则跳转到选项详细页)</td>
+</tr>
+<tr>
+  	<th valign="top"><span class="red">*</span><if condition="$apply_fields_name['manifesto'] neq ''">{vifnn:$apply_fields_name['manifesto']}<else />拉票宣言</if>：</th>
+  	<td><textarea class="px" id="manifesto" name="manifesto" style="width:643px; height: 100px;">{vifnn:$set.manifesto}</textarea>&nbsp;&nbsp;&nbsp;<span id="manifesto_msg">
+	</td>
+</tr>
+<tr>
+  	<th valign="top">自我介绍：</th>
+  	<td><textarea class="px" id="introduction" name="introduction" style="width:400px; height: 350px;">{vifnn:$set.introduction}</textarea>
+	</td>
+</tr>
+<tr>
+<th valign="top"><if condition="$apply_fields_name['voice_path'] neq ''">{vifnn:$apply_fields_name['voice_path']}<else />参赛语音</if><if condition="$set.serverid neq ''"><span style="color:red;">(已录音)</span></if>：</th>
+<td>
+<input type="file" name="upload_voice" value='{vifnn:$set.upload_voice}' id="upload_voice" class="" style="width:300px;" ><br /><if condition="$set.upload_voice neq ''"><a href="{vifnn:$set.upload_voice}" target="_blank">{vifnn:$set.upload_voice}</a></if><br />(语音请上传mp3格式,大小不超过<?php echo ini_get('upload_max_filesize');?>)</td>
+</tr>
+<tr>
+<th valign="top">参赛视频：</th>
+<td>
+<input type="hidden" id="img1" value="{vifnn:$staticPath}/tpl/static/voteimg/img/tongyong.jpg" />
+<input type="text" name="video_path" value='{vifnn:$set.video_path}' id="video_path" class="px" style="width:646px;" /><br />(参赛视频目前仅支持优酷、腾讯、土豆的视频,参赛视频请输入通用代码,获取通用代码示例请点击'查看获取示例'</span>)&nbsp;&nbsp;&nbsp;<a href="###" onclick="viewImg('img1')"><span style="color:green;">查看获取示例</a></td>
+</tr>
+<tr>
+<th width="120">票数：</th>
+<td><input type="text" name="vote_count" id="vote_count" value="{vifnn:$set.vote_count}" class="px" style="width:120px;">&nbsp;&nbsp;&nbsp;(可以手动设置选项获得的票数)&nbsp;&nbsp;&nbsp;<span id="vote_count_msg"></span></td>
+</tr>
+<tr>
+<th width="120"><span class="red">*</span><if condition="$apply_fields_name['contact'] neq ''">{vifnn:$apply_fields_name['contact']}<else />联系电话</if>：</th>
+<td><input type="text" name="contact" id="contact" value="{vifnn:$set.contact}" class="px" style="width:120px;">&nbsp;&nbsp;&nbsp;(可以用于通知得奖者)&nbsp;&nbsp;&nbsp;<span id="contact_msg"></span></td>
+</tr>
+{vifnn:$formData}
+<tr>
+<th>&nbsp;</th>
+<input type="hidden" name="upload_type" value="{vifnn:$_GET['upload_type']}">
+<input type="hidden" name="vote_id" value="{vifnn:$set.vote_id}">
+<input type="hidden" name="token" value="{vifnn:$token}">
+<td><button type="button" name="button" class="btnGreen sub">保存</button>
+<a href="{vifnn::U('Voteimg/edit_item',array('id'=>$id,'token'=>$token))}" class="btnGray vm">取消</a>
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+  </div>
+</div>
+<script>
+  $(function(){
+	var reg = /^[0-9]+[0-9]*]*$/;
+	var reg_phone = /^([0-9]){6,}$/;
+	$('#vote_title').blur(function(){
+		var vote_title = $.trim($("#vote_title").val());
+		if(vote_title.length > 8){
+			$("#vote_title_msg").html('<span id="vote_title_msg" style="color: red;">您输入的字符过长,不要超过8个汉字。</span>');
+		}else if(vote_title.length == 0){
+			$("#vote_title_msg").html('<span id="vote_title_msg" style="color: red;">选项标题不能为空。</span>');
+		}else{
+			$("#vote_title_msg").html('');
+		}
+	});
+	$('#manifesto').blur(function(){
+		var manifesto = $("#manifesto").val();
+		if($.trim(manifesto).length == 0){
+			$("#manifesto_msg").html('<span id="manifesto_msg" style="color: red;">拉票宣言不能为空。</span>');
+		}else{
+			$("#manifesto_msg").html('');
+		}
+	});
+	$('#vote_count').blur(function(){
+		var vote_count = $("#vote_count").val();
+		if(!reg.test(vote_count) && vote_count != ""){
+			$("#vote_count_msg").html('<span id="vote_count_msg" style="color: red;">票数请输入整数。</span>');
+		}else{
+			$("#vote_count_msg").html('');
+		}
+	});
+	$('#contact').blur(function(){
+		var contact = $("#contact").val();
+		if(!reg_phone.test(contact) && contact != ""){
+			$("#contact_msg").html('<span id="contact_msg" style="color: red;">手机号格式不正确。</span>');
+		}else{
+			$("#contact_msg").html('');
+		}
+	});
+	
+	$(".sub").click(function(){
+		var vote_title = $("#vote_title").val();
+		var vote_img = $(":input[name=vote_img]").val();
+		var manifesto = $("#manifesto").val();
+		var introduction = $("#introduction").val();
+		var vote_count = $("#vote_count").val();
+		var contact = $("#contact").val();
+		var upload_voice = $("#upload_voice").val();
+		var video_path = $("#video_path").val();
+		video_path = html_encode(video_path);
+		$("#video_path").val(video_path);
+		var is_register = "{vifnn:$is_register}";
+		var inputimg = '';
+		 $(":input[name='inputimg[]']").each(function(){
+			inputimg += $(this).val()+';';
+		});
+		var msg = '';	
+		if(vote_title == ''){
+			msg += '标题不能为空\n';
+		}
+		if(manifesto == ''){
+			msg += '拉票宣言不能为空\n';
+		}
+		if(manifesto.length > 100){
+			msg += '拉票宣言最多100字\n';
+		}
+		if(contact == ''){
+			msg += '手机号不能为空\n';
+		}else if(!reg_phone.test(contact)){
+			msg += '手机号格式不正确\n';
+		}
+		var data = new Array();
+		<volist name="verify" id="item">
+			<if condition="$item['type'] eq 'checkbox'">			
+				<if condition="$item['is_empty'] eq 1">
+					if($(".field_id_{vifnn:$item['id']}:checked").length == 0){
+						msg += '{vifnn:$item["name"]}不能为空    ';
+					}
+				</if>			
+				var val = '', pre = '';
+				$(".field_id_{vifnn:$item['id']}").each(function(){
+					if ($(this).attr('checked')) {
+						val += pre + $(this).val();
+						pre = '|';
+					}
+				});
+			<elseif condition="$item['type'] eq 'radio'" />	
+			<else />
+				<if condition="$item['is_empty'] eq 1">
+					if($.trim($("#field_id_{vifnn:$item['id']}").val()) == ""){
+						msg += "{vifnn:$item['name']}不能为空    ";
+					}
+				</if>
+				<if condition="$item['match'] neq ''">
+					if (!new RegExp(/{vifnn:$item['match']}/).test($.trim($("#field_id_{vifnn:$item['id']}").val())) && $("#field_id_{vifnn:$item['id']}").val() != "") {
+						msg += '{vifnn:$item["name"]}的输入格式不正确    ';
+					}
+				</if>			
+		</if>
+		</volist>
+		if(msg != ''){
+			alert(msg);
+			return false;
+		}
+		$(".form").submit();
+	})
+});
+
+function html_encode(str)   
+{   
+  var s = "";   
+  if (str.length == 0) return "";   
+    s = str.replace(/</g, "&lt;");
+    s = s.replace(/>/g, "&gt;");
+  return s;   
+}   
+</script>
+<script>
+  KindEditor.ready(function(K) {
+
+    window.editor = K.create('#introduction', {
+      resizeType : 1,
+      allowPreviewEmoticons : false,
+      allowImageUpload : true,
+      uploadJson : '/index.php?g=User&m=Upyun&a=kindedtiropic',
+      items : [
+      'source','undo','plainpaste','wordpaste','clearhtml','quickformat','selectall','fullscreen','fontname', 'fontsize','subscript','superscript','indent','outdent','|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline','hr', '|', 'image'],
+		afterCreate: function () {
+			this.sync();
+		},
+		afterBlur: function () {
+			this.sync();
+		}
+      });
+  });
+  
+  function show_other_img(obj){
+	$(obj).text('隐藏其他图片');
+	$(obj).attr('onclick','hide_other_img(this)');
+	$("#other_img").show();
+  }
+  function hide_other_img(obj){
+	$(obj).text('显示其他图片');
+	$(obj).attr('onclick','show_other_img(this)');
+	$("#other_img").hide();
+  }
+</script>
+<include file="Public:footer"/>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>编辑微店</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css">
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css">
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v3.0.css">
+
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.min.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn::$staticFilePath}/js/func.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/Common.js"></script>
+</head>
+
+<body class="body-gray">
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" style="display: none;" id="errerMsg">请输入微店名！<a href="#" class="close">×</a></div>
+    <!--submit errow tip end-->
+
+
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="{vifnn::U('DrpUcenter/drp_index')}"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">编辑微店</h1>
+            </section>
+            <section class="right-small right-small-text2" id="saveBtn">
+                <a href="javascript:void(0)" onclick="btnSave()" class="button [radius round] top-button">保存</a>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    
+    <!--have begin-->
+    <div class="storeedit mlr-15">
+        
+        <form>
+            <!--01 begin-->
+            
+            
+            <div class="row">
+                <div class="large-12 columns">
+                    <label>
+                        微店名称
+                        <input type="text" id="title" placeholder="微店名称" old="{vifnn:$store.name}" value="{vifnn:$store.name}" />
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <label>
+                        微店公告
+                        <textarea style="resize: none;" name="notice" id="notice" placeholder="微店公告">{vifnn:$store['notice']}</textarea>
+                    </label>
+                </div>
+            </div><br/>
+            <div class="row">
+                <div class="large-12 columns">
+                    <label>
+                        电脑端管理地址：
+                        {vifnn:$Think.config.site_url}/index.php?g=Home&m=Drp&a=index
+                    </label>
+            </div>
+            <!--01 end-->
+            <div class="row">
+                <div class="large-12 columns">
+                    <label>&nbsp;</label>
+                </div>
+            </div>
+            <!--01 begin-->
+            <div class="tip-means mb-20">
+                <h2 class="tip-means-title"><i class="icon-light"></i><span>温馨提示</span><i class="icon-close" onclick="tip_means_close(this)"></i></h2>
+                <div class="tip-means-c">
+                    <span>亲，您的佣金由三部分组成：</span>
+                    <ol class="tip-means-ol">
+                        <li>自己分销的产品所获得佣金（即本店销售佣金）。</li>
+                        <li>发展下级分店，我所获得的佣金（即渠道商佣金）。</li>
+                        <li>下级分店销售的商品，我所获得佣金（即下级分店佣金）。</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row">
+                
+            </div>
+            <!--row01 begin-->
+            <div id="device" class="category gridalicious">
+            
+            </div>
+            <div style="text-align: center">
+                <a class="more" id="show_more" page="2" style="display: none;" href="javascript:void(0);">加载更多</a>
+                <input type="hidden" id="canScroll" value="1" />
+            </div>
+            <!--01 end-->
+        </form>
+    </div>
+
+    <!--have end-->
+    
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.grid-a-licious.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#device").gridalicious({
+                gutter: 10,
+                width: 130,
+                animationOptions: {
+                    speed: 150,
+                    duration: 400,
+                    complete: null
+                },
+            });
+
+
+            //获取可以分销的商品
+            $.post("{vifnn::U('DrpStore/ajax_products2')}", '', function(data){
+                $('#device').html(data);
+                $("#device").gridalicious({
+                    gutter: 10,
+                    width: 130,
+                    animationOptions: {
+                        speed: 150,
+                        duration: 400,
+                        complete: null
+                    },
+                });
+            })
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+
+            $(document).on('click', "div[name=columns]", function () {
+                if (!$(this).hasClass('current')) {
+                    $(this).addClass("current");
+                    $.post("{vifnn::U('DrpStore/edit', array('type' => 'putaway'))}", {'id': $(this).attr('pid')}, function(data) {
+                            
+                    })
+                } else {
+                    $(this).removeClass("current");
+                    $.post("{vifnn::U('DrpStore/edit', array('type' => 'soldout'))}", {'id': $(this).attr('pid')}, function(data) {
+                            
+                    })
+                }
+            });
+
+        })
+
+        function btnSave() {
+            title = $("#title").val().trim();
+            notice = $('#notice').val().trim();
+            var tempbl = false;
+            if (title == "") {
+                ShowMsg("店铺名称不可为空");
+                return;
+            } else {
+                if (title == $("#title").attr("old").trim()) {
+                    tempbl = true;
+                } else {
+                    //检测店铺名称是否已存在
+                    $.ajax({
+                        url: "{vifnn::U('DrpStore/check_name')}",
+                        data: {"name": title},
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        success: function (data) {
+                            tempbl = data;
+                        }
+                    })
+                }
+            }
+            if (!tempbl) {
+                ShowMsg("店铺名称已存在");
+                return;
+            } else {
+                $.ajax({
+                    url: "{vifnn::U('DrpStore/edit')}",
+                    data: {"id": '{vifnn:$store.id}', "name": title, 'notice': notice},
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        if (data) {
+                            window.location.href = "{vifnn::U('DrpUcenter/drp_index')}";
+                        } else {
+                            ShowMsg("店铺修改失败");
+                        }
+                    }
+                })
+            }
+
+        }
+
+        /*---------------------加载更多--------------------*/
+        var total = {vifnn:$count}, pagesize = 10, pages = Math.ceil(total / pagesize);
+        if (pages > 1) {
+            var _page = $('#show_more').attr('page');
+            $(window).bind("scroll",function() {
+                if ($(document).scrollTop() + $(window).height() >= $(document).height()) {
+                    $('#show_more').show().html('加载中...');
+                    if (_page > pages) {
+                        $('#show_more').show().html('没有更多了').delay(2300).slideUp(1600);
+                        return;
+                    }
+                    if($('#canScroll').val()==0){//不要重复加载
+                        return;
+                    }
+                    $('#canScroll').attr('value',0);
+                    $.post("{vifnn::U('DrpStore/ajax_products2')}",{'page' : _page, 'pagesize' : pagesize}, function(data) {
+                        $('#canScroll').attr('value',1);
+                        $('#show_more').hide().html('加载更多');
+                        if (data) {
+                            $('#show_more').attr('page',parseInt(_page)+1);
+                        }
+                        _page = $('#show_more').attr('page');
+                        $('#device').append(data);
+                        $("#device").gridalicious({
+                            gutter: 10,
+                            width: 130,
+                            animationOptions: {
+                                speed: 150,
+                                duration: 400,
+                                complete: null
+                            },
+                        });
+                    })
+                }
+            })
+        }
+    </script>
+</body>
+</html>

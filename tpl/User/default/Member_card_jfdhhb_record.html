@@ -1,0 +1,58 @@
+<include file="Public:head" />
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">会员卡【{vifnn:$card.cardname}】的积分兑换红包<?php if($_GET['id']){?>金额为“<?php echo $jfdhhb['hongbao']/100;?>元”<?php }?>的记录</h4>
+		<a href="{vifnn::U('User/Member_card/jfdhhb',array('token'=>$token,'id'=>$_GET['cardid']))}"  class="right btnGreen" >返回</a>
+	</div>
+	<div class="cLine">
+		<div class="searchbar left">
+			<input type="text" id="msgSearchInput" class="txt left" placeholder="输入搜索内容" name="search" value="<?php echo $_GET['search'];?>" style="margin-top:13px;width:200">
+			<a value="搜索" id="msgSearchBtn" href="javascript:search();" class="btnGrayS" title="搜索" style="margin-top:10px">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="">昵称</th>
+					<th width="">电话</th>
+					<th width="">兑换红包金额</th>
+					<th width="">兑换红包积分</th>
+					<th width="">兑换时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td><?php echo $lv['wechaname']?$lv['wechaname']:'匿名';?></td>
+					<td><?php echo $lv['tel']?$lv['tel']:'无';?></td>
+					<td><?php echo $lv['hongbao']/100;?>元</td>
+					<td><?php echo $lv['integral'];?></td>
+					<td>{vifnn:$lv.addtime|date="Y-m-d H:i:s",###}</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){});
+function search(){
+	var search = $("input[name='search']").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Member_card/jfdhhb_record',array('token'=>$token,'id'=>$_GET['id'],'cardid'=>$_GET['cardid']))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Member_card/jfdhhb_record',array('token'=>$token,'id'=>$_GET['id'],'cardid'=>$_GET['cardid']))}";
+	}
+}
+</script>
+<include file="Public:footer" />

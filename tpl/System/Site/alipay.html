@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>站点配置</title>
+<link href="{vifnn::RES}/images/main.css" type="text/css" rel="stylesheet">
+<!-- <link href="{vifnn::RES}/images/jquery-1.7.2.min.js" type="text/css" rel="stylesheet">
+<link href="{vifnn::RES}/images/jquery.form.js" type="text/css" rel="stylesheet"> -->
+<script src="/tpl/static/jquery-1.4.2.min.js" type="text/javascript"></script>
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+</head>
+<body class="warp">
+<style>
+.set_top{background:url('{vifnn::RES}/images/set_top.png');height:60px;}
+.set_top li{font-weight: bold;float:left;width:98px;line-height:60px;text-align: center;background:url('{vifnn::RES}/images/set_top_li.png');}
+#set_top_li_bg{background:url('{vifnn::RES}/images/set_top_li_hover.png');}
+.btnGreen{    display: inline-block;    padding: 2px 12px;    margin-bottom: 0;    font-size: 14px;    font-weight: normal;    text-align: center;    white-space: nowrap;    vertical-align: middle;    -ms-touch-action: manipulation;    touch-action: manipulation;    cursor: pointer;    -webkit-user-select: none;    -moz-user-select: none;    -ms-user-select: none;    user-select: none;    background-image: none;    border: 1px solid transparent;    border-radius: 4px;    background-color: #44b549;    border-color: #44b549;    color: #FFFFFF;	background-image: none !important;    border: none !important;    text-shadow: none !important;    margin-left: 5px;    padding: 2px 8px !important;    cursor: pointer !important;    display: inline-block !important;    overflow: visible !important;    border-radius: 2px !important;    -moz-border-radius: 2px !important;    -webkit-border-radius: 2px !important;    color: #fff !important;    font-size: 14px !important;    line-height: 1.5 !important;}
+</style>
+<include file="Site:public" />
+<div id="artlist">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="addn">
+	<form id="myform" action="{vifnn::U('Site/insert')}" method="post">
+		<tr> 
+			<td  height="48" align="right"><strong>支付方式：</strong></td>
+			<td>
+				<select name="pay_type" id="pay_type">
+					<option value="alipay"<?php if (C('pay_type')==''||C('pay_type')=='alipay'){echo ' selected';}?>>支付宝</option>
+					<option value="tenpay"<?php if (C('pay_type')=='tenpay'){echo ' selected';}?>>财付通</option>
+				</select>
+			</td>
+		</tr>
+		<tr> 
+			<td  height="48" align="right"><strong>财付通partnerId：</strong></td>
+			<td>
+				<?php
+					$tenpay_partnerid = C('tenpay_partnerid');
+					$tenpay_partnerid_s = substr($tenpay_partnerid, 0, 2);
+					$tenpay_partnerid_s .= '*************************'.substr($tenpay_partnerid, -2);
+				?>
+				<span class="tenpay_partnerid" style="<?php if(!$tenpay_partnerid){?>display:none;<?php }?>width: inherit;">
+					<?php
+						echo $tenpay_partnerid_s;
+					?>
+					<span class="btnGreen" style="width: inherit;" onclick="$('.tenpay_partnerid').hide();$('.tenpay_partnerid-edit').show();$('input[name=\'tenpay_partnerid\']').val('');">修改</span>
+				</span>
+				<span class="tenpay_partnerid-edit" style="<?php if($tenpay_partnerid){?>display:none;<?php }?>width: inherit;">
+					<input type="text" name="tenpay_partnerid" value="{vifnn:$tenpay_partnerid}" class="ipt" size="45" />
+					<span class="btnGreen" style="width: inherit;" onclick="$('.tenpay_partnerid').show();$('.tenpay_partnerid-edit').hide();$('input[name=\'tenpay_partnerid\']').val('{vifnn:$tenpay_partnerid}');">显示</span>
+				</span>
+				<span>&nbsp;&nbsp;(仅选择财付通时填写)</span>
+			</td>
+		</tr>
+		<tr> 
+			<td  height="48" align="right"><strong>财付通partnerKey：</strong></td>
+			<td>
+				<?php
+					$tenpay_partnerkey = C('tenpay_partnerkey');
+					$tenpay_partnerkey_s = substr($tenpay_partnerkey, 0, 2);
+					$tenpay_partnerkey_s .= '*************************'.substr($tenpay_partnerkey, -2);
+				?>
+				<span class="tenpay_partnerkey" style="<?php if(!$tenpay_partnerkey){?>display:none;<?php }?>width: inherit;">
+					<?php
+						echo $tenpay_partnerkey_s;
+					?>
+					<span class="btnGreen" style="width: inherit;" onclick="$('.tenpay_partnerkey').hide();$('.tenpay_partnerkey-edit').show();$('input[name=\'tenpay_partnerkey\']').val('');">修改</span>
+				</span>
+				<span class="tenpay_partnerkey-edit" style="<?php if($tenpay_partnerkey){?>display:none;<?php }?>width: inherit;">
+					<input type="text" name="tenpay_partnerkey" value="{vifnn:$tenpay_partnerkey}" class="ipt" size="45" />
+					<span class="btnGreen" style="width: inherit;" onclick="$('.tenpay_partnerkey').show();$('.tenpay_partnerkey-edit').hide();$('input[name=\'tenpay_partnerkey\']').val('{vifnn:$tenpay_partnerkey}');">显示</span>
+				</span>
+				<span>&nbsp;&nbsp;(仅选择财付通时填写)</span>
+			</td>
+		</tr>
+		<tr> 
+			<td  height="48" align="right"><strong>支付宝帐号：</strong></td>
+			<td>
+				<?php
+					$alipay_name = C('alipay_name');
+					$alipay_name_s = substr($alipay_name, 0, 2);
+					$alipay_name_s .= '*************************'.substr($alipay_name, -2);
+				?>
+				<span class="alipay_name" style="<?php if(!$alipay_name){?>display:none;<?php }?>width: inherit;">
+					<?php
+						echo $alipay_name_s;
+					?>
+					<span class="btnGreen" style="width: inherit;" onclick="$('.alipay_name').hide();$('.alipay_name-edit').show();$('input[name=\'alipay_name\']').val('');">修改</span>
+				</span>
+				<span class="alipay_name-edit" style="<?php if($alipay_name){?>display:none;<?php }?>width: inherit;">
+					<input type="text" name="alipay_name" value="{vifnn:$alipay_name}" class="ipt" size="45" />
+					<span class="btnGreen" style="width: inherit;" onclick="$('.alipay_name').show();$('.alipay_name-edit').hide();$('input[name=\'alipay_name\']').val('{vifnn:$alipay_name}');">显示</span>
+				</span>
+				<span>&nbsp;&nbsp;例：123@163.COM(仅选择支付宝时填写)</span>
+			</td>
+		</tr>
+		<tr> 
+			<td  height="48" align="right"><strong>支付宝PID：</strong></td>
+			<td>
+				<?php
+					$alipay_pid = C('alipay_pid');
+					$alipay_pid_s = substr($alipay_pid, 0, 2);
+					$alipay_pid_s .= '*************************'.substr($alipay_pid, -2);
+				?>
+				<span class="alipay_pid" style="<?php if(!$alipay_pid){?>display:none;<?php }?>width: inherit;">
+					<?php
+						echo $alipay_pid_s;
+					?>
+					<span class="btnGreen" style="width: inherit;" onclick="$('.alipay_pid').hide();$('.alipay_pid-edit').show();$('input[name=\'alipay_pid\']').val('');">修改</span>
+				</span>
+				<span class="alipay_pid-edit" style="<?php if($alipay_pid){?>display:none;<?php }?>width: inherit;">
+					<input type="text" name="alipay_pid" value="{vifnn:$alipay_pid}" class="ipt" size="45" />
+					<span class="btnGreen" style="width: inherit;" onclick="$('.alipay_pid').show();$('.alipay_pid-edit').hide();$('input[name=\'alipay_pid\']').val('{vifnn:$alipay_pid}');">显示</span>
+				</span>
+				<span>&nbsp;&nbsp;请登陆支付宝商家服务中去查看(仅选择支付宝时填写)</span>
+			</td>
+		</tr>
+		<tr> 
+			<td  height="48" align="right"><strong>支付宝KEY：</strong></td>
+			<td>
+				<?php
+					$alipay_key = C('alipay_key');
+					$alipay_key_s = substr($alipay_key, 0, 2);
+					$alipay_key_s .= '*************************'.substr($alipay_key, -2);
+				?>
+				<span class="alipay_key" style="<?php if(!$alipay_key){?>display:none;<?php }?>width: inherit;">
+					<?php
+						echo $alipay_key_s;
+					?>
+					<span class="btnGreen" style="width: inherit;" onclick="$('.alipay_key').hide();$('.alipay_key-edit').show();$('input[name=\'alipay_key\']').val('');">修改</span>
+				</span>
+				<span class="alipay_key-edit" style="<?php if($alipay_key){?>display:none;<?php }?>width: inherit;">
+					<input type="text" name="alipay_key" value="{vifnn:$alipay_key}" class="ipt" size="45" />
+					<span class="btnGreen" style="width: inherit;" onclick="$('.alipay_key').show();$('.alipay_key-edit').hide();$('input[name=\'alipay_key\']').val('{vifnn:$alipay_key}');">显示</span>
+				</span>
+				<span>&nbsp;&nbsp;请登陆支付宝商家服务中去查看(仅选择支付宝时填写)</span>
+			</td>
+		</tr>
+    
+	   <input type="hidden" name="files" value="<?php echo base64_encode('alipay.php');?>" />
+	   <input type="hidden" name="files_hash" value="<?php echo md5('alipay.php|validate_vifnn');?>" />
+		<tr> 
+			<td height="48" colspan="2">
+				<div id="addkey"></div>
+				<div style="padding-left:100px;">
+					<input type="submit" value="保存设置" />
+				</div>
+			</td>
+		</tr>
+	</form>
+</table>
+<br />
+<br />
+<br />
+
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>{vifnn:$metaTitle}</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css">
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css">
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v3.0.css">
+    <style type="text/css">
+        .uppic-ul li {
+            position: relative;
+            float: left;
+            width: 30%;
+            padding: 2px 0;
+        }
+        .uppic-ul li span img {
+            width: 100%;
+            border-radius: 100px;
+        }
+        .uppic-ul li span {
+            position: relative;
+            display: block;
+            width: 100%;
+            background: #fff;
+            border: 5px solid #cdf1f8;
+            border-radius: 100px;
+            box-shadow: 0 0px 6px rgba(0,0,0,.1);
+        }
+        .uppic-ul li span.text-tip {
+            position: absolute;
+            display: block;
+            top: 50%;
+            left: 10%;
+            width: 80%;
+            margin-top: -12px;
+            padding: 0;
+            border: 0;
+            background: rgba(0,0,0,.6);
+            color: #fff;
+            text-align: center;
+            font-size: 8px;
+        }
+        .uppic-ul input[type='file'] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 6;
+            filter: alpha(opacity=0);
+            -moz-opacity: 0;
+            opacity: 0;
+        }
+    </style>
+
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.min.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn::$staticFilePath}/js/func.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/Common.js"></script>
+</head>
+
+<body class="body-gray">
+
+    <!--submit errow tip begin-->
+    <div data-alert="" class="alert-box alert" style="display: none;" id="errerMsg"><a href="{vifnn::U('DrpStore/setting')}#" class="close">×</a></div>
+    <!--submit errow tip end-->
+
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="{vifnn::U('DrpUcenter/drp_index')}"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">{vifnn:$metaTitle}</h1>
+            </section>
+            <section class="right-small right-small-text2" id="saveBtn">
+                <a href="javascript:void(0)" onclick="btnSave()" class="button [radius round] top-button">保存</a>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    
+    <!--have begin-->
+    <div class="storeedit mlr-15">
+        
+        <form>
+            <!--01 begin-->
+            <div class="row"></div>
+
+            <!--01 end-->
+            <div class="form-title-class">
+                分销加盟：<input type="radio" name="allow_distribution" class="allow_distribution" value="0" <if condition="$store.allow_distribution eq 0">checked="true"</if> />禁止&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="allow_distribution" class="allow_distribution" value="1" <if condition="$store.allow_distribution eq 1">checked="true"</if> /> 允许
+            </div>
+            <div class="form-title-class">
+                佣金分成：<input type="text" name="commission_rate" class="commission_rate" style="width: 50px;display: inline-block" <if condition="$store.commission_rate gt 0">value="{vifnn:$store.commission_rate}"</if> />%
+            </div>
+            <div class="form-title-class">
+                商品来源：<input type="radio" name="product_source" class="product_source" value="1" <if condition="$store.product_source eq 1">checked="true"</if> /> 本店铺&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="product_source" class="product_source" value="0" <if condition="$store.product_source eq 0">checked="true"</if> /> 不限
+            </div>
+
+            <!--01 begin-->
+            <div class="tip-means mb-20">
+                <h2 class="tip-means-title"><i class="icon-light"></i><span>温馨提示</span><i class="icon-close" onclick="tip_means_close(this)"></i></h2>
+                <div class="tip-means-c">
+                    <ol class="tip-means-ol">
+                        <li>分销加盟：允许会员加盟本店铺成为下级分销商。</li>
+                        <li>佣金分成：分享下级分销佣金的比率, 若为空或0表示不分享。</li>
+                        <li>商品来源：下级分销商可分销的商品来源。</li>
+                    </ol>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--have end-->
+    <script type="text/javascript">
+
+        function btnSave() {
+            var allow_distribution = $('.allow_distribution:checked').val();
+            var commission_rate = $('.commission_rate').val();
+            var product_source = $('.product_source:checked').val();
+
+            if (isNaN(commission_rate) || commission_rate < 0) {
+                ShowMsg("佣金分成填写有误！");
+                return;
+            } else {
+                $.ajax({
+                    url: "{vifnn::U('DrpStore/setting', array('id' => $_GET['id']))}",
+                    data: {"allow_distribution": allow_distribution, "commission_rate": commission_rate, "product_source": product_source},
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    success: function (data) {
+                        if (data) {
+                            window.location.href = "{vifnn::U('DrpUcenter/drp_index')}";
+                        } else {
+                            ShowMsg("分销配置失败！");
+                        }
+                    }
+                })
+            }
+
+        }
+    </script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html class="no-js  mobile" lang="zh-CN">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <meta charset="utf-8">
+    <meta name="keywords" content="{vifnn:$metaTitle}" />
+    <meta name="description" content="{vifnn:$metaTitle}" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="cleartype" content="on" />
+
+    <title>{vifnn:$metaTitle} - {vifnn:$store.name}</title>
+    <!-- _global -->
+    <script>
+
+        window.l_createElement = document.createElement;
+        window.l_Function = window.Function;
+        window.l_open = window.open;
+        window.l_adoptNode = document.adoptNode;
+        window.l_defineProperty = Object.defineProperty;
+
+        document.createElement = window.l_createElement;
+        window.Function = window.l_Function;
+        window.open = window.l_open;
+        document.adoptNode = window.l_adoptNode;
+        Object.defineProperty = window.l_defineProperty;
+
+        _global = {
+            "platform":"mobile",
+            "is_mobile":true,
+            "team_certificate":true,
+            "alipay_env":true,
+            "sku":{
+                "tree":[],
+                "list":[],
+                "price":"{vifnn:$product.price}",
+                "collection_id":21467698,
+                "collection_price":1980,
+                "none_sku":true,
+                "stock_num":'{vifnn:$product.num}',
+                "sold_num":'vifnn:$product.salecount',
+                "messages":[],
+                "hide_stock":false
+            },
+            "goods_id":"{vifnn:$product.id}",
+            "url":{
+                "wap":"{vifnn::U('DrpCart/add')}"
+            }
+        };
+        _global.spm = {logType:"g",logId:"{vifnn:$product.id}"};
+
+        //base_head_script.js
+        function viewportMeta(){var e=parseInt(window.screen.width),t=e/640,i=navigator.userAgent;if(/Android (\d+\.\d+)/.test(i)){var a=parseFloat(RegExp.$1);document.write(a>2.3?'<meta name="viewport" content="width=640, minimum-scale = '+t+", maximum-scale = "+t+', target-densitydpi=device-dpi">':'<meta name="viewport" content="width=640, target-densitydpi=device-dpi">')}else document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">')}function _cdnFallback(e){var t=e.nodeName.toLowerCase(),i=document.createElement(t),a={script:"src",link:"href"},n=a[t],o=e[n];o=o.replace("kdt-static.qiniudn.com","kdt-static.b0.upaiyun.com"),"link"==t&&(i.rel="stylesheet"),i[n]=o,document.body.appendChild(i)}!function(e){var t=document.documentElement;e.match(/micromessenger\/5/gi)?t.className=t.className+" mobile wx_mobile wx_mobile_5":e.match(/micromessenger/gi)?t.className=t.className+" mobile wx_mobile":window._global.is_mobile&&(t.className=t.className+" mobile")}(navigator.userAgent||navigator.vendor||window.opera);
+
+        function viewportMetaAuto(){var e=parseInt(window.screen.width),t=e/640,i=navigator.userAgent,n=window.screen.width;if(/Android (\d+\.\d+)/.test(i)){var d=parseFloat(RegExp.$1);document.write(d>2.3?'<meta name="viewport" content="width=640, minimum-scale = '+t+", maximum-scale = "+t+', target-densitydpi=device-dpi">':'<meta name="viewport" content="width=640, target-densitydpi=device-dpi">')}else n>320?(document.write('<meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">'),window.__isIPhone6=!0):document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">')}
+    </script>
+
+
+    <!-- meta viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/base.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/showcase.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/goods.css" />
+    <script type="text/javascript">
+        (function(){
+            if ( !window._global.is_mobile && !window._global.is_owner_team ) {
+                var winWidth = window.screen.width || document.documentElement.clientWidth;
+                var winHeight = window.screen.height || document.documentElement.clientHeight;
+                if ( winWidth > 800 && winHeight > 800 || winWidth > 1025 || winHeight > 1025 ) {
+                    window.location = window._global.goods_redirect_url;
+                    return;
+                }
+            }
+        })();
+    </script>
+    <style type="text/css">
+        .props {
+            margin: 5px 5px 0 5px;
+        }
+        .props .i-row {
+            display: -webkit-box;
+            min-height: 3rem;
+            overflow: hidden;
+            padding: 1px 5px;
+        }
+        .props .i-row .t {
+            width: 4rem;
+            line-height: 3rem;
+            font-size: 14px;
+            text-align: left;
+            color: #999;
+        }
+        .props .i-row .c {
+            -webkit-box-flex: 1;
+        }
+        .props .i-row ul.cm li {
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 0.5rem;
+            text-align: center;
+            line-height: 2rem;
+            margin: .5rem 0.5rem .2rem 0;
+            display: inline-block;
+            border: .1rem solid #d1d1d1;
+            background: #f3f3f3;
+        }
+        .props .i-row ul.ys .on {
+            border: .1rem solid #b90000;
+            overflow: hidden;
+            position: relative;
+        }
+        .props .i-row ul.ys .on:before {
+            content: '';
+            width: 2.4rem;
+            height: 1.2rem;
+            display: inline-block;
+            overflow: hidden;
+            background: #b90000;
+            position: absolute;
+            -webkit-transform: rotate(-42deg);
+            bottom: -0.3rem;
+            right: -1.2rem;
+        }
+        .props .i-row ul.ys .on:after {
+            content: '';
+            width: .8rem;
+            height: .3rem;
+            display: inline-block;
+            border: solid #fff;
+            border-width: 0 0 .2rem .2rem;
+            position: absolute;
+            -webkit-transform: rotate(-60deg);
+            bottom: .3rem;
+            right: -.2rem;
+        }
+        .market-price {
+            text-decoration: line-through;
+            color:gray;
+        }
+        .props .i-row ul.ys .disabled {
+            cursor: no-drop!important;
+            border: dashed lightgray 1px!important;
+            background: #ffffff!important;
+            color: lightgray;
+        }
+        .unselected {
+            border: 1px dashed #f60;
+        }
+        .sale-props {
+            color:green!important;
+        }
+    </style>
+</head>
+
+<body class=" body-fixed-bottom">
+    <!-- container -->
+    <div class="container wap-goods internal-purchase">
+        <div class="header">
+            <div class="js-mp-info share-mp-info">
+                <a class="page-mp-info" href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}">
+                    <img class="mp-image" src="{vifnn:$store.logourl}" height="24" width="24">
+                    <i class="mp-nickname">{vifnn:$store.name}</i>
+                </a>
+                <div class="links">
+                    <a class="mp-homepage" href="{vifnn:$ucenter}">我的记录</a>
+                </div>
+            </div>
+        </div>
+        <div class="content ">
+            <div class="content-body">
+                <span id="wxdesc" class="hide"></span>
+                <div class="js-image-swiper custom-image-swiper custom-goods-swiper">
+                    <div class="swiper-container" style="height: 300px!important;">
+                        <div style="width: 1080px; height: 300px!important; transform: translate3d(0px, 0px, 0px); transition-duration: 0.3s;" class="swiper-wrapper">
+                            <volist name="images" id="image">
+                            <div style="" class="swiper-slide <if condition="$i eq 1">swiper-slide-visible swiper-slide-active</if>">
+                                <a class="js-no-follow" href="javascript:;" style="height: 300px;">
+                                    <img class="goods-main-photo" src="{vifnn:$image.image}" style="height:300px!important;width:100%!important;" />
+                                </a>
+                            </div>
+                            </volist>
+                        </div>
+                    </div>
+
+                    <div class="swiper-pagination">
+                        <volist name="images" id="image">
+                        <span class="swiper-pagination-switch <if condition="$i eq 1">swiper-visible-switch swiper-active-switch</if>"></span>
+                        </volist>
+                    </div>
+                </div>
+                <div class="goods-header">
+                    <h2 class="title">{vifnn:$product.name}</h2>
+                    <div class="goods-price">
+                        <div class="current-price">
+                            <span>￥&nbsp;</span><i class="js-goods-price price" id="price">{vifnn:$product.price|number_format=2, '.' , ''}</i>
+                            <span class="market-price">￥&nbsp;{vifnn:$product.oprice|number_format=2, '.' , ''}</span>
+                        </div>
+                    </div>
+                </div>
+                <hr class="with-margin" />
+
+                <div class="props">
+                    <if condition="empty($catData['color']) neq true">
+                        <div class="i-row">
+                            <div class="t color-label">{vifnn:$catData.color}：</div>
+                            <div class="c">
+                                <ul class="ys cm">
+                                    <volist name="colorData" id="detail" key="colorId">
+                                        <li class="color" id="color_{vifnn:$detail['color']}">
+                                            <if condition="$detail['logo'] neq ''"><img src="{vifnn:$detail['logo']}"><else/>{vifnn:$detail['colorName']}</if>
+                                        </li>
+                                    </volist>
+                                </ul>
+                            </div>
+                        </div>
+                    </if>
+
+                    <if condition="empty($catData['norms']) neq true">
+                        <div class="i-row">
+                            <div class="t norms-label">{vifnn:$catData.norms}：</div>
+                            <div class="c">
+                                <ul id="shoe_size_list" class="ys cm">
+                                    <volist name="formatData" id="detail" key="formatId">
+                                        <li class="norms" id="norms_{vifnn:$detail['format']}">{vifnn:$detail['formatName']}</li>
+                                    </volist>
+                                </ul>
+                            </div>
+                        </div>
+                    </if>
+                </div>
+
+                <if condition="empty($catData['norms']) neq true OR empty($catData['color']) neq true">
+                <volist name="productDetail" id="pro">
+                    <input type="hidden" id="color_{vifnn:$pro.color}_norms_{vifnn:$pro.format}" color="{vifnn:$pro.color}" format="{vifnn:$pro.format}" value="{vifnn:$pro.num}" did="{vifnn:$pro.id}" price="{vifnn:$pro.price|number_format=2, '.' , ''}" vprice="{vifnn:$pro.vprice|number_format=2, '.' , ''}" class="hidden"/>
+                </volist>
+                </if>
+
+                <div class="sku-detail adv-opts" style="border-top:none;">
+                    <div class="sku-detail-inner adv-opts-inner">
+                        <dl>
+                            <dt>库存：</dt>
+                            <dd id="stock" data="{vifnn:$product.num|default=0}">
+                                {vifnn:$product.num|default=0}
+                                <input type="hidden" />
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>运费：</dt>
+                            <dd><if condition="$product.mailprice gt 0">{vifnn:$product.mailprice|number_format=2, '.' , ''}<else />免运费</if></dd>
+                        </dl>
+                    </div>
+                    <div class="qrcode-buy">
+                        <a href="javascript:;" class="js-qrcode-buy btn btn-block btn-orange-dark butn-qrcode">立即购买</a>
+                    </div>
+                </div>
+                <div class="js-components-container components-container">
+        		    <div class="custom-store">
+                        <a class="custom-store-link clearfix" href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}">
+                            <div class="custom-store-img"></div>
+                            <div class="custom-store-name">{vifnn:$store.name}</div>
+                            <span class="custom-store-enter">进入店铺</span>
+                        </a>
+                    </div>
+                    <div class="custom-recommend-goods js-custom-recommend-goods hide clearfix">
+                        <div class="custom-recommend-goods-title">
+                            <a class="js-custom-recommend-goods-link" href="">推荐商品</a>
+                        </div>
+                        <ul class="custom-recommend-goods-list js-custom-recommend-goods-list clearfix"></ul>
+                    </div>
+
+
+
+                    <div class="custom-richtext">
+
+                        <p>
+                            {vifnn:$product.intro|html_entity_decode}
+                        </p>
+                        <volist name="images" id="image">
+                            <img src="{vifnn:$image.image}" />
+                        </volist>
+                    </div>
+                                
+                </div>
+                <div class="js-bottom-opts bottom-opts">
+                    <!-- 购买链接 -->
+                    <a href="javascript:;" class="js-buy-it btn btn-orange-dark btn-2-1">立即购买</a>
+
+                    <!-- 购物车按钮 -->
+                    <a href="javascript:;" class="js-add-cart btn btn-yellow btn-2-1">加入购物车</a>
+                </div>
+            </div>
+
+    
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="{vifnn:$staticFilePath}/js/zepto.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/style_2.js"></script>
+    <div class="motify">
+        <div class="motify-inner"></div>
+    </div>
+    <script id="tmpl-sku" type="text/template">
+        <div class="layout-title sku-box-shadow name-card sku-name-card">
+            <div class="thumb"><img src="{vifnn:$product.logourl}" alt="{vifnn:$product.name}" /></div>
+            <div class="detail goods-base-info clearfix">
+                <p class="title c-black ellipsis">{vifnn:$product.name}</p>
+                <% if(props) {%>
+                <p class="sale-props"><%= props %></p>
+                <% } %>
+                <div class="goods-price clearfix">
+                    <div class="current-price c-black pull-left">
+                        <span class='price-name pull-left font-size-14 c-orangef60'>￥</span>
+                        <i class="js-goods-price price font-size-18 c-orangef60 vertical-middle"><%= price %></i>
+                    </div>
+                </div>
+            </div> 
+            <div class="js-cancel sku-cancel">
+                <div class="cancel-img"></div>
+            </div>
+        </div>
+    
+        <div class="adv-opts layout-content">
+            <div class="goods-models js-sku-views block block-list block-border-top-none"></div>
+            <div class="confirm-action content-foot"></div>
+        </div>
+    </script>
+    <script src="{vifnn:$staticFilePath}/js/other.js"></script>
+
+    <script src="{vifnn:$staticFilePath}/js/style.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/style_1.js"></script>
+    <script id="tmpl-side-qrcode" type="text/template">
+        <div class="section-detail"></div>
+    </script>
+    <script src="{vifnn:$staticFilePath}/js/sku.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/product.js"></script>
+    <div id="right-icon" class="icon-hide  no-border hide" data-count="1">
+        <div class="right-icon-container clearfix" style="width: 50px">
+
+            <a id="global-cart" href="" class="no-text" style="background-image: url({vifnn:$staticFilePath}/images/cart.png);background-size: 50px 50px;background-position: center;">
+                <p class="right-icon-img"></p>
+                <p class="right-icon-txt">购物车</p>
+            </a>
+        </div>
+    </div>
+
+    <script src="{vifnn:$staticFilePath}/js/icon.js"></script>
+    <script type="text/javascript">
+        var buyDetailId = '';
+        $(".color").click(function(){
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+            if ($(this).attr('class') != 'color on') {
+                $(this).addClass('on').siblings().removeClass('on');
+                $('.props').removeClass('unselected');
+                var id = $(this).attr('id');
+                var nextid = 'norms_0';
+                $('.norms').each(function(){
+                    if ($(this).attr('class') == 'norms on') {
+                        nextid = $(this).attr('id');
+                    }
+                });
+                $('.norms').removeClass('disabled');
+                $('.hidden').each(function(){
+                    if ($(this).val() == 0 && ('color_' + $(this).attr('color')) == id) {
+                        $('#norms_' + $(this).attr('format')).addClass('disabled');
+                    }
+                })
+                if ($("#" + id + "_" + nextid).val() != null && $("#" + id + "_" + nextid).val() != '') {
+                    buyDetailId = id + "_" + nextid;
+                    $("#stock").text($("#" + id + "_" + nextid).val());
+                    $("#price").text($("#" + id + "_" + nextid).attr('price'));
+                }
+            } else {
+                $(this).removeClass('on');
+                $("#stock").text($("#stock").attr('data'));
+                $('.norms').removeClass('disabled');
+                buyDetailId = '';
+            }
+        });
+
+        $(".norms").click(function(){
+            if ($(this).hasClass('disabled')) {
+                return false;
+            }
+            if ($(this).attr('class') != 'norms on') {
+                $(this).addClass('on').siblings().removeClass('on');
+                $('.props').removeClass('unselected');
+                var id = $(this).attr('id');
+                var nextid = 'color_0';
+                $('.color').each(function(){
+                    if ($(this).attr('class') == 'color on') {
+                        nextid = $(this).attr('id');
+                    }
+                });
+                $('.color').removeClass('disabled');
+                $('.hidden').each(function(){
+                    if ($(this).val() == 0 && ('norms_' + $(this).attr('format')) == id) {
+                        $('#color_' + $(this).attr('color')).addClass('disabled');
+                    }
+                })
+                if ($("#" + nextid + "_" + id).val() != '' && $("#" + nextid + "_" + id).val() != null) {
+                    buyDetailId = nextid + "_" + id;
+                    $("#stock").text($("#" + nextid + "_" + id).val());
+                    $("#price").text($("#" + nextid + "_" + id).attr('price'));
+                }
+            } else {
+                $(this).removeClass('on');
+                $("#stock").text($("#stock").attr('data'));
+                $('.color').removeClass('disabled');
+                buyDetailId = '';
+            }
+        });
+
+        $('.js-buy-it').click(function(){
+            if ($('.color').length > 0 || $(".norms").length > 0) {
+                //未选择商品属性
+                if (buyDetailId == '') {
+                    $('.props').addClass('unselected');
+                    $('html,body').scrollTop($(".goods-header").offset().top);
+                    return false;
+                }
+            }
+
+            $('.sale-props').html("<%= props %>");
+            $('#tmpl-sku').find('.price').html("<%= price %>");
+
+            _global = {
+                "platform":"mobile",
+                "is_mobile":true,
+                "team_certificate":true,
+                "alipay_env":true,
+                "sku":{
+                    "tree":[],
+                    "list":[],
+                    "price":$('#price').text(),
+                    "none_sku":true,
+                    "stock_num":parseInt($('#stock').text()),
+                    "sold_num":'vifnn:$product.salecount',
+                    "messages":[],
+                    "hide_stock":false
+                },
+                "goods_id":"{vifnn:$product['id']}",
+                "url":{
+
+                }
+            };
+            _global.spm = {logType:"g",logId:"{vifnn:$product['id']}"};
+            html = $('#tmpl-sku').html();
+            html = html.replace(new RegExp('&lt;','gm'),'<');
+            html = html.replace(new RegExp('&gt;','gm'),'>');
+            ItemView =Backbone.View.extend({
+                template:_.template(html),
+                initialize: function(options) {
+                    this.render();
+                },
+                render: function() {
+                    props_val = '';
+                    if ($('.color-label').length > 0) {
+                        var color = $('.color-label').next('.c').find('.on').text();
+                        color = $('.color-label').text() + color;
+                        props_val = color;
+                    }
+                    if ($('.norms-label').length > 0) {
+                        var norms = $('.norms-label').next('.c').find('.on').text();
+                        norms = $('.norms-label').text() + norms;
+                        props_val = norms;
+                    }
+
+                    if (color != '' && norms != '') {
+                        props_val = color + ';&nbsp;&nbsp;' + norms;
+                    }
+                    $('#tmpl-sku').html(this.template({price : $('#price').text(), props : props_val}));
+                }
+            })
+            view = new ItemView();
+        })
+
+        $('.js-add-cart').click(function(){
+            if ($('.color').length > 0 || $(".norms").length > 0) {
+                //未选择商品属性
+                if (buyDetailId == '') {
+                    $('.props').addClass('unselected');
+                    $('html,body').scrollTop($(".goods-header").offset().top);
+                    return false;
+                }
+            }
+
+            $('.sale-props').html("<%= props %>");
+            $('#tmpl-sku').find('.price').html("<%= price %>");
+
+            /*_global = {
+                "platform":"mobile",
+                "is_mobile":true,
+                "team_certificate":true,
+                "alipay_env":true,
+                "sku":{
+                    "tree":[],
+                    "list":[],
+                    "price":$('#price').text(),
+                    "none_sku":true,
+                    "stock_num":parseInt($('#stock').text()),
+                    "sold_num":'{vifnn:$product.salecount}',
+                    "messages":[],
+                    "hide_stock":false
+                },
+                "goods_id":"{vifnn:$product['id']}",
+                "url":{
+                    "wap":"http:\/\/wap.koudaitong.com\/v2"
+                }
+            };
+            _global.spm = {logType:"g",logId:"{vifnn:$product['id']}"};*/
+
+
+            var _global = {
+                "platform":"mobile",
+                "is_mobile":true,
+                "team_certificate":true,
+                "goods_redirect_url":"",
+                "current_page_link":"",
+                "sku":{
+                    "tree":[],
+                    "list":[],
+                    "price":$('#price').text(),
+                    "none_sku":true,
+                    "stock_num":parseInt($('#stock').text()),
+                    "sold_num":'{vifnn:$product.salecount}',
+                    "messages":[],
+                    "hide_stock":false
+                },
+                "goods_id":"{vifnn:$product['id']}",
+                "url":{
+
+                }
+            };
+            _global.spm = {logType:"g",logId:"{vifnn:$product['id']}"};
+
+            html = $('#tmpl-sku').html();
+            html = html.replace(new RegExp('&lt;','gm'),'<');
+            html = html.replace(new RegExp('&gt;','gm'),'>');
+            ItemView =Backbone.View.extend({
+                template:_.template(html),
+                initialize: function(options) {
+                    this.render();
+                },
+                render: function() {
+                    props_val = '';
+                    if ($('.color-label').length > 0) {
+                        var color = $('.color-label').next('.c').find('.on').text();
+                        color = $('.color-label').text() + color;
+                        props_val = color;
+                    }
+                    if ($('.norms-label').length > 0) {
+                        var norms = $('.norms-label').next('.c').find('.on').text();
+                        norms = $('.norms-label').text() + norms;
+                        props_val = norms;
+                    }
+
+                    if (color != '' && norms != '') {
+                        props_val = color + ';&nbsp;&nbsp;' + norms;
+                    }
+                    $('#tmpl-sku').html(this.template({price : $('#price').text(), props : props_val}));
+                }
+            })
+            view = new ItemView();
+        })
+    </script>
+</body>
+<script type="text/javascript">
+    window.shareData = {
+        "moduleName":"Store",
+        "moduleID":"{vifnn:$product['id']}",
+        "imgUrl": "{vifnn:$product['logourl']}",
+        "timeLineLink": "{vifnn::C('site_url') . U('DrpStore/product',array('id' => $_GET['id'],'pid' => $product['id']))}",
+        "sendFriendLink": "{vifnn::C('site_url') . U('DrpStore/product',array('id' => $_GET['id'],'pid' => $product['id']))}",
+        "weiboLink": "{vifnn::C('site_url') . U('DrpStore/product',array('id' => $_GET['id'],'pid' => $product['id']))}",
+        "tTitle": "{vifnn:$metaTitle}",
+        "tContent": "{vifnn:$metaTitle}"
+    };
+</script>
+{vifnn:$shareScript}
+</html>

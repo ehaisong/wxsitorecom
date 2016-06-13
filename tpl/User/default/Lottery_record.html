@@ -1,0 +1,99 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="./tpl/User/default/common/css/cymain.css" />
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<div class="content">
+  <div class="cLineB"><h4 class="left">"{vifnn:$lottery.title}"参与记录</h4><div>
+  <a href="{vifnn::U(MODULE_NAME.'/index',array('token'=>$token))}" class="right btnGrayS vm">返回</a>
+  </div><div class="clr"></div> 
+  </div>
+  <div class="cLineB">本次活动奖品总数：<span class="redamount">{vifnn:$datacount}</span>个　　　中奖人数：<span class="redamount">{vifnn:$recordcount} </span>个   已发奖品：<span class="redamount">{vifnn:$sendCount}</span>个</div>
+		<div style="margin-top:20px;"><a href="{vifnn::U(MODULE_NAME.'/record',array('id'=>$lottery['id'],'islottery'=>1))}" class="btnGrayS vm">中奖记录</a>&nbsp;&nbsp;<a href="{vifnn::U(MODULE_NAME.'/record',array('id'=>$lottery['id'],'islottery'=>0))}" class="btnGrayS vm">未中奖记录</a>&nbsp;&nbsp;<a href="{vifnn::U(MODULE_NAME.'/record',array('id'=>$lottery['id']))}" class="btnGrayS vm">全部记录</a></div>
+          <div class="msgWrap">
+          <form method="post"  action="" id="info" >
+          <input name="delall"  type="hidden" value="" />
+           <input name="wxid"  type="hidden" value="" />
+            <TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+              <THEAD>
+                <TR style="text-align: center;">
+					<TH class="select">序号</TH>
+					<TH>SN码(中奖号)</TH>
+					<TH>奖项</TH>
+					<TH>是否已发奖品</TH>
+					<TH>奖品发送时间</TH>
+					 
+					<TH>手机号</TH>
+					<?php if($_GET['type'] != 4){?>
+					<TH>微信号</TH>
+					<?php }?>
+					<TH>参与时间</TH>
+					<TH>操作</TH>
+                </TR>
+				
+              </THEAD>
+              <TBODY>
+				<volist name="record_list" id="record">
+				<TR style="line-height:30px;height: 43px;line-height: 59px;">
+				<td class="select">{vifnn:$i}</td>
+				<td><?php if($record['islottery'] == 1){ echo $record['sn'];}else{ echo '未中奖';}?></td>
+				<td><?php if($record['sn'] == ''){ echo '未中奖';}else{ echo $record['prize'].'等奖';}?></td>
+				<td><if condition="$record['sendstutas'] eq 0">未发放<else/>已发放</if></td>
+			    <td><if condition="$record['sendtime'] eq 0"> 未发放<else/>{vifnn:$record.sendtime|date='Y-m-d H:i:s',###}</if></td>
+				<td><?php if($record['phone'] != ''){ echo $record['phone'];}else{ echo '无';}?></td>
+				<?php if($_GET['type'] != 4){?><td>{vifnn:$record.wecha_name}</td><?php }?>
+				<td><if condition="$record['time'] neq 0"> {vifnn:$record.time|date='Y-m-d H:i:s',###}</if></td>
+				<td>
+               <if condition="$record['sendstutas'] eq 0"> 
+				<?php if($record['sn'] == ''){ echo '未中奖';}else{ if($_GET['type'] != 3){ ?><a href="javascript:sendprize('{vifnn:$record.id}','{vifnn:$record.sn}')";>发奖</a><?php }}?>
+              <else/>
+               <a href="index.php?g=User&m=Lottery&a=sendnull&id={vifnn:$record.id}">取消发奖</a>
+              </if> <a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Lottery/snDelete',array('token'=>$token,'id'=>$record['id']))}');">删除</a>
+            </td>
+			</TR>
+				</volist>
+			  </TBODY>
+            </TABLE>
+           </form> 
+          </div>
+          <div class="cLine">
+            <div class="pageNavigator right">
+                 <div class="pages">{vifnn:$page}</div>
+              </div>
+            <div class="clr"></div>
+          </div>
+        </div>
+
+        <div class="clr"></div>
+      </div>
+    </div>
+  </div>
+  <!--底部-->
+  	</div>
+<div id="sendprize" style="display:none">
+<div class="setting_rows">
+<p>
+<span>选择门店：</span>
+<select name="company">
+	<volist name="company_list" id="cv">
+	<option value="{vifnn:$cv['id']}" >{vifnn:$cv['name']}</option>
+	</volist>
+</select>
+</p>
+</div>
+</div>
+<script type="text/javascript">
+var dialog;
+function sendprize(id,sn){
+	dialog = $.dialog({
+		title:'【'+sn+'】发奖：',
+		content:document.getElementById('sendprize'),
+		lock:true,
+		ok:function(){
+			var company = $('select[name="company"]').val();
+			location.href="<?php echo U('User/Lottery/sendprize',array('token'=>$token));?>&id="+id+"&company_id="+company;
+		}
+	});
+}
+</script>
+<include file="Public:footer"/>
+        

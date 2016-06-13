@@ -1,0 +1,125 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left">拼团购回复信息配置</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap bgfc">
+	<form class="form" method="post"   action="" enctype="multipart/form-data" >
+		<table class="userinfoArea" style=" margin:0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
+			<tbody>
+				<tr>
+					<th valign="top"><span class="red">*</span>关键词：</th>
+					<td>
+						<input type="text" class="px" id="keyword" name="keyword" value="<?php echo $set['keyword']?$set['keyword']:'拼团购';?>" style="width:400px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>拼团购标题名称：</th>
+					<td>
+						<input type="text" class="px" id="title" name="title" value="<?php echo $set['title']?$set['title']:'拼团购';?>" style="width:400px;" />
+						&nbsp;既是微信图文回复标题名称也是拼团首页的标题名称
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>回复图片：</th>
+					<td>
+						<input type="text" class="px" id="pic" name="pic" value="<?php echo $set['pic']?$set['pic']:$staticPath.'/tpl/static/pintuan/images/pintuan.jpg';?>" style="width:250px;" />
+						<a href="###" onclick="upyunPicUpload('pic',900,500,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('pic')">预览</a>
+					</td>
+				</tr>
+				<tr>
+					<th valign="top">回复描述：</th>
+					<td>
+						<input type="text" class="px" id="info" name="info" value="<?php echo $set['info']?$set['info']:'';?>" style="width:400px;" />
+					</td>
+				</tr>
+				<tr>
+					<th valign="top"><span class="red">*</span>联系电话：</th>
+					<td>
+						<input type="text" class="px" id="tel" name="tel" value="<?php echo $set['tel']?$set['tel']:'';?>" style="width:400px;" />
+					</td>
+				</tr>
+				<tr>
+					<th>&nbsp;</th>
+					<td><button type="submit" class="btnGreen" >保存</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+	$("form").submit(function(){
+		var is_error = true;
+		var is_error_msg = "";
+		var error_id = new Array();
+		var error_i = 0;
+		
+		var keyword = $('#keyword').val();
+		if(keyword == ''){
+			is_error_msg += "请填写关键词！<br>";
+			buterror("#keyword");
+			error_id[error_i] = "#keyword";
+			error_i++;
+			is_error = false;
+		}
+		var title = $('#title').val();
+		if(title == ''){
+			is_error_msg += "请填写拼团购标题名称！<br>";
+			buterror("#title");
+			error_id[error_i] = "#title";
+			error_i++;
+			is_error = false;
+		}
+		var pic = $('#pic').val();
+		if(pic == ''){
+			is_error_msg += "请添加回复图片！<br>";
+			buterror("#pic");
+			error_id[error_i] = "#pic";
+			error_i++;
+			is_error = false;
+		}
+		var tel = $('#tel').val();
+		if(tel == ''){
+			is_error_msg += "请填写联系电话！<br>";
+			buterror("#tel");
+			error_id[error_i] = "#tel";
+			error_i++;
+			is_error = false;
+		}
+		if(is_error == false){
+			_alert(is_error_msg);
+			//$("html,body").animate({scrollTop: $(error_id[0]).offset().top}, 500);
+			return false;
+		}else{
+			return true;
+		}
+	});
+});
+function _alert(content){
+	layer.alert(content,{icon:5});
+}
+function buterror(id){
+	$(id).css("border","2px solid red");
+	$(id).css("background-color","rgb(255, 223, 221)");
+	$(id).focus(function(){
+		$(id).css("background-color","#fff");
+		$(id).css("border","1px solid");
+		$(id).css("border-color","#848484 #E0E0E0 #E0E0E0 #848484");
+	});
+}
+</script>
+<include file="Public:footer"/>

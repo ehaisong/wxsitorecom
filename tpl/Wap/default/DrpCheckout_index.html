@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="no-js  mobile" lang="zh-CN" />
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="keywords" content=" 购物车结算" />
+    <meta name="description" content="购物车结算" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="cleartype" content="on" />
+    <title>购物车结算 - {vifnn:$storeSet.name}</title>
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+
+    <!-- meta viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/base.css" />
+    <link rel="stylesheet" href="{vifnn:$staticFilePath}/css/trade.css" />
+    <style type="text/css">
+        body,a {
+            font-family: "\5fae\8f6f\96c5\9ed1","Microsoft YaHei",Helvetica,Arial,sans-serif!important;
+        }
+        .props {
+            color:green!important;
+        }
+        .shipping {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class=" ">
+    <!-- container -->
+    <div class="container js-page-content wap-page-order">
+        <div class="content confirm-container">
+            <div class="app app-order">
+                <div class="app-inner inner-order" id="js-page-content">
+                    <!-- 通知 -->
+                    <!-- 商品列表 -->
+                    <div class="block block-order block-border-top-none">
+                        <div class="header">
+                            <span>店铺：{vifnn:$storeSet.name}</span>
+                        </div>
+                        <hr class="margin-0 left-10" />
+                        <div class="block block-list block-border-top-none block-border-bottom-none">
+                            <volist name="products" id="product">
+                            <div class="block-item name-card name-card-3col clearfix">
+                                <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $product['id']))}" class="thumb">
+                                    <img class="js-view-image" src="{vifnn:$product.logourl}" alt="{vifnn:$product.name}">
+                                </a>
+                                <div class="detail">
+                                    <a href="{vifnn::U('DrpProduct/index', array('id' => $_GET['id'], 'pid' => $product['id']))}"><h3>{vifnn:$product.name}</h3></a>
+                                    <p class="props">
+                                        <foreach name="product['props']" item="prop">
+                                            - {vifnn:$prop.name} : {vifnn:$prop.value}<br/>
+                                        </foreach>
+                                    </p>
+                                    <if condition="$product.comment neq ''">
+                                        <p class="comment">
+                                            留言：{vifnn:$product.comment}
+                                        </p>
+                                    </if>
+                                </div>
+                                <div class="right-col">
+                                    <div class="price">¥&nbsp;<span>{vifnn:$product.price}</span></div>
+                                    <div class="shipping"><if condition="$product.shipping gt 0">运费：¥&nbsp;<span>{vifnn:$product.shipping}</span><else />免运费</if></div>
+                                    <div class="num">×<span class="num-txt">{vifnn:$product.quantity}</span></div>
+                                </div>
+                            </div>
+                            </volist>
+                        </div>
+                    </div>
+                    <hr class="margin-0 left-10" />
+                    <div class="order-message clearfix" id="js-order-message">
+                        <textarea class="js-msg-container font-size-12 comment" placeholder="给卖家留言..."></textarea>
+                    </div>
+                </div>
+                <!-- 物流 -->
+                <div class="block express" id="js-logistics-container">
+                    <div class="js-logistics-content logistics-content js-express">
+                        <div class="">
+                            <div class="block block-form block-border-top-none block-border-bottom-none">
+                                <div class="js-order-address block-item-express-panel" style="padding-left:0;">
+                                    <div class="opt-wrapper"><a href="{vifnn::U('DrpCheckout/shipping_address', array('id' => $_GET['id']))}" class="btn btn-xxsmall btn-grayeee butn-edit-address js-edit-address">修改</a></div>
+                                    <ul>
+                                        <li><span>{vifnn:$shipping_address.name}</span>, {vifnn:$shipping_address.tel}</li>
+                                        <li>{vifnn:$shipping_address.address} {vifnn:$shipping_address.postcode}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="js-logistics-content logistics-content js-self-fetch hide"></div>
+                </div>
+                <!-- 支付 -->
+                <div class="js-step-topay">
+                    <div class="js-used-coupon block" style="display: none;"></div>
+                    <div class="block">
+                        <div class="js-order-total block-item order-total">
+                            <p>￥{vifnn:$product_total} <if condition="$shipping_total gt 0">+ ￥{vifnn:$shipping_total}运费<else />免运费</if></p>
+                            <strong class="js-real-pay c-orange js-real-pay-temp">需付：￥{vifnn:$total_amount}</strong>
+                        </div>
+                    </div>
+
+                    <div class="action-container" id="confirm-pay-way-opts">
+                        <div style="margin-bottom: 10px;">
+                            <button type="button" data-pay-type="umpay" class="btn-pay btn btn-block btn-large btn-umpay  btn-green">确认，提交订单</button>
+                        </div>
+                    </div>
+
+                    <div class="center action-tip js-pay-tip">支付完成后，如需退换货请及时联系卖家</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+    <script type="text/javascript">
+        $(function(){
+            $('.btn-pay').click(function(){
+                var comment = $('.comment').val(); //给卖家留言
+                $.post("{vifnn::U('DrpCheckout/confirm', array('id' => $_GET['id']))}", {'comment': comment}, function(data){
+                    var data = $.parseJSON(data);
+                    if (data.status) {
+                        window.location.href = data.data;
+                    } else {
+                        motify.log(data.info);
+                        return false;
+                    }
+                })
+                return false;
+            })
+        })
+    </script>
+</body>
+</html>

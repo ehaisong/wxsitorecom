@@ -1,0 +1,79 @@
+<include file="Hotels:header"/>
+<body>
+	<div class="html">
+		<div class="main">
+			<header>
+	<a class="ico-hd arr-hd" href="javascript:history.go(-1);"></a>
+	<h1>订单详情</h1>
+</header>
+<div class="contxt cont-artical">
+	<div class="box-cont box-order">
+		<div class="hd">
+			<b>在线预订客房{vifnn:$company['name']}</b>
+			<i>{vifnn:$order['housename']}</i> | <i>{vifnn:$order['nums']}间</i>
+		</div>
+		<div class="bd box-txt">
+			<p><span>入住日期</span><b>{vifnn:$order['startdate']}</b></p>
+			<p><span>离店日期</span><b>{vifnn:$order['enddate']} </b></p>
+			<p>
+				<span>订单状态</span>
+				<if condition="$order['paytype'] eq 'daofu' or $order['paytype'] eq 'dianfu'">
+					<em style="color:green">到店付款</em>
+				<elseif condition="$order['paid'] eq 1" />
+					<if condition="$order['status'] eq 1">
+						<em style="color:green">已入住</em>
+					<elseif condition="$order['status'] eq 2" />
+						<em style="color:red">已取消</em>
+					<else />
+						<em style="color:green">已预定</em>
+					</if>
+				<else />
+					<em style="color:red">未支付</em>
+				</if>
+			</p>
+			<p><span>操作</span>
+			<if condition="$order['status'] gt 1">
+			<span style="color:red">已取消</span>
+			<else />
+			<a class="btn btn-small to_book" onclick="javascript:cancel('{vifnn:$order['id']}', 2);">取消订单</a>
+			</if>
+			</p>
+			
+		</div>
+		<div class="ft box-txt">
+			<p><span>联系人电话：</span><b>{vifnn:$order['tel']}</b></p>
+			<p><span>总 金 额：</span><b>￥{vifnn:$order['price']}</b></p>
+		</div>
+	</div>
+	<br><br>
+</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+function cancel(oid, status)
+{
+	if (confirm('你确定要这么操作吗？')) {
+		$.get("{vifnn::U('Hotels/cancel',array('token' => $_GET['token']))}&oid=" + oid + "&status=" + status, function(response){
+			if (response.error_code == true) {
+				alert(response.msg);
+			} else {
+				location.href = "{vifnn::U('Hotels/my',array('token' => $_GET['token']))}"
+			}
+		}, 'json');
+	}
+}
+window.shareData = {  
+            "moduleName":"Hotels",
+            "moduleID":"{vifnn:$company[0]['id']}",
+            "imgUrl": "{vifnn:$company[0]['logourl']}", 
+            "timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U('Hotels/detail',array('token' => $_GET['token']))}",
+            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Hotels/detail',array('token' => $_GET['token']))}",
+            "weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('Hotels/detail',array('token' => $_GET['token']))}",
+            "tTitle": "{vifnn:$metaTitle}",
+            "tContent": "{vifnn:$metaTitle}"
+        };
+</script>
+{vifnn:$shareScript}
+</html>

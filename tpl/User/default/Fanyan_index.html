@@ -1,0 +1,222 @@
+<include file="Public:head"/> 
+
+
+
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+
+
+
+<div class="content"  >
+
+
+
+<div class="cLineB">
+
+
+
+<h4 class="left">题目管理 ({vifnn:$page} ) </h4></div>
+
+<div class="tab">
+<ul>
+<li class="current tabli" id="tab2"><a href="{vifnn::U('Fanyan/index')}">题目管理</a></li>
+
+<li class=" tabli" id="tab20"><a href="{vifnn::U('Fanyan/reply')}">回复信息配置</a></li>
+</ul>
+</div>
+
+<div class="searchbar right">
+
+
+
+
+
+
+
+
+
+
+
+<div class="clr"></div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="cLine">
+
+
+
+<div class="pageNavigator left"> <a href="{vifnn::U('Fanyan/add',array('token'=>$token))}" title="添加" class="btnGrayS vm bigbtn  J_ajax_submit_btn"><img src="{vifnn::RES}/images/product/add.png" width="16" class="vm">添加</a></div>
+
+
+
+<div class="clr"></div>
+
+
+
+</div>
+
+
+
+<div class="msgWrap">
+
+
+
+<form method="post" action="" id="info">
+
+
+
+<input name="delall" type="hidden" value="">
+
+
+
+<input name="wxid" type="hidden" value="">
+
+
+
+<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+
+
+
+<thead>
+
+
+
+<tr>
+
+
+
+<th width="140">题目</th>
+
+
+
+<th width="160">选项</th>
+
+
+
+<th width="140">答对分数</th>
+
+
+
+
+
+
+
+
+
+
+
+<th width="250" class="norightborder">操作</th>
+
+
+
+</tr>
+
+
+
+</thead>
+
+
+
+<tbody>
+
+
+
+<tr></tr>
+
+
+
+<volist name="data" id="item"> 
+
+
+
+<tr>
+
+
+
+<td>{vifnn:$item.timu}</td>
+
+
+
+<td>{vifnn:$item.answer1}<br>{vifnn:$item.answer2}<br>{vifnn:$item.answer3}<br>{vifnn:$item.answer4}
+</td>
+
+<td>{vifnn:$item.score1}<br>{vifnn:$item.score2}<br>{vifnn:$item.score3}<br>{vifnn:$item.score4}</td>
+
+
+
+
+
+
+
+
+
+
+
+<td class="norightborder"><a href="{vifnn::U('Fanyan/set',array('id'=>$item['id'],'token'=>$token))}">修改</a>&nbsp;&nbsp;<a href="{vifnn::U('Fanyan/del',array('aid'=>$item['pid'],'id'=>$item['id'],'token'=>$token))}">删除</a></td>
+
+
+
+</tr>
+
+
+
+</volist>
+
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+</form>
+
+
+
+
+
+
+
+</div>
+
+
+
+<div class="cLine">
+
+
+
+<div class="pageNavigator right">
+
+
+
+<div class="pages">{vifnn:$page}</div>
+
+
+
+</div>
+
+
+
+<div class="clr"></div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<include file="Public:footer"/>

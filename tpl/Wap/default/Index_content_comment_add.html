@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <!-- 禁止百度转码 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!-- UC强制竖屏 -->
+    <meta name="screen-orientation" content="portrait" />
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait" />
+    <!-- UC强制全屏 -->
+    <meta name="full-scerrn" content="yes" />
+    <!-- QQ强制全屏 -->
+    <meta name="x5-fullscreen" content="ture" />
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app" />
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- window phone 点亮无高光 -->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- 安卓设备不自动识别邮件地址 -->
+    <meta name="format-detection" name="email=no" />
+    <!-- iOS设备 -->
+    <!-- 添加到主屏幕的标题 -->
+    <meta name="apple-mobile-web-app-title" content="小猪CMS" />
+    <title></title>
+<link href="{vifnn:$staticPath}/tpl/static/comment/css/comstyle.css" rel="stylesheet">
+<script src="{vifnn:$staticPath}/tpl/static/dashang/js/jquery-1.7.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="{vifnn:$staticPath}/tpl/static/layer_mobile/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+	body{background: #FBFBFB;}
+    .dComment{padding-bottom: 20px;}
+    .dComment .dsMoney{text-align: center;font-size: 15px;color: #999;padding: 15px 0}
+    .dComment .dsMoney em{color: #5182c0;font-style: normal}
+    .dComment .userList{overflow: hidden;padding:0 20px 20px;border-bottom: 1px solid #e1e1e1}
+    .dComment .userList ul li{float: left;margin: 0 5px 5px 5px;width: 36px;height: 36px;list-style: none}
+    .dComment .userList ul li img{width: 36px;height: 36px;}
+    .dComment .tit{text-align: center;position: relative;margin: 0 10px;}
+    .dComment .tit{text-align: center}
+    .dComment .tit .line{position: absolute;height: 1px;border-bottom: 1px dotted #e1e1e1;width: 100%;top: 50%;z-index: 0}
+    .dComment .tit h2{display: inline-block;padding: 15px 10px;font-weight: normal;font-size: 15px;color: #666;position: relative;z-index: 9;background: #FBFBFB;}
+    .conmmentBox{padding: 0 10px}
+    .conmmentBox>ul>li{margin-bottom: 15px}
+    .conmmentBox>ul>li .userHd{overflow: hidden}
+    .conmmentBox>ul>li .userHd a{float: right;background: url("images/good.png") no-repeat left center;height: 15px;background-size: 15px 15px;padding-left: 20px;font-size: 13px;color: #999; margin-top: 10px;
+    }
+    .conmmentBox>ul>li .userHd a.goodOn{background-image: url("images/goodOn.png");color: #ed614e}
+    .conmmentBox .userInfo{overflow: hidden}
+    .conmmentBox .userInfo .avatarBox{display: inline-block;width: 36px;height: 36px;vertical-align: middle;margin-right: 5px;}
+    .conmmentBox .userInfo .avatarBox img{width: 36px;height: 36px;}
+    .conmmentBox .userInfo  .name{display: inline-block;vertical-align: top;font-size: 15px;color: #999}
+
+    .conmmentBox .userPost{padding-left: 45px;margin-top: -15px;}
+    .conmmentBox .userPost .thisPost p{font-size: 15px;color: #333;margin-bottom: 5px}
+    .conmmentBox .userPost .thisPost .time{font-size: 10px;color: #999}
+    .conmmentBox .userPost .thisPost .delete{float: right;font-size: 12px;color: #678ec5}
+    .conmmentBox .otherPost{border-top: 1px solid #e1e1e1;margin-top: 10px}
+    .conmmentBox .otherPost ol li{list-style: none;margin-top: 10px}
+    .conmmentBox .otherPost ol li h3{font-size: 15px;color: #5a87c2;font-weight: normal;padding-left: 10px;border-left: 5px solid #80a0cd;margin-bottom: 5px}
+    .conmmentBox .otherPost ol li .setPadding{padding-left: 15px}
+    .conmmentBox .otherPost ol li p{color: #333;font-size: 15px;margin-bottom: 5px}
+    .conmmentBox .otherPost ol li .time{color: #999;font-size: 10px}
+
+    .dComment .tipp{text-align: center;font-size: 15px;color: #999}
+    .dComment .commentBtn{overflow: hidden;padding-right: 20px}
+    .dComment .commentBtn a{float: right;height: 50px;width: 50px;line-height: 50px;color: #fff;font-size: 15px;border-radius: 100%;background: #678ec5;text-align: center}
+
+    .dComment .review h1{text-align: left;font-size: 15px;color: #333;padding: 15px 10px;font-weight: normal;}
+    .dComment .reviewInfo{border: 1px solid #e1e1e1;background-color: #FFFFFF;}
+    .dComment .reviewInfo textarea{width: 100%;border: 0;height: 100px;padding: 0 15px;background-color: #FFFFFF;margin-top: 5px; font-size:14px;}
+    .dComment .reviewBtn{text-align: center;margin-top: 15px}
+    .dComment .reviewBtn button{width: 90%;margin: 0 auto;background: #678ec5;border-radius: 5px;padding: 10px 0;text-align: center;border: 0;display: block;font-size: 13px;color: #fff}
+	.dComment .reviewBtn .disbutton{background:#A6BCDC;}
+    .dComment .emojiBox{overflow: hidden;padding: 10px 20px}
+    .dComment .emojiBox a{display: inline-block;width:18px;height: 18px; }
+    .dComment .emojiBox a img{width:18px;height: 18px; }
+
+</style>
+</head>
+<body>
+<script>
+        $(function(){		
+			$("#content").keyup(function(){
+				content = $(this).val().replace(/(^\s*)|(\s*$)/g, "");
+				if(content == ''){
+					$("#submit").attr("disabled",true).addClass('disbutton');
+				}else{
+					$("#submit").attr("disabled",false).removeClass('disbutton');
+				}
+							
+			})
+			
+            $("#submit").click(function(){
+				$(this).attr("disabled",true);
+				var content = $("#content").val();
+					content = content.replace(/(^\s*)|(\s*$)/g, "");
+				var imgid = "{vifnn:$_GET['imgid']}";
+				if(content == ''){
+					layer.open({
+						content: '评论内容不能为空',
+						style: 'background-color:#000; color:#fff; border:none;',
+						time: 2
+					});
+					$(this).attr("disabled",false);
+					return false;
+				}else{
+					$.post("{vifnn::U('Index/content_comment_add')}",{content:content,imgid:imgid},function(msg){
+						layer.open({
+							content: msg.msg,
+							style: 'background-color:#000; color:#fff; border:none;',
+							time: 2
+						});
+						window.location.reload();
+					},'json')
+				}
+            });
+            $(".delete").click(function(){
+				var cmtid = $(this).attr('data-id');
+				layer.open({
+					content: '是否确认删除',
+					style: "width:70%;",
+					btn: ['删除', '取消'],
+					shadeClose: false,
+					yes: function(){
+						$.post("{vifnn::U('Index/content_comment_delete')}",{cmtid:cmtid},function(msg){
+						//alert(msg.msg);
+							window.location.reload();
+						},'json')
+					}, no: function(){
+						return true;
+					}
+				});
+            });			
+        });
+</script>
+<section class="dComment">
+    <div class="review">
+        <h1>{vifnn:$imgtitle}</h1>
+        <div class="reviewInfo">
+            <textarea name="content" id="content" placeholder="评论将由作者筛选后显示,对所有人可见"></textarea>
+<!--             <div class="emojiBox">
+                <a href="javascript:;"><img src="images/emoji.png"/></a>
+            </div> -->
+        </div>
+
+        <div class="reviewBtn">
+            <button id="submit" class="disbutton" disabled="disabled">发送</button>
+        </div>
+    </div>
+    <div class="tit">
+        <div class="line"></div>
+        <h2>我的评论</h2>
+    </div>
+    <div class="conmmentBox">
+        <ul>
+		<volist name="list" id="cvo">
+            <li>
+                <div class="userHd">
+                    <div class="userInfo">
+                        <div class="avatarBox">
+                            <img src="{vifnn:$cvo['wheaderimg']|default=$staticPath.'/tpl/static/comment/images/avatar.png'}"/>
+                        </div>
+                        <small class="name">{vifnn:$cvo['wname']|default='匿名'}</small>
+                    </div>
+                </div>
+                <div class="userPost">
+                    <div class="thisPost">
+                        <p>{vifnn:$cvo['content']}</p>
+						<eq name='cvo[status]' value="1"> <else /><a class="delete" data-id="{vifnn:$cvo['id']}">删除</a></eq>
+                        <time class="time" datetime="{vifnn::date('Y-m-d H:i:s',$cvo['ctime'])}"></time>
+                    </div>
+                    <?php $rearr = json_decode($cvo['reply'],true);?>
+                    <volist name="rearr" id="revo">
+                        <div class="otherPost">
+                            <ol>
+                                <li>
+                                    <h3>作者回复</h3>
+                                    <div class="setPadding">
+                                        <p>{vifnn:$revo['reply']}</p>
+                                        <time datetime="{vifnn::date("Y-m-d H:i:s",$revo['ctime'])}" class="time"></time>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    </volist>
+                </div>
+            </li>
+		</volist>	
+        </ul>
+    </div>
+</section>
+<script src="{vifnn:$staticPath}/tpl/static/jquery.timeago.js" type="text/javascript"></script>
+<script type="text/javascript">
+   $(function() {
+     $(".time").timeago();
+   });
+</script>
+</body>
+</html>

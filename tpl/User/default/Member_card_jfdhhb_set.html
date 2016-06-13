@@ -1,0 +1,239 @@
+<include file="Public:head" />
+<script language="javascript" type="text/javascript" src="{vifnn:$staticPath}/tpl/static/cutprice/js/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/cutprice/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<form class="form" method="post" action="" enctype="multipart/form-data" >
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left"><?php if($set == ''){echo "会员卡【".$card['cardname']."】添加一个积分兑换红包";}else{echo "会员卡【".$card['cardname']."】修改兑换金额为“".($set['hongbao']/100)."元”的积分兑换红包";}?></h4>
+		<a href="{vifnn::U('User/Member_card/jfdhhb',array('token'=>$token,'id'=>$_GET['cardid']))}"  class="right btnGreen" >返回</a>
+	</div>
+	<div class="msgWrap bgfc">
+		<table class="userinfoArea" style=" margin:0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
+			<tr>
+				<th valign="top"><span class="red">*</span>兑换红包商户名称：</th>
+				<td>
+					<input type="text" class="px" id="send_name" value="<?php echo $set['send_name'];?>" name="send_name" style="width:400px" />
+					&nbsp;不超过30个字母，相当于10个汉字。
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>兑换红包活动名称：</th>
+				<td>
+					<input type="text" class="px" id="act_name" value="<?php echo $set['act_name'];?>" name="act_name" style="width:400px" />
+					&nbsp;不超过30个字母，相当于10个汉字。
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>兑换红包祝福语：</th>
+				<td>
+					<input type="text" class="px" id="wishing" value="<?php echo $set['wishing'];?>" name="wishing" style="width:400px" />
+					&nbsp;不超过120个字母，相当于40个汉字。
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>兑换红包金额：</th>
+				<td>
+					<?php if($set['starttime'] && $set['starttime'] < time()){?>
+					<?php echo $set['hongbao']/100;?>元
+					<input type="hidden" id="hongbao" value="<?php echo $set['hongbao']?($set['hongbao']/100):'';?>" name="hongbao"/>
+					<?php }else{?>
+					<input type="text" class="px" id="hongbao" value="<?php echo $set['hongbao']?($set['hongbao']/100):'';?>" name="hongbao" style="width:100px" />
+					&nbsp;红包金额介于[1.00元，200.00元]之间
+					<?php }?>
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>兑换红包积分：</th>
+				<td>
+					<?php if($set['starttime'] && $set['starttime'] < time()){?>
+					<?php echo $set['integral'];?>
+					<input type="hidden" id="integral" value="<?php echo $set['integral'];?>" name="integral"/>
+					<?php }else{?>
+					<input type="number" class="px" id="integral" value="<?php echo $set['integral'];?>" name="integral" style="width:100px" />
+					&nbsp;达到此积分值才能兑换
+					<?php }?>
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>每人最多可兑换次数：</th>
+				<td>
+					<input type="number" class="px" id="count" value="<?php echo $set['count']?$set['count']:1;?>" name="count" style="width:100px" />
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>有效期：</th>
+				<td colspan="2">
+					<?php if($set['starttime'] && $set['starttime'] < time()){?>
+					<input type="input" class="px" value="{vifnn:$set.starttime|date='Y-m-d',###}" disabled />
+					<input type="hidden" id="starttime" value="{vifnn:$set.starttime|date='Y-m-d',###}" name="starttime" />
+					<?php }else{?>
+					<input type="input" class="px" id="starttime" value="<if condition="$set['starttime'] neq ''">{vifnn:$set.starttime|date='Y-m-d',###}<else/><?php echo date('Y-m-d',time());?></if>" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="starttime"  />
+					<?php }?>
+					到
+					<input type="input" class="px" id="endtime" value="<if condition="$set['endtime'] neq ''">{vifnn:$set.endtime|date='Y-m-d',###}<else/><?php echo date('Y-m-d',time()+2592000);?></if>" name="endtime"  onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  />
+					&nbsp;<span style="color:red">在开始时间之后不能再修改金额、积分和开始时间。</span>
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red"></span>是否显示：</th>
+				<td colspan="2">
+					<input type="radio" name="display" id="display1" value="1" <if condition="($set['display'] eq 1)">checked</if>><label for="display1">否</label>
+					&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="display" id="display2" value="2" <if condition="($set['display'] eq 2)OR($set eq '')">checked</if>><label for="display2">是</label>
+				</td>
+			</tr>
+			<tr>
+				<th valign="top"><span class="red">*</span>兑换红包备注：</th>
+				<td>
+					<input type="text" class="px" id="remark" value="<?php echo $set['remark'];?>" name="remark" style="width:400px" />
+					&nbsp;不超过240个字母，相当于80个汉字。
+				</td>
+			</tr>
+			<tr>    
+				<th valign="top"></th>     
+				<td colspan="2">
+					<button type="submit" name="button" class="btnGreen">保存</button>
+					&nbsp;&nbsp;&nbsp; 
+					<a href="{vifnn::U('User/Member_card/jfdhhb',array('token'=>$token,'id'=>$_GET['cardid']))}" class="btnGray vm">取消</a>
+				</td> 
+			</tr>
+		</table>
+	</div>
+</div>
+</form>
+<script>
+$(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+	
+	$("form").submit(function(){
+		var is_error = true;
+		var is_error_msg = "";
+		var error_id = new Array();
+		var error_i = 0;
+		
+		var send_name = $('#send_name').val();
+		if(send_name == ''){
+			is_error_msg += "请填写兑换红包商户名称！<br>";
+			buterror("#send_name");
+			error_id[error_i] = "#send_name";
+			error_i++;
+			is_error = false;
+		}
+		var act_name = $('#act_name').val();
+		if(act_name == ''){
+			is_error_msg += "请填写兑换红包活动名称！<br>";
+			buterror("#act_name");
+			error_id[error_i] = "#act_name";
+			error_i++;
+			is_error = false;
+		}
+		var wishing = $('#wishing').val();
+		if(wishing == ''){
+			is_error_msg += "请填写兑换红包祝福语！<br>";
+			buterror("#wishing");
+			error_id[error_i] = "#wishing";
+			error_i++;
+			is_error = false;
+		}
+		var remark = $('#remark').val();
+		if(remark == ''){
+			is_error_msg += "请填写兑换红包备注！<br>";
+			buterror("#remark");
+			error_id[error_i] = "#remark";
+			error_i++;
+			is_error = false;
+		}
+		var hongbao = $('#hongbao').val();
+		hongbao = hongbao*1;
+		if(hongbao < 1 || hongbao > 200){
+			is_error_msg += "红包金额介于[1.00元，200.00元]之间！<br>";
+			buterror("#hongbao");
+			error_id[error_i] = "#hongbao";
+			error_i++;
+			is_error = false;
+		}
+		var integral = $('#integral').val();
+		integral = integral*1;
+		if(integral < 1){
+			is_error_msg += "请填写兑换红包积分！<br>";
+			buterror("#integral");
+			error_id[error_i] = "#integral";
+			error_i++;
+			is_error = false;
+		}
+		var count = $('#count').val();
+		count = count*1;
+		if(count < 1){
+			is_error_msg += "请填写每人最多可兑换次数！<br>";
+			buterror("#count");
+			error_id[error_i] = "#count";
+			error_i++;
+			is_error = false;
+		}
+		var starttime = $('#starttime').val();
+		var starttime_unix = datetime_to_unix(starttime+" 00:00:00");
+		var endtime = $('#endtime').val();
+		var endtime_unix = datetime_to_unix(endtime+" 00:00:00");
+		if(starttime == ''){
+			is_error_msg += "请填写有效期开始时间！<br>";
+			buterror("#starttime");
+			error_id[error_i] = "#starttime";
+			error_i++;
+			is_error = false;
+		}
+		if(endtime == ''){
+			is_error_msg += "请填写有效期结束时间！<br>";
+			buterror("#endtime");
+			error_id[error_i] = "#endtime";
+			error_i++;
+			is_error = false;
+		}
+		if(starttime_unix > endtime_unix){
+			is_error_msg += "有效期开始时间不能大于结束时间！<br>";
+			buterror("#starttime");
+			buterror("#endtime");
+			error_id[error_i] = "#starttime";
+			error_i++;
+			is_error = false;
+		}
+		if(is_error == false){
+			_alert(is_error_msg);
+			//$("html,body").animate({scrollTop: $(error_id[0]).offset().top}, 500);
+			return false;
+		}else{
+			return true;
+		}
+	});
+});
+function _alert(content){
+	layer.alert(content,{icon:5});
+}
+function buterror(id){
+	$(id).css("border","2px solid red");
+	$(id).css("background-color","rgb(255, 223, 221)");
+	$(id).focus(function(){
+		$(id).css("background-color","#fff");
+		$(id).css("border","1px solid");
+		$(id).css("border-color","#848484 #E0E0E0 #E0E0E0 #848484");
+	});
+}
+//转为时间戳
+function datetime_to_unix(datetime){
+	var tmp_datetime = datetime.replace(/:/g,'-');
+	tmp_datetime = tmp_datetime.replace(/ /g,'-');
+	var arr = tmp_datetime.split("-");
+	var now = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3]-8,arr[4],arr[5]));
+	return parseInt(now.getTime()/1000);
+}
+//转为时间格式
+function unix_to_datetime(unix) {
+	var now = new Date(parseInt(unix) * 1000);
+	return now.toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+}
+</script>
+<include file="Public:footer" />

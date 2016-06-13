@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <title>我的佣金</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v4.0.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/dis-v4.0.css" />
+
+    <script src="{vifnn:$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.tab.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.accordion.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/Common.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/func2.js"></script>
+</head>
+<body>
+    <div class="mask"></div>
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="{vifnn::U('DrpUcenter/drp_index')}"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">我的佣金</h1>
+            </section>
+            <section class="right-small right-btn-brokerage">
+                <a class="a-borkerage-detail" href="{vifnn::U('DrpUcenter/commission_log')}">明细</a>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--amount begin-->
+    <div class="bro-spare">
+        <p class="tip-txt"><i class="icon-money"></i>可提现佣金余额</p>
+        <span class="number-big">￥{vifnn:$commission_balance}</span>
+        <p class="field-2">已提现佣金总额：<big>￥{vifnn:$commission_paid}</big></p>
+    </div>
+    <!--amount end-->
+    <!--list begin-->
+    <ul class="maneylist" style="display: ;">
+
+    </ul>
+    <!--list end-->
+
+    <div class="bro-extract-btn">
+        <a href="{vifnn::U('DrpUcenter/withdrawals')}" class="button [radius round] red">申请提现</a>
+    </div>
+
+    <!--help begin-->
+    <div class="bro-help">
+        <h3>没有收入，试试分享店铺</h3>
+        <ul class="bro-help-list">
+            <li class="bro-help-list-li"><a class="bro-help-list-a" href="javascript:void(0)" onclick="showShare()"><i class="icon-share-circle"></i><span>分享店铺很重要</span><i class="arrow"></i></a></li>
+        </ul>
+    </div>
+    <!--help end-->
+
+
+
+    <div class="h50"></div>
+
+    <div class="fixed bottom">
+        <div class="shareList">
+            <ul class="small-block-grid-4" id="sharelist">
+                <li shareid="tsina"><i class="icon-sina"></i><span class="name">新浪微博</span></li>
+                <li shareid="qzone"><i class="icon-qqzone"></i><span class="name">QQ空间</span></li>
+                <li shareid="tqq"><i class="icon-txwb"></i><span class="name">腾讯微博</span></li>
+                <li class="no-line" shareid="xiaoyou"><i class="icon-friend"></i><span class="name">朋友网</span></li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        $(document).foundation().foundation('joyride', 'start');
+
+        function showShare() {
+            $(".shareList").slideToggle("slow");
+            $(".mask").toggle();
+        }
+
+        $(document).ready(function () {
+            $(".mask").click(function () {
+                $(".shareList").slideToggle("slow");
+                $(".mask").toggle();
+            })
+        })
+    </script>
+    <!-- JiaThis Button BEGIN -->
+
+    <script type="text/javascript">
+        $("#sharelist li").click(function () {
+            var shareurl = "{vifnn:$site_url}{vifnn::U('DrpStore/index', array('id' => $store['id']))}";
+            var title = "我的微店:{vifnn:$store.name}";
+            var shareid = $(this).attr("shareid");
+            window.location.href = "http://www.jiathis.com/send/?webid=" + shareid + "&url=" + encodeURIComponent(shareurl) + "&title=" + encodeURIComponent(title) + "&shortUrl=false&hideMore=false";
+        })
+
+    </script>
+
+
+</body></html>

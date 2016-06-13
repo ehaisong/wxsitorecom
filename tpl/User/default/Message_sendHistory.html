@@ -1,0 +1,153 @@
+<include file="Public:head"/>
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<div class="content" >  
+<div class="cLineB">
+  <h4>消息群发<span class="FAQ"></span></h4>
+ </div>
+ <div class="cLine">
+    <div class="pageNavigator left">
+  		<a class="btnGrayS vm bigbtn" title="新增语音回复" href="?g=User&m=Message&a=index"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/text.png" class="vm" /></if> 新增群发消息</a>
+		<a class="btnGrayS vm bigbtn" title="设置审核人" href="?g=User&m=Message&a=setverifier&token={vifnn:$token}"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/text.png" class="vm" /></if> 设置审核人</a>
+    </div>
+          
+    <div class="clr"></div>
+</div>
+  <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;"></if>温馨提示：1.只有认证公众号才能使用（其他类型公众号请不要使用第三方群发，否则微信可能会封号）<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 2.由于群发任务彻底完成需要较长时间,送达成功人数和送达失败人数统计需要一段时间，群发状态的失败成功状态也需要时间<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 3.审核人未通过发送的群发消息或群发消息已经发送则不允许编辑图文<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 4.用户每月只能接收4条群发消息，多于4条的群发将对该用户发送失败
+ <br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 5.<span style="color:red">用户设置拒收或用户接收已超4条会被自动过滤掉不会被发送，所以发送成功人数+发送失败人数不一定和你选择的总人数一致</span>
+</div>
+<div class="msgWrap form">
+<div class="bdrcontent">
+<div id="div_ptype">
+<table class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+<thead>
+<tr>
+<th style=" width:80px;">群发标题</th>
+<th style=" width:80px;">指定粉丝</th>
+<th style=" width:80px;">送达成功人数</th>  
+<th style=" width:80px;">送达失败人数</th>  
+<th style=" width:115px;" class="norightborder">发布时间</th>
+<th style=" width:80px;" class="norightborder">发布方式</th>
+<th style=" width:80px;">群发状态</th>               
+<th style=" width:205px;">操作</th>    
+</tr>
+</thead>
+<volist name="info" id="actinfo">
+<tr><td>{vifnn:$actinfo.title}</td>
+<td><if condition="$actinfo.send_type eq 1">{vifnn:$actinfo.group_name}<elseif condition="$actinfo.send_type eq 2" />{vifnn:$actinfo.select_fans_count}人<else />全部粉丝</if></td>
+<td>{vifnn:$actinfo.reachcount}</td>
+<td>{vifnn:$actinfo.errorcount}</td>
+<td><if condition="$actinfo.schedule_time gt 0 && $actinfo.schedule_type eq 1"><if condition="$actinfo.status eq 0">{vifnn:$actinfo.schedule_time|date="Y-m-d H:i:s",###}<br />
+<input type="hidden" value="<?php echo date('m/d/Y H:i:s',$actinfo['schedule_time']);?>" class="endtime"/>
+<span></span>
+<span id="time_{vifnn:$actinfo.id}"></span><else />{vifnn:$actinfo.time|date="Y-m-d H:i:s",###}</if><else /><if condition="$actinfo.status eq 0">---<else />{vifnn:$actinfo.time|date="Y-m-d H:i:s",###}</if></if></td>
+<td><if condition="$actinfo.schedule_type eq 5">手动发送<else />审核通过后发送</if></td>
+<td>
+	<if condition="$actinfo.check_status eq 2">
+		<span class="red">审核未通过</span>
+	<elseif condition="$actinfo.check_status eq 4" />
+	<span class="red">待审核</span>
+	<elseif condition="$actinfo.check_status eq 3" />
+	<span class="red">审核中</span>
+    
+	<else />
+		<if condition="$actinfo.status eq 0">
+		<p style="color:#ff203c;">待发送</p>
+	<elseif condition="$actinfo.status eq 1"/>
+		<p style="color:#ff9b2d;">已发送</p>
+	<elseif condition="$actinfo.status eq 2"/>
+		<p style="color:#44b549;">发送成功</p>
+	<else/>
+		<p style="color:red;">发送失败</p>
+	</if>
+	</if>
+</td>
+<td class="norightborder">
+<if condition="$actinfo.status eq 0 && $actinfo.check_status neq 2">
+	<a charset="a_oper" href="{vifnn::U('Message/index',array('token'=>$token,'id'=>$actinfo['id']))}">编辑</a>
+</if>
+<if condition="$actinfo.status eq 0">
+	<a charset="a_oper" href="javascript:preview('{vifnn:$actinfo['id']}');">预览</a>
+</if>
+	<a charset="a_oper" href="{vifnn::U('Message/del',array('token'=>$token,'id'=>$actinfo['id']))}" onclick="javascript:return confirm('确定要删除吗');">删除</a>
+	<if condition="$actinfo.check_status eq 4">
+	<a charset="a_oper" href="javascript:drop_confirm('确定发送给审核人?', '{vifnn::U('Message/sendpreview',array('token'=>$token,'id'=>$actinfo['id']))}');">发给审核人</a></if>
+    <if condition="$actinfo.schedule_type eq 5">
+    <a charset="a_oper" href="{vifnn::U('Message/AutoSendMessage',array('token'=>$token,'id'=>$actinfo['id']))}">
+		<if condition="$actinfo.status neq 2">
+			立即发送
+		<else/>
+			重复发送
+		</if>
+	</a>
+    </if>
+	<a charset="a_oper" href="{vifnn::U('Message/checkmessage',array('token'=>$token,'id'=>$actinfo['id']))}">查看群发图文</a>
+</td>
+</tr>
+</volist>
+</table>
+</div>
+</div>
+<div class="footactions" style="padding-left:10px">
+  <div class="pages">{vifnn:$page}</div>
+</div>
+</div>
+</div>
+   <div class="clr"></div>
+      </div>
+    </div>
+  </div> 
+  <!--底部-->
+ </div>
+<script>
+$(function(){
+	timeShow();
+})
+function timeShow(){
+	$(".endtime").each(function(){
+	var stime = "<?php echo date('m/d/Y H:i:s');?>";
+	var etime = $(this).val();
+	starttime = new Date(stime);//开始时间
+	endtiem = new Date(etime);//结束时间
+	today = new Date();//当前时间
+	delta_T = endtiem.getTime() - today.getTime();//时间间隔
+	if(delta_T < 0){
+		$(this).next().html('<span style="color:red">发布时间已过</span>');
+	}else{
+		total_days = delta_T/(24*60*60*1000);//总天数
+		total_show = Math.floor(total_days);//实际显示的天数
+		total_hours = (total_days - total_show)*24;//剩余小时
+		hours_show = Math.floor(total_hours);//实际显示的小时数
+		total_minutes = (total_hours - hours_show)*60;//剩余的分钟数
+		minutes_show = Math.floor(total_minutes);//实际显示的分钟数
+		total_seconds = (total_minutes - minutes_show)*60;//剩余的分钟数
+		seconds_show = Math.floor(total_seconds);//实际显示的秒数
+		if(total_days<10){
+			total_days="0"+total_days;
+		}
+		if(hours_show<10){
+			hours_show="0"+hours_show;
+		}
+		if(minutes_show<10){
+			minutes_show="0"+minutes_show;
+		}
+		if(seconds_show<10){
+			seconds_show="0"+seconds_show;
+		}
+		$(this).next().html('剩余<span style="color:green">'+total_show+'</span>天<span style="color:green">'+hours_show+'</span>时<span style="color:green">'+minutes_show+'</span>分<span style="color:green">'+seconds_show+'</span>秒');
+		}
+	})
+}
+function preview(id){
+	art.dialog.open('?g=User&m=Message&a=preview&id='+id,{lock:true,title:'群发预览',width:600,height:400,yesText:'关闭',background: '#000',opacity: 0.45});
+}
+</script>
+<include file="Public:footer"/>

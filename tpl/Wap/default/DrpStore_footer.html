@@ -1,0 +1,91 @@
+<div class="content-sidebar"></div>
+<div class="js-navmenu shop-nav nav-menu nav-menu-1 has-menu-3">
+    <div class="nav-special-item nav-item">
+        <a href="{vifnn::U('DrpStore/index', array('id' => $_GET['id']))}" class="home">主页</a>
+    </div>
+    <div class="nav-item">
+        <a class="mainmenu js-mainmenu" href="{vifnn::U('DrpStore/latest', array('id' => $_GET['id']))}">
+            <span class="mainmenu-txt">最新商品</span>
+        </a>
+        <!-- 子菜单 -->
+    </div>
+    <div class="nav-item">
+        <a class="mainmenu js-mainmenu" href="{vifnn::U('DrpStore/hot', array('id' => $_GET['id']))}">
+            <span class="mainmenu-txt">热销商品</span>
+        </a>
+        <!-- 子菜单 -->
+    </div>
+    <if condition="$Think.session.distributor neq ''">
+        <div class="nav-item">
+            <a class="mainmenu js-mainmenu" href="{vifnn::U('DrpUcenter/drp_index')}">
+                <span class="mainmenu-txt">分销管理</span>
+            </a>
+            <!-- 子菜单 -->
+        </div>
+    </if>
+    <if condition="$level gt $level_max OR $storeSet['allow_distribution'] eq 0 OR $Think.session.uid neq ''">
+        <div class="nav-item">
+            <a class="mainmenu js-mainmenu" href="{vifnn:$ucenter}">
+                <span class="mainmenu-txt">会员中心</span>
+            </a>
+            <!-- 子菜单 -->
+        </div>
+        </if>
+    <if condition="$Think.session.distributor eq '' AND $level elt $level_max AND $storeSet['allow_distribution'] eq 1 AND $Think.session.uid eq ''">
+        <div class="nav-item">
+            <a class="mainmenu js-mainmenu" <if condition="$Think.session.uid neq ''">href="{vifnn::U('DrpStore/add', array('id' => $_GET['id']))}"<else />href="{vifnn::U('DrpStore/login', array('id' => $_GET['id']))}"</if>>
+                <span class="mainmenu-txt">我要分销</span>
+            </a>
+            <!-- 子菜单 -->
+        </div>
+    </if>
+</div>
+</div>
+</div>
+
+<!-- JS -->
+<script src="{vifnn:$staticFilePath}/js/jquery-2.0.3.min.js"></script>
+<script src="{vifnn:$staticFilePath}/js/style_2.js"></script>
+<div class="motify">
+    <div class="motify-inner"></div>
+</div>
+<script src="{vifnn:$staticFilePath}/js/style.js"></script>
+
+<script id="tmpl-sku" type="text/template">
+    <div class="layout-title sku-box-shadow name-card sku-name-card"></div>
+
+    <div class="adv-opts layout-content">
+        <div class="goods-models js-sku-views block block-list block-border-top-none"></div>
+        <div class="confirm-action content-foot"></div>
+    </div>
+</script>
+
+<script src="{vifnn:$staticFilePath}/js/other.js"></script>
+<script src="{vifnn:$staticFilePath}/js/sku.js"></script>
+<script src="{vifnn:$staticFilePath}/js/style_1.js"></script>
+<if condition="$Think.session.drp_cart eq ''">
+    <div id="right-icon" class="icon-hide  no-border hide">
+<else />
+    <div id="right-icon" class="icon-hide  no-border">
+</if>
+    <div class="right-icon-container clearfix" style="width: 50px">
+        <a id="global-cart" href="{vifnn::U('DrpCart/index', array('id' => $_GET['id']))}" class="no-text" style="background-image: url({vifnn:$staticFilePath}/images/cart.png);background-size: 50px 50px;background-position: center;">
+            <p class="right-icon-img"></p>
+            <p class="right-icon-txt">购物车</p>
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.shareData = {
+        "moduleName":"FenXiao",
+        "moduleID":"0",
+        "imgUrl": "{vifnn:$shareData.imgUrl|default=''}",
+        "sendFriendLink": "{vifnn:$shareData.sendFriendLink|default=''}",
+        "tTitle": "{vifnn:$shareData.tTitle|default=''}",
+        "tContent": "{vifnn:$shareData.tContent|default=''}"
+    };
+</script>
+{vifnn:$shareScript}
+</body>
+</html>

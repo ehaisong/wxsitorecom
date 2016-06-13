@@ -1,0 +1,149 @@
+<style>
+    .dComment{padding-bottom: 10px;}
+    .dComment .tit{text-align: center;position: relative;margin: 0 10px}
+    .dComment .tit{text-align: center}
+    .dComment .tit .line{position: absolute;height: 1px;border-bottom: 1px dotted #e1e1e1;width: 100%;top: 50%;z-index: 0}
+    .dComment .tit h2{display: inline-block;padding: 15px 10px;font-weight: normal;font-size: 15px;color: #666;position: relative;z-index: 9}
+    .conmmentBox{padding: 0 10px}
+    .conmmentBox>ul>li{margin-bottom: 15px}
+    .conmmentBox>ul>li .userHd{overflow: hidden}
+    .conmmentBox>ul>li .userHd a{float: right;background: url("{vifnn:$staticPath}/tpl/static/comment/images/good.png") no-repeat left center;height: 15px;background-size: 15px 15px;padding-left: 20px;font-size: 13px;color: #999;
+    }
+    .conmmentBox>ul>li .userHd a.goodOn{background-image: url("{vifnn:$staticPath}/tpl/static/comment/images/goodOn.png");color: #ed614e}
+    .conmmentBox .userInfo{overflow: hidden;}
+    .conmmentBox .userInfo .avatarBox{display: inline-block;width: 36px;height: 36px;vertical-align: middle;margin-right: 5px;}
+    .conmmentBox .userInfo .avatarBox img{width: 36px;height: 36px;}
+    .conmmentBox .userInfo  .name{display: inline-block;vertical-align: top;font-size: 15px;color: #999}
+
+    .conmmentBox .userPost{padding-left: 45px;margin-top: -15px;}
+    .conmmentBox .userPost .thisPost p{font-size: 15px;color: #333;margin-bottom: 5px}
+    .conmmentBox .userPost .thisPost .time{font-size: 10px;color: #999}
+    .conmmentBox .userPost .thisPost .delete{float: right;font-size: 12px;color: #678ec5}
+    .conmmentBox .otherPost{border-top: 1px dashed #e1e1e1;margin-top: 10px}
+    .conmmentBox .otherPost ol li{list-style: none;margin-top: 10px}
+    .conmmentBox .otherPost ol li h3{font-size: 15px;color: #5a87c2;font-weight: normal;padding-left: 10px;border-left: 5px solid #80a0cd;margin-bottom: 5px}
+    .conmmentBox .otherPost ol li .setPadding{padding-left: 15px}
+    .conmmentBox .otherPost ol li p{color: #333;font-size: 15px;margin-bottom: 5px}
+    .conmmentBox .otherPost ol li .time{color: #999;font-size: 10px}
+
+    .dComment .tipp{text-align: center;font-size: 15px;color: #999}
+    .dComment .commentBtn{position: fixed;right: 15px;bottom: 60px;z-index: 9999;}
+    .dComment .commentBtn a{float: right;height: 50px;width: 50px;line-height: 50px;color: #fff;font-size: 15px;border-radius: 100%;background: #678ec5;text-align: center}
+
+    .dComment .review h1{text-align: center;font-size: 15px;color: #333;padding: 20px 0;font-weight: normal}
+    .dComment .reviewInfo{border: 1px solid #e1e1e1}
+    .dComment .reviewInfo textarea{width: 100%;border: 0;height: 100px;padding: 0 15px}
+    .dComment .reviewBtn{text-align: center;margin-top: 15px}
+    .dComment .reviewBtn button{width: 90%;margin: 0 auto;background: #678ec5;border-radius: 5px;padding: 10px 0;text-align: center;border: 0;display: block;font-size: 13px;color: #fff}
+    .dComment .emojiBox{overflow: hidden;padding: 10px 20px}
+    .dComment .emojiBox a{display: inline-block;width:18px;height: 18px; }
+    .dComment .emojiBox a img{width:18px;height: 18px; }
+
+</style>
+<script src="{vifnn:$staticPath}/tpl/static/dashang/js/jquery-1.7.2.js" type="text/javascript" charset="utf-8"></script>
+<script src="./tpl/Wap/default/common/js/touch.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function(){
+        //window.location.reload();
+        $(".userHd a").click(function(){
+            var e = $(this);
+            var thisValue=parseFloat($(this).text());
+            var id = e.attr("data-id");
+            $.post("{vifnn::U('Index/content_comment_support')}",{id:id},function(msg){
+                if(msg.status == 1){
+                    if(msg.type == 1){
+                        e.addClass('goodOn');
+                        e.text(msg.count);
+                    }else{
+                        e.removeClass('goodOn');
+                        e.text(msg.count);
+                    }
+                }
+            },'json')
+        });
+    });
+</script>
+<style>
+</style>
+<section class="dComment">
+    <div class="tit">
+        <!-- <div class="line"></div> -->
+        <h2>精选评论</h2>
+    </div>
+    <div class="conmmentBox">
+        <ul>
+			<volist name="comment_list" id="cvo">
+            <li>
+                <div class="userHd">
+                    <if condition="!empty($wecha_id) && ($wecha_id neq '0')"><a  href="javascript:;" data-id="{vifnn:$cvo['id']}" <eq name="cvo[wstatus]" value='1'>data-status="1" class="goodOn"<else />data-status="0" class=""</eq>>{vifnn:$cvo.support}</a></if>
+                    <div class="userInfo">
+                        <div class="avatarBox">
+                            <img src="{vifnn:$cvo['wheaderimg']|default=$staticPath.'/tpl/static/comment/images/avatar.png'}"/>
+                        </div>
+                        <small class="name">{vifnn:$cvo['wname']|default='匿名'}</small>
+                    </div>
+                </div>
+                <div class="userPost">
+					<div class="thisPost">
+                        <p>{vifnn:$cvo['content']}</p>
+                        <time class="time" datetime="{vifnn::date('Y-m-d H:i:s',$cvo['ctime'])}"></time>
+                    </div>
+					<?php $rearr = json_decode($cvo['reply'],true);?>
+				<volist name="rearr" id="revo">				
+                    <div class="otherPost">
+                        <ol>
+                            <li>
+                                <h3>作者回复</h3>
+                                <div class="setPadding">
+                                    <p>{vifnn:$revo['reply']}</p>
+                                    <time datetime="{vifnn::date("Y-m-d H:i:s",$revo['ctime'])}" class="time"></time>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+				</volist>
+                </div>
+            </li>   
+            </volist>
+        </ul>
+    </div>
+	<if condition="!empty($comment_list)">
+    <div class="tit">
+        <!-- <div class="line"></div> -->
+        <h2>以上评论由作者筛选后显示</h2>
+    </div>
+	</if>
+	<if condition="!empty($wecha_id) && ($wecha_id neq '0')">
+    <div class="commentBtn">
+        <a href="{vifnn::U('Index/content_comment_add',array('imgid'=>$res['id']))}">评论</a>
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            touch.on('.commentBtn', 'touchstart', function(ev){
+                ev.preventDefault();
+            });
+            var dx, dy;
+            touch.on('.commentBtn', 'drag', function(ev){
+                dx = dx || 0;
+                dy = dy || 0;
+                var offx = dx + ev.x + "px";
+                var offy = dy + ev.y + "px";
+                this.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+            });
+            touch.on('.commentBtn', 'dragend', function(ev){
+                dx += ev.x;
+                dy += ev.y;
+            });
+
+            touch.on('.commentBtn', 'tap', function(ev){
+                location.href="{vifnn::U('Index/content_comment_add',array('imgid'=>$res['id']))}";
+            });
+        });
+    </script>
+	</if>
+</section>
+<script type="text/javascript">
+$(function() {
+    $(".time").timeago();
+});
+</script>

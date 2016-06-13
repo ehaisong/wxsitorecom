@@ -1,0 +1,91 @@
+<include file="Public:head" />
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">会员卡【{vifnn:$card.cardname}】的积分兑换红包</h4>
+		<a href="{vifnn::U('User/Member_card/index',array('token'=>$token))}"  class="right btnGreen" >返回</a>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<a href="{vifnn::U('User/Member_card/jfdhhb_set',array('token'=>$token,'cardid'=>$_GET['id']))}" title="添加积分兑换红包" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/product/add.png" width="16" class="vm">添加积分兑换红包</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="{vifnn::U('User/Member_card/jfdhhb_record',array('cardid'=>$_GET['id'],'token'=>$token))}" class="btnGrayS vm bigbtn">兑换总记录</a>
+		</div>
+		<div class="searchbar right">
+			<input type="text" id="msgSearchInput" class="txt left" placeholder="输入搜索内容" name="search" value="<?php echo $_GET['search'];?>" style="margin-top:13px;width:200">
+			<a value="搜索" id="msgSearchBtn" href="javascript:search();" class="btnGrayS" title="搜索" style="margin-top:10px">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="100px">兑换红包金额</th>
+					<th width="100px">兑换红包积分</th>
+					<th width="160px">有效期</th>
+					<th width="60px">状态</th>
+					<th width="80px">兑换次数</th>
+					<th width="120px">添加时间</th>
+					<th class="norightborder">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td><?php echo $lv['hongbao']/100;?>元</td>
+					<td>{vifnn:$lv.integral}</td>
+					<td>
+						{vifnn:$lv.starttime|date="Y-m-d",###}
+						至
+						{vifnn:$lv.endtime|date="Y-m-d",###}
+					</td>
+					<td><?php if($lv['display'] == 1){echo '不显示';}elseif($lv['display'] == 2){echo '显示';}?></td>
+					<td>{vifnn:$lv.dhcount}</td>
+					<td>{vifnn:$lv.addtime|date="Y-m-d H:i:s",###}</td>
+					<td class="norightborder">
+						<a href="{vifnn::U('User/Member_card/jfdhhb_record',array('id'=>$lv['id'],'cardid'=>$lv['cardid'],'token'=>$token))}">记录</a>
+						<a href="{vifnn::U('User/Member_card/jfdhhb_set',array('id'=>$lv['id'],'cardid'=>$lv['cardid'],'token'=>$token))}">修改</a>
+						<a href="javascript:fwy_confirm('您确定要删除吗?', '{vifnn::U('User/Member_card/jfdhhb_del',array('id'=>$lv['id'],'cardid'=>$lv['cardid'],'token'=>$token))}');">删除</a>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+});
+function search(){
+	var search = $("input[name='search']").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Member_card/jfdhhb',array('token'=>$token,'id'=>$_GET['id']))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Member_card/jfdhhb',array('token'=>$token,'id'=>$_GET['id']))}";
+	}
+}
+function fwy_confirm(msg,url){
+	layer.confirm(msg, {
+		btn: ['确定','取消'],
+		icon:0
+	}, function(){
+		location.href=url;
+	}, function(){
+	
+	});
+}
+</script>
+<include file="Public:footer" />

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>我的会员</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/foundation.css">
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/normalize.css">
+    <script src="./我的会员_files/jquery.js"></script>
+    <script src="./我的会员_files/foundation.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn:$staticFilePath}/js/foundation.tab.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/foundation.accordion.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/func.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn:$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/dis-v3.0.css">
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticFilePath}/css/common-v3.0.css">
+
+
+</head>
+<body class="body-gray my-memvers">
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" href="{vifnn::U('DrpUcenter/drp_index')}"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">我的会员</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--count-->
+    <section class="member-count">
+        <h2 class="member-count-title"><i class="icon-chunk-gray"><i class="icon-chunk-blue"></i></i><span>我的会员</span></h2>
+        <div class="row member-count-row">
+            <div class="small-4 columns member-count-column">
+                <span class="member-count-label">今日新增(人)</span><em class="member-count-number">{vifnn:$todayusertotal|default=0}</em>
+                <a class="member-count-more" href="{vifnn::U('DrpMember/index', array('type' => 'today'))}">查看详细</a>
+            </div>
+            <div class="small-4 columns member-count-column">
+                <span class="member-count-label">昨日新增(人)</span><em class="member-count-number">{vifnn:$yesterdayusertotal|default=0}</em>
+                <a class="member-count-more" href="{vifnn::U('DrpMember/index', array('type' => 'yesterday'))}">查看详细</a>
+            </div>
+            <div class="small-4 columns member-count-column">
+                <span class="member-count-label">会员总数(人)</span><em class="member-count-number">{vifnn:$usertotal|default=0}</em>
+                <a class="member-count-more" href="{vifnn::U('DrpMember/index', array('type' => 'all'))}">查看详细</a></div>
+        </div>
+    </section>
+    <!--count-->
+    <!--<section class="member-browse">
+        <h2 class="member-browse-title"><i class="icon-chunk-gray"><i class="icon-chunk-blue"></i></i><span>店铺一周内会员访客</span></h2>
+        <ul class="member-browse-ul">
+            
+        </ul>
+    </section>-->
+    <script>
+        $(document).foundation().foundation('joyride', 'start');
+    </script>
+
+
+</body></html>

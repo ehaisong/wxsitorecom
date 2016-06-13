@@ -1,0 +1,197 @@
+<include file="Public:head"/>
+<style>
+#Export_excel_pop li{ padding: 10px 0 10px 35px;color:#fff;padding-left: 80px;}
+</style>
+<link rel="stylesheet" type="text/css" href="./tpl/User/default/common/css/cymain.css" />
+<script src="/tpl/static/fushionCharts/JSClass/FusionCharts.js" type="text/javascript"></script>   
+<link rel="stylesheet" type="text/css" href="./tpl/User/default/common/css/cymain.css" />
+<div class="content">
+         
+          <div class="cLineB" style="border-bottom: 1px">
+                    <div class="msgWrap form">
+<ul id="tags" style="width:100%">
+  <if condition="$fuwu == ''">
+      <li <if condition="$_GET['tip'] == NULL">class="selectTag"</if>>
+        <a href="?g=User&m=Wechat_group&a=info">微信会员信息</a> 
+      </li>
+  <else />
+      <li <if condition="$_GET['tip'] == NULL">class="selectTag"</if>>
+        <a href="?g=User&m=Wechat_group&a=info">微信会员信息</a> 
+      </li>
+      <li <if condition="$_GET['tip'] == '2'">class="selectTag"</if>>
+        <a href="?g=User&m=Wechat_group&a=info&tip=2">服务窗会员信息</a> 
+      </li>
+  </if>
+            <div class="clr" style="height:1px;background:#eee;margin-bottom:20px;"></div>
+    </ul>
+</div> 
+
+</div>
+
+
+        <div>
+<form method="post" action="">
+                  <b class="kserico">搜索类型：</b>
+      <select name="type">
+        <option value="1" <if condition="$type eq 1">selected</if>>会员昵称</option>
+        <option value="2" <if condition="$type eq 2">selected</if>>手机号</option>
+      </select> 
+<input type="text" id="msgSearchInput" class="px" placeholder="输入搜索内容" name="keyword" value="{vifnn:$keyword}">
+<input type="text" id="tip" class="px" name="tip" value="{vifnn:$tip}" style="display:none;">
+<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+<a href="#" class="btnGrayS vm" onclick="Export_excel({vifnn:$tip})">导出会员信息</a>
+</form>   
+</div>
+
+
+  <vifnnif where="$showStatistics eq 1">
+<div id="chartdiv1" align="center"></div>
+          <script type="text/javascript">
+          var chart = new FusionCharts("/tpl/static/fushionCharts/Charts/Pie3D.swf", "ChartId", "600", "400", "0", "1");
+          //chart.setTransparent("false");
+          chart.setDataXML('{vifnn:$xml}');
+          //chart.setDataURL("data.html");
+          chart.render("chartdiv1");
+          </script>
+</vifnnif>         
+          
+          <div class="msgWrap" style="border-top:1px solid #ccc;padding-top:10px;margin-top:10px;">
+
+          <div style="margin:10px 0">
+<div style="clear:both"></div>
+</div>
+          
+            <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+              <thead>
+                <tr>
+          <th style="width:55px;text-align:center;">头像</th>        
+          <th style="width:130px;text-align:center;">会员昵称 </th>
+          <th style="width:100px;text-align:center;">联系电话</th>
+          <th style="width:120px;text-align:center;">分组</th>
+          <th style="width:150px;text-align:center;">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+        <vifnnlist array="list" foreach="list">
+                <tr>
+                  <td>
+				  	<div class="cateimg">
+						<a href="{vifnn:$list['portrait']}" target="_blank"><img src="{vifnn:$list['portrait']}" class="cateimg_small" style="margin-left:2px"/></a></div>
+					</td>
+				  </td>
+                  <td>{vifnn:$list.wechaname}</td>
+                  <td>{vifnn:$list.tel}</td>
+                  <td>{vifnn:$list.wechatname}</td>
+                  <td class="norightborder" style="text-align:center;">
+            <a href="{vifnn::U('Wechat_group/setinfo',array('id'=>$list['id'],'token'=>$token))}">修改</a>&nbsp;
+           </td>
+                </tr>
+            </vifnnlist>
+                 <tr>
+
+                </tr>
+              </tbody>
+            </table>
+            </form>
+          </div>
+          <div class="cLine">
+            <div class="pageNavigator right">
+                 <div class="pages">{vifnn:$page}</div>
+            </div>
+            <div class="clr"></div>
+          </div>
+        </div>  
+		<!------导出弹窗---------------->
+<div class="pop_pub" id="Export_excel_pop" style="background: #777 none repeat scroll 0 0;height: 160px; margin: 0 auto;position: absolute;width: 352px;display:none;z-index:99;left:30%;top:20%;">
+    <h2><a href="javascript:;" title="关闭" onclick="$('#Export_excel_pop').hide();">×</a></h2>
+    <ul class="pop_pub-main">
+      <li style="padding-top:20px;">正在导出您的数据，请稍等......</li>
+    </ul>
+   <div class="pop_pub-bot">
+    	<button class="btn" onclick="$('#Export_excel_pop').hide();" style="  font-size: 16px;height: 36px;margin: 25px 118px;width: 98px;">取 消</button>
+	</div>
+</div>
+<include file="Public:footer"/>
+<script type="text/javascript">
+  $(function(){
+    $('#check_box').click(function(){
+      if($(this).attr('checked')){
+        $(':checkbox').attr('checked','true');
+      }else{
+        $(':checkbox').removeAttr('checked');
+      }
+    });
+  });
+</script>
+<script type=" text/javascript">
+function beforeSubmit(form){
+	return confirm('确认删除所选粉丝信息？');
+}
+var tipshtm='';
+var excellock=false;
+function Export_excel(_cid){
+	if(excellock){
+		$('#Export_excel_pop').show();
+	    return false;
+	}
+	excellock=true;
+$('#Export_excel_pop ul').html('<li style="padding-top:20px;">正在导出您的数据，请稍等......</li>');
+   _cid=parseInt(_cid);
+   $('#Export_excel_pop').show(); 
+      $.get('/index.php?g=User&m=Wechat_group&a=exportmember&tip='+_cid, function(resp){
+			 if (resp.error_code){
+				 return false;
+			 } else {
+				if(resp.tt>0){
+				  tipshtm="<li>已经导出1到5000数据......."+
+				                 "<li id='extpage_1'>正在为您导出5001到10000条数据......</li>";
+								 $('#Export_excel_pop ul').html(tipshtm);
+				  Run_Export_excel(_cid,2);
+				}else{
+				  tipshtm="<li>数据导出完成&nbsp;&nbsp;&nbsp;<a href='"+resp.fileurl+"' style=\"color:#fff;font-size:16px;\">下 载<a></li>"
+				  $('#Export_excel_pop ul').html(tipshtm);
+				  excellock=false;
+				}
+			 }                                     	
+        }, 'json');
+   
+    return false;
+}
+
+function Run_Export_excel(_cid,page){
+      $.post('/index.php?g=User&m=Wechat_group&a=exportmember&tip='+_cid+'&page='+page, function(resp){
+			 if (resp.error_code){
+				 return false;
+			 } else {
+				var tmp= resp.p +1;
+				var idxs=(page-1);
+				if(!resp.flag && (tmp<=resp.tt)){
+				  var mc1=5000*idxs +1;
+				  var mc2=5000*page;
+				  var mc3=5000*tmp;
+				    $('#extpage_'+idxs).html('已经导出'+mc1+'到'+mc2+'数据.......');
+					mc2=mc2+1;
+				    tipshtm="<li id='extpage_"+page+"'>正在为您导出"+mc2+"到"+mc3+"条数据......</li>";
+					$('#Export_excel_pop ul').html(tipshtm);
+				    Run_Export_excel(_cid,tmp);
+				}else{
+				  tipshtm="<li id='extpage_end'>完成导出，正在为你打包导出的文件......</li>";
+				  $('#Export_excel_pop ul').html(tipshtm);
+				    if(true){
+					var token = '{vifnn:$token}';
+				    $.post('/index.php?g=User&m=Wechat_group&a=export_excel_zip', {cid:_cid,page:resp.p,token:token}, function(rest){
+				         if (rest.error_code){
+							return false;
+							} else {
+									 tipshtm="<li>打包完成&nbsp;&nbsp;&nbsp;<a href='"+rest.fileurl+"' style=\"color:#fff;font-size:16px;\">下 载<a></li>";
+								    $('#Export_excel_pop ul').html(tipshtm);
+									excellock=false;
+							}
+				    }, 'json');
+					}
+				}
+				 //window.location.reload();
+			 }                                     	
+        }, 'json');
+}
+</script>

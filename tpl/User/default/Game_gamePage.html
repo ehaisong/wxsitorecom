@@ -1,0 +1,1181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+	<meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+	<meta content="no-cache" http-equiv="pragma">
+	<meta content="0" http-equiv="expires">
+	<meta content="telephone=no, address=no" name="format-detection">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!-- apple devices fullscreen -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/User/default/common/css/style_2_common.css?BPm">
+	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/User/default/common/css/style-1.css?id=103">
+	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/jquery-ui-1.9.1.custom.min.css">
+	<link type="text/css" href="{vifnn:$staticPath}/tpl/static/game/css/phoneGame.css" rel="stylesheet"/>
+</head>
+<style>
+	.hidden {
+		display: none !important;
+	}
+</style>
+<body>
+<div class="panel">
+	<div class="pageRowBox">
+		<div class="row home absCenter" style="display: block;z-index: 1001">
+			<php>
+				foreach ($selfs as $self){
+					switch($self['property']){
+						case 'bgmusic':
+							$bgMusic = $self['defaultvalue'];
+							$bgMusicX = $self['x'];
+							$bgMusicY = $self['y'];
+							$bgMusicV = $self['visible'];
+
+							break;
+						case 'title':
+							$titleVal = $self['defaultvalue'];
+							$titleX = $self['x'];
+							$titleY = $self['y'];
+							$titleW = $self['width'];
+							$titleH = $self['height'];
+
+							break;
+						case 'logo':
+							$logoVal = $self['defaultvalue'];
+							$logoX = $self['x'];
+							$logoY = $self['y'];
+							$logoW = $self['width'];
+							$logoH = $self['height'];
+							$logoV = $self['visible'];
+
+							break;
+						case 'starbtn':
+							$startBtnVal = $self['defaultvalue'];
+							$startBtnX = $self['x'];
+							$startBtnY = $self['y'];
+
+							break;
+						case 'starbg':
+							$bgPic = $self['defaultvalue'];
+
+							break;
+						case 'gamebg':
+							$gameBgPic = $self['defaultvalue'];
+
+							break;
+						case 'timearea':
+							$timeX = $self['x'];
+							$timeY = $self['y'];
+
+							break;
+						case 'info':
+							$infoX = $self['x'];
+							$infoY = $self['y'];
+
+							break;
+						case 'join':
+							$joinX = $self['x'];
+							$joinY = $self['y'];
+
+							break;
+						case 'prize':
+							$prizePic = $self['defaultvalue'];
+
+							break;
+						case 'rank':
+							$rankPic = $self['defaultvalue'];
+
+							break;
+						default :
+							break;
+					}
+				}
+			</php>
+
+			<input type="hidden" id="titleImgX" name="title[x]" value="{vifnn:$titleX}">
+			<input type="hidden" id="titleImgY" name="title[y]" value="{vifnn:$titleY}">
+			<input type="hidden" id="titleImgW" name="title[w]" value="{vifnn:$titleW}">
+			<input type="hidden" id="titleImgH" name="title[h]" value="{vifnn:$titleH}">
+
+			<input type="hidden" id="logoImgX" name="logo[x]" value="{vifnn:$logoX}">
+			<input type="hidden" id="logoImgY" name="logo[y]" value="{vifnn:$logoY}">
+			<input type="hidden" id="logoImgW" name="logo[w]" value="{vifnn:$logoW}">
+			<input type="hidden" id="logoImgH" name="logo[h]" value="{vifnn:$logoH}">
+
+			<input type="hidden" id="startBtnImgX" name="startBtn[x]" value="{vifnn:$startBtnX}">
+			<input type="hidden" id="startBtnImgY" name="startBtn[y]" value="{vifnn:$startBtnY}">
+
+			<input type="hidden" id="joinX" name="join[x]" value="{vifnn:$joinX}">
+			<input type="hidden" id="joinY" name="join[y]" value="{vifnn:$joinY}">
+
+			<input type="hidden" id="tipX" name="tip[x]" value="{vifnn:$infoX}">
+			<input type="hidden" id="tipY" name="tip[y]" value="{vifnn:$infoY}">
+
+			<input type="hidden" id="bgMusicImgX" name="bgMusic[x]" value="{vifnn:$bgMusicX}">
+			<input type="hidden" id="bgMusicImgY" name="bgMusic[y]" value="{vifnn:$bgMusicY}">
+
+			<input type="hidden" id="timeX" name="time[x]" value="{vifnn:$timeX|default='170'}">
+			<input type="hidden" id="timeY" name="time[y]" value="{vifnn:$timeY|default='25'}">
+
+			<div id="audio_btn" class="play_yinfu" style="display: <if condition="$bgMusicV eq 1">block<else />none</if>; left: {vifnn:$bgMusicX}px; top: {vifnn:$bgMusicY}px; ">
+				<div id="yinfu" class="rotate"></div>
+				<audio loop src="{vifnn:$bgMusic}"
+				       id="gameMusic" <if condition="$bgMusicV eq 1">autoplay</if> preload="" name="'numsic"></audio>
+			</div>
+			<div class="homeBgBox">
+				<img id="homeBg" src="{vifnn:$bgPic}">
+			</div>
+			<!--<img class="soundIcon " src="phoneimage/musicOn.png" alt=""/>-->
+			<img class="titleImg slaveImg absImg" id="titleImg" style="width: {vifnn:$titleW}px; height: {vifnn:$titleH}px; left: {vifnn:$titleX}px; top: {vifnn:$titleY}px; "
+			     src="{vifnn:$titleVal}" alt=""/>
+			<img class="coLogo absImg" id="coLogo" style="width: {vifnn:$logoW}px; height: {vifnn:$logoH}px; left: {vifnn:$logoX}px; top: {vifnn:$logoY}px; "
+			     src="{vifnn:$logoVal}"
+			     alt=""/>
+			<img class="startBtnImg  absImg" id="startBtnImg" style="width: 150px;height: 45px; left: {vifnn:$startBtnX}px; top: {vifnn:$startBtnY}px;"
+			     src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_{vifnn:$startBtnVal|default=1}.png" alt=""/>
+
+			<div class="joinNumLine absText" id="joinNumLine" style="left: {vifnn:$joinX}px; top: {vifnn:$joinY}px;">
+				<php>
+					$textFontSize = $info['join_set']['text']['style'] == 0 ? '12px;' : $info['join_set']['text']['content']['font_size'];
+					$textFontColor = $info['join_set']['text']['style'] == 0 || $info['join_set']['text']['content']['font_color']['style'] == 0 ? $info['join_set']['text']['content']['font_color']['default_color'] : $info['join_set']['text']['content']['font_color']['self_color'];
+					$textBorderColor = $info['join_set']['text']['style'] == 0 || $info['join_set']['text']['content']['border_color']['style'] == 0 ? $info['join_set']['text']['content']['border_color']['default_color'] : $info['join_set']['text']['content']['border_color']['self_color'];
+
+					$peopleFontSize = $info['join_set']['people']['style'] == 0 ? '16px' : $info['join_set']['people']['content']['font_size'];
+					$peopleFontColor = $info['join_set']['people']['style'] == 0 || $info['join_set']['people']['content']['font_color']['style'] == 0 ? $info['join_set']['people']['content']['font_color']['default_color'] : $info['join_set']['people']['content']['font_color']['self_color'];
+					$peopleBorderColor = $info['join_set']['people']['style'] == 0 || $info['join_set']['people']['content']['border_color']['style'] == 0 ? $info['join_set']['people']['content']['border_color']['default_color'] : $info['join_set']['people']['content']['border_color']['self_color'];
+				</php>
+
+				<if condition="$textBorderColor neq ''">
+					<p style="color: {vifnn:$textFontColor}; font-size: {vifnn:$textFontSize}; text-shadow: {vifnn:$textBorderColor} 1px 0px 1px;">
+				<else />
+					<p style="color: {vifnn:$textFontColor}; font-size: {vifnn:$textFontSize}; ">
+				</if>
+					已有
+				<if condition="$textBorderColor neq ''">
+					<span id="joinNum" class="specil" style="color: {vifnn:$peopleFontColor}; font-size: {vifnn:$peopleFontSize}; text-shadow: {vifnn:$peopleBorderColor} 1px 0px 1px;">
+				<else />
+					<span id="joinNum" class="specil" style="color: {vifnn:$peopleFontColor}; font-size: {vifnn:$peopleFontSize}; ">
+				</if>
+						100
+					</span>
+					人参加活动
+				</p>
+			</div>
+			<div class="slaveDiv someTip absText" id="someTip" style="left: {vifnn:$infoX}px; top: {vifnn:$infoY}px;">
+				<p class="hongbao"><span class="info_limit" <if condition="$info['limit_num'] eq '' || $info['limit_num'] eq 0">style="display: none; "</if>>您还剩<em class="info_limit_number"><if condition="$info['limit_num'] eq ''">5<elseif condition="$info['limit_num'] neq 0" />{vifnn:$info.limit_num}</if></em>次可玩机会，且</span>每成功邀请<em class="numbers">3</em>位好友参与，即可获得红包一份。数量有限，先到先得。</p>
+
+				<p class="kaquan"><span class="info_limit" <if condition="$info['limit_num'] eq '' || $info['limit_num'] eq 0">style="display: none; "</if>>您还剩<em class="info_limit_number"><if condition="$info['limit_num'] eq ''">5<elseif condition="$info['limit_num'] neq 0" />{vifnn:$info.limit_num}</if></em>次可玩机会，且</span>每成功邀请<em class="numbers">3</em>位好友参与，即可获得卡券一张。数量有限，先到先得。</p>
+
+				<p class="jifen"><span class="info_limit" <if condition="$info['limit_num'] eq '' || $info['limit_num'] eq 0">style="display: none; "</if>>您还剩<em class="info_limit_number"><if condition="$info['limit_num'] eq ''">5<elseif condition="$info['limit_num'] neq 0" />{vifnn:$info.limit_num}</if></em>次可玩机会，且</span>每成功邀请<em class="numbers">3</em>位好友来玩，即可获得<em class="reward">100</em>个积分。</p>
+
+				<p class="jihui"><span class="info_limit" <if condition="$info['limit_num'] eq '' || $info['limit_num'] eq 0">style="display: none; "</if>>您还剩<em class="info_limit_number"><if condition="$info['limit_num'] eq ''">5<elseif condition="$info['limit_num'] neq 0" />{vifnn:$info.limit_num}</if></em>次可玩机会，且</span>每成功邀请<em class="numbers">3</em>位好友参与，即可增加<em class="reward">1</em>次机会。</p>
+			</div>
+			<div class="homeBtnBox">
+				<div class="gamePageRankBtn" id="rankBtn">
+					<img id="rankBtnImg" src="{vifnn:$rankPic}" alt=""/>
+				</div>
+				<div class="gamePageAwardBtn" id="awardBtn">
+					<img id="awardBrnImg" src="{vifnn:$prizePic}" alt=""/>
+				</div>
+			</div>
+			<div class="rightTime slaveDiv" style="left: {vifnn:$timeX|default='170'}px; top: {vifnn:$timeY|default='25'}px">
+				<p><i>24</i>天<i>03</i>时<i>35</i>分<i>50</i>秒</p>
+			</div>
+		</div>
+		<div class="row playing">
+			<php>
+				$timeFontSize = $info['notice_set']['time_text']['style'] == 0 ? '17px' : $info['notice_set']['time_text']['content']['size'];
+				$timeFontColor = $info['notice_set']['time_text']['style'] == 0 || $info['notice_set']['time_text']['content']['color']['style'] == 0 ? $info['notice_set']['time_text']['content']['color']['default_color'] : $info['notice_set']['time_text']['content']['color']['self_color'];
+
+				$scoreFontSize = $info['notice_set']['score_text']['style'] == 0 ? '33px' : $info['notice_set']['score_text']['content']['size'];
+				$scoreFontColor = $info['notice_set']['score_text']['style'] == 0 || $info['notice_set']['score_text']['content']['color']['style'] == 0 ? $info['notice_set']['score_text']['content']['color']['default_color'] : $info['notice_set']['score_text']['content']['color']['self_color'];
+
+				$backOpacity = $info['notice_set']['back_color']['style'] == 0 ? 0 : $info['notice_set']['back_color']['content']['opacity'];
+				$backColor = $info['notice_set']['back_color']['style'] == 0 || $info['notice_set']['back_color']['content']['color']['style'] == 0 ? $info['notice_set']['back_color']['content']['color']['default_color'] : $info['notice_set']['back_color']['content']['color']['self_color'];
+			</php>
+			<div class="playTop">
+				<div class="playTopBg" style="background: {vifnn:$backColor}; opacity: {vifnn:$backOpacity}; "></div>
+				<div class="playTopText">
+					<span class="f-r grade" style="color: {vifnn:$scoreFontColor}; font-size: {vifnn:$scoreFontSize}; ">34</span>
+
+					<div class="time" style="color: {vifnn:$timeFontColor}; font-size: {vifnn:$timeFontSize}; ">倒计时：30</div>
+				</div>
+			</div>
+			<div class="actImgList">
+				<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/placeholder/w1.png"
+				     style="width: 100px;height: 100px;top: 20px;left: 15px"
+				     alt="immName"/>
+			</div>
+			<!--<img class="soundIcon" src="phoneimage/musicOn.png" alt=""/>-->
+			<div class="playingBgBox">
+				<img id="playingBg" src="{vifnn:$gameBgPic|default="$bgPic"}">
+			</div>
+		</div>
+		<div class="row actPrice windowDiv">
+			<div class="window">
+				<div class="hd">
+					<ul>
+						<li>活动规则</li>
+						<li class="on">活动奖品</li>
+						<li>邀请有礼</li>
+					</ul>
+				</div>
+				<div class="bd">
+					<div class="divCell priceCell">
+						<div class="listCell">
+							<div class="hdTit">
+								<span>活动规则</span>
+							</div>
+							<p class="editText" id="actRuleText" style="font-size: 14px;">
+								<em>{vifnn:$info.rule}</em></p>
+						</div>
+						<div class="listCell">
+							<div class="hdTit">
+								<span>主办单位</span>
+							</div>
+							<p style="font-size: 14px;">本次活动主办单位 <span class="editText" id="actCompanyText"><em>{vifnn:$info.office_value.name|default=$wecha['wxname']}</em></span>，并对本次活动享有最终解释权。
+							</p>
+						</div>
+					</div>
+					<div class="divCell priceCell" style="height: 360px;overflow: auto;overflow-x: hidden">
+						<div class="listCell">
+							<div class="hdTit">
+								<span>我的奖品</span>
+							</div>
+							<div class="myPrice">
+								<div class="f-r" style="display: none; ">
+									<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/qrcode.png" width="37" height="37"
+									     alt=""/>
+								</div>
+
+								<div class="myPriceInfo">
+									<p><tg class="awards_type">{vifnn:$awardsValues[0]['awards_type']}</tg>：<tg class="awards_name">{vifnn:$awardsValues[0]['awards_name']}</tg></p>
+
+									<p>兑奖码：1233 3333 3333 <em>未兑奖</em></p>
+								</div>
+							</div>
+						</div>
+						<div class="listCell">
+							<div class="hdTit">
+								<span>活动奖品</span>
+							</div>
+							<div class="priceList editText clearfix" id="priceList">
+								<div class="cellRow style1" <if condition="$info['awards_value']['show_pic'] eq 0">style="display: none; "</if>>
+									<ul>
+										<php>
+											$end = 0;
+										</php>
+										<volist name="awardsValues" id="awards">
+											<li>
+												<div class="priceImgBox">
+													<img src="{vifnn:$awards.awards_pic|default='/tpl/User/default/common/phoneimage/homebg.png'}" alt=""/>
+
+													<php>
+														$start = $end + 1;
+														$end = $end + $awards['awards_num'];
+
+														if ($start == $end) {
+															$awardsShow = "<tg>" . $end . "</tg>";
+														} else {
+															$awardsShow = "<tg>" . $start . "</tg>-<tg>" . $end . "</tg>";
+														}
+													</php>
+													<p class="awardNumber" data="{vifnn:$awards.awards_num}">TOP {vifnn:$awardsShow}</p>
+												</div>
+												<h3 class="awardType">{vifnn:$awards.awards_type}</h3>
+
+												<p class="awardName">{vifnn:$awards.awards_name}</p>
+											</li>
+										</volist>
+									</ul>
+								</div>
+								<div class="cellRow editText style2" <if condition="$info['awards_value']['show_pic'] eq 0">style="display: block; "</if>>
+									<ul>
+										<php>
+											$end = 0;
+										</php>
+										<volist name="awardsValues" id="awards">
+											<li>
+												<php>
+													$start = $end + 1;
+													$end = $end + $awards['awards_num'];
+
+													if ($start == $end) {
+														$awardsShow = $end;
+													} else {
+														$awardsShow = $start . "-" . $end;
+													}
+												</php>
+
+												<span class="awardType">{vifnn:$awards.awards_type}</span>：
+												<span class="awardName">{vifnn:$awards.awards_name}</span>
+												(<em class="awardNumber" data="{vifnn:$awards.awards_num}">TOP {vifnn:$awardsShow}</em>)
+											</li>
+										</volist>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div class="listCell">
+							<div class="hdTit">
+								<span>兑奖说明</span>
+							</div>
+							<div class="editText" id="exchange" style="font-size: 14px;">
+								<p class="exchangeTime">兑奖时间：<br><span><em class="start">{vifnn:$info.awards_value.awards_start_time|default=strtotime('+1 month')|date='Y-m-d H:i',###}</em>~<em class="end">{vifnn:$info.awards_value.awards_end_time|default=strtotime('+2 month')|date='Y-m-d H:i',###}</em></span>
+								</p>
+
+								<p class="exchangeText">{vifnn:$info.awards_value.awards_content}</p>
+
+							</div>
+						</div>
+					</div>
+					<div class="divCell priceCell">
+						<div class="listCell invitationRuleP">
+							<div class="hdTit">
+								<span>邀请规则</span>
+							</div>
+							<div class="ruleP editText" id="invitationText" style="font-size: 14px;">
+								<p class="hongbao">每成功邀请<em class="numbers">{vifnn:$info['share_value']['people']|default=3}</em>位好友参与，即可获得红包一份。数量有限，先到先得。</p>
+
+								<p class="kaquan">每成功邀请<em class="numbers">{vifnn:$info['share_value']['people']|default=3}</em>位好友参与，即可获得【{vifnn:$info['share_value']['coupon_title']|default='卡券名称'}】卡券一张。数量有限，先到先得。</p>
+
+								<p class="jifen">每成功邀请<em class="numbers">{vifnn:$info['share_value']['people']|default=3}</em>位好友来玩，即可获得<em class="reward">{vifnn:$info['share_value']['points']|default=100}</em>个积分。</p>
+
+								<p class="jihui">每成功邀请<em class="numbers">{vifnn:$info['share_value']['people']|default=3}</em>位好友参与，即可增加<em class="reward">{vifnn:$info['share_value']['chance']|default=1}</em>次机会。
+								</p>
+							</div>
+						</div>
+
+						<div class="listCell">
+							<div class="hdTit">
+								<span>获奖记录</span>
+							</div>
+							<div class="userOwn">
+								<div class="rowIncell">
+									<h3>恭喜您，您获得4次奖励，共收到20元红包！</h3>
+
+									<div class="myPriceList">
+										<ul>
+											<li>
+												<span class="f-r">2015-09-12 10:30</span>
+												3元
+											</li>
+											<li>
+												<span class="f-r">2015-09-11 18:24</span>
+												5元
+											</li>
+											<li>
+												<span class="f-r">2015-09-09 15:26</span>
+												7元
+											</li>
+											<li>
+												<span class="f-r">2015-09-05 18:30</span>
+												5元
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="rowIncell">
+									<h3>恭喜您，您共获得2张卡券！</h3>
+
+									<div class="myPriceList">
+										<ul>
+											<li>
+												<span class="f-r">2015-09-12 18:30</span>
+												{vifnn:$info['share_value']['coupon_title']|default='卡券名称'}
+											</li>
+											<li>
+												<span class="f-r">2015-09-10 14:30</span>
+												{vifnn:$info['share_value']['coupon_title']|default='卡券名称'}
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="rowIncell" style="display: none;">
+									<h3>恭喜您，您获得4次奖励，共奖励80个积分！</h3>
+
+									<div class="myPriceList">
+										<ul>
+											<li>
+												<span class="f-r">2015-09-12 18:30</span>
+												20积分
+											</li>
+											<li>
+												<span class="f-r">2015-09-10 11:30</span>
+												20积分
+											</li>
+											<li>
+												<span class="f-r">2015-09-08 14:25</span>
+												20积分
+											</li>
+											<li>
+												<span class="f-r">2015-09-05 10:45</span>
+												20积分
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="rowIncell" style="display: none;">
+									<h3>恭喜您，您获得4轮奖励，共增加12次机会！</h3>
+
+									<div class="myPriceList">
+										<ul>
+											<li>
+												<span class="f-r">2015-09-12 18:30</span>
+												3次
+											</li>
+											<li>
+												<span class="f-r">2015-09-10 14:30</span>
+												3次
+											</li>
+											<li>
+												<span class="f-r">2015-09-05 12:35</span>
+												3次
+											</li>
+											<li>
+												<span class="f-r">2015-09-01 08:28</span>
+												3次
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="windowClosed">
+					<a href="##">关闭</a>
+				</div>
+			</div>
+		</div>
+		<div class="row actRank  windowDiv">
+			<div class="window">
+				<div class="hd">
+					<ul class="clearfix">
+						<li class="on"><img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rankList.png" width="11"
+						                    height="14" alt=""/>排行榜
+						</li>
+						<li><img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rankPk.png" width="15" height="14" alt=""/>好友排行
+						</li>
+					</ul>
+				</div>
+				<div class="bd">
+					<div class="divCell rankCell">
+						<h2>您最高成绩200分，全国排名NO.5</h2>
+
+						<div class="listCell">
+							<ul>
+								<li>
+									<span class="f-l num rankThree p0"><i>1</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_1.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘01</h3>
+
+										<p>玩了<em>5</em>次，最高记录<em>200</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num rankThree p1"><i>2</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_2.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘02</h3>
+
+										<p>玩了<em>1</em>次，最高记录<em>160</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num rankThree p2"><i>3</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_3.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘03</h3>
+
+										<p>玩了<em>4</em>次，最高记录<em>152</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>4</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_4.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘04</h3>
+
+										<p>玩了<em>3</em>次，最高记录<em>150</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>5</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_5.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘05</h3>
+
+										<p>玩了<em>8</em>次，最高记录<em>130</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>6</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_6.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘06</h3>
+
+										<p>玩了<em>10</em>次，最高记录<em>120</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>7</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_7.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘07</h3>
+
+										<p>玩了<em>6</em>次，最高记录<em>100</em>分</p>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="divCell rankCell">
+						<h2>您最高成绩200分，好友圈排名NO.5</h2>
+
+						<div class="listCell">
+							<ul>
+								<li>
+									<span class="f-l num rankThree p0"><i>1</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_1.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘01</h3>
+
+										<p>玩了<em>5</em>次，最高记录<em>200</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num rankThree p1"><i>2</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_2.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘02</h3>
+
+										<p>玩了<em>1</em>次，最高记录<em>160</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num rankThree p2"><i>3</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_3.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘03</h3>
+
+										<p>玩了<em>4</em>次，最高记录<em>152</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>4</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_4.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘04</h3>
+
+										<p>玩了<em>3</em>次，最高记录<em>150</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>5</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_5.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘05</h3>
+
+										<p>玩了<em>8</em>次，最高记录<em>130</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>6</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_6.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘06</h3>
+
+										<p>玩了<em>10</em>次，最高记录<em>120</em>分</p>
+									</div>
+								</li>
+								<li>
+									<span class="f-l num"><i>7</i></span>
+
+									<div class="userAvatar f-l"><img
+											src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rank_7.png" alt=""/></div>
+									<div class="userInfo">
+										<h3>大眼睛的姑娘07</h3>
+
+										<p>玩了<em>6</em>次，最高记录<em>100</em>分</p>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="windowClosed">
+					<a href="##">关闭</a>
+				</div>
+			</div>
+		</div>
+		<div class="row failAndSucced  windowDiv">
+			<img class="fs3" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/suc3.png" width="320" alt=""/>
+
+			<div class="window succed">
+				<img class="fs0" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/suc0.png" width="265" alt=""/>
+				<img class="fs1" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/suc1.png" width="235" alt=""/>
+				<img class="fs2" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/suc2.png" width="147" alt=""/>
+
+				<div class="redBox">
+					<img class="fsText" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/failtext.png" height="28.5" alt=""/>
+
+					<div class="grade">
+						<ul>
+
+							<li>本次成绩：100分</li>
+							<li>击败30%的对手</li>
+							<li>最高成绩：200分</li>
+							<li>全国排名：第30名</li>
+						</ul>
+					</div>
+					<p class="tipText">（每成功邀请3位好友来玩，即可获得一份红包，送完为止。）</p>
+
+					<div class="fsBtn">
+						<div class="btn1"><a href="javascript:;">再玩一次（剩3次）</a></div>
+						<div class="btn2"><a href="javascript:;">排行榜</a><a href="javascript:;">找朋友比赛</a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row failAndSucced  windowDiv">
+			<div class="window fail">
+				<img class="fs0" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/fail0.png" width="265" alt=""/>
+				<img class="fs1" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/fail1.png" width="235" alt=""/>
+				<img class="fs2" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/fail2.png" width="143" alt=""/>
+
+				<div class="redBox">
+					<img class="fsText" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/failtext.png" height="28.5" alt=""/>
+
+					<div class="grade">
+						<ul>
+							<li>本次成绩：100分</li>
+							<li>击败30%的对手</li>
+							<li>最高成绩：200分</li>
+							<li>全国排名：第30名</li>
+						</ul>
+					</div>
+					<p class="tipText">（每成功邀请3位好友来玩，即可获得一份红包，送完为止。）</p>
+
+					<div class="fsBtn">
+						<div class="btn1"><a href="javascript:;">再玩一次（剩3次）</a></div>
+						<div class="btn2"><a href="javascript:;">排行榜</a><a href="javascript:;">找朋友比赛</a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row winPrice  windowDiv">
+			<div class="window succed">
+				<img class="winTit" width="208" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/wintit.png" alt=""/>
+				<img class="winPrice" width="147.5" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/winprice.png" alt=""/>
+				<img class="failsuccedclosed" width="25" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/failsuccedclosed.png"
+				     alt=""/>
+
+				<h3>二等奖：100元优惠券</h3>
+
+				<p>兑换码：<em>888888</em></p>
+
+				<p class="t4">获奖后凭兑换码联系活动主办单位即可获奖</p>
+			</div>
+		</div>
+		<div class="row friends windowDiv">
+			<div class="window ">
+				<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/friends.png" width="287" alt=""/>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script src="{vifnn:$staticPath}/tpl/static/newswelcome/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery-ui-1.9.1.custom.min.js"></script>
+
+<!-- 游戏过程list -->
+<script>
+	/**
+	 * Created by Administrator on 2016/1/21.
+	 */
+
+	var playingData = ([
+	<volist name="selfs" id="item">
+		<if condition="$item['property'] eq 'ordinary' && $item['element_attribute']['show'] eq 1">
+			{
+				"id":      "{vifnn:$item.id}",
+				"imgName": "{vifnn:$item.syname}",
+				"image":   "{vifnn:$item.defaultvalue}",
+				"style":   {
+					"width":  "{vifnn:$item.width}",
+					"height": "{vifnn:$item.height}",
+					"top":    "{vifnn:$item.y}",
+					"left":   "{vifnn:$item.x}",
+				},
+				resizable: <if condition="$item['element_attribute']['zoom'] eq 0">false<else />true</if>,
+				draggable: {
+					drag:      <if condition="$item['element_attribute']['move'] eq 0">false<else />true</if>,
+					direction: "<if condition="$item['element_attribute']['move'] eq 1">all<elseif condition="$item['element_attribute']['move'] eq 2" />y<elseif condition="$item['element_attribute']['move'] eq 3" />x</if>",
+				},
+			},
+		</if>
+	</volist>
+	]);
+
+	$(function () {
+		var temp = '';
+		var i = 0;
+		var directionv;
+		var draggablev;
+		var resizablev;
+
+		function directionValue () {
+			directionv = playingData[i].draggable.direction;
+			if (directionv == 'x') {
+				directionv = 'direction-x';
+			} else if (directionv == 'y') {
+				directionv = 'direction-y';
+			} else if (directionv == 'all') {
+				directionv = 'direction-all'
+			} else {
+				directionv = '';
+			}
+		}
+
+		function draggableValue () {
+			draggablev = playingData[i].draggable.drag;
+			if (draggablev == true) {
+				draggablev = 'draggableTrue';
+			} else {
+				draggablev = '';
+			}
+		}
+
+		function resizableValue () {
+			resizablev = playingData[i].resizable;
+			if (resizablev == true) {
+				resizablev = ' resizableTrue';
+			} else {
+				resizablev = '';
+			}
+		}
+
+		for (i = 0; i < playingData.length; i++) {
+			directionValue();
+			draggableValue();
+			resizableValue();
+			if (resizablev == '') {
+				temp += '<div class="ui-wrapper layerImg ' + directionv + ' ' + draggablev + '" style="width:' + playingData[i].style.width / 2 + 'px;height:' + playingData[i].style.height / 2 + 'px;top: ' + playingData[i].style.top + 'px;left:' + playingData[i].style.left + 'px"><img id="selfImgShow'+ playingData[i].id +'" src="' + playingData[i].image + '" style="width:' + playingData[i].style.width / 2 + 'px;height:' + playingData[i].style.height / 2 + 'px" alt="' + playingData[i].imgName + '"/></div>';
+			} else {
+				temp += '<img id="selfImgShow'+ playingData[i].id +'" class="layerImg ' + directionv + ' ' + draggablev + ' ' + resizablev + '" src="' + playingData[i].image + '" style="width:' + playingData[i].style.width / 2 + 'px;height:' + playingData[i].style.height / 2 + 'px;top: ' + playingData[i].style.top + 'px;left:' + playingData[i].style.left + 'px" alt="' + playingData[i].imgName + '"/>';
+			}
+		}
+
+		$(".actImgList").html(temp);
+	});
+</script>
+
+<!-- 游戏展示js -->
+<script>
+	/**
+	 * Created by tanytree on 2016/1/16.
+	 */
+
+	//设置cookie
+	function setCookie (cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		var expires = "expires=" + d.toUTCString();
+		var path = "path=/";
+		document.cookie = cname + "=" + cvalue + "; " + expires + "; " + path;
+	}
+
+	//获取cookie
+	function getCookie (cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ')
+				c = c.substring(1);
+			if (c.indexOf(name) != -1)
+				return c.substring(name.length, c.length);
+		}
+		return "";
+	}
+
+	//清除cookie
+	function clearCookie (name) {
+		setCookie(name, "", -1);
+	}
+
+	//检查cookie
+	function checkCookie () {
+		var user = getCookie("username");
+		if (user != "") {
+			alert("Welcome again " + user);
+		} else {
+			user = prompt("Please enter your name:", "");
+			if (user != "" && user != null) {
+				setCookie("username", user, 365);
+			}
+		}
+	}
+
+	//拖拽缩放设置
+	$(function () {
+		$("#titleImg").each(function () {
+			var w = $(this).css('width');
+			var h = $(this).css('height');
+			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
+			$(this).resizable({
+				stop: function () {
+					$(this).append(recover);
+
+					$("#titleImgW").val($(this).css('width').replace('px', ''));
+					$("#titleImgH").val($(this).css('height').replace('px', ''));
+				}
+			});
+			$(this).parent().on('click', '.recover', function () {
+				$(this).parent().css({'width': w, 'height': h});
+				$(this).parent().find('.ui-resizable').css({'width': w, 'height': h});
+				$(this).remove();
+			});
+
+		});
+
+		$("#coLogo").each(function () {
+			var w = $(this).css('width');
+			var h = $(this).css('height');
+			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
+			$(this).resizable({
+				create: function(event, ui) {
+					if ({vifnn:$logoV} != 1) {
+						$(this).hide();
+					}
+				},
+				stop: function () {
+					$(this).append(recover);
+
+					$("#logoImgW").val($(this).css('width').replace('px', ''));
+					$("#logoImgH").val($(this).css('height').replace('px', ''));
+				}
+			});
+			$(this).parent().on('click', '.recover', function () {
+				$(this).parent().css({'width': w, 'height': h});
+				$(this).parent().find('.ui-resizable').css({'width': w, 'height': h});
+				$(this).remove();
+			});
+		});
+		$("#startBtnImg").each(function () {
+			var w = $(this).css('width');
+			var h = $(this).css('height');
+			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
+			$(this).resizable({
+				stop: function () {
+					$(this).append(recover);
+				}
+			});
+			$(this).parent().on('click', '.recover', function () {
+				$(this).parent().css({'width': w, 'height': h});
+				$(this).parent().find('.ui-resizable').css({'width': w, 'height': h});
+				$(this).remove();
+			});
+
+		});
+
+		$("#titleImg").parent().draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#titleImgX").val($this.css('left').replace('px', ''));
+				$("#titleImgY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$("#coLogo").parent().draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#logoImgX").val($this.css('left').replace('px', ''));
+				$("#logoImgY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$("#startBtnImg").parent().draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#startBtnImgX").val($this.css('left').replace('px', ''));
+				$("#startBtnImgY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$("#joinNumLine").draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#joinX").val($this.css('left').replace('px', ''));
+				$("#joinY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$("#someTip").draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#tipX").val($this.css('left').replace('px', ''));
+				$("#tipY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$(".rightTime").draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#timeX").val($this.css('left').replace('px', ''));
+				$("#timeY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$("#audio_btn").draggable({
+			containment: ".pageRowBox",
+			scroll:      false,
+			stop:        function () {
+				var $this = $(this);
+
+				$("#bgMusicImgX").val($this.css('left').replace('px', ''));
+				$("#bgMusicImgY").val($this.css('top').replace('px', ''));
+			}
+		});
+
+		$(".resizableTrue").each(function () {
+			var w = $(this).css('width');
+			var h = $(this).css('height');
+			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
+			$(this).resizable({
+				stop: function () {
+					$(this).append(recover);
+				}
+			});
+			//开始按钮控制
+			$(this).parent().on('click', '.recover', function () {
+				$(this).parent().css({'width': w, 'height': h});
+				$(this).parent().find('.resizableTrue').css({'width': w, 'height': h});
+				$(this).remove();
+			});
+		});
+
+		$("img.direction-x").each(function(){
+			$(this).parent(".ui-wrapper").draggable({  containment: ".actImgList", scroll: false,axis: "x" });
+		});
+		$("img.direction-y").each(function(){
+			$(this).parent(".ui-wrapper").draggable({  containment: ".actImgList", scroll: false,axis: "y" });
+		});
+		$("img.direction-all").each(function(){
+			$(this).parent(".ui-wrapper").draggable({  containment: ".actImgList", scroll: false});
+		});
+		$("div.direction-x").each(function(){
+			$(this).draggable({  containment: ".actImgList", scroll: false,axis: "x"});
+		});
+		$("div.direction-y").each(function(){
+			$(this).draggable({   containment: ".actImgList", scroll: false,axis: "y"});
+		});
+		$("div.direction-all").each(function(){
+			$(this).draggable({  containment: ".actImgList", scroll: false});
+		});
+
+	});
+
+	//首屏图标位置居中设置
+	$(function () {
+//		function absCenter (target) {
+//			$(".absCenter").find(target).each(function () {
+//				var thisW = 320;
+//				var thisSlave = $(this);
+//				var slaveW = thisSlave.width();
+//				var left = (thisW - slaveW) / 2;
+//				if (target == '.absText') {
+//					thisSlave.css('left', left);
+//				} else {
+//					thisSlave.parent('.ui-wrapper').css('left', left);
+//				}
+//			});
+//		}
+//
+//		absCenter(".absImg");//图标元素居中
+//		absCenter(".absText");//文字说明div居中
+//		absCenter(".coLogo");//居中企业logo
+		$(".ui-wrapper").css('overflow', 'initial');//取消图标层的溢出隐藏
+	});
+
+	//添加编辑按钮
+	$(function () {
+		tabForPhone('.window .hd li', '.window .bd .divCell ', 'on');
+		$('.home,.playing').mouseover(function () {
+			$(window.parent.document).find("#moduleLayerBox").show();
+		});
+		var editBtn = $('<a href="javascript:;" class="doBtn imgUpLoadBtn">编辑</a>');//创建弹窗编辑按钮标签
+		var ctrlBtn = $('<a href="javascript:;" class="doBtn ctrlBtn">编辑</a>');//创建表单控制按钮标签
+		var coLogoctrlBtn = $('<a href="javascript:;" class="doBtn coLogoctrlBtn">编辑</a>');//企业logo控制按钮标签
+		var startBtn = $('<a href="javascript:;" class="doBtn startBtn">样式</a>');//开始控制按钮标签
+		var playTopBtn = $('<a href="javascript:;" class="doBtn playTopBtn">样式</a>');//样式控制按钮标签
+		var styleAndCrtl = $('<span class="styleAndCrtl"> <a class="ctrlFromBtn" href="javascript:;">编辑</a> <a  class="styleBtn" href="javascript:;">样式</a> </span>');
+
+		//通用按钮
+		$(".slaveDiv").hover(function () {
+			$(this).append(ctrlBtn);
+			$(this).css({'z-index': '1002', 'overflow': '/'});
+			$(this).find('.ctrlBtn').show();
+		}, function () {
+			$(this).find('.ctrlBtn').remove();
+		});
+
+		//参与人数文字
+		$(".home .joinNumLine").hover(function () {
+			$(this).append(styleAndCrtl);
+			$(this).css({'z-index': '1002', 'overflow': '/'});
+			$(this).find('.styleAndCrtl').show();
+		}, function () {
+			$(this).css({'z-index': '999'});
+			$(this).find('.styleAndCrtl').remove();
+		});
+
+		//底部提示
+		$(".home .someTip").hover(function () {
+			$(this).append(ctrlBtn);
+			$(this).css({'z-index': '1002', 'overflow': '/'});
+			$(this).find('.ctrlBtn').show();
+		}, function () {
+			$(this).css({'z-index': '999'});
+			$(this).find('.ctrlBtn').remove();
+		});
+
+		//开始大按钮
+		$(".home .startBtnImg").hover(function () {
+			$(this).parent().append(startBtn);
+			$(this).parent().css({'z-index': '1002', 'overflow': '/'});
+			$(this).parent().find('.startBtn').show();
+		});
+
+		//企业logo
+		$(".home .coLogo").hover(function () {
+			$(this).parent().append(coLogoctrlBtn);
+			$(this).parent().css({'z-index': '1002', 'overflow': '/'});
+			$(this).parent().find('.coLogoctrlBtn').show();
+		});
+
+		$(".slaveImg,.homeBtnBox img,.actImgList .ui-wrapper img").hover(function () {
+			$(this).parent().append(editBtn);
+			$(this).parent().css({'z-index': '1002', 'overflow': '/'});
+			$(this).parent().find('.imgUpLoadBtn').show();
+			//alert( $(this).parent().find('.imgUpLoadBtn').html());
+		});
+
+		$(".slaveImg,.homeBtnBox img,.ui-wrapper img").parent().mouseleave(function () {
+			$(this).parent().css({'z-index': '999', 'overflow': '/'});
+			$(this).find('.imgUpLoadBtn').remove();
+			$(this).find('.ctrlBtn').remove();
+			$(this).find('.coLogoctrlBtn').remove();
+			$(this).find('.startBtn').remove();
+			$(this).css('z-index', 'initial');
+		});
+
+		$(".editText").hover(function () {
+			$(this).append(ctrlBtn);
+			$(this).find('.ctrlBtn').show();
+		}, function () {
+			$(this).find('.ctrlBtn').remove();
+
+		});
+
+		//恢复原来大小
+		$(".ui-wrapper").hover(function () {
+			$(this).find(".recover").show();
+		}, function () {
+			$(this).find(".recover").hide();
+		});
+
+		//游戏进行顶部
+		$(".playTop").hover(function () {
+			$(this).append(playTopBtn);
+			$(this).find('.playTopBtn').show();
+
+		}, function () {
+			$(this).find('.playTopBtn').remove();
+		});
+	});
+
+	//音乐图标操作
+	$(function () {
+		$("#audio_btn").on('click', function () {
+
+			if ($(this).hasClass('off')) {
+				$(this).removeClass('off');
+				$("#yinfu").addClass("rotate");
+				document.getElementById('gameMusic').play();
+				return false;
+			} else {
+				$(this).addClass('off');
+				$("#yinfu").removeClass("rotate");
+				document.getElementById('gameMusic').pause();
+				return false;
+			}
+			//$("#gameMusic").pause();
+		});
+	});
+
+	//tab切换三个参数
+	function tabForPhone (a, b, c) {
+		var len = $(a);
+		len.bind("click", function () {
+			var index = 0;
+			$(this).addClass(c).siblings().removeClass(c);
+			index = len.index(this);
+			$(b).eq(index).addClass("animate").show().siblings().removeClass("animate").hide();
+			return false;
+		}).eq(1).trigger("click");
+	}
+</script>
+</body>
+</html>

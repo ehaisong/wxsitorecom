@@ -1,0 +1,55 @@
+<include file="Public:head"/>
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js?2013"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/copy/ZeroClipboard.js"></script>
+<div class="content">
+<div class="cLineB"><h4>生成原文链接</h4></div> 
+<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;"><p>温馨提示：只有认证服务号才能将原文链接生成短链接，短链接生成失败将返回格式化后的原文链接</p></div>
+    <div class="msgWrap bgfc">
+	  <form class="form" method="post" action="" target="_top" >	 
+	  	<h6 style="color:#44B549">生成系统所有功能应用的原文链接</h6>
+		<table class="userinfoArea" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<tbody>
+				<tr style="height:100px">
+					<th>要生成的原文链接：</th>
+					<td><input type="text" id="furl" name="furl" value="" class="px" style="width:300px;" readonly ><if condition="session('isQcloud') neq true"><a href="###" onclick="addLink('furl',0)" class="a_choose">功能库添加</a></if><a href="###" class="a_choose" title="将原文链接生成短链接" onclick="createshorturl();">生成短链接</a></td>
+				</tr>
+				<tr>
+				<th>生成后的链接：</th>
+				<td>
+				<input type="text" id="shorturl" name="shorturl" value="" class="px" style="width:300px;" readonly /><a href="###" class="a_choose" title="将生成的链接复制到剪贴板" id="clip_button" onclick="copylink();">复制</a>
+				</td></tr>
+			</tbody>
+		</table>
+	</form>
+  </div> 
+</div>
+<script>
+function createshorturl(){
+	if($("#furl").val() == ""){ alert('原文链接不能为空');return false;}
+	$.post("/index.php?g=User&m=Quick&a=cpshortlink",{"longurl":$("#furl").val(),'token':'{vifnn:$token}'},function(data){
+		var json = eval('('+data+')');
+		if(json.status == 'success'){
+			$("#shorturl").val(json.short_url);
+		}else{
+			$("#shorturl").val(json.longurl);
+		}
+	});
+}
+
+function copylink(){  
+  var clip = null;  
+  	clip = new ZeroClipboard.Client();
+  	clip.setHandCursor(true);  	
+  	clip.addEventListener('mouseOver', function (client){
+		clip.setText( $("#shorturl").val() );
+  	});
+  	clip.addEventListener('complete', function (client, text) { 
+    	alert('复制成功');
+  	});
+	clip.glue('clip_button');
+}
+$(function(){ copylink();})
+</script>	
+<include file="Public:footer"/>

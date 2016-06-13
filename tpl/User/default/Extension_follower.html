@@ -1,0 +1,86 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css"/>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+<style>
+    .avatar_box
+    {
+        width: 60px;
+        height: 60px;
+        padding: 2px;
+        border: solid 1px #dcdcdc;
+        background: #ffffff;
+        display: inline-block;
+    }
+
+    .avatar_box img
+    {
+        width: 60px;
+        height: 60px;
+        border: none;
+    }
+</style>
+
+<div class="content">
+    <div class="cLineB">
+        <h4>帮&nbsp;
+            <span style="color: orangered">
+                <volist name="_parents" id="parent">
+                    {vifnn:$parent['wechaname']}
+                    <if condition="$key lt count($_parents)-1">
+                        >&nbsp;
+                    </if>
+                </volist>
+            </span> 推广的人</h4>
+        <a href="javascript:history.back();" class="right btnGrayS vm" style="margin-top:-27px">返回</a>
+    </div>
+
+    <div class="msgWrap">
+        <form method="post" action="" id="info">
+            <input name="delall" type="hidden" value="">
+            <input name="wxid" type="hidden" value="">
+            <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <thead>
+                <tr>
+                    <th >头像</th>
+                    <th >推广人</th>
+                    <th class="norightborder">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <empty name="_list">
+                    <td colspan="3">
+                        <p style="line-height: 60px;text-align: center;">暂无推广人！</p>
+                    </td>
+                    <else/>
+                    <volist name="_list" id="vo">
+                        <tr>
+                            <td>
+                                <div class="avatar_box">
+                                    <img src="{vifnn::img_url($vo['user_info']['portrait'],'','/tpl/User/default/common/images/portrait.jpg')}" />
+                                </div>
+                            </td>
+                            <td >{vifnn:$vo.user_info.wechaname}</td>
+                            <td class="norightborder">
+                                <elt name="vo['follower1_num']" value="0">
+                                    <span style="color: #888;">暂未有人帮TA推广</span>
+                                    <else/>
+                                    <a href="{vifnn::U('follower',array('uid'=>$vo['user_info']['id'],'pid'=>$_GET['pid'],'aid'=>$vo['aid'],'token'=>$_GET['token']))}">查看帮TA推广的人({vifnn::$vo["follower1_num"]})</a>
+                                </elt>
+                            </td>
+                        </tr>
+                    </volist>
+                </empty>
+                </tbody>
+            </table>
+        </form>
+
+    </div>
+    <div class="cLine">
+        <div class="pageNavigator right">
+            <div class="pages">{vifnn:$page}</div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+<include file="Public:footer"/>

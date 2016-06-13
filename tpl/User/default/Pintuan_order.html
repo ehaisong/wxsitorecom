@@ -1,0 +1,90 @@
+<include file="Public:head" />
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/conditionalmenu/layer/layer.js"></script>
+<div class="content">
+	<include file="Pintuan:nav" />
+	<div class="cLineB">
+		<h4 class="left">团长“{vifnn:$head.user_name}”的【{vifnn:$pintuan.title}】拼团记录</h4>
+		<a href="javascript:history.go(-1)"  class="right btnGrayS" >返回</a>
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<input type="text" id="search" class="px search" placeholder="输入姓名、电话、地址进行搜索"  name="search" value="{vifnn:$_GET['search']}" style="margin-top:10px;width:185px;">
+			<a href="javascript:search()" class="btnGrayS" title="搜索">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="">职位</th>
+					<th width="">姓名</th>
+					<th width="">电话</th>
+					<th width="200px">地址</th>
+					<th width="">数量</th>
+					<th width="">实付</th>
+					<th width="">状态</th>
+					<th width="">下单时间</th>
+					<th class="norightborder">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td><?php echo $lv['ishead']?'团长':'团员';?></td>
+					<td>{vifnn:$lv.user_name}</td>
+					<td>{vifnn:$lv.user_tel}</td>
+					<td>{vifnn:$lv.user_address}</td>
+					<td>{vifnn:$lv.num}</td>
+					<td>￥{vifnn:$lv.price}</td>
+					<td>{vifnn:$lv.state_text}</td>
+					<td>{vifnn:$lv.addtime|date="Y-m-d H:i:s",###}</td>
+					<td class="norightborder">
+						<a href="javascript:showIntroDetail({vifnn:$lv.id});">详细</a>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator" style="float: right;">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	layer.config({
+		extend:'extend/layer.ext.js'
+	});
+	layer.ready(function(){});
+});
+function search(){
+	var search = $("#search").val();
+	if(search != ""){
+		window.location.href="{vifnn::U('User/Pintuan/order',array('token'=>$token,'team_id'=>$_GET['team_id']))}&search="+search;
+	}else{
+		window.location.href="{vifnn::U('User/Pintuan/order',array('token'=>$token,'team_id'=>$_GET['team_id']))}";
+	}
+}
+function fwy_confirm(msg,url){
+	layer.confirm(msg, {
+		btn: ['确定','取消']
+	}, function(){
+		location.href=url;
+	}, function(){
+	
+	});
+}
+function showIntroDetail(id){
+	art.dialog.open('{vifnn::U('Pintuan/orderinfo',array('token'=>$token))}&id='+id,{lock:false,title:'订单详情',width:1000,height:620,yesText:'关闭',background: '#000',opacity: 0.87, close: function(){location.reload();}});
+}
+</script>
+<include file="Public:footer"/>

@@ -1,0 +1,3373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> {vifnn:$f_siteTitle} {vifnn:$f_siteName}</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="keywords" content="{vifnn:$f_metaKeyword}" />
+<meta name="description" content="{vifnn:$f_metaDes}" />
+<meta http-equiv="MSThemeCompatible" content="Yes" />
+<script>var SITEURL='';</script>
+<script src="{vifnn::RES}/js/common.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/newswelcome/js/jquery-1.10.2.min.js"  type="text/javascript"></script>
+<!--<script src="{vifnn::STATICS}/jquery-1.4.2.min.js" type="text/javascript"></script> @xulinyang-->
+<php>if($usertplid == 0){</php>
+    <link href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style.css?id=103" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style_2_common.css?BPm" />
+<php>}elseif($usertplid == 1){</php>
+    <link href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style-{vifnn:$usertplid}.css?id=103" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style_2_common.css?BPm" />
+<php>}else{</php>
+    <script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
+    <link href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style-{vifnn:$usertplid}.css?id=103" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}{vifnn::ltrim(RES,'.')}/css/style_2_common_2.css?BPm" />
+    <link href="{vifnn:$staticPath}/tpl/static/new/css/bootstrap.css" rel="stylesheet">
+    <link href="{vifnn:$staticPath}/tpl/static/new/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{vifnn:$staticPath}/tpl/static/new/css/style.css" rel="stylesheet">
+    <script>
+      $(function(){
+        var width = $('.func').width();
+        $('.func').css('width',(width-11)+"px");
+        
+        var fwidth = $('.welcome1').width();
+        var a = fwidth%120;
+        var b = parseInt(fwidth/120);
+        var c = a + 360;
+        var d = b - 3;
+        var e = parseInt(c/d);
+        $('.img1').css('margin-left',(e/2)+'px');
+        $('.img1').css('margin-right',(e/2)+'px');
+      });
+    </script>
+    <style>
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        margin-left: 13px;
+        margin-right: 5px;
+    }
+    @-webkit-keyframes fadeInRight {
+        0% {
+            opacity: 0;
+            -webkit-transform: translateX(200px);
+            transform: translateX(200px);
+        }
+
+        100% {
+            opacity: 1;
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+    }
+    .fadeInRight {
+        -webkit-animation-name: fadeInRight;
+    }
+
+    .alink a:link {color: #fff}
+    .alink a:hover {color: #000}
+    .pace-done{min-width:1345px;overflow-x:auto;}
+    .alert h4 {color: #000;}
+    </style>
+<php>}</php>
+<style type="text/css">
+  .content1{
+    margin:80px auto;
+    top:80px;
+  }
+  .img1{
+    margin-top:60px;
+    width:120px;
+    height:150px;
+    float: left;
+    text-align: center;
+  }
+  .img1 a {
+    line-height: 50px;
+  }
+  .img1 a:hover{
+    text-decoration:none;  
+  } 
+   .content ul li.guanzhu {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 25.23%;
+    background:#7cbae5;
+  }
+
+ .content ul li.huiyuanka {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 24.8%;
+    background:#cec0f4;
+  }
+ .content ul li.liulan {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 24.8%;
+    background:#81d2cf;
+  }
+ .content ul li.fangke {
+  color: #fff;
+    float: left;
+    height: 96px;
+    margin-right: 1px;
+    overflow: hidden;
+    width: 24.8%;
+    background:#92bf77;
+  }
+ .content ol li{
+  float: left;
+    height:120px;
+    overflow: hidden;
+    width:120px;
+  padding:0px 15px;
+  }
+ .content ul li.guanzhu a,
+ .content ul li.huiyuanka a,
+ .content ul li.liulan a,
+ .content ul li.fangke a
+ {
+    color: #fff;
+    display: block;
+    font-size:22px;
+    height: 96px;
+    overflow: hidden;
+    /*width: 224px;*/
+    padding-top:10px;
+  text-align:center;
+}
+ .content ul li a:hover {
+  text-decoration:none;
+}
+</style>
+<style>
+.topbg{background:url({vifnn:$staticPath}/tpl/static/newskin/images/top.gif) repeat-x; height:101px; /*box-shadow:0 0 10px #000;-moz-box-shadow:0 0 10px #000;-webkit-box-shadow:0 0 10px #000;*/}
+.top {
+    margin: 0px auto; width: 988px; height: 101px;
+}
+.toplink{ height:30px; line-height:27px; color:#999; font-size:12px;}
+.toplink .welcome{ float:left;}
+.toplink .memberinfo{ float:right;}
+.toplink .memberinfo a{ color:#999;}
+.toplink .memberinfo a:hover{ color:#F90}
+.toplink .memberinfo a.green{ background:none; color:#0C0}
+.logo { color: #333; height:70px; font-size:16px;}
+h1{ font-size:25px;float:left; width:230px; margin:0; padding:0; margin-top:6px; }
+.navr {width:auto;overflow:hidden;}
+.navr li {text-align:center; float: left; height:25px; font-size:1em; width:12%; margin-right:5px;}
+.navr li a {width:100%; line-height:25px; float: left;height:100%; color: #333; font-size: 1em; text-decoration:none;}
+.navr li a:hover { background:#44b549;}
+.navr li.menuon {background:#44b549; display:block; width:12%;}
+.navr li.menuon a{color:#333;}
+.navr li.menuon a:hover{color:#333;}
+.banner{height:200px; text-align:center; border-bottom:2px solid #ddd;}
+.hbanner{ background: url(img/h2003070126.jpg) center no-repeat #B4B4B4;}
+.gbanner{ background: url(img/h2003070127.jpg) center no-repeat #264C79;}
+.jbanner{ background: url(img/h2003070128.jpg) center no-repeat #E2EAD5;}
+.dbanner{ background: url(img/h2003070129.jpg) center no-repeat #009ADA;}
+.nbanner{ background: url(img/h2003070130.jpg) center no-repeat #ffca22;}
+</style>
+</head>
+<!--<link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />-->
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/jquery-ui-1.9.1.custom.min.css">
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/jquery-ui-timepicker-addon.css">
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/game/css/jquery.bigcolorpicker.css"/>
+
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/gameconfig.css">
+<style>
+	.errorMsg {
+		color: red !important;
+		padding: 10px;
+		display: none;
+	}
+	.read_only {
+		background: #CCCCCC !important;
+	}
+</style>
+<div class="tableContent clearfix">
+	<div class="content newSetPage" style="float:left;border-left:0">
+		<div class="cLineB">
+			<h4>{vifnn:$thisGame.title}游戏设置</h4>
+			<a href="javascript:history.go(-1)" class="right btnGrayS vm" style="margin-top:-27px">返回</a>
+		</div>
+
+		<!--游戏设置模块-->
+		<div class="gameConfig">
+			<!--顶部导航-->
+			<div class="gHd clearfix">
+				<h3 class="f-l">活动页面</h3>
+				<ul class="f-l">
+					<li class="on"><a href="javascript:;">首页</a></li>
+					<li><a href="javascript:;">游戏过程</a></li>
+					<li><a href="javascript:;">活动奖品</a></li>
+					<li><a href="javascript:;">排行榜</a></li>
+					<li><a href="javascript:;">挑战成功</a></li>
+					<li><a href="javascript:;">挑战失败</a></li>
+					<!--<li><a href="javascript:;">邀请奖励</a></li>-->
+					<li><a href="javascript:;">获奖页面</a></li>
+					<li><a href="javascript:;">找朋友比赛</a></li>
+				</ul>
+			</div>
+			<!--顶部导航-->
+			<!--游戏设置主体-->
+			<form method="post" enctype="multipart/form-data" id="setForm">
+				<volist name="selfs" id="item">
+					<if condition="$item['property'] eq 'title'">
+
+						<?php $titleWidth = $item['width']; $titleHeight = $item['height']; ?>
+
+						<input type="hidden" id="titleImgX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="titleImgY" name="self_{vifnn:$item.id}[y]" value="">
+						<input type="hidden" id="titleImgW" name="self_{vifnn:$item.id}[width]" value="">
+						<input type="hidden" id="titleImgH" name="self_{vifnn:$item.id}[height]" value="">
+						<input type="hidden" id="titleImgSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+
+					<if condition="$item['property'] eq 'logo'">
+						<input type="hidden" id="logoImgX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="logoImgY" name="self_{vifnn:$item.id}[y]" value="">
+						<input type="hidden" id="logoImgW" name="self_{vifnn:$item.id}[width]" value="">
+						<input type="hidden" id="logoImgH" name="self_{vifnn:$item.id}[height]" value="">
+						<input type="hidden" id="logoImgSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+
+					<if condition="$item['property'] eq 'info'">
+						<input type="hidden" id="tipX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="tipY" name="self_{vifnn:$item.id}[y]" value="">
+					</if>
+
+					<if condition="$item['property'] eq 'join'">
+						<input type="hidden" id="joinSelfX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="joinSelfY" name="self_{vifnn:$item.id}[y]" value="">
+					</if>
+
+					<if condition="$item['property'] eq 'timearea'">
+						<input type="hidden" id="timeX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="timeY" name="self_{vifnn:$item.id}[y]" value="">
+					</if>
+
+					<if condition="$item['property'] eq 'starbtn'">
+						<input type="hidden" id="startBtnImgX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="startBtnImgY" name="self_{vifnn:$item.id}[y]" value="">
+						<input type="hidden" id="startBtnImgType" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue|default=1}">
+					</if>
+
+					<if condition="$item['property'] eq 'rank'">
+						<input type="hidden" id="rankImgSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+
+					<if condition="$item['property'] eq 'prize'">
+						<input type="hidden" id="prizeImgSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+
+					<if condition="$item['property'] eq 'starbg'">
+						<input type="hidden" id="startBgImgSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+
+					<if condition="$item['property'] eq 'gamebg'">
+						<input type="hidden" id="playBgImgSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+
+					<if condition="$item['property'] eq 'bgmusic'">
+						<input type="hidden" id="bgMusicX" name="self_{vifnn:$item.id}[x]" value="">
+						<input type="hidden" id="bgMusicY" name="self_{vifnn:$item.id}[y]" value="">
+						<input type="hidden" id="bgMusicSrc" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+						<input type="hidden" id="bgMusicVisible" name="self_{vifnn:$item.id}[visible]" value="{vifnn:$item.visible}">
+					</if>
+
+					<if condition="$item['property'] eq 'ordinary'">
+						<input type="hidden" id="selfImgValue{vifnn:$item.id}" name="self_{vifnn:$item.id}[value]" value="{vifnn:$item.defaultvalue}">
+					</if>
+				</volist>
+
+				<input type="hidden" id="startBtnType" name="star_btn" value="{vifnn:$info.star_btn|default=1}">
+				<input type="hidden" id="startBtnX" name="star_btn_coordinate[x]" value="{vifnn:$info.star_btn_coordinate.x}">
+				<input type="hidden" id="startBtnY" name="star_btn_coordinate[y]" value="{vifnn:$info.star_btn_coordinate.y}">
+
+				<input type="hidden" id="joinX" name="join_set[x]" value="">
+				<input type="hidden" id="joinY" name="join_set[y]" value="">
+
+				<input type="hidden" id="bgMusicImgX" name="bg_music_value[x]" value="">
+				<input type="hidden" id="bgMusicImgY" name="bg_music_value[y]" value="">
+				<input type="hidden" id="bgMusicValue" name="bg_music_value[value]" value="{vifnn:$info.bg_music_value.value}">
+				<input type="hidden" id="bgMusicType" name="bg_music" value="{vifnn:$info.bg_music|default=1}">
+
+				<input type="hidden" id="startBgType" name="star_bg" value="">
+
+				<input type="hidden" id="noticeTimeType" name="notice_set[time_text][style]" value="{vifnn:$info.notice_set.time_text.style|default=0}">
+				<input type="hidden" id="noticeTimeSize" name="notice_set[time_text][content][size]" value="{vifnn:$info.notice_set.time_text.content.size|default='17px'}">
+				<input type="hidden" id="noticeTimeColorType" name="notice_set[time_text][content][color][style]" value="{vifnn:$info.notice_set.time_text.content.color.style|default=0}">
+				<input type="hidden" id="noticeTimeColorDefault" name="notice_set[time_text][content][color][default_color]" value="{vifnn:$info.notice_set.time_text.content.color.default_color|default='#FFE5BC'}">
+				<input type="hidden" id="noticeTimeColorNew" name="notice_set[time_text][content][color][self_color]" value="{vifnn:$info.notice_set.time_text.content.color.self_color}">
+
+				<input type="hidden" id="noticeScoreType" name="notice_set[score_text][style]" value="{vifnn:$info.notice_set.score_text.style|default=0}">
+				<input type="hidden" id="noticeScoreSize" name="notice_set[score_text][content][size]" value="{vifnn:$info.notice_set.score_text.content.size|default='33px'}">
+				<input type="hidden" id="noticeScoreColorType" name="notice_set[score_text][content][color][style]" value="{vifnn:$info.notice_set.score_text.content.color.style|default=0}">
+				<input type="hidden" id="noticeScoreColorDefault" name="notice_set[score_text][content][color][default_color]" value="{vifnn:$info.notice_set.score_text.content.color.default_color|default='#FF6961'}">
+				<input type="hidden" id="noticeScoreColorNew" name="notice_set[score_text][content][color][self_color]" value="{vifnn:$info.notice_set.score_text.content.color.self_color}">
+
+				<input type="hidden" id="noticeBackType" name="notice_set[back_color][style]" value="{vifnn:$info.notice_set.back_color.style|default=0}">
+				<input type="hidden" id="noticeBackOpacity" name="notice_set[back_color][content][opacity]" value="{vifnn:$info.notice_set.back_color.content.opacity|default=0}">
+				<input type="hidden" id="noticeBackColorType" name="notice_set[back_color][content][color][style]" value="{vifnn:$info.notice_set.back_color.content.color.style|default=0}">
+				<input type="hidden" id="noticeBackColorDefault" name="notice_set[back_color][content][color][default_color]" value="{vifnn:$info.notice_set.back_color.content.color.default_color|default='#FFFFFF'}">
+				<input type="hidden" id="noticeBackColorNew" name="notice_set[back_color][content][color][self_color]" value="{vifnn:$info.notice_set.back_color.content.color.self_color}">
+
+				<div class="gBd clearfix">
+					<!--左侧手机游戏界面-->
+					<div class="leftPhonewrap">
+						<div class="holderPhone">
+							<div class="wxHd">
+								<div id="actName"><h2>{vifnn:$info.title}</h2></div>
+							</div>
+							<div id="gameContent">
+								<iframe id="gamePreviewPage" frameborder="0" scrolling="no"
+								        style="width:100%;height:100%;display: none"
+								        src="{vifnn::U('Game/gamePage', ['gameid' => $gameid, 'id' => $id])}"></iframe>
+							</div>
+							<div id="moduleLayerBox">
+								<div class="moduleLayer">
+									<div class="item"><a class="item tool" href="javascript:;">编辑音效</a></div>
+								</div>
+								<div class="moduleLayer">
+									<div class="item"><a class="item tool" href="javascript:;">编辑背景</a></div>
+								</div>
+							</div>
+						</div>
+						<div class="phoneBtn">
+							<a href="javascript:;" class="prev"></a>
+							<a href="javascript:;" class="next"></a>
+						</div>
+
+					</div>
+					<!--左侧手机游戏界面-->
+
+					<!--右侧设置表单-->
+					<div class="rightForm">
+						<!--表单切换头部-->
+						<div class="hd clearfix">
+							<ul>
+								<li class="on"><a href="javascript:;">活动设置</a></li>
+								<li><a href="javascript:;">奖项设置</a></li>
+								<li><a href="javascript:;">邀请设置</a></li>
+								<li><a href="javascript:;">高级设置</a></li>
+							</ul>
+						</div>
+						<!--表单切换头部-->
+
+						<!--表单切换主体-->
+						<div class="bd">
+							<div class="row" style="display: block">
+								<div class="formRow">
+									<span class="rowTitle"><i>*</i>关键词：</span>
+
+									<div class="putWrap">
+										<input placeholder="只能写一个关键词，用户输入此关键词将会触发此活动。" type="text"
+										       value="{vifnn:$info.keyword}" name="keyword" class="require_text" data-id="keywordError"/>
+										<!--<a class="clearBtn" href="javascript:;"></a>-->
+										<p class="tipInfo">只能写一个关键词，用户输入此关键词将会触发此活动。</p>
+										<p id="keywordError" class="errorMsg"></p>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle">图文封面：</span>
+
+									<div class="putWrap addWrapBorder">
+										<div class="coverPhoto placeHolder f-l">
+											<img id="picurl_src" src="<if condition="$info['picurl'] eq ''">{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png<else />{vifnn:$info.picurl}</if>" alt="" name="picurl"/>
+											<input type="hidden" id="picurl" value="{vifnn:$info.picurl}" name="picurl">
+
+											<div class="imgLoding <if condition="$info['picurl'] neq ''">hide</if>" id="picurl_loading">
+												<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/imgLoding.gif" alt=""/>
+											</div>
+
+										</div>
+										<div class="uploadImg">
+											<div class="filePut">
+												<script src="{vifnn:$staticPath}/tpl/static/upyun.js?{vifnn::date('YmdHis',time())}"></script>
+												<a href="javascript:void(0)" class="uploadCoverBtn" onclick="upyunPicUpload('picurl', 900, 500,'{vifnn:$token}')">选择图片</a>
+												<a href="###" onclick="viewImg('picurl')">预览</a>
+											</div>
+											<p>消息回复图片，图片像素建议为900*500px，格式为jpg或png</p>
+										</div>
+									</div>
+								</div>
+								<div class="formRow" id="actNameRow">
+									<span class="rowTitle"><i>*</i>活动标题：</span>
+
+									<div class="putWrap">
+										<input id="actNamePut" placeholder="活动标题" value="{vifnn:$info.title}"
+										       type="text" name="title" class="require_text" data-id="actNamePutError"/>
+
+										<p id="actNamePutError" class="errorMsg"></p>
+										<!--<a class="clearBtn" href="javascript:;"></a>-->
+										<!--<p class="tipInfo">只能写一个关键词，用户输入此关键词将会触发此活动。</p>-->
+									</div>
+								</div>
+								<div class="formRow" id="actTime">
+									<span class="rowTitle"><i>*</i>起止时间：</span>
+
+									<div class="putWrap shortPut">
+										<input class="<if condition="$info['is_release'] eq 0">actData<else />read_only</if> actStart require_text" placeholder="选择时间" type="text" readonly="true"
+										       value="{vifnn:$info.start_time|default=time()|date='Y-m-d H:i',###}"
+										       name="start_time" data-id="startTimeError"/><em>至</em><input class="<if condition="$info['is_release'] eq 0 || !isset($info['end_time']) || $info['end_time'] egt time()">actData<else />read_only</if> actEnd require_text" placeholder="选择时间" type="text" readonly="true"
+										       value="{vifnn:$info.end_time|default=strtotime('+1 month')|date='Y-m-d H:i',###}"
+										       name="end_time" data-id="endTimeError"/>
+									</div>
+
+
+									<p id="startTimeError" class="errorMsg"></p>
+									<p id="endTimeError" class="errorMsg"></p>
+									<p id="actTimeError" class="errorMsg"></p>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle"><i>*</i>活动简介：</span>
+
+									<div class="putWrap">
+										<textarea rows="5" cols="20" name="intro" class="require_text" data-id="introTextAreaError">{vifnn:$info.intro}</textarea>
+										<p id="introTextAreaError" class="errorMsg"></p>
+									</div>
+								</div>
+								<div class="formRow" id="actRuleRow">
+									<span class="rowTitle"><i>*</i>活动规则：</span>
+
+									<div class="putWrap">
+										<textarea rows="5" cols="20" id="actRuleArea" name="gameSet_rule" class="require_text" data-id="actRuleAreaError">{vifnn:$info.rule}</textarea>
+										<p id="actRuleAreaError" class="errorMsg"></p>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle longTitle">每人初始&nbsp;&nbsp;&nbsp;<br/>可玩次数：</span>
+
+									<div class="putWrap shortPut">
+										<input id="limitNum" placeholder="" type="text" value="<if condition="$info['limit_num'] eq ''">5<elseif condition="$info['limit_num'] neq 0" />{vifnn:$info.limit_num}</if>" name="limit_num" <if condition="$info['is_release'] eq 1">readonly="readonly"</if>/>
+										<em>次</em>
+										<span class="t0">（不填，则默认为可玩无限次）</span>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle longTitle">每天增加&nbsp;&nbsp;&nbsp;<br/>可玩次数：</span>
+
+									<div class="putWrap shortPut">
+										<input id="limitFx" placeholder="" type="text" value="<if condition="$info['limit_fx'] eq ''">1<else />{vifnn:$info.limit_fx}</if>" name="limit_fx"/>
+										<em>次</em>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<p class="t1">活动结束后，系统将自动生成兑奖码，您可在<b>【兑奖管理】</b>中查看</p>
+
+								<div class="priceWrap clearfix newPrizeBox">
+									<div class="formRow clearfix">
+										<span class="rowTitle shortTitle">奖项数：</span>
+
+										<div class="putWrap selectPut">
+											<if condition="$info['is_release'] eq 1">
+												<input type="hidden" name="gameSet_awards_value[awards_count]" value="{vifnn:$info.awards_value.awards_count}">
+												<select id="setAwardNums" name="gameSet_awards_value[awards_count]" disabled="disabled" style="padding: 0 !important;">
+											<else />
+												<select id="setAwardNums" name="gameSet_awards_value[awards_count]" style="padding: 0 !important;">
+											</if>
+												<option value="1" <if condition="$info['awards_value']['awards_count'] eq 1">selected</if>>1</option>
+												<option value="2" <if condition="$info['awards_value']['awards_count'] eq 2">selected</if>>2</option>
+												<option value="3" <if condition="$info['awards_value']['awards_count'] eq 3">selected</if>>3</option>
+												<option value="4" <if condition="$info['awards_value']['awards_count'] eq 4">selected</if>>4</option>
+												<option value="5" <if condition="$info['awards_value']['awards_count'] eq 5">selected</if>>5</option>
+												<option value="6" <if condition="$info['awards_value']['awards_count'] eq 6">selected</if>>6</option>
+												<option value="7" <if condition="$info['awards_value']['awards_count'] eq 7">selected</if>>7</option>
+												<option value="8" <if condition="$info['awards_value']['awards_count'] eq 8">selected</if>>8</option>
+												<option value="9" <if condition="$info['awards_value']['awards_count'] eq 9">selected</if>>9</option>
+											</select>
+
+											<span class="t0" style="margin-left: 10px; ">活动发布后，不可修改</span>
+										</div>
+										<br />
+										<div class="showPicDiv cssRadio" style="margin-left: 25px; ">
+											<span>展示奖品图片：</span>
+											<input type="radio" id="showPicY" value="1" <if condition="$info['awards_value']['show_pic'] eq 1">checked</if> name="gameSet_awards_value[show_pic]"/>
+											<label class="checkBoxLabel" for="showPicY"><em>需要</em></label>
+											<input type="radio" id="showPicN" value="0" <if condition="$info['awards_value']['show_pic'] eq 0">checked</if> name="gameSet_awards_value[show_pic]"/>
+											<label class="checkBoxLabel" for="showPicN"><em>不需要</em></label>
+										</div>
+									</div>
+									<div class="formRow priceSeting">
+										<div class="setHd clearfix">
+											<ul>
+												<li>奖一</li>
+												<li>奖二</li>
+												<li>奖三</li>
+												<li>奖四</li>
+												<li>奖五</li>
+												<li>奖六</li>
+												<li>奖七</li>
+												<li>奖八</li>
+												<li>奖九</li>
+											</ul>
+										</div>
+
+										<volist name="awardsValues" id="item">
+
+											<input type="hidden" id="awardsValuesType_{vifnn:$key}" name="gameSet_awards_value[awards_values][{vifnn:$key}][awards_type]" value="{vifnn:$item.awards_type}" class="require_text" data-id="awardsValuesTypeError" data-type="{vifnn:$key}">
+											<input type="hidden" id="awardsValuesName_{vifnn:$key}" name="gameSet_awards_value[awards_values][{vifnn:$key}][awards_name]" value="{vifnn:$item.awards_name}" class="require_text" data-id="awardsValuesNameError" data-type="{vifnn:$key}">
+											<input type="hidden" id="awardsValuesNum_{vifnn:$key}" name="gameSet_awards_value[awards_values][{vifnn:$key}][awards_num]" value="{vifnn:$item.awards_num}" class="require_text" data-id="awardsValuesNumError" data-type="{vifnn:$key}">
+											<input type="hidden" id="awardsValuesPic_{vifnn:$key}" name="gameSet_awards_value[awards_values][{vifnn:$key}][awards_pic]" value="{vifnn:$item.awards_pic}">
+
+										</volist>
+
+										<div class="setBd">
+											<div class="formRow">
+												<span class="rowTitle shortTitle"><i>*</i>奖项类型：</span>
+
+												<div class="putWrap shortPut">
+													<input placeholder="" type="text" id="awardType" maxlength="7">
+													<p id="awardsValuesTypeError" class="errorMsg"></p>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle shortTitle"><i>*</i>奖项名称：</span>
+
+												<div class="putWrap shortPut">
+													<input placeholder="" type="text" id="awardName" maxlength="8" <if condition="$info['is_release'] eq 1">readonly="readonly"</if>>
+
+													<span class="t0" style="margin-left: 10px; ">活动发布后，不可修改</span>
+													<p id="awardsValuesNameError" class="errorMsg"></p>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle shortTitle"><i>*</i>奖品数量：</span>
+
+												<div class="putWrap shortPut">
+													<input placeholder="" type="text" id="awardNumber" <if condition="$info['is_release'] eq 1">readonly="readonly"</if>>
+
+													<span class="t0" style="margin-left: 10px; ">活动发布后，不可修改</span>
+													<p id="awardsValuesNumError" class="errorMsg"></p>
+												</div>
+											</div>
+											<div class="formRow priceSetRow" <if condition="$info['awards_value']['show_pic'] eq 0">style="display: none; "</if>>
+												<span class="rowTitle shortTitle">奖品图片：</span>
+
+												<div class="putWrap addWrapBorder">
+													<div class="coverPhoto placeHolder f-l">
+														<img id="pricePhoto" src="{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png" alt="">
+													</div>
+													<div class="uploadImg">
+														<div class="filePut">
+															<a href="javascript:void(0)" class="uploadCoverBtn" id="awardPic">选择图片</a>
+															<a href="###" id="awardsView" onclick="viewImg('awardsValuesPic_0')">预览</a>
+														</div>
+														<p>图片像素建议为100*100px，格式为jpg或png</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="exchangeRow">
+									<div class="formRow">
+										<span class="rowTitle shortTitle"><i>*</i>兑奖期限：</span>
+
+										<div class="putWrap shortPut">
+											<input class="actData start require_text" data-id="awardsStartTimeError" placeholder="选择时间" type="text" readonly="true" value="{vifnn:$info.awards_value.awards_start_time|default=strtotime('+1 month')|date='Y-m-d H:i',###}" name="gameSet_awards_value[awards_start_time]"><em>至</em><input class="actData end require_text" data-id="awardsEndTimeError" placeholder="选择时间" type="text" readonly="true" value="{vifnn:$info.awards_value.awards_end_time|default=strtotime('+2 month')|date='Y-m-d H:i',###}" name="gameSet_awards_value[awards_end_time]">
+											<p id="awardsStartTimeError" class="errorMsg"></p>
+											<p id="awardsEndTimeError" class="errorMsg"></p>
+											<p id="awardsTimeError" class="errorMsg"></p>
+										</div>
+									</div>
+									<div class="formRow">
+										<span class="rowTitle shortTitle"><i>*</i>兑奖说明：</span>
+
+										<div class="putWrap">
+											<textarea rows="5" cols="20" id="exchangeArea" name="gameSet_awards_value[awards_content]" class="require_text" data-id="exchangeAreaError">{vifnn:$info.awards_value.awards_content}</textarea>
+											<p id="exchangeAreaError" class="errorMsg"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row rowTitle132">
+								<div class="formRow">
+									<span class="rowTitle">微信分享图标：</span>
+
+									<div class="putWrap cssRadio">
+										<input type="radio" value="0" id="sharePicN" <if condition="$info['wechat_set']['style'] eq 0 || $info['wechat_set']['style'] eq ''">checked</if> name="wechat_set[style]"/>
+										<label class="radioLabel" for="sharePicN"><em>默认</em></label>
+										<input type="radio" value="1" id="sharePicY" <if condition="$info['wechat_set']['style'] eq 1">checked</if> name="wechat_set[style]"/>
+										<label class="radioLabel" for="sharePicY"><em>自定义</em></label>
+										<span class="t0">（默认为原始游戏图标）</span>
+
+										<div class="putWrap addWrapBorder wxShareImg mt10" <if condition="$info['wechat_set']['style'] eq 1">style="display: block; "</if>>
+											<div class="sharePic placeHolder f-l">
+												<img id="wechatIcon_src" src="<if condition="$info['wechat_set']['icon'] eq ''">{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png<else />{vifnn:$info.wechat_set.icon}</if>"alt="">
+												<input type="hidden" name="wechat_set[icon]" id="wechatIcon" value="{vifnn:$info.wechat_set.icon}">
+
+												<!--<div class="imgLoding <if condition="$info['wechat_set']['icon'] neq ''">hide</if>" id="wechatIcon_loading">-->
+													<!--<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/imgLoding.gif" alt="">-->
+												<!--</div>-->
+											</div>
+											<div class="uploadImg">
+												<div class="filePut">
+													<a href="javascript:void(0); " class="uploadCoverBtn" onclick="upyunPicUpload('wechatIcon', 500, 500, '{vifnn:$token}'); ">选择图片</a>
+												</div>
+												<p>消息回复图片，推荐尺寸：500*500</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle">分享自定义标题：</span>
+
+									<div class="putWrap">
+										<input placeholder="" type="text" name="wechat_set[title]" value="{vifnn:$info.wechat_set.title}">
+										<!--<a class="clearBtn" href="javascript:;"></a>-->
+										<p class="tipInfo">分享活动或找朋友比赛，不填默认为活动标题。</p>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle longTitle">分享活动自&nbsp;&nbsp;&nbsp;<br>定义描述：</span>
+
+									<div class="putWrap">
+										<input placeholder="" type="text" name="wechat_set[intro]" value="{vifnn:$info.wechat_set.intro}">
+										<!--<a class="clearBtn" href="javascript:;"></a>-->
+										<p class="tipInfo">用户在没有玩游戏的情况下，将活动分享出去。不填则默认为活动简介。</p>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle longTitle">找朋友比赛&nbsp;&nbsp;&nbsp;<br>自定义描述：</span>
+
+									<div class="putWrap">
+										<textarea rows="5" cols="20" name="wechat_set[pk_intro]">{vifnn:$info.wechat_set.pk_intro}</textarea>
+
+										<p class="tipInfo">用户产生个人成绩，再将活动分享出去。<br/>
+											不填默认为：我正在玩【游戏名称】游戏活动，当前最高成绩【最高成<br/>
+											绩】，现向您发起挑战，您敢来应战，赢取丰厚奖品吗？</p>
+									</div>
+								</div>
+								<div class="formRow" id="invitationRow" <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">style="display: none; "</if>>
+									<span class="rowTitle">邀请有礼：</span>
+
+									<div class="putWrap cssRadio">
+										<input type="radio" id="invitationYes" value="1" <if condition="$info['is_share'] eq 1 || $info['is_share'] eq ''">checked</if> name="is_share">
+										<label for="invitationYes" class="radioLabel">开启</label>
+										<input type="radio" id="invitationNo" value="0" <if condition="isset($info['is_share']) && $info['is_share'] eq 0">checked</if> name="is_share">
+										<label for="invitationNo" class="radioLabel">关闭</label>
+										<p class="tipInfo">一旦开启，并活动发布后，不可修改；未发布状态下，游戏界面不展现。</p>
+									</div>
+								</div>
+								<div class="invitationSet" <if condition="isset($info['is_share']) && $info['is_share'] eq 0">style="display: none; "</if>>
+									<div class="formRow">
+										<span class="rowTitle">分享奖励类型：</span>
+
+										<div class="putWrap shareTypeHd cssRadio">
+											<input type="radio" value="1" name="share_callback" id="hongbao" <if condition="$info['share_callback'] eq 1">checked</if>>
+											<label class="radioLabel" for="hongbao" <if condition="$serverType eq 0 || ($info['is_release'] eq 1 && $info['is_share'] eq 1 &&  $info['share_callback'] neq 1)">style="display: none; "</if>>红包</label>
+
+											<input type="radio" value="2" name="share_callback" id="kaquan" <if condition="$info['share_callback'] eq 2">checked</if>>
+											<label class="radioLabel" for="kaquan" <if condition="$serverType eq 0 || ($info['is_release'] eq 1 && $info['is_share'] eq 1 &&  $info['share_callback'] neq 2)">style="display: none; "</if>>卡券</label>
+
+											<input type="radio" value="3" name="share_callback" id="jifen" <if condition="$info['share_callback'] eq 3">checked</if>>
+											<label class="radioLabel" for="jifen" <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1 && $info['share_callback'] neq 3">style="display: none; "</if>>积分</label>
+
+											<input type="radio" value="4" name="share_callback" id="jihui" <if condition="$info['share_callback'] eq 4">checked</if>>
+											<label class="radioLabel" for="jihui" <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1 &&  $info['share_callback'] neq 4">style="display: none; "</if>>可玩机会</label>
+										</div>
+									</div>
+									<div class="shareWrap">
+										<div class="shareType dpn hongbao">
+											<div class="formRow">
+												<span class="rowTitle">获得红包条件：</span>
+
+												<div class="putWrap minPut">
+													每成功邀请&nbsp;&nbsp;
+													<input placeholder="" value="{vifnn:$info['share_value']['people']|default=3}" type="text" class="numbers number_input" name="share[people]" <if condition="$is_wxopen eq 0 || $info['share_callback'] neq 1">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													&nbsp;&nbsp;位好友来比赛
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle">单个红包金额范围：</span>
+
+												<div class="putWrap midPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['minmoney']|default=1}"id="minMoney" data-id="minMoneyError" type="text" class="require_text money_numbers" name="share[minmoney]" <if condition="$is_wxopen eq 0 || $info['share_callback'] neq 1">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>元</em>
+													——&nbsp;&nbsp;&nbsp;&nbsp;
+													<input placeholder="输入最大金额" value="{vifnn:$info['share_value']['maxmoney']}" id="maxMoney" type="text" class="money_numbers" name="share[maxmoney]" <if condition="$is_wxopen eq 0 || $info['share_callback'] neq 1">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>元</em>
+
+													<p class="tipInfo">发放金额在范围内随机，最低1元，最高200元，可精确到小数点后两位。若默认只填写最小金额，如5元，则表示每人每次所获得的红包为5元。</p>
+													<p id="minMoneyError" class="errorMsg"></p>
+													<p id="moneyError" class="errorMsg"></p>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle longTitle">每人限领&nbsp;&nbsp;&nbsp;<br>红包个数：</span>
+
+												<div class="putWrap minPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['money_number']}" type="text" class="numbers number_input" name="share[money_number]" <if condition="$is_wxopen eq 0">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>次</em>
+													<span class="t0">（不填则默认为不限制）</span>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle">红包发放总金额：</span>
+
+												<div class="putWrap midPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['totalmoney']|default=2000}" type="text" class="numbers number_input" name="share[totalmoney]" <if condition="$is_wxopen eq 0">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>元</em>
+													<span class="t0">（请确保微信支付的余额充足）</span>
+												</div>
+											</div>
+
+										</div>
+										<div class="shareType dpn kaquan">
+											<div class="formRow">
+												<span class="rowTitle">选择卡券：</span>
+
+												<div class="putWrap minPut">
+													<a id="selectCoupon" class="rowBtn" href="javascript:void(0); "><if condition="$info['share_value']['coupon_title'] neq ''">重新选择<else />选择卡券</if></a>
+													&nbsp;&nbsp;
+													<em id="chosed_coupon">{vifnn:$info['share_value']['coupon_title']}</em>
+
+													<input type="hidden" name="share[coupon_title]" id="coupon_title" data-checked="<if condition="$info['share_callback'] neq 2">false<else />true</if>" value="{vifnn:$info['share_value']['coupon_title']}" <if condition="$info['share_callback'] neq 2">disabled="true"</if>>
+													<input type="hidden" name="share[coupon_id]" id="coupon_id" value="{vifnn:$info['share_value']['coupon_id']}" <if condition="$info['share_callback'] neq 2">disabled="true"</if>>
+													<input type="hidden" name="share[coupon_people]" id="coupon_people" value="{vifnn:$info['share_value']['coupon_people']}" <if condition="$info['share_callback'] neq 2">disabled="true"</if>>
+
+													<p id="couponError" class="errorMsg"></p>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle">获得卡券条件：</span>
+
+												<div class="putWrap minPut">
+													每成功邀请&nbsp;&nbsp;
+													<input id="coupon_limit" placeholder="" value="{vifnn:$info['share_value']['people']|default=3}" type="text" class="numbers number_input" name="share[people]" <if condition="$info['share_callback'] neq 2">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													&nbsp;&nbsp;位好友来比赛，即可获取1张
+												</div>
+											</div>
+										</div>
+										<div class="shareType dpn jifen" >
+											<div class="formRow">
+												<span class="rowTitle">获得积分条件：</span>
+
+												<div class="putWrap minPut">
+													每成功邀请&nbsp;&nbsp;
+													<input placeholder="" value="{vifnn:$info['share_value']['people']|default=3}" type="text" class="numbers number_input" name="share[people]" <if condition="$info['share_callback'] neq 3">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													&nbsp;&nbsp;位好友来比赛
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle">积分奖励：</span>
+
+												<div class="putWrap minPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['points']|default=100}" type="text" class="reward number_input" name="share[points]" <if condition="$info['share_callback'] neq 3">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>积分</em>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle longTitle">每人最多&nbsp;&nbsp;&nbsp;<br>奖励次数：</span>
+
+												<div class="putWrap minPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['points_number']|default=1}" type="text" class="awards_limit number_input" name="share[points_number]" <if condition="$info['share_callback'] neq 3">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>次</em>
+													<span class="t0">（不填则默认为不限制）</span>
+												</div>
+											</div>
+										</div>
+										<div class="shareType dpb jihui">
+											<div class="formRow">
+												<span class="rowTitle">增加机会条件：</span>
+
+												<div class="putWrap minPut">
+													每成功邀请&nbsp;&nbsp;
+													<input placeholder="" value="{vifnn:$info['share_value']['people']|default=3}" type="text" class="numbers number_input" name="share[people]" <if condition="$info['share_callback'] neq 4">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													&nbsp;&nbsp;位好友来比赛
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle">增加机会：</span>
+
+												<div class="putWrap midPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['chance']|default=1}" type="text" class="reward number_input" name="share[chance]" <if condition="$info['share_callback'] neq 4">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>次</em>
+												</div>
+											</div>
+											<div class="formRow">
+												<span class="rowTitle longTitle">每人最多&nbsp;&nbsp;&nbsp;<br>奖励轮数：</span>
+
+												<div class="putWrap minPut">
+													<input placeholder="" value="{vifnn:$info['share_value']['chance_number']}" type="text" class="awards_limit number_input" name="share[chance_number]" <if condition="$info['share_callback'] neq 4">disabled="true"</if> <if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">readonly="readonly"</if>>
+													<em>轮</em>
+													<span class="t0">（不填则默认为不限制）</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="formRow" id="actInclusion">
+									<input type="hidden" id="joinSetTextStyle" value="{vifnn:$info.join_set.text.style|default=0}" name="join_set[text][style]">
+									<input type="hidden" id="joinSetTextFontSize" value="{vifnn:$info.join_set.text.content.font_size|default='12px'}" name="join_set[text][content][font_size]">
+									<input type="hidden" id="joinSetTextFontColorType" value="{vifnn:$info.join_set.text.content.font_color.style|default=0}" name="join_set[text][content][font_color][style]">
+									<input type="hidden" id="joinSetTextFontColorDefault" value="{vifnn:$info.join_set.text.content.font_color.default_color|default='#FFFFFF'}" name="join_set[text][content][font_color][default_color]">
+									<input type="hidden" id="joinSetTextFontColorNew" value="{vifnn:$info.join_set.text.content.font_color.self_color}" name="join_set[text][content][font_color][self_color]">
+									<input type="hidden" id="joinSetTextBorderColorType" value="{vifnn:$info.join_set.text.content.border_color.style|default=0}" name="join_set[text][content][border_color][style]">
+									<input type="hidden" id="joinSetTextBorderColorDefault" value="{vifnn:$info.join_set.text.content.border_color.default_color}" name="join_set[text][content][border_color][default_color]">
+									<input type="hidden" id="joinSetTextBorderColorNew" value="{vifnn:$info.join_set.text.content.border_color.self_color}" name="join_set[text][content][border_color][self_color]">
+
+									<input type="hidden" id="joinSetPeopleStyle" value="{vifnn:$info.join_set.people.style|default=0}" name="join_set[people][style]">
+									<input type="hidden" id="joinSetPeopleFontSize" value="{vifnn:$info.join_set.people.content.font_size|default='16px'}" name="join_set[people][content][font_size]">
+									<input type="hidden" id="joinSetPeopleFontColorType" value="{vifnn:$info.join_set.people.content.font_color.style|default=0}" name="join_set[people][content][font_color][style]">
+									<input type="hidden" id="joinSetPeopleFontColorDefault" value="{vifnn:$info.join_set.people.content.font_color.default_color|default='#E45C5C'}" name="join_set[people][content][font_color][default_color]">
+									<input type="hidden" id="joinSetPeopleFontColorNew" value="{vifnn:$info.join_set.people.content.font_color.self_color}" name="join_set[people][content][font_color][self_color]">
+									<input type="hidden" id="joinSetPeopleBorderColorType" value="{vifnn:$info.join_set.people.content.border_color.style|default=0}" name="join_set[people][content][border_color][style]">
+									<input type="hidden" id="joinSetPeopleBorderColorDefault" value="{vifnn:$info.join_set.people.content.border_color.default_color}" name="join_set[people][content][border_color][default_color]">
+									<input type="hidden" id="joinSetPeopleBorderColorNew" value="{vifnn:$info.join_set.people.content.border_color.self_color}" name="join_set[people][content][border_color][self_color]">
+
+									<span class="rowTitle">参与人数：</span>
+
+									<div class="putWrap cssRadio">
+										<input type="radio" value="1" <if condition="$info['join_set']['visible'] eq 1 || $info['join_set']['visible'] eq ''">checked</if> name="join_set[visible]" id="inclusionShow"/>
+										<label class="radioLabel" for="inclusionShow">显示</label>
+										<input type="radio" value="0" <if condition="isset($info['join_set']['visible']) && $info['join_set']['visible'] eq 0">checked</if> name="join_set[visible]" id="inclusionHide"/>
+										<label class="radioLabel" for="inclusionHide">隐藏</label>
+
+										<div class="putWrap minPut mt10 inclusionSet" style="<if condition="$info['join_set']['visible'] eq 1 || $info['join_set']['visible'] eq ''">display: block;<else />display: none;</if>">
+											在实际参与人数基础上增加&nbsp;&nbsp;
+											<input placeholder="" value="{vifnn:$info.join_set.add_num|default=0}" type="text" class="number_input" name="join_set[add_num]"/>
+											&nbsp;&nbsp;人
+											<span class="t0">（只展示不计入统计）</span>
+										</div>
+									</div>
+								</div>
+								<div class="formRow" id="rankLimit">
+									<span class="rowTitle longTitle">排行榜&nbsp;&nbsp;&nbsp;<br/>显示条数：</span>
+
+									<div class="putWrap minPut">
+										<input placeholder="10" value="{vifnn:$info.rank_limit|default=200}" class="number number_input" type="text" name="rank_limit" id="rankLimitInput"/>
+										&nbsp;&nbsp;人
+										<span class="t0">（最多可显示1000人）</span>
+									</div>
+								</div>
+								<div class="formRow" id="actCompanyRow">
+									<span class="rowTitle"><i>*</i>主办单位：</span>
+
+									<div class="putWrap">
+										<input placeholder="{vifnn:$wecha.wxname}" value="{vifnn:$info.office_value.name|default=$wecha['wxname']}" type="text" name="office_value[name]" class="require_text" data-id="officeNameError">
+										<p id="officeNameError" class="errorMsg"></p>
+										<!--<a class="clearBtn" href="javascript:;"></a>-->
+									</div>
+								</div>
+								<div class="formRow" style="display: none; ">
+									<span class="rowTitle">链接地址：</span>
+
+									<div class="putWrap">
+										<input placeholder="" value="{vifnn:$info.office_value.url}" type="text" name="office_value[url]">
+										<!--<a class="clearBtn" href="javascript:;"></a>-->
+									</div>
+								</div>
+								<div class="formRow" id="actLogoRow">
+									<span class="rowTitle">企业LOGO：</span>
+
+									<php>
+										$logoId = '';
+										$logoVisible = '';
+										$logoUrl = '';
+										foreach ($selfs as $self){
+											if ($self['property'] == 'logo') {
+												$logoId = $self['id'];
+												$logoVisible = $self['visible'];
+												$logoUrl = $self['defaultvalue'];
+											}
+										}
+									</php>
+
+									<div class="putWrap cssRadio">
+										<input type="radio" value="1" name="self_{vifnn:$logoId}[visible]" id="logoShow" <if condition="$logoVisible eq 1">checked</if>/>
+										<label class="radioLabel" for="logoShow">显示</label>
+										<input type="radio" value="0" name="self_{vifnn:$logoId}[visible]" id="logoHide" <if condition="$logoVisible eq 0 || $logoVisible eq ''">checked</if>/>
+										<label class="radioLabel" for="logoHide" >隐藏</label>
+
+										<div class="putWrap addWrapBorder mt10 logoShowAndHid" <if condition="$logoVisible eq 1">style="display: block; "<else />style="display: none; "</if>>
+											<div class="sharePic placeHolder f-l">
+												<img id="logoImgSrc_src" src="<if condition="$logoUrl eq ''">{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png<else />{vifnn:$logoUrl}</if>" alt="">
+
+												<div class="imgLoding <if condition="$logoUrl neq ''">hide</if>" id="logoImgSrc_loading">
+													<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/imgLoding.gif" alt="">
+												</div>
+											</div>
+											<div class="uploadImg">
+												<div class="filePut">
+													<a href="javascript:void(0); " class="uploadCoverBtn" id="cLogoSelect">选择图片</a>
+												</div>
+												<p>图片像素建议为121*51px，格式为jpg或png</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle">是否需要关注：</span>
+
+									<div class="putWrap cssRadio">
+										<input type="radio" value="0" name="is_attention" id="followN" <if condition="$info['is_attention'] eq 0 || $info['is_attention'] eq ''">checked</if>>
+										<label class="radioLabel" for="followN">否</label>
+										<input type="radio" value="1" name="is_attention" id="followY" <if condition="$info['is_attention'] eq 1">checked</if>>
+										<label class="radioLabel" for="followY">是</label><span
+											class="t0">（该选项目前仅适用于认证服务号,非认证服务号体验稍差）</span>
+									</div>
+								</div>
+								<div class="formRow">
+									<span class="rowTitle longTitle">是否需要&nbsp;&nbsp;&nbsp;<br/>填写手机号：</span>
+
+									<div class="putWrap cssRadio">
+										<input type="radio" value="0" <if condition="$info['is_phone'] eq 0 || $info['is_phone'] eq ''">checked</if> name="is_phone">
+										<label class="radioLabel">否</label>
+										<input type="radio" value="1" <if condition="$info['is_phone'] eq 1">checked</if> name="is_phone">
+										<label class="radioLabel">是</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--表单切换主体-->
+					</div>
+					<!--右侧设置表单-->
+
+				</div>
+				<!--游戏设置主体-->
+
+				<vifnnif where="$id">
+					<input type="hidden" value="{vifnn:$id}" name="id"/>
+				</vifnnif>
+
+				<div class="saveBottomBar">
+					<div class="buttonBox">
+						<button id="saveButon" class="bottomButon saveButon" type="submit">保存</button>
+						<button id="cancelButton" class="bottomButon cancelButton" type="reset">取消</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--游戏设置模块-->
+
+	</div>
+</div>
+
+<!--图片上传弹窗-->
+<div id="uploadImg" class="setWindow windowBg hidden" style="background: rgba(0, 0, 0, 0.298039);">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">编辑图片</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="uploadLine">
+				<div class="itemTitle item" id="itemTitle">色狼图片：</div>
+				<div class="imgBox item">
+					<img id="itemSrc" class="img" src="{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png" width="50" height="80">
+
+					<div class="imgLoading" id="itemLoading">
+						<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/imgLoding.gif" alt="">
+					</div>
+				</div>
+				<div class="btnBox item">
+					<span class="selectbtn">
+						<a href="javascript:void(0); " class="uploadify-button uploadify-button-game" data-type="titleImgSrc" data-width="256" data-height="116" id="itemUploadBtn">上传替换</a>
+					</span>
+
+					<div class="recoveryBtn btn">恢复默认</div>
+					<p class="t2">图片像素建议为<em id="itemWidth">640</em>*<em id="itemHeight">1028</em>px，格式为jpg或png</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--图片上传弹窗-->
+
+<!--游戏过程图片上传弹窗-->
+<div id="uploadImgListBox" class="setWindow windowBg hidden" style="background: rgba(0, 0, 0, 0.298039);">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">编辑图片</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div style="max-height: 500px; overflow: auto; ">
+			<volist name="selfs" id="item">
+				<if condition="$item['property'] eq 'ordinary'">
+					<div class="uploadInfoBox">
+						<div class="uploadLine">
+							<div class="itemTitle item" id="selfTitle{vifnn:$item.id}">{vifnn:$item.name}：</div>
+							<div class="imgBox item">
+								<php>
+									$newWidth = '80';
+									$newHeight = 80/$item['width']*$item['height'];
+									if ($newHeight > 80) {
+										$newHeight = '80';
+										$newWidth = 80/$item['height']*$item['width'];
+									}
+								</php>
+								<img id="selfImg{vifnn:$item.id}" class="img" src="<if condition="$item['defaultvalue'] neq ''">{vifnn:$item.defaultvalue}<else />{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png</if>" width="{vifnn:$newWidth}" height="{vifnn:$newHeight}">
+
+								<div class="imgLoading <if condition="$item['defaultvalue'] neq ''">hide</if>" id="selfLoading{vifnn:$item.id}">
+								<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/imgLoding.gif" alt="">
+							</div>
+						</div>
+						<div class="btnBox item">
+							<span class="selectbtn">
+								<a href="javascript:void(0); " class="uploadify-button uploadify-button-game itemUploadBtn" data-self-id="{vifnn:$item.id}" data-type="selfImgValue{vifnn:$item.id}" data-width="{vifnn:$item.width}" data-height="{vifnn:$item.height}">上传替换</a>
+							</span>
+
+							<div class="recoveryBtn btn">恢复默认</div>
+							<p class="t2">图片像素建议为<em id="slefItemWidth">{vifnn:$item.width}</em>*<em id="selfItemHeight">{vifnn:$item.height}</em>，格式为jpg或png</p>
+						</div>
+					</div>
+					</div>
+				</if>
+			</volist>
+		</div>
+	</div>
+</div>
+<!--图片上传弹窗-->
+
+<!--音乐上传弹窗-->
+<div id="uploadMusic" class="windowBg setWindow hidden" style="background: rgba(0, 0, 0, 0.298039);">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">游戏音效</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="setMusic">
+				<div class="formRow clearfix">
+					<span class="rowTitle">背景音乐：</span>
+
+					<div class="putWrap cssRadio">
+						<input type="radio" id="setMusicY" <if condition="$info['bg_music'] eq 1 || $info['bg_music'] eq ''">checked</if> name="setMusic">
+						<label for="setMusicY" class="radioLabel">开启</label>
+						<input type="radio" id="setMusicN" <if condition="$info['bg_music'] neq '' &&$info['bg_music'] == 0">checked</if> name="setMusic">
+						<label for="setMusicN" class="radioLabel">关闭</label>
+						<input type="radio" id="setMusicC" <if condition="$info['bg_music'] eq 2">checked</if> name="setMusic">
+						<label for="setMusicC" class="radioLabel">自定义</label>
+					</div>
+				</div>
+				<div class="formRow clearfix <if condition="$info['bg_music'] neq 2">hide</if> musicSetCustom">
+					<div class="rowCell clearfix">
+						<div class="f-l uploadWay">
+							<a href="javascript:void(0); " class="musicSelect" onclick="upyunPicUpload('bgMusicText', '', '', '{vifnn:$token}')">本地上传</a>
+						</div>
+						<div class="f-l urlWay">
+							<input type="text" id="bgMusicText" placeholder="" value="{vifnn:$info.bg_music_value.value|default=''}"/>
+							<button id="submitBgMusic">确定</button>
+						</div>
+						<p class="t2">音频，格式为44100Hz，96kbps的mp3文件</p>
+					</div>
+					<div class="rowCell hide clearfix">
+						<em>上传失败</em>
+
+						<p>音频，格式为mp3/avi/swf</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!--音乐上传弹窗-->
+
+<!--样式设置弹窗-->
+<div id="uploadTextStyle" class="windowBg setWindow hidden" style="background: rgba(0, 0, 0, 0.298039);">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">样式设置</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+
+			<php>
+				$textFontSize = $info['join_set']['text']['content']['font_size'];
+
+				$peopleFontSize = $info['join_set']['people']['content']['font_size'];
+			</php>
+
+			<div class="setStyle">
+				<div class="formRow clearfix">
+					<span class="rowTitle">常规文字：</span>
+
+					<div class="putWrap">
+						<div class="cssRadio">
+							<input type="radio" id="regularTextDefault" <if condition="$info['join_set']['text']['style'] eq 0 || $info['join_set']['text']['style'] eq ''">checked</if> name="regularText">
+							<label for="regularTextDefault" class="radioLabel">默认</label>
+							<input type="radio" id="regularTextCustom" <if condition="$info['join_set']['text']['style'] eq 1">checked</if> name="regularText">
+							<label for="regularTextCustom" class="radioLabel">自定义</label>
+						</div>
+						<div class="blockCell" <if condition="$info['join_set']['text']['style'] eq 1">style="display: block; "</if>>
+							<div class="minCell">
+								大小：
+								<span class="slider-range slider-range-0"></span>
+								<em class="amount">{vifnn:$textFontSize|default='12px'}</em>
+							</div>
+							<div class="minCell cssRadio">
+								文字颜色：
+								<input type="radio" id="regularColorDefault" <if condition="$info['join_set']['text']['content']['font_color']['style'] eq 0 || $info['join_set']['text']['content']['font_color']['style'] eq ''">checked</if> name="regularColor">
+								<label for="regularColorDefault" class="radioLabel">默认</label>
+								<input type="radio" id="regularColorCustom" data-color-id="joinSetTextFontColorNew" data-color="{vifnn:$info.join_set.text.content.font_color.self_color|default='#f60'}" <if condition="$info['join_set']['text']['content']['font_color']['style'] eq 1">checked</if> name="regularColor">
+								<label for="regularColorCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForRegularColor" <if condition="$info['join_set']['text']['content']['font_color']['self_color'] neq ''"><if condition="$info['join_set']['text']['content']['font_color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.join_set.text.content.font_color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.join_set.text.content.font_color.self_color}; "</if></if>></a>
+							</div>
+							<div class="minCell cssRadio">
+								描边颜色：
+								<input type="radio" id="regularStrokeDefault" <if condition="$info['join_set']['text']['content']['border_color']['style'] eq 0 || $info['join_set']['text']['content']['border_color']['style'] eq ''">checked</if> name="regularStroke">
+								<label for="regularStrokeDefault" class="radioLabel">默认</label>
+								<input type="radio" id="regularStrokeCustom" data-color-id="joinSetTextBorderColorNew" data-color="{vifnn:$info.join_set.text.content.border_color.self_color|default='#f60'}" <if condition="$info['join_set']['text']['content']['border_color']['style'] eq 1">checked</if> name="regularStroke">
+								<label for="regularStrokeCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForRegularStroke" <if condition="$info['join_set']['text']['content']['border_color']['self_color'] neq ''"><if condition="$info['join_set']['text']['content']['border_color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.join_set.text.content.border_color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.join_set.text.content.border_color.self_color}; "</if></if>></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="formRow clearfix">
+					<span class="rowTitle">参与人数：</span>
+
+					<div class="putWrap">
+						<div class="cssRadio">
+							<input type="radio" id="playersDefault" <if condition="$info['join_set']['people']['style'] eq 0 || $info['join_set']['people']['style'] eq ''">checked</if> name="players">
+							<label for="playersDefault" class="radioLabel">默认</label>
+							<input type="radio" id="playersCustom" <if condition="$info['join_set']['people']['style'] eq 1">checked</if> name="players">
+							<label for="playersCustom" class="radioLabel">自定义</label>
+						</div>
+						<div class="blockCell" <if condition="$info['join_set']['people']['style'] eq 1">style="display: block; "</if>>
+							<div class="minCell">
+								大小：
+								<span class="slider-range slider-range-1"></span>
+								<em class="amount">{vifnn:$peopleFontSize|default='16px'}</em>
+							</div>
+							<div class="minCell cssRadio">
+								文字颜色：
+								<input type="radio" id="playersTextDefault" <if condition="$info['join_set']['people']['content']['font_color']['style'] eq 0 || $info['join_set']['people']['content']['font_color']['style'] eq ''">checked</if> name="playersText">
+								<label for="playersTextDefault" class="radioLabel">默认</label>
+								<input type="radio" id="playersTextCustom" data-color-id="joinSetPeopleFontColorNew" data-color="{vifnn:$info.join_set.people.content.font_color.self_color|default='#f60'}" <if condition="$info['join_set']['people']['content']['font_color']['style'] eq 1">checked</if> name="playersText">
+								<label for="playersTextCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForPlayersText" <if condition="$info['join_set']['people']['content']['font_color']['self_color'] neq ''"><if condition="$info['join_set']['people']['content']['font_color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.join_set.people.content.font_color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.join_set.people.content.font_color.self_color}; "</if></if>></a>
+							</div>
+							<div class="minCell cssRadio">
+								描边颜色：
+								<input type="radio" id="playersStrokeDefault" <if condition="$info['join_set']['people']['content']['border_color']['style'] eq 0 || $info['join_set']['people']['content']['border_color']['style'] eq ''">checked</if> name="playersStroke">
+								<label for="playersStrokeDefault" class="radioLabel">默认</label>
+								<input type="radio" id="playersStrokeCustom" data-color-id="joinSetPeopleBorderColorNew" data-color="{vifnn:$info.join_set.people.content.border_color.self_color|default='#f60'}" <if condition="$info['join_set']['people']['content']['border_color']['style'] eq 1">checked</if> name="playersStroke">
+								<label for="playersStrokeCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForPlayersStroke" <if condition="$info['join_set']['people']['content']['border_color']['self_color'] neq ''"><if condition="$info['join_set']['people']['content']['border_color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.join_set.people.content.border_color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.join_set.people.content.border_color.self_color}; "</if></if>></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--样式设置弹窗-->
+
+<!--按钮样式弹窗-->
+<div id="startBtn" class="windowBg setWindow hidden" style="background: rgba(0, 0, 0, 0.298039);">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">选择按钮样式</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="btnStyle">
+				<ul class="clearfix">
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_1.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 1 || $info.star_btn eq ''">style="display: block; "</if>></div>
+						</div>
+						<h3>样式一</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_2.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 2">style="display: block; "</if>></div>
+						</div>
+						<h3>样式二</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_3.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 3">style="display: block; "</if>></div>
+						</div>
+						<h3>样式三</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_4.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 4">style="display: block; "</if>></div>
+						</div>
+						<h3>样式四</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_5.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 5">style="display: block; "</if>></div>
+						</div>
+						<h3>样式五</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_6.png" alt="样式">
+
+							<div class="selectCover"  <if condition="$info.star_btn eq 6">style="display: block; "</if>></div>
+						</div>
+						<h3>样式六</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_7.png" alt="样式">
+
+							<div class="selectCover"  <if condition="$info.star_btn eq 7">style="display: block; "</if>></div>
+						</div>
+						<h3>样式七</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_8.png" alt="样式">
+
+							<div class="selectCover"  <if condition="$info.star_btn eq 8">style="display: block; "</if>></div>
+						</div>
+						<h3>样式八</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_9.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 9">style="display: block; "</if>></div>
+						</div>
+						<h3>样式九</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_10.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 10">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_11.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 11">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十一</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_12.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 12">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十二</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_13.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 13">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十三</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_14.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 4">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十四</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_15.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 15">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十五</h3>
+					</li>
+					<li>
+						<div class="btnImgBox">
+							<img src="{vifnn:$staticPath}/tpl/static/game/gameimage/start_16.png" alt="样式">
+
+							<div class="selectCover" <if condition="$info.star_btn eq 16">style="display: block; "</if>></div>
+						</div>
+						<h3>样式十六</h3>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!--按钮样式弹窗-->
+
+<!--样式设置弹窗-->
+<div id="playTopStyle" class="windowBg setWindow hidden" style="background: rgba(0, 0, 0, 0.298039)">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">样式设置</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+
+			<php>
+				$timeFontSize = $info['notice_set']['time_text']['content']['size'];
+
+				$scoreFontSize = $info['notice_set']['score_text']['content']['size'];
+			</php>
+
+			<div class="setStyle">
+				<div class="formRow clearfix">
+					<span class="rowTitle">计时文字：</span>
+
+					<div class="putWrap">
+						<div class="cssRadio">
+							<input type="radio" id="timeTextDefault" <if condition="$info['notice_set']['time_text']['style'] eq 0 || $info['notice_set']['text']['style'] eq ''">checked</if> name="timeText">
+							<label for="timeTextDefault" class="radioLabel">默认</label>
+							<input type="radio" id="timeTextCustom" <if condition="$info['notice_set']['time_text']['style'] eq 1">checked</if> name="timeText">
+							<label for="timeTextCustom" class="radioLabel">自定义</label>
+						</div>
+						<div class="blockCell" <if condition="$info['notice_set']['time_text']['style'] eq 1">style="display: block; "</if>>
+							<div class="minCell">
+								大小：
+								<span class="slider-range slider-range-2"></span>
+								<em class="amount">{vifnn:$timeFontSize|default='17px'}</em>
+							</div>
+							<div class="minCell cssRadio">
+								文字颜色：
+								<input type="radio" id="timeColorDefault" <if condition="$info['notice_set']['time_text']['content']['color']['style'] eq 0 || $info['notice_set']['time_text']['content']['color']['style'] eq ''">checked</if> name="timeColor">
+								<label for="timeColorDefault" class="radioLabel">默认</label>
+								<input type="radio" id="timeColorCustom" data-color-id="noticeTimeColorNew" data-color="{vifnn:$info.notice_set.time_text.content.color.self_color|default='#FFE5BC'}" <if condition="$info['notice_set']['time_text']['content']['color']['style'] eq 1">checked</if> name="timeColor">
+								<label for="timeColorCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForTimeColor" <if condition="$info['notice_set']['time_text']['content']['color']['self_color'] neq ''"><if condition="$info['notice_set']['time_text']['content']['color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.notice_set.time_text.content.color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.notice_set.time_text.content.color.self_color}; "</if></if>></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="formRow clearfix">
+					<span class="rowTitle">成绩文字：</span>
+
+					<div class="putWrap">
+						<div class="cssRadio">
+							<input type="radio" id="gradeTextDefault" <if condition="$info['notice_set']['score_text']['style'] eq 0 || $info['notice_set']['score_text']['style'] eq ''">checked</if> name="gradeText">
+							<label for="gradeTextDefault" class="radioLabel">默认</label>
+							<input type="radio" id="gradeTextCustom" <if condition="$info['notice_set']['score_text']['style'] eq 1">checked</if> name="gradeText">
+							<label for="gradeTextCustom" class="radioLabel">自定义</label>
+						</div>
+						<div class="blockCell" <if condition="$info['notice_set']['score_text']['style'] eq 1">style="display: block; "</if>>
+							<div class="minCell">
+								大小：
+								<span class="slider-range slider-range-3"></span>
+								<em class="amount">{vifnn:$scoreFontSize|default='33px'}</em>
+							</div>
+							<div class="minCell cssRadio">
+								文字颜色：
+								<input type="radio" id="gradeColorDefault" <if condition="$info['notice_set']['score_text']['content']['color']['style'] eq 0 || $info['notice_set']['score_text']['content']['color']['style'] eq ''">checked</if> name="gradeColor">
+								<label for="gradeColorDefault" class="radioLabel">默认</label>
+								<input type="radio" id="gradeColorCustom" data-color-id="noticeScoreColorNew" data-color="{vifnn:$info.notice_set.score_text.content.color.self_color|default='#FF6961'}" <if condition="$info['notice_set']['score_text']['content']['color']['style'] eq 1">checked</if> name="gradeColor">
+								<label for="gradeColorCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForGradeText" <if condition="$info['notice_set']['score_text']['content']['color']['self_color'] neq ''"><if condition="$info['notice_set']['score_text']['content']['color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.notice_set.score_text.content.color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.notice_set.score_text.content.color.self_color}; "</if></if>></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="formRow clearfix">
+					<span class="rowTitle">背景颜色：</span>
+
+					<div class="putWrap">
+						<div class="cssRadio">
+							<input type="radio" id="topBgDefault" <if condition="$info['notice_set']['back_color']['style'] eq 0 || $info['notice_set']['back_color']['style'] eq ''">checked</if> name="topBg">
+							<label for="topBgDefault" class="radioLabel">默认</label>
+							<input type="radio" id="topBgCustom" <if condition="$info['notice_set']['back_color']['style'] eq 1">checked</if> name="topBg">
+							<label for="topBgCustom" class="radioLabel">自定义</label>
+						</div>
+						<div class="blockCell" <if condition="$info['notice_set']['back_color']['style'] eq 1">style="display: block; "</if>>
+							<div class="minCell cssRadio">
+								颜色设置：
+								<input type="radio" id="topBgColorDefault" <if condition="$info['notice_set']['back_color']['content']['color']['style'] eq 0 || $info['notice_set']['back_color']['content']['color']['style'] eq ''">checked</if> name="topBgColor">
+								<label for="topBgColorDefault" class="radioLabel">默认</label>
+								<input type="radio" id="topBgColorCustom" data-color-id="noticeBackColorNew" data-color="{vifnn:$info.notice_set.back_color.content.color.self_color|default='#FF6961'}" <if condition="$info['notice_set']['back_color']['content']['color']['style'] eq 1">checked</if> name="topBgColor">
+								<label for="topBgColorCustom" class="radioLabel">自定义</label>
+								<a href="javascript:;" class="colorPicker" id="colorForTopBg" <if condition="$info['notice_set']['back_color']['content']['color']['self_color'] neq ''"><if condition="$info['notice_set']['back_color']['content']['color']['style'] eq 1">style="visibility: visible; background: {vifnn:$info.notice_set.back_color.content.color.self_color}; "<else />style="visibility: hide; background: {vifnn:$info.notice_set.back_color.content.color.self_color}; "</if></if>></a>
+							</div>
+
+							<div class="minCell">
+								背景透明度：
+								<span class="slider-range slider-range-4"></span>
+								<em class="amount">{vifnn:$info['notice_set']['back_color']['content']['opacity']*100|default=0}%</em>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--样式设置弹窗-->
+
+<!--卡券选择弹窗-->
+<div id="couponSelect" class="windowBg setWindow hidden" style="background: rgba(0, 0, 0, 0.298039)">
+	<div class="uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit"><span class="uploadBoxTitle">卡券列表</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="setStyle">
+				<volist name="coupon" id="cp">
+					<div class="formRow clearfix">
+						<div class="p item">
+							<em>{vifnn:$key+1}</em>.<span class="t0">{vifnn:$cp['title']}&nbsp;&nbsp;有效期:[<em>{vifnn:$cp['statdate']|date="Y-m-d H:i:s",###}</em>至<em>{vifnn:$cp['enddate']|date="Y-m-d H:i:s",###}</em>]</span>
+							<span class="superLink" people="{vifnn:$cp['people']}" coupon="{vifnn:$cp['card_id']}" ctitle="{vifnn:$cp['title']}" onclick="chose_coupon(this)" style="color: #2A7B3E; right: 25px; position: absolute; cursor: pointer; ">选中</span>
+						</div>
+					</div>
+				</volist>
+			</div>
+		</div>
+	</div>
+</div>
+<!--卡券选择弹窗-->
+
+<script src="http://demo.vifnn.cn/tpl/static/newswelcome/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<!--<script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.min.js"></script>-->
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery-ui-1.9.1.custom.min.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery-ui-timepicker-zh-CN.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery.ui.datepicker-zh-CN.js.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery.bigcolorpicker.min.js"></script>
+
+
+<div class="clr"></div>
+</div>
+</div>
+</div>
+<!--底部-->
+<!-- 游戏配置 -->
+<script>
+	/**
+	 * Created by tanytree on 2016/1/15.
+	 */
+
+		//单选框 .form_2radio
+	$(document).ready(function () {
+		$(".cssRadio").each(function () {
+			$(this).cssRadio()
+		});
+	});
+	jQuery.fn.cssRadio = function () {
+		var context = this;
+		jQuery("input[type='radio'] + label", this)
+				.each(function () {
+					if (jQuery(this).prev()[0].checked)
+						jQuery(this).addClass("checkOn");
+				})
+				.click(function () {
+					jQuery("input[type='radio'] + label", context)
+							.each(function () {
+								jQuery(this)
+										.removeClass('checkOn')
+										.prev()[0].checked = false;
+							});
+					jQuery(this)
+							.addClass("checkOn")
+							.prev()[0].checked = true;
+				}).prev().hide();
+	};
+
+	$(function(){
+		var x= $(".rightForm").offset().left;
+		$(".uploadBox").css({left:x});
+
+		$(".uploadBox").each(function(){
+			var obj=$(this);
+			centerWindow(obj);
+		});
+
+
+	});
+	//2.将盒子方法放入这个方，方便法统一调用
+	function centerWindow(a) {
+		center(a);
+		//自适应窗口
+		$(window).bind('scroll resize',
+				function() {
+					center(a);
+				});
+	}
+
+	//1.居中方法，传入需要剧中的标签
+	function center(a) {
+		var wWidth = $(window).width();
+		var wHeight = $(window).height();
+		var boxWidth = $(a).width();
+		var boxHeight = $(a).outerHeight(true);
+		var scrollTop = $(window).scrollTop();
+		var scrollLeft = $(window).scrollLeft();
+		var top = (wHeight - boxHeight) / 2;
+		//var left = scrollLeft + (wWidth - boxWidth) / 2;
+		var x= $(".rightForm").offset().left;
+
+		$(a).css({
+			"top": top,'left':x
+		});
+	}
+
+	$(function () {
+		myFun.tabs('.rightForm .hd ul li', '.rightForm .bd .row', 'on');
+		$(".rightForm .bd .putWrap input[type=text],.rightForm .bd .putWrap textarea,.rightForm .bd .putWrap select").focus(function () {
+			$(this).addClass('focusOn');
+			$(this).parent().find(".clearBtn").fadeIn(300);
+		}).blur(function () {
+			$(this).removeClass('focusOn');
+			$(this).parent().find(".clearBtn").fadeOut(300);
+		});
+		$(".clearBtn").click(function () {
+			$(this).prev().val('');
+		});
+	});
+	//显示隐藏操作
+	$(function () {
+		$(".actData").each(function () {
+			$(this).datetimepicker({
+				dateFormat: "yy-mm-dd",
+				timeFormat: "HH:mm",
+				closeText:  "确定"
+			});
+		});
+
+		function changeMinDate (from, to, num)
+		{
+			var $this = $("." + from);
+			var startTime = $this.val();
+
+			var startTime = startTime.split(' ')[0];
+			var startYear = startTime.split('-')[0];
+			var startMonth = Number(startTime.split('-')[1]);
+			var startDay = Number(startTime.split('-')[2]);
+
+			$("." + to).datetimepicker('option', 'minDate', new Date(startYear, startMonth - 1, startDay + 1));
+			if (num && num != 1) {
+				num--;
+				changeMinDate(from, to, num);
+			}
+		}
+
+		$(".actStart").on('change', function () {
+			changeMinDate('actStart', 'actEnd');
+		});
+
+		$(".actEnd").on('change', function () {
+			changeMinDate('actEnd', 'start');
+		});
+
+		$(".start").on('change', function () {
+			changeMinDate('start', 'end');
+		});
+
+		changeMinDate('actStart', 'actEnd', 2);
+		<if condition="$info['is_release'] eq 1 && isset($info['end_time']) && $info['end_time'] lt time()">
+		changeMinDate('actEnd', 'start',2);
+		</if>
+
+
+		//  微信分享图片
+		$('#sharePicY').click(function () {
+			$(".wxShareImg").slideDown();
+		});
+		$('#sharePicN').click(function () {
+			$(".wxShareImg").slideUp();
+		});
+
+		//活动标题编辑显示隐藏
+		var editBtn = $('<a class="imgUpLoadBtn">编辑</a>');
+		var actNameEdit = $("#actName");
+		actNameEdit.append(editBtn);
+		actNameEdit.hover(function () {
+			$(this).find('.imgUpLoadBtn').show();
+		}, function () {
+			$(this).find('.imgUpLoadBtn').hide();
+		})
+
+	});
+
+//	$(function () {
+//		var rightFormLeft = $(".rightForm").offset().left;
+//		$("#uploadImgBox").css('left', rightFormLeft);
+//	});
+
+	function fixFooter () {
+		var h = $(".gameConfig").outerHeight();
+		var left = $(".gameConfig").offset().left;
+		if (window.innerHeight < h) {
+			$(".saveBottomBar").addClass("fixBottombar");
+			$(".saveBottomBar").css('left', left);
+		} else {
+			$(".saveBottomBar").removeClass("fixBottombar");
+		}
+	}
+	$(function () {
+		fixFooter();
+	});
+	window.onresize = function () {
+		fixFooter();
+	};
+
+	//主页面内操作表单和弹窗
+	$(function () {
+		$('#actName .imgUpLoadBtn').click(function () {
+			$(".rightForm .hd ul li").eq(0).click();
+			$("#actNameRow").addClass('checkBorder');
+		});
+		$('.formRow').hover(function () {
+			$(this).removeClass('checkBorder');
+			$(this).parent().removeClass('checkBorder');
+		});
+
+
+	});
+
+	$("#rankLimitInput").keyup(function() {
+		var $this = $(this);
+
+		var value = $this.val();
+
+		if (value > 1000) {
+			$this.val(1000);
+			alert("最多显示1000人！");
+		}
+	});
+
+	function chose_coupon (obj) {
+		var coupon_id = obj.getAttribute('coupon'),
+				coupon_title  = obj.getAttribute('ctitle'),
+				coupon_people = obj.getAttribute('people');
+		document.getElementById('chosed_coupon').innerHTML = coupon_title;
+		document.getElementById('coupon_id').value     = coupon_id;
+		document.getElementById('coupon_title').value  = coupon_title;
+		document.getElementById('coupon_people').value = coupon_people;
+		document.getElementById('coupon_limit').value = coupon_people;
+
+		$("#couponSelect").addClass("hidden");
+		$("body").css("overflow","auto");
+	}
+
+	var titleX = '', titleY = '', titleW = '', titleH = '', logoX = '', logoY = '', logoW = '', logoH = '',
+			startBtnX = '', startBtnY = '', joinX = '', joinY = '', tipX = '', tipY = '', bgMusicX = '', bgMusicY = '', timeX = '', timeY = '';
+
+	$("#setForm").bind("submit", function (event) {
+		var hasError = false;
+		var requires = $(".require_text");
+		$(".errorMsg").html("").hide();
+
+		$.each(requires, function (k, require) {
+
+			var value = $(require).val();
+			if (!value) {
+				hasError = true;
+
+				var awardsTypeArray = new Array('奖一', '奖二', '奖三', '奖四', '奖五', '奖六', '奖七', '奖八', '奖九');
+				var checkType = $(require).data('id');
+
+				switch (checkType) {
+					case 'keywordError':
+						var htmlText = '关键词不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'actNamePutError':
+						var htmlText = '活动标题不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'startTimeError':
+						var htmlText = '活动开始时间不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'endTimeError':
+						var htmlText = '活动结束时间不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'introTextAreaError':
+						var htmlText = '活动简介不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'actRuleAreaError':
+						var htmlText = '活动规则不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'awardsValuesTypeError':
+						var awardsType = $(require).data('type');
+
+						var htmlText = awardsTypeArray[awardsType] + '的奖项类型不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'awardsValuesNameError':
+						var awardsType = $(require).data('type');
+
+						var htmlText = awardsTypeArray[awardsType] + '的奖项名称不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'awardsValuesNumError':
+						var awardsType = $(require).data('type');
+
+						var htmlText = awardsTypeArray[awardsType] + '的奖项数量不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'awardsStartTimeError':
+						var htmlText = '兑奖开始时间不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'awardsEndTimeError':
+						var htmlText = '兑奖结束时间不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'exchangeAreaError':
+						var htmlText = '兑奖规则不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'officeNameError':
+						var htmlText = '主办单位不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+					case 'minMoneyError':
+						var htmlText = '最小红包金额不能为空！';
+
+						$("#"+checkType).html(htmlText).show();
+						break;
+				}
+			}
+		});
+
+		var hasTimeError = false;
+		var actStart = $(".actStart").val();
+		actStart = new Date(Date.parse(actStart.replace(/-/g, "/")));
+		actStart = actStart.getTime();
+
+		var actEnd = $(".actEnd").val();
+		actEnd = new Date(Date.parse(actEnd.replace(/-/g, "/")));
+		actEnd = actEnd.getTime();
+
+		var startTime = $(".start").val();
+		startTime = new Date(Date.parse(startTime.replace(/-/g, "/")));
+		startTime = startTime.getTime();
+
+		var endTime = $(".end").val();
+		endTime = new Date(Date.parse(endTime.replace(/-/g, "/")));
+		endTime = endTime.getTime();
+
+		if (actStart >= actEnd) {
+			hasTimeError = true;
+
+			var timeErrorText = '活动的结束时间必须大于开始时间！';
+
+			$("#actTimeError").html(timeErrorText).show();
+		}
+
+		if (startTime >= endTime) {
+			hasTimeError = true;
+
+			var timeErrorText = '兑奖的结束时间必须大于开始时间！';
+
+			$("#awardsTimeError").html(timeErrorText).show();
+		}
+
+		var hasMoneyError = false;
+		var minMoney = $("#minMoney").val();
+		var maxMoney = $("#maxMoney").val();
+		if (maxMoney && maxMoney <= minMoney) {
+			hasMoneyError = true;
+
+			var moneyText = "红包的最大金额必须大于红包的最小金额！"
+
+			$("#moneyError").html(moneyText).show();
+		}
+
+		var hasCouponError = false;
+		if (!$("#coupon_title").val() && $("#coupon_title").data("checked")) {
+			hasCouponError = true;
+
+			$("#couponError").html("请选择微信卡券！").show();
+		}
+
+		if (hasError || hasTimeError || hasMoneyError || hasCouponError) {
+			event.preventDefault();
+		}
+
+		$("#titleImgX").val(titleX.val());
+		$("#titleImgY").val(titleY.val());
+		$("#titleImgW").val(titleW.val());
+		$("#titleImgH").val(titleH.val());
+
+		$("#logoImgX").val(logoX.val());
+		$("#logoImgY").val(logoY.val());
+		$("#logoImgW").val(logoW.val());
+		$("#logoImgH").val(logoH.val());
+
+		$("#startBtnImgX").val(startBtnX.val());
+		$("#startBtnImgY").val(startBtnY.val());
+		$("#startBtnX").val(startBtnX.val());
+		$("#startBtnY").val(startBtnY.val());
+
+		$("#startBgType").val($("#startBgImgSrc").val());
+
+		$("#joinX").val(joinX.val());
+		$("#joinY").val(joinY.val());
+		$("#joinSelfX").val(joinX.val());
+		$("#joinSelfY").val(joinY.val());
+
+		$("#tipX").val(tipX.val());
+		$("#tipY").val(tipY.val());
+
+		$("#bgMusicX").val(bgMusicX.val());
+		$("#bgMusicY").val(bgMusicY.val());
+		$("#bgMusicImgX").val(bgMusicX.val());
+		$("#bgMusicImgY").val(bgMusicY.val());
+
+		$("#timeX").val(timeX.val());
+		$("#timeY").val(timeY.val());
+	});
+
+	//操作iframe
+	var gamePage = document.getElementById("gamePreviewPage").onload = function () {
+		$(this).show();
+
+		var gamePreviewPage = $("#gamePreviewPage", parent.document.body).contents();
+		var a = gamePreviewPage.find(".pageRowBox").html();
+		var uiWrapper = gamePreviewPage.find(".ui-wrapper");
+		var absText = gamePreviewPage.find(".absText");
+		var homeBtnBox = gamePreviewPage.find(".homeBtnBox");
+		var actImgList = gamePreviewPage.find(".actImgList");
+		var rightTime = gamePreviewPage.find(".rightTime");
+		var actRuleTextA = gamePreviewPage.find("#actRuleText");
+		var actRuleTextB = gamePreviewPage.find("#actCompanyText");
+		var priceList = gamePreviewPage.find("#priceList");
+		var exchange = gamePreviewPage.find("#exchange");
+		var invitationText = gamePreviewPage.find("#invitationText");
+		var sharePrice = gamePreviewPage.find("#sharePrice");
+		var musicIcon = gamePreviewPage.find("#audio_btn");
+		var startBtnImg = gamePreviewPage.find("#startBtnImg");
+		var joinNumLine = gamePreviewPage.find("#joinNumLine");
+		var playTop = gamePreviewPage.find(".playTop");
+		var titleImg = gamePreviewPage.find("#titleImg");
+		var coLogo = gamePreviewPage.find("#coLogo");
+		var rankImg = gamePreviewPage.find("#rankBtnImg");
+		var awardsImg = gamePreviewPage.find("#awardBrnImg");
+		var homeBgImg = gamePreviewPage.find("#homeBg");
+		var playBgImg = gamePreviewPage.find("#playingBg");
+		var selfImgShow = new Array();
+
+		<volist name="selfs" id="item">
+			<if condition="$item['property'] eq 'ordinary'">
+				selfImgShow[{vifnn:$item.id}] = gamePreviewPage.find("#selfImgShow"+{vifnn:$item.id});
+			</if>
+		</volist>
+
+		titleX = gamePreviewPage.find("#titleImgX");
+		titleY = gamePreviewPage.find("#titleImgY");
+		titleW = gamePreviewPage.find("#titleImgW");
+		titleH = gamePreviewPage.find("#titleImgH");
+
+		logoX = gamePreviewPage.find("#logoImgX");
+		logoY = gamePreviewPage.find("#logoImgY");
+		logoW = gamePreviewPage.find("#logoImgW");
+		logoH = gamePreviewPage.find("#logoImgH");
+
+		startBtnX = gamePreviewPage.find("#startBtnImgX");
+		startBtnY = gamePreviewPage.find("#startBtnImgY");
+
+		joinX = gamePreviewPage.find("#joinX");
+		joinY = gamePreviewPage.find("#joinY");
+
+		tipX = gamePreviewPage.find("#tipX");
+		tipY = gamePreviewPage.find("#tipY");
+
+		bgMusicX = gamePreviewPage.find("#bgMusicImgX");
+		bgMusicY = gamePreviewPage.find("#bgMusicImgY");
+
+		timeX = gamePreviewPage.find("#timeX");
+		timeY = gamePreviewPage.find("#timeY");
+
+		bigScroll();
+		//按下拉框的值显示奖项个数
+		var pricePicLi1 = gamePreviewPage.find(".priceList .style1 ul li");
+		var pricePicLi2 = gamePreviewPage.find(".priceList .style2 ul li");
+		var setThisNow = gamePreviewPage.find(".priceList .style2 ul li.setThisNow");
+		var clickLen = $(".priceSeting .setHd ul li");
+		var setHdLen = $('.setHd ul li').length;
+		var selectVal = $("#setAwardNums").val();
+
+		var price = new Array(8);
+
+		<volist name="awardsValues" id="item">
+		price[{vifnn:$key}] = new Array('{vifnn:$item.awards_type}', '{vifnn:$item.awards_name}', '{vifnn:$item.awards_num}', '{vifnn:$item.awards_pic}');
+		</volist>
+
+//		price[0] = new Array('一等奖', '拉拉的玛西亚45', '5', 'phoneimage/placeholder/w1.png');
+//		price[1] = new Array('二等奖', '拉拉的玛西亚1', '4', 'phoneimage/placeholder/w2.png');
+//		price[2] = new Array('三等奖', '拉拉的玛西亚2', '5', 'phoneimage/placeholder/w3.png');
+//		price[3] = new Array('四等奖', '拉拉的玛西亚3', '8', 'phoneimage/placeholder/w3.png');
+//		price[4] = new Array('五等奖', '拉拉的玛西亚4', '15', 'phoneimage/placeholder/w3.png');
+//		price[5] = new Array('六等奖', '拉拉的玛西亚5', '20', 'phoneimage/placeholder/w3.png');
+//		price[6] = new Array('七等奖', '拉拉的玛西亚6', '30', 'phoneimage/placeholder/w3.png');
+//		price[7] = new Array('八等奖', '拉拉的玛西亚7', '80', 'phoneimage/placeholder/w3.png');
+//		price[8] = new Array('九等奖', '拉拉的玛西亚8', '90', 'phoneimage/placeholder/w3.png');
+
+		clickLen.click(function () {
+			$(this).addClass('on').siblings().removeClass("on");
+			//$(".priceSeting .setBd").find("input[type=text]").val('');
+			var o = clickLen.index(this);
+			pricePicLi1.eq(o).addClass('setThisNow').siblings().removeClass('setThisNow');
+			pricePicLi2.eq(o).addClass('setThisNow').siblings().removeClass('setThisNow');
+			//alert(clickLen.index(this));
+			setThisNow = gamePreviewPage.find(".priceList ul li.setThisNow");
+			if (!price[o]) {
+				return;
+			} else {
+				$("#awardType").val(price[o][0]);
+				$("#awardName").val(price[o][1]);
+				$("#awardNumber").val(price[o][2]);
+				$("#pricePhoto").attr('src', price[o][3]);
+				$("#awardsView").attr('onclick', "viewImg('awardsValuesPic_"+o+"')");
+			}
+		}).eq(0).trigger('click');
+
+		for (var i = setHdLen; i >= selectVal; i--) {
+			$('.setHd ul li').eq(i).hide();
+			pricePicLi1.eq(i).hide();
+			pricePicLi2.eq(i).hide();
+		}
+		$('#setAwardNums').change(function () {
+			var val = $(this).val();
+			showAward(val);
+		});
+
+		function showAward (count) {
+			var li = $('.setHd ul li');
+			li.hide();
+			pricePicLi1.hide();
+			pricePicLi2.hide();
+			var index = parseInt($('.setHd ul li.on').index()) + 1;
+			if (count < index) {
+				$('.setHd ul li').eq(count - 1).click();
+			}
+			for (var i = 0; i < count; i++) {
+				li.eq(i).show();
+				pricePicLi1.eq(i).show();
+				pricePicLi2.eq(i).show();
+			}
+			li.each(function (i) {
+				if (i != 8) {
+					if (i < count) {
+						li.eq(i).show();
+						$(this).show();
+					} else {
+						$(this).hide();
+						li.eq(i).hide();
+					}
+				}
+			});
+			$('.setHd ul li.on').click();
+		}
+
+		//  奖项设置显示奖品图片
+		$('#showPicY').click(function () {
+			$(".priceSetRow").slideDown();
+		});
+		$('#showPicN').click(function () {
+			$(".priceSetRow").slideUp();
+		});
+
+		var LiOnIndex;
+		var myPriceInfo = gamePreviewPage.find(".myPriceInfo");
+		var priceList = gamePreviewPage.find(".priceList");
+		var setThisNow = gamePreviewPage.find(".priceList  ul li.setThisNow");
+		var topVal;
+		//查询当前是几等奖的输入状态
+		function checkLiOnIndex () {
+			var li = $(".priceSeting .setHd ul li");
+			var liOn = $(".priceSeting .setHd ul li.on");
+			LiOnIndex = li.index(liOn);
+		}
+
+		//奖项编辑实时输入
+
+		$("#awardType").bind('input propertychange', function () {
+			checkLiOnIndex();
+			setThisNow.find(".awardType").text($(this).val());
+			price[LiOnIndex][0] = $(this).val();
+
+			if (LiOnIndex == 0) {
+				myPriceInfo.find(".awards_type").text($(this).val());
+			}
+
+			$("#awardsValuesType_"+LiOnIndex).val(price[LiOnIndex][0]);
+		});
+		$("#awardName").bind('input propertychange', function () {
+			checkLiOnIndex();
+			setThisNow.find(".awardName").text($(this).val());
+			price[LiOnIndex][1] = $(this).val();
+
+			if (LiOnIndex == 0) {
+				myPriceInfo.find(".awards_name").text($(this).val());
+			}
+
+			$("#awardsValuesName_"+LiOnIndex).val(price[LiOnIndex][1]);
+		});
+		$("#awardNumber").change(function () {
+			if ($(this).val() == 0) {
+				$(this).val(price[LiOnIndex][2]);
+			}
+		});
+
+		$("#awardNumber").bind('input propertychange', function () {
+			checkLiOnIndex();
+			if (this.value == 0) {
+				console.log("不得为“0”");
+				return false;
+			}
+			this.value = this.value.replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, "$1");
+			//setThisNow.find(".awardNumber").text(this.value);
+			price[LiOnIndex][2] = this.value;
+
+			$("#awardsValuesNum_"+LiOnIndex).val(price[LiOnIndex][2]);
+
+			priceList.find(".style1 ul li").eq(LiOnIndex).find(".awardNumber").attr('data', this.value);
+			priceList.find(".style2 ul li").eq(LiOnIndex).find(".awardNumber").attr('data', this.value);
+			for (LiOnIndex; LiOnIndex < 9; LiOnIndex++) {
+				var prevNo = priceList.find(".style1 ul li").eq(LiOnIndex - 1).find(".awardNumber").find("tg").last().text();
+				var nextNo = priceList.find(".style1 ul li").eq(LiOnIndex).find(".awardNumber").attr('data');
+				prevNo = parseInt(prevNo);
+				nextNo = parseInt(nextNo);
+				var startNo = prevNo + 1;
+				var endNo = nextNo + prevNo;
+
+				if (nextNo < 2 && LiOnIndex == 0) {
+					priceList.find(".style1 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP <tg>" + nextNo + "</tg>");
+					priceList.find(".style2 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP " + nextNo);
+				} else if (nextNo > 1 && LiOnIndex == 0) {
+					priceList.find(".style1 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP <tg>1</tg>-<tg>" + nextNo + "</tg>");
+					priceList.find(".style2 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP 1-" + nextNo);
+
+				} else if (LiOnIndex > 0 && nextNo == 1) {
+					priceList.find(".style1 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP <tg>" + startNo + "</tg>");
+					priceList.find(".style2 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP " + startNo);
+				} else if (LiOnIndex > 0 && nextNo > 1) {
+					priceList.find(".style1 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP <tg>" + startNo + "</tg>-<tg>" + endNo + "</tg>");
+					priceList.find(".style2 ul li").eq(LiOnIndex).find(".awardNumber").html("TOP " + startNo + "-" + endNo);
+				}
+			}
+
+		});
+
+		// 修改奖品图片
+		$("#awardPic").click(function () {
+			checkLiOnIndex();
+			upyunPicUploadCallback('awardsValuesPic_'+LiOnIndex, 100, 100, '{vifnn:$token}', function () {
+				var value = $("#awardsValuesPic_"+LiOnIndex).val();
+
+				$("#pricePhoto").attr('src', value);
+				$("#awardsView").attr('onclick', "viewImg('awardsValuesPic_"+LiOnIndex+"')");
+				price[LiOnIndex][3] = value;
+				priceList.find(".style1 ul li").eq(LiOnIndex).find("img").attr('src', value);
+			});
+		});
+
+		// 修改企业LOGO
+		$("#cLogoSelect").click(function () {
+			upyunPicUploadCallback('logoImgSrc', 121, 51, '{vifnn:$token}', function () {
+				var value = $("#logoImgSrc").val();
+
+				coLogo.attr('src', value);
+			});
+		});
+
+		//窗口显示
+		function showWindow (target, callback) {
+			if (callback) {
+				$(target).fadeIn('normal', callback).removeClass("hidden");
+				$(target).fadeIn('normal', callback).removeClass("hidden");
+			} else {
+				$(target).removeClass("hidden");
+			}
+
+			$("body").css("overflow","hidden");
+		}
+
+		//编辑音乐和背景图
+		$(".moduleLayer").click(function () {
+			if ($(this).index() == 0) {
+				showWindow('#uploadMusic');
+			} else if ($(this).index() == 1) {
+				var type =  $('.gameConfig').find(".gHd ul li.on").index();
+
+				switch(type) {
+					case 0:
+						showWindow('#uploadImg', function () {
+							$("#itemTitle").text('游戏封面：');
+							var imgSrc = homeBgImg.attr('src');
+							$("#itemUploadBtn").data('type', 'startBgImgSrc');
+							$("#itemUploadBtn").data('width', '640');
+							$("#itemUploadBtn").data('height', '1028');
+
+							$("#itemWidth").text('640');
+							$("#itemHeight").text('1028');
+
+							$("#itemSrc").attr('width', '50');
+							$("#itemSrc").attr('height', '80');
+
+							if (imgSrc) {
+								$("#itemSrc").attr('src', imgSrc);
+								$("#itemLoading").addClass('hide');
+							} else {
+								$("#itemSrc").attr('src', '{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png');
+								$("#itemLoading").removeClass('hide');
+							}
+						});
+
+						break;
+					case 1:
+						showWindow('#uploadImg', function () {
+							$("#itemTitle").text('游戏背景：');
+							var imgSrc = playBgImg.attr('src');
+							$("#itemUploadBtn").data('type', 'playBgImgSrc');
+							$("#itemUploadBtn").data('width', '640');
+							$("#itemUploadBtn").data('height', '1028');
+
+							$("#itemWidth").text('640');
+							$("#itemHeight").text('1028');
+
+							$("#itemSrc").attr('width', '50');
+							$("#itemSrc").attr('height', '80');
+
+							if (imgSrc) {
+								$("#itemSrc").attr('src', imgSrc);
+								$("#itemLoading").addClass('hide');
+							} else {
+								$("#itemSrc").attr('src', '{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png');
+								$("#itemLoading").removeClass('hide');
+							}
+						});
+
+						break;
+				}
+
+			}
+		});
+		var homeBgmoduleLayer = $('#moduleLayerBox');
+		var homeBgmoduleTimer = null;
+		var homePage = gamePreviewPage.find(".home");
+		homePage.hover(function () {
+			homeBgmoduleLayer.show();
+		});
+		homeBgmoduleLayer.mouseenter(function () {
+			clearTimeout(homeBgmoduleTimer);
+		}).mouseleave(function () {
+			homeBgmoduleTimer = setTimeout(function () {
+				homeBgmoduleLayer.hide();
+			}, 10);
+		});
+
+		$(".holderPhone").mouseleave(function () {
+			homeBgmoduleLayer.hide();
+		});
+
+		//图片上传窗口弹出，封面图和游戏进行中使用同一段代码控制，具体开发中需要具体处理
+		uiWrapper.on('click', '.imgUpLoadBtn', function () {
+			showWindow('#uploadImg', function () {
+				$("#itemTitle").text('游戏标题：');
+				var imgSrc = titleImg.attr('src');
+				$("#itemUploadBtn").data('type', 'titleImgSrc');
+				$("#itemUploadBtn").data('width', '{vifnn:$titleWidth}');
+				$("#itemUploadBtn").data('height', '{vifnn:$titleHeight}');
+
+				$("#itemWidth").text('{vifnn:$titleWidth}');
+				$("#itemHeight").text('{vifnn:$titleHeight}');
+
+				<php>
+					$newWidth = '80';
+					$newHeight = 80/$titleWidth*$titleHeight;
+					if ($newHeight > 80) {
+						$newHeight = '80';
+						$newWidth = 80/$titleHeight*$titleWidth;
+					}
+				</php>
+
+				$("#itemSrc").attr('width', '{vifnn:$newWidth}');
+				$("#itemSrc").attr('height', '{vifnn:$newHeight}');
+
+				if (imgSrc) {
+					$("#itemSrc").attr('src', imgSrc);
+					$("#itemLoading").addClass('hide');
+				} else {
+					$("#itemSrc").attr('src', '{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png');
+					$("#itemLoading").removeClass('hide');
+				}
+			});
+		});
+
+		actImgList.on('click', '.layerImg', function () {
+			showWindow('#uploadImgListBox');
+		});
+
+		$("#itemUploadBtn").click(function () {
+			var imgType = $(this).data('type');
+			var imgWidth = $(this).data('width');
+			var imgHeight = $(this).data('height');
+
+			upyunPicUploadCallback(imgType, imgWidth, imgHeight, '{vifnn:$token}', function () {
+				var val = $("#" + imgType).val();
+
+				$("#itemSrc").attr('src', val);
+				$("#itemLoading").addClass('hide');
+
+				switch (imgType) {
+					case 'titleImgSrc':
+						titleImg.attr('src', val);
+						break;
+					case 'rankImgSrc':
+						rankImg.attr('src', val);
+						break;
+					case 'prizeImgSrc':
+						awardsImg.attr('src', val);
+						break;
+					case 'startBgImgSrc':
+						homeBgImg.attr('src', val);
+						break;
+					case 'playBgImgSrc':
+						playBgImg.attr('src', val);
+						break;
+					default :
+						break;
+				}
+			})
+		});
+
+		$(".itemUploadBtn").click(function () {
+			var selfId = $(this).data('self-id');
+			var imgType = $(this).data('type');
+			var imgWidth = $(this).data('width');
+			var imgHeight = $(this).data('height');
+
+			upyunPicUploadCallback(imgType, imgWidth, imgHeight, '{vifnn:$token}', function () {
+				var val = $("#" + imgType).val();
+
+				$("#selfImg" + selfId).attr('src', val);
+				selfImgShow[selfId].attr('src', val);
+				$("#selfLoading" + selfId).addClass('hide');
+			})
+		});
+
+		//关闭窗口
+		$('.editPicClose').click(function (e) {
+			$('.setWindow').addClass("hidden");
+			$("body").css("overflow","auto");
+		});
+		//企业logo按钮控制
+		uiWrapper.on('click', '.coLogoctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(3).click();
+			$("#actLogoRow").addClass('checkBorder');
+		});
+		//开始按钮控制
+		uiWrapper.on('click', '.startBtn', function () {
+			showWindow('#startBtn');
+		});
+		//封面图底部文字提示
+		absText.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(2).click();
+			$(".invitationSet").addClass('checkBorder');
+			//$(".shareTypeHd label").last().click();
+		});
+		//参与人数文字编辑按钮
+		absText.on('click', '.styleAndCrtl .ctrlFromBtn', function () {
+			$(".rightForm .hd ul li").eq(3).click();
+			$("#actInclusion").addClass('checkBorder');
+		});
+		//参与人数文字样式按钮
+		absText.on('click', '.styleAndCrtl .styleBtn', function () {
+			showWindow('#uploadTextStyle');
+		});
+
+		//封面图右侧排名按钮
+		homeBtnBox.on('click', '#rankBtn', function () {
+			showWindow('#uploadImg', function () {
+				$("#itemTitle").text('排行图标：');
+				var imgSrc = rankImg.attr('src');
+				$("#itemUploadBtn").data('type', 'rankImgSrc');
+				$("#itemUploadBtn").data('width', '30');
+				$("#itemUploadBtn").data('height', '30');
+
+				$("#itemWidth").text('30');
+				$("#itemHeight").text('30');
+
+				$("#itemSrc").attr('width', '80');
+				$("#itemSrc").attr('height', '80');
+
+				if (imgSrc) {
+					$("#itemSrc").attr('src', imgSrc);
+					$("#itemLoading").addClass('hide');
+				} else {
+					$("#itemSrc").attr('src', '{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png');
+					$("#itemLoading").removeClass('hide');
+				}
+			});
+		});
+
+		//封面图右侧奖品按钮
+		homeBtnBox.on('click', '#awardBtn', function () {
+			showWindow('#uploadImg', function () {
+				$("#itemTitle").text('奖项图标：');
+				var imgSrc = awardsImg.attr('src');
+				$("#itemUploadBtn").data('type', 'prizeImgSrc');
+				$("#itemUploadBtn").data('width', '30');
+				$("#itemUploadBtn").data('height', '30');
+
+				$("#itemWidth").text('30');
+				$("#itemHeight").text('30');
+
+				$("#itemSrc").attr('width', '80');
+				$("#itemSrc").attr('height', '80');
+
+				if (imgSrc) {
+					$("#itemSrc").attr('src', imgSrc);
+					$("#itemLoading").addClass('hide');
+				} else {
+					$("#itemSrc").attr('src', '{vifnn:$staticPath}/tpl/static/game/gameimage/sharePic.png');
+					$("#itemLoading").removeClass('hide');
+				}
+			});
+		});
+
+		//时间条
+		rightTime.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(0).click();
+			$("#actTime").addClass('checkBorder');
+		});
+		//活动规则
+		actRuleTextA.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(0).click();
+			$("#actRuleRow").addClass('checkBorder');
+		});
+		//活动单位
+		actRuleTextB.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(3).click();
+			$("#actCompanyRow").addClass('checkBorder');
+		});
+		//奖品列表
+		priceList.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(1).click();
+			$(".priceWrap").addClass('checkBorder');
+		});
+		//兑换说明
+		exchange.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(1).click();
+			$("#exchangeRow").addClass('checkBorder');
+
+		});
+		//邀请规则
+		invitationText.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(2).click();
+			$("#invitationRow").addClass('checkBorder');
+		});
+		//邀请规则
+		sharePrice.on('click', '.ctrlBtn', function () {
+			$(".rightForm .hd ul li").eq(2).click();
+			$(".invitationSet").addClass('checkBorder');
+		});
+
+
+		//奖品列表模式切换
+		$("#showPicY").click(function () {
+			gamePreviewPage.find(".priceList .cellRow").hide();
+			gamePreviewPage.find(".priceList .style1").show();
+		});
+		$("#showPicN").click(function () {
+			gamePreviewPage.find(".priceList .cellRow").hide();
+			gamePreviewPage.find(".priceList .style2").show();
+		});
+
+		//音乐窗口处理
+		$("#setMusicY").click(function () {
+			musicIcon.removeClass('off');
+			if (!musicIcon.find("#yinfu").hasClass('rotate')) {
+				musicIcon.find("#yinfu").addClass('rotate');
+			}
+			musicIcon.show();
+			document.getElementById('gamePreviewPage').contentWindow.document.getElementById('gameMusic').play();
+
+			$(".musicSetCustom").addClass("hide");
+
+			$("#bgMusicVisible").val(1);
+			$("#bgMusicType").val(1);
+		});
+
+		$("#setMusicN").click(function () {
+			musicIcon.hide();
+			document.getElementById('gamePreviewPage').contentWindow.document.getElementById('gameMusic').pause();
+			$(".musicSetCustom").addClass("hide");
+
+			$("#bgMusicVisible").val(0);
+			$("#bgMusicType").val(0);
+		});
+
+		$("#setMusicC").click(function () {
+			musicIcon.removeClass('off');
+			if (!musicIcon.find("#yinfu").hasClass('rotate')) {
+				musicIcon.find("#yinfu").addClass('rotate');
+			}
+			musicIcon.show();
+			document.getElementById('gamePreviewPage').contentWindow.document.getElementById('gameMusic').play();
+			$(".musicSetCustom").removeClass("hide");
+
+			$("#bgMusicVisible").val(1);
+			$("#bgMusicType").val(2);
+		});
+
+		$("#submitBgMusic").click(function () {
+			var bgMusicValue = $("#bgMusicText").val();
+
+			$("#bgMusicSrc").val(bgMusicValue);
+			$("#bgMusicValue").val(bgMusicValue);
+			document.getElementById('gamePreviewPage').contentWindow.document.getElementById('gameMusic').setAttribute('src', bgMusicValue);
+
+			$('.setWindow').addClass("hidden");
+			$("body").css("overflow","auto");
+		});
+
+		//按钮窗口处理
+		$(".uploadInfoBox .btnStyle ul li").on('click', function () {
+			$(this).find(".selectCover").show().end().siblings().find('.selectCover').hide();
+
+			var btnIndex = $(this).index();
+			$("#startBtnType").val(btnIndex + 1);
+			$("#startBtnImgType").val(btnIndex + 1);
+
+			var oSrc = $(this).find(".btnImgBox img").attr('src');
+			startBtnImg.attr('src', oSrc);
+		});
+
+
+		//参与人数样式操作
+		var normalSize = joinNumLine.find('p').css('font-size');
+		var normalColor = joinNumLine.find('p').css('color');
+		var normalShadow = joinNumLine.find('p').css('text-shadow');
+
+		var joinNumSize = joinNumLine.find("#joinNum").css('font-size');
+		var joinNumColor = joinNumLine.find("#joinNum").css('color');
+		var joinNumShadow = joinNumLine.find("#joinNum").css('text-shadow');
+
+		//默认参与人数文字颜色
+		$("#playersTextDefault").click(function () {
+			joinNumLine.find("#joinNum").css({'color': joinNumColor});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#joinSetPeopleFontColorType").val(0);
+		});
+
+		$("#playersTextCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#joinSetPeopleFontColorType").val(1);
+		});
+
+		//默认参与人数文字描边
+		$("#playersStrokeDefault").click(function () {
+			joinNumLine.find("#joinNum").css({'text-shadow': joinNumShadow});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#joinSetPeopleBorderColorType").val(0);
+		});
+
+		$("#playersStrokeCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#joinSetPeopleBorderColorType").val(1);
+		});
+
+		//默认常规文字颜色
+		$("#regularColorDefault").click(function () {
+			joinNumLine.find('p').css({'color': normalColor});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#joinSetTextFontColorType").val(0);
+		});
+		$("#regularColorCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#joinSetTextFontColorType").val(1);
+		});
+
+		//默认常规文字描边
+		$("#regularStrokeDefault").click(function () {
+			joinNumLine.find('p').css({'text-shadow': normalShadow});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#joinSetTextBorderColorType").val(0);
+		});
+
+		$("#regularStrokeCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#joinSetTextBorderColorType").val(1);
+		});
+
+		//默认常规文字设置
+		$("#regularTextDefault").click(function () {
+			joinNumLine.find('p').css({'font-size': normalSize, 'color': normalColor, 'text-shadow': normalShadow});
+		});
+
+		$("#regularColorCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#joinSetPeopleFontColorType").val(1);
+		});
+
+		//默认参与人数设置
+		$("#playersDefault").click(function () {
+			joinNumLine.find("#joinNum").css({
+				'font-size':   joinNumSize,
+				'color':       joinNumColor,
+				'text-shadow': joinNumShadow
+			});
+		});
+
+		//  参与人数设置
+		$('#inclusionShow').click(function () {
+			$(".inclusionSet").slideDown();
+			joinNumLine.show();
+		});
+
+		$('#inclusionHide').click(function () {
+			$(".inclusionSet").slideUp();
+			joinNumLine.hide();
+		});
+
+		//  logo设置
+		$('#logoShow').click(function () {
+			$(".logoShowAndHid").slideDown();
+			coLogo.parent().show();
+		});
+		$('#logoHide').click(function () {
+			$(".logoShowAndHid").slideUp();
+			coLogo.parent().hide();
+		});
+
+		// 可玩次数方法
+		function playTimes(){
+			var limitNum = $("#limitNum");
+			var limitFx = $("#limitFx");
+
+			if(limitNum.val() < 0 ||  limitNum.val() == ''){
+				limitFx.attr('readonly', true);
+				limitFx.addClass('read_only');
+				limitFx.val(0);
+			}else if(limitNum.val() > 0){
+				limitFx.attr('readonly', false);
+				limitFx.removeClass('read_only');
+			}
+		}
+
+		//可玩次数设置
+		$("#limitNum").keyup(function () {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (!value) {
+				gamePreviewPage.find(".info_limit").hide();
+			} else {
+
+				var rule = /^[0-9]*$/;
+
+				if(rule.test(value) && value != 0){
+					gamePreviewPage.find(".info_limit").show();
+					gamePreviewPage.find(".info_limit_number").text(value);
+				} else {
+					alert("每人初始可玩次数必须为大于0的数字或者不填！");
+					$this.val('');
+				}
+			}
+
+			playTimes();
+		});
+		$("#limitFx").keyup(function () {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (value) {
+				var rule = /^[0-9]*$/;
+
+				if(!rule.test(value)){
+					alert("每人增加可玩次数必须为数字！");
+					$this.val(0);
+				}
+			}
+
+			playTimes();
+		});
+
+		playTimes();
+
+		var defaultNumber = '';
+		$(".number_input").focus(function() {
+			var $this = $(this);
+			defaultNumber = $this.val();
+		});
+
+		$(".number_input").keyup(function () {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (value) {
+				var rule = /^[0-9]*$/;
+
+				if(!rule.test(value)){
+					alert("必须为正整数！");
+					$this.val(defaultNumber);
+				}
+			}
+		});
+
+		// 红包金额输入框
+		$(".money_numbers").focus(function() {
+			var $this = $(this);
+			defaultNumber = $this.val();
+		});
+
+		$(".money_numbers").keyup(function () {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (value) {
+				if (value < 1) {
+					alert("必须大于1元！");
+					$this.val(defaultNumber);
+				}
+
+				var rule = /^[0-9]*([.][0-9]{0,2})?$/;
+
+				if(!rule.test(value)){
+					alert("数据格式不对！");
+					$this.val(defaultNumber);
+				}
+			}
+		});
+
+		$(".numbers").change(function() {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (value == 0) {
+				$this.val(defaultNumber);
+			}
+		});
+
+		$(".reward").change(function() {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (value == 0) {
+				$this.val(defaultNumber);
+			}
+		});
+
+		$(".awards_limit").change(function() {
+			var $this = $(this);
+
+			var value = $this.val();
+
+			if (value == 0) {
+				$this.val('');
+			}
+		});
+
+		//邀请设置
+		$("#invitationYes").click(function () {
+			$(".invitationSet").slideDown();
+			gamePreviewPage.find("#someTip").show();
+			gamePreviewPage.find(".invitationRuleP").show();
+			gamePreviewPage.find(".window .hd li").eq(2).show();
+			gamePreviewPage.find(".window .hd li").eq(2).click();
+
+		});
+
+		$("#invitationNo").click(function () {
+			$(".invitationSet").slideUp();
+			gamePreviewPage.find("#someTip").hide();
+			gamePreviewPage.find(".invitationRuleP").hide();
+			gamePreviewPage.find(".window .hd li").eq(2).hide();
+			gamePreviewPage.find(".window .hd li").eq(0).click();
+		});
+
+		//分享类型选择
+		$(".shareTypeHd label").each(function (index) {
+			$(this).click(function () {
+				$(".shareWrap .shareType").eq(index).show().siblings().hide();
+				$("#coupon_title").data("checked", false);
+
+				if (index != 0) {
+					$(".shareWrap .shareType").eq(index).find("input").attr("disabled",false);
+					$(".shareWrap .shareType").eq(index).siblings().find("input").attr("disabled", true);
+
+					if (index == 1) {
+						$("#coupon_title").data("checked", true);
+					}
+				} else {
+					if ({vifnn:$is_wxopen} != 0) {
+						$(".shareWrap .shareType").eq(index).find("input").attr("disabled",false);
+					}
+
+					$(".shareWrap .shareType").eq(index).siblings().find("input").attr("disabled", true);
+				}
+
+				gamePreviewPage.find(".sharePrice .window .rowCell").eq(index).show().siblings().hide();
+				gamePreviewPage.find("#someTip").find("p").eq(index).show().siblings().hide();
+				gamePreviewPage.find(".ruleP p").eq(index).show().siblings().hide();
+				gamePreviewPage.find(".userOwn .rowIncell").eq(index).show().siblings().hide();
+			});
+		}).eq(<if condition="$info['share_callback'] eq 0 || $info['share_callback'] eq ''">3<else />{vifnn:$info.share_callback}-1</if>).trigger('click');
+
+		//积分文字数量输入
+		$(".invitationSet .jifen .numbers").bind('input propertychange', function () {
+
+			gamePreviewPage.find("#someTip").find("p.jifen .numbers").text($(this).val());
+			gamePreviewPage.find(".ruleP").find("p.jifen .numbers").text($(this).val());
+
+		});
+		$(".invitationSet .jifen .reward").bind('input propertychange', function () {
+
+			gamePreviewPage.find("#someTip").find("p.jifen .reward").text($(this).val());
+			gamePreviewPage.find(".ruleP").find("p.jifen .reward").text($(this).val());
+
+		});
+
+		//红包文字数量输入
+		$(".invitationSet .hongbao .numbers").bind('input propertychange', function () {
+
+			gamePreviewPage.find("#someTip").find("p.hongbao .numbers").text($(this).val());
+			gamePreviewPage.find(".ruleP").find("p.hongbao .numbers").text($(this).val());
+
+		});
+
+		//卡券文字数量输入
+		$(".invitationSet .kaquan .numbers").bind('input propertychange', function () {
+
+			gamePreviewPage.find("#someTip").find("p.kaquan .numbers").text($(this).val());
+			gamePreviewPage.find(".ruleP").find("p.kaquan .numbers").text($(this).val());
+
+		});
+
+		//选择卡券
+		$("#selectCoupon").click(function () {
+			<if condition="$info['is_release'] eq 1 && $info['is_share'] eq 1">
+				alert("发布后不可修改！");
+			<else />
+				showWindow("#couponSelect");
+			</if>
+		});
+
+		//可玩机会文字数量输入
+		$(".invitationSet .jihui .numbers").bind('input propertychange', function () {
+
+			gamePreviewPage.find("#someTip").find("p.jihui .numbers").text($(this).val());
+			gamePreviewPage.find(".ruleP").find("p.jihui .numbers").text($(this).val());
+
+		});
+
+		$(".invitationSet .jihui .reward").bind('input propertychange', function () {
+
+			gamePreviewPage.find("#someTip").find("p.jihui .reward").text($(this).val());
+			gamePreviewPage.find(".ruleP").find("p.jihui .reward").text($(this).val());
+
+		});
+
+
+		//参与人数颜色字号大小设置
+		$("#regularTextDefault").on('click', function () {
+			$(this).parent().next().hide();
+
+			$("#joinSetTextStyle").val(0);
+		});
+		$("#regularTextCustom").on('click', function () {
+			$(this).parent().next().show();
+
+			$("#joinSetTextStyle").val(1);
+		});
+
+		// 音乐自定义设置
+		$("#playersDefault").on('click', function () {
+			$(this).parent().next().hide();
+
+			$("#joinSetPeopleStyle").val(0);
+		});
+		$("#playersCustom").on('click', function () {
+			$(this).parent().next().show();
+
+			$("#joinSetPeopleStyle").val(1);
+		});
+
+		//游戏进行时颜色字号大小设置
+		$("#timeTextDefault,#gradeTextDefault,#topBgDefault").on('click', function () {
+			$(this).parent().next().hide();
+		});
+		$("#timeTextCustom").on('click', function () {
+			$(this).parent().next().show();
+
+			$("#noticeTimeType").val(1);
+		});
+		$("#gradeTextCustom").on('click', function () {
+			$(this).parent().next().show();
+
+			$("#noticeScoreType").val(1);
+		});
+		$("#topBgCustom").on('click', function () {
+			$(this).parent().next().show();
+
+			$("#noticeBackType").val(1);
+		});
+
+		$("#regularColorCustom,#regularStrokeCustom,#playersTextCustom,#playersStrokeCustom,#timeColorCustom,#gradeColorCustom,#topBgColorCustom").on('click', function () {
+			$(this).parent().find(".colorPicker").show();
+		});
+
+		//字号大小拉条
+		$(".slider-range-0").slider({
+			range: "min",
+			value: "{vifnn:$textFontSize|default='12px'}".replace('px', ''),
+			min:   10,
+			max:   48,
+			slide: function (event, ui) {
+				$(this).next().text(ui.value + "px");
+				joinNumLine.find('p').css('font-size', ui.value + "px");
+
+				$("#joinSetTextFontSize").val(ui.value + "px");
+			}
+		});
+		$(".slider-range-1").slider({
+			range: "min",
+			value: "{vifnn:$peopleFontSize|default='16px'}".replace('px', ''),
+			min:   10,
+			max:   48,
+			slide: function (event, ui) {
+				$(this).next().text(ui.value + "px");
+				joinNumLine.find('#joinNum').css('font-size', ui.value + "px");
+
+				$("#joinSetPeopleFontSize").val(ui.value + "px");
+			}
+		});
+
+		//点击方框选取颜色
+		//常规文字颜色设置
+		$("#colorForRegularColor").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			joinNumLine.find('p').css({'color': color});
+
+			$("#joinSetTextFontColorNew").val(color);
+		});
+
+		//常规文字描边设置
+		$("#colorForRegularStroke").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			joinNumLine.find('p').css({'text-shadow': '1px 0 1px' + color});
+
+			$("#joinSetTextBorderColorNew").val(color);
+		});
+
+		//参与人数颜色设置
+		$("#colorForPlayersText").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			joinNumLine.find('#joinNum').css({'color': color});
+
+			$("#joinSetPeopleFontColorNew").val(color);
+		});
+
+		//参与人数描边设置
+		$("#colorForPlayersStroke").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			joinNumLine.find('#joinNum').css({'text-shadow': '1px 0 1px' + color});
+
+			$("#joinSetPeopleBorderColorNew").val(color);
+		});
+
+		//var joinNumLine=$("#gamePreviewPage",parent.document.body).contents().find("#joinNumLine");
+		$("#actNamePut").val($("#actName h2").text());
+		$("#actNamePut").bind('input propertychange', function () {
+			$("#actName h2").text($(this).val());
+		});
+
+		//游戏进行时顶部
+		//获取默认文字颜色大小等
+		var timeSize = playTop.find('.time').css('font-size');
+		var timeColor = playTop.find('.time').css('color');
+		var gradeSize = playTop.find('.grade').css('font-size');
+		var gradeColor = playTop.find('.grade').css('color');
+		var topBgColor = playTop.find('.playTopBg').css('background-color');
+		var topBgOpacity = playTop.find('.playTopBg').css('opacity');
+
+		//默认时间文字颜色
+		$("#timeColorDefault").click(function () {
+			playTop.find(".time").css({'color': timeColor});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#noticeTimeColorType").val(0);
+		});
+
+		$("#timeColorCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#noticeTimeColorType").val(1);
+		});
+
+		//默认时间文字大小
+		$("#timeTextDefault").click(function () {
+			playTop.find(".time").css({'font-size': timeSize});
+			playTop.find(".time").css({'color': timeColor});
+			//$(this).parent().find(".colorPicker").css('visibility','hidden');
+
+			$("#noticeTimeType").val(0);
+		});
+
+		//默认成绩文字颜色
+		$("#gradeColorDefault").click(function () {
+			playTop.find(".grade").css({'color': gradeColor});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#noticeScoreColorType").val(0);
+		});
+
+		$("#gradeColorCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#noticeScoreColorType").val(1);
+		});
+
+		//默认成绩文字大小
+		$("#gradeTextDefault").click(function () {
+			playTop.find(".grade").css({'font-size': gradeSize});
+			playTop.find(".grade").css({'color': gradeColor});
+			//$(this).parent().find(".colorPicker").css('visibility','hidden');
+
+			$("#noticeScoreType").val(0);
+		});
+
+		//默认游戏进行时顶部背景颜色
+		$("#topBgColorDefault").click(function () {
+			playTop.find(".playTopBg").css({'background-color': topBgColor});
+			$(this).parent().find(".colorPicker").hide();
+
+			$("#noticeBackColorType").val(0);
+		});
+
+		$("#topBgColorCustom").click(function () {
+			var colorId = $(this).data('color-id');
+			var value = $(this).data('color');
+
+			$("#" + colorId).val(value);
+			$("#noticeBackColorType").val(1);
+		});
+
+		//默认游戏进行时顶部背景颜色透明度
+		$("#topBgDefault").click(function () {
+			playTop.find(".playTopBg").css({'background-color': topBgColor});
+			playTop.find(".playTopBg").css({'opacity': topBgOpacity});
+			//$(this).parent().find(".colorPicker").css('visibility','hidden');
+
+			$("#noticeBackType").val(0);
+		});
+
+		playTop.on('click', '.playTopBtn', function () {
+			showWindow("#playTopStyle");
+		});
+
+		$(".slider-range-2").slider({
+			range: "min",
+			value: "{vifnn:$timeFontSize|default='17px'}".replace('px', ''),
+			min:   10,
+			max:   30,
+			slide: function (event, ui) {
+				$(this).next().text(ui.value + "px");
+				playTop.find('.time').css('font-size', ui.value + "px");
+
+				$("#noticeTimeSize").val(ui.value + "px");
+			}
+		});
+
+		$(".slider-range-3").slider({
+			range: "min",
+			value: "{vifnn:$scoreFontSize|default='33px'}".replace('px', ''),
+			min:   10,
+			max:   50,
+			slide: function (event, ui) {
+				$(this).next().text(ui.value + "px");
+				playTop.find('.grade').css('font-size', ui.value + "px");
+
+				$("#noticeScoreSize").val(ui.value + "px");
+			}
+		});
+
+		$(".slider-range-4").slider({
+			range: "min",
+			value: "{vifnn:$info.notice_set.back_color.content.opacity|default=0}" * 100,
+			min:   0,
+			max:   100,
+			slide: function (event, ui) {
+				$(this).next().text(ui.value + "%");
+				playTop.find('.playTopBg').css('opacity', ui.value / 100);
+
+				$("#noticeBackOpacity").val(ui.value / 100);
+			}
+		});
+
+
+		//设置文字颜色和背景色
+		$("#colorForTimeColor").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			playTop.find('.time').css({'color': color});
+
+			$("#noticeTimeColorNew").val(color);
+
+		});
+		$("#colorForGradeText").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			playTop.find('.grade').css({'color': color});
+
+			$("#noticeScoreColorNew").val(color);
+
+		});
+		$("#colorForTopBg").bigColorpicker(function (el, color) {
+			$(el).css("background-color", color);
+			playTop.find('.playTopBg').css({'background-color': color});
+
+			$("#noticeBackColorNew").val(color);
+
+		});
+
+		//兑换说明，兑换期限
+		$("#exchangeRow .start").bind('change', function () {
+			var timeText = $(this).val().substring(0, 10);
+			exchange.find(".start").text(timeText);
+		});
+		$("#exchangeRow .end").bind('change', function () {
+			var timeText = $(this).val().substring(0, 10);
+			exchange.find(".end").text(timeText);
+		});
+
+		$("#exchangeArea").bind("input propertychange", function () {
+			exchange.find(".exchangeText").text($(this).val());
+		});
+
+		$("#actRuleArea").bind('input propertychange', function () {
+			actRuleTextA.find("em").text($(this).val());
+		});
+
+		$("#actCompanyRow input[type=text]").bind('input propertychange', function () {
+			actRuleTextB.find("em").text($(this).val());
+		});
+
+		//参与人数
+		$(".inclusionSet input").bind('input propertychange', function () {
+			joinNumLine.find("#joinNum").text($(this).val());
+		});
+	};
+
+	/*
+	 * 获得时间差,时间格式为 年-月-日 小时:分钟:秒 或者 年/月/日 小时：分钟：秒
+	 * 其中，年月日为全格式，例如 ： 2010-10-12 01:00:00
+	 * 返回精度为：秒，分，小时，天
+	 */
+	function GetDateDiff (startTime, endTime, diffType) {
+		//将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
+		startTime = startTime.replace(/\-/g, "/");
+		endTime = endTime.replace(/\-/g, "/");
+		//将计算间隔类性字符转换为小写
+		diffType = diffType.toLowerCase();
+		var sTime = new Date(startTime);      //开始时间
+		var eTime = new Date(endTime);  //结束时间
+		//作为除数的数字
+		var divNum = 1;
+		switch (diffType) {
+			case "second":
+				divNum = 1000;
+				break;
+			case "minute":
+				divNum = 1000 * 60;
+				break;
+			case "hour":
+				divNum = 1000 * 3600;
+				break;
+			case "day":
+				divNum = 1000 * 3600 * 24;
+				break;
+			default:
+				break;
+		}
+		return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(divNum));
+	}
+
+
+	$(function () {
+		var start, end;
+		var d = new Date();
+		var vYear = d.getFullYear();
+		var vMon = d.getMonth() + 1;
+		var vDay = d.getDate();
+		var h = d.getHours();
+		var m = d.getMinutes();
+		var se = d.getSeconds();
+		start = vYear + '-' + (vMon < 10 ? "0" + vMon : vMon) + '-' + (vDay < 10 ? "0" + vDay : vDay) + ' ' + (h < 10 ? "0" + h : h) + ':' + (m < 10 ? "0" + m : m);
+		Date.prototype.format = function (format) {
+			var o = {
+				"M+": this.getMonth() + 1, //month
+				"d+": this.getDate(), //day
+				"h+": this.getHours(), //hour
+				"m+": this.getMinutes() //minute
+				//"s+" : this.getSeconds(), //second
+//                    "q+" : <a href="https://www.baidu.com/s?wd=Math.floor&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1d-nHTvmhn3PAuhuA7bPhmv0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EnHmvrjDYn1f3njTvrjTLnjDsPs" target="_blank" class="baidu-highlight">Math.floor</a>((this.getMonth()+3)/3), //quarter
+//            "S" : this.getMilliseconds() //millisecond
+			};
+			if (/(y+)/.test(format)) {
+				format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			}
+			for (var k in o) {
+				if (new RegExp("(" + k + ")").test(format)) {
+					format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+				}
+			}
+			return format;
+		}
+
+		var addNDays = function (date, n) {
+			var d = new Date(Date.parse(date.replace(/-/g, "/")));
+			var time = d.getTime();
+			var newTime = time + n * 24 * 60 * 60 * 1000;
+			return new Date(newTime);
+		};
+		var nd = addNDays(start, 29);
+		end = nd.format('yyyy-MM-dd hh:mm');
+
+//		$(".start,.actStrat").each(function () {
+//
+//			$(this).val(start);
+//		});
+//		$(".end,.actEnd").each(function () {
+//			$(this).val(end);
+//		});
+	});
+
+	//页面切换
+	function bigScroll () {
+		var i = 0;
+		var timer = 0;
+		var prev = $('.gameConfig').find(".phoneBtn a.prev");
+		var next = $('.gameConfig').find(".phoneBtn a.next");
+		var pageI = $('.gameConfig').find(".gHd ul li");
+		var pageRow = $("#gamePreviewPage", parent.document.body).contents().find(".panel .row");
+		//var audioBtn=$("#gamePreviewPage",parent.document.body).contents().find("#audio_btn");
+		function right () {
+			i++;
+			if (i == pageRow.length) {
+				i = 0
+			}
+		}
+
+		function left () {
+			i--;
+			if (i < 0) {
+				i = pageRow.length - 1
+			}
+		}
+
+		function run () {
+			pageI.eq(i).addClass("on").siblings().removeClass("on");
+			//pageRow.eq(i).css('z-index','1001').siblings().css('z-index','99');
+			pageRow.eq(i).fadeIn(300).siblings('.row').hide();
+			pageRow.eq(1).show();
+			//if(i==0 || i==1){
+			//    audioBtn.css('z-index','1100')
+			//}else{
+			//    audioBtn.css('z-index','1')
+			//}
+		}
+
+		pageI.each(function (index) {
+			$(this).click(function () {
+				i = index;
+				run();
+			});
+		}).eq(0).trigger("click");
+		function runn () {
+			right();
+			run();
+		}
+
+		//timer= setInterval(runn, 8000);
+		//$("#gamePreviewPage").hover(function(){
+		//    clearInterval(timer);
+		//},function(){
+		//    timer = setInterval(runn, 8000);
+		//});
+		prev.click(function () {
+			left();
+			run();
+		});
+		next.click(function () {
+			right();
+			run();
+		});
+	}
+
+	var myFun = {
+		//计算每行最后一个，清除每行最后一个的margin
+		rowlastLi: function (a, b) {
+			$(a).each(function () {
+				var li = $(this).find("ul>li");
+				var len = $(this).find("ul>li").length;
+				var y = len / b;
+				for (var i = 1; i <= y; i++) {
+					li.eq(i * b - 1).css({
+						'margin-right': '0'
+					});
+				}
+			})
+		},
+
+		//tab切换一个参数
+		tab:       function (obj) {
+			var tabObj = $(obj);
+			tabObj.each(function () {
+				var len = $(this).find('.hd ul li');
+				var row = $(this).find('.row');
+				len.bind("click", function () {
+					var index = 0;
+					$(this).addClass('on').siblings().removeClass('on');
+					index = len.index(this);
+					row.eq(index).show().siblings(".row").hide();
+					return false;
+				}).eq(0).trigger("click");
+			});
+		},
+
+		//tab切换一个参数
+		tabFade:   function (obj) {
+			var tabObj = $(obj);
+			tabObj.each(function () {
+				var len = $(this).find('.hd ul li');
+				var row = $(this).find('.row');
+				len.bind("click", function () {
+					var index = 0;
+					$(this).addClass('on').siblings().removeClass('on');
+					index = len.index(this);
+					row.eq(index).fadeIn(1000).siblings(".row").hide();
+					return false;
+				}).eq(0).trigger("click");
+			});
+		},
+
+		//tab切换三个参数
+		tabs:      function (a, b, c) {
+			var len = $(a);
+			len.bind("click", function () {
+				var index = 0;
+				$(this).addClass(c).siblings().removeClass(c);
+				index = len.index(this);
+				$(b).eq(index).addClass("animate").show().siblings().removeClass("animate").hide();
+				return false;
+			}).eq(0).trigger("click");
+		},
+
+		//清楚最后一个li的border
+		lastLi:    function (a) {
+			$(a).find("li").last().css('borderBottom', '0');
+		},
+
+		//清楚最后一个li的margin-right
+		lastLimr:  function (a) {
+			$(a).find("li").last().css('marginRight', '0');
+		},
+
+		//设置相对屏幕（不是整个文档的）的top值
+		marginTop: function (a) {
+			var wHeight = $(window).height();
+			var boxHeight = $(a).height();
+			//var scrollTop = $(window).scrollTop();
+			var top = (wHeight - boxHeight) / 2;
+			$(a).css('marginTop', top);
+		},
+
+		animate: function (sum) {
+			var t = $(window).scrollTop();
+			var h = $(window).height();
+			for (var i = 1; i < sum + 1; i++) {
+				var off = $('.floor' + i).offset().top + 100;
+				if (t + h > off) {
+					$('.floor' + i).addClass('animate');
+				}
+				;
+			}
+			;
+		}
+	};
+</script>
+</div>
+<include file="Public:footer"/>

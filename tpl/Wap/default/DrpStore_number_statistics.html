@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>下级店铺统计</title>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/normalize.css" />
+    <script src="{vifnn::$staticFilePath}/js/ClassFirst.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/ClassSub.js"></script>
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/common-v4.0.css" />
+    <link rel="stylesheet" type="text/css" href="{vifnn::$staticFilePath}/css/dis-v5.0.css" />
+
+
+    <script src="{vifnn::$staticFilePath}/js/jquery.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/foundation.js"></script>
+    <meta class="foundation-data-attribute-namespace" />
+    <meta class="foundation-mq-xxlarge" />
+    <meta class="foundation-mq-xlarge" />
+    <meta class="foundation-mq-large" />
+    <meta class="foundation-mq-medium" />
+    <meta class="foundation-mq-small" />
+    <script src="{vifnn::$staticFilePath}/js/foundation.tab.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/highcharts.js"></script>
+    <script src="{vifnn::$staticFilePath}/js/shopchartline.js"></script>
+    <script>
+        function GetToDayPrice(data) {
+            //var strTimeslot = "[0,0,0,0]";
+            var strTimeslot = data;
+            var timeSlot = JSON.parse(strTimeslot);
+            for (var i = 0; i < timeSlot.length; i++) {
+                if (timeSlot[i] != 0) {
+                    $("#panel").show();
+                }
+            }
+            return timeSlot;
+        }
+        function GetYesterDayPrice(data) {
+            //var strTimeslot = "[0,0,0,0]";
+            var strTimeslot = data;
+            var timeSlot = JSON.parse(strTimeslot);
+            for (var i = 0; i < timeSlot.length; i++) {
+                if (timeSlot[i] != 0) {
+                    $("#panel1").show();
+                }
+            }
+            return timeSlot;
+        }
+        function GetThisWeekPrice(data) {
+            //var strTimeslot = "[0,0,0,0,0,0,0]";
+            var strTimeslot = data;
+            var timeSlot = JSON.parse(strTimeslot);
+            for (var i = 0; i < timeSlot.length; i++) {
+                if (timeSlot[i] != 0) {
+                    $("#panel2").show();
+                }
+            }
+            return timeSlot;
+        }
+        function GetThisMonthPrice(data) {
+            //var strTimeslot = "[0,0,0,0]";
+            var strTimeslot = data;
+            var timeSlot = JSON.parse(strTimeslot);
+            for (var i = 0; i < timeSlot.length; i++) {
+                if (timeSlot[i] != 0) {
+                    $("#panel3").show();
+                }
+            }
+             return timeSlot;
+         }
+    </script>
+</head>
+<body>
+    <!--topbar begin-->
+    <div class="fixed">
+        <nav class="tab-bar">
+            <section class="left-small">
+                <a class="menu-icon" onclick="window.history.go(-1)"><span></span></a>
+            </section>
+            <section class="middle tab-bar-section">
+                <h1 class="title">分店统计</h1>
+            </section>
+        </nav>
+    </div>
+    <!--topbar end-->
+    <!--yesterday begin-->
+    <div class="panel bro-yesterday">
+        <p><i class="icon-organization"></i>下级分店总数</p>
+        <span>{vifnn:$sub_store_count}</span>
+    </div>
+    <!--yesterday end-->
+    <!--table begin-->
+    <dl class="tabs tab-title4-chart" data-tab="">
+        <dd class="active"><a href="{vifnn::U('DrpStore/number_statistics')}#panel2-1" id="today">今日</a></dd>
+        <dd><a href="{vifnn::U('DrpStore/number_statistics')}#panel2-2" id="yesterday">昨日</a></dd>
+        <dd><a href="{vifnn::U('DrpStore/number_statistics')}#panel2-3" id="week">本周</a></dd>
+        <dd><a href="{vifnn::U('DrpStore/number_statistics')}#panel2-4" id="month">本月</a></dd>
+    </dl>
+    <!--table end-->
+    <!--content begin-->
+    <div class="tabs-content tabcontent04">
+        <!--totaltoday begin-->
+        <div class="content active" id="panel2-1">
+             <a href="{vifnn::U('DrpStore/branch_list', array('level' => 0, 'date' => 'today'))}" style="display:none" id="panel" class="view-detail">查看详情</a>
+            <div id="totaltoday" style="min-width: 100%; height: 400px; margin-top: 10px;" data-highcharts-chart="0">
+                <div class="highcharts-container" id="highcharts-0" style="position: relative; overflow: hidden; width: auto; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+            </div>
+        </div>
+        <!--totaltoday end-->
+        <!--yestoday begin-->
+        <div class="content" id="panel2-2">
+             <a href="{vifnn::U('DrpStore/branch_list', array('level' => 0, 'date' => 'yesterday'))}" style="display:none" id="panel1" class="view-detail">查看详情</a>
+            <div id="yestoday" style="min-width: 100%; height: 400px; margin-top: 10px;" data-highcharts-chart="1">
+                <div class="highcharts-container" id="highcharts-4" style="position: relative; overflow: hidden; width: auto; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+            </div>
+        </div>
+        <!--yestoday end-->
+        <!--weekday begin-->
+        <div class="content" id="panel2-3">
+             <a href="{vifnn::U('DrpStore/branch_list', array('level' => 0, 'date' => 'week'))}" style="display:none" id="panel2" class="view-detail">查看详情</a>
+            <div id="weekday" style="min-width: 100%; height: 400px; margin-top: 10px;" data-highcharts-chart="2">
+                <div class="highcharts-container" id="highcharts-8" style="position: relative; overflow: hidden; width: auto; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+            </div>
+        </div>
+        <!--weekday end-->
+        <!--moonth begin-->
+        <div class="content" id="panel2-4">
+             <a href="{vifnn::U('DrpStore/branch_list', array('level' => 0, 'date' => 'month'))}" style="display:none" id="panel3" class="view-detail">查看详情</a>
+            <div id="moonth" style="min-width: 100%; height: 400px; margin-top: 10px;" data-highcharts-chart="3">
+                <div class="highcharts-container" id="highcharts-12" style="position: relative; overflow: hidden; width: auto; height: 400px; text-align: left; line-height: normal; z-index: 0; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+            </div>
+        </div>
+        <!--moonth end-->
+
+    </div>
+    <!--content end-->
+    <input type="hidden" name="url" class="url" value="{vifnn::U('DrpStore/number_statistics')}" />
+    <script type="text/javascript">
+        $(document).foundation().foundation('joyride', 'start');
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{vifnn:$info.title}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=320,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <script language="javascript">
+        var SHAKE_THRESHOLD = 3000;// 定义摇动的幅度
+        var SHAKE_SPACE = 100;// 定义摇动的时间间隔
+        var countdownTotal=parseInt('{vifnn:$countdownTotal}');//活动总时间s
+        var countdownNow = parseInt('{vifnn:$countdownNow}');//活动已开始时间s
+        var actStatus = '{vifnn:$actStatus}';//活动状态
+        var checkFre = 3000;//检查活动状态频率
+        var uploadFre = parseInt('{vifnn:$info.clienttime}')*1000;//上传震动数据频率
+        var actId = '{vifnn:$act_id}';
+        var shakeId='{vifnn:$info.id}';
+        var actType='{vifnn:$act_type}';
+        var checkUrl = '{vifnn::U("shakeActivityStatus",array("token"=>$_GET["token"]))}';
+        var uploadUrl = '{vifnn::U("refreshScreen",array("token"=>$_GET["token"]))}';
+        var round= parseInt('{vifnn:$info.round}');
+        var shockTotal=parseInt('{vifnn:$shockTotal}');
+        var currentShakeNum=parseInt('{vifnn:$shockTotal}');
+        var recNum=parseInt('{vifnn:$recNum}');
+    </script>
+    <style>
+        body {
+            font-size: 12px;
+            font-family: "nobile", "微软雅黑", "宋体";
+            color: #595959;
+            margin: 0;
+            padding: 0;
+            background-color: #404040;
+            text-shadow: rgba(255, 255, 255, .95) 0px 1px 0px;
+        }
+
+        @font-face {
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        /* Common Style */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        input, select {
+            font-size: 12px;
+            line-height: 16px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-size: 100%;
+            font-weight: normal;
+        }
+
+        q:before, q:after {
+            content: '';
+        }
+
+        .clear {
+            clear: both;
+            display: block;
+            float: none;
+            font-size: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            visibility: hidden;
+        }
+
+        img {
+            border: 0;
+        }
+
+        p {
+            line-height: 20px;
+        }
+
+        ul, li {
+            list-style-type: none;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+            text-shadow: rgba(255, 255, 255, .95) 0px 1px 0px;
+        }
+
+        .page {
+            width: 320px;
+            clear: both;
+            margin: 0 auto;
+        }
+
+        /*适应手机端的div样式*/
+        .mobile-div {
+            border: 1px #CCC solid;
+            margin: 10px 5px;
+            background: #FFF;
+            overflow: hidden;
+            min-height: 50px;
+        }
+
+        .mobile-hd {
+            height: 35px;
+            line-height: 35px;
+            padding: 0 10px;
+            color: #666;
+            text-shadow: 0 1px #FFF;
+            border-bottom: 1px solid #C6C6C6;
+            background-color: #E1E1E1;
+            background-image: linear-gradient(bottom, #E7E7E7 0%, #f9f9f9 100%);
+            background-image: -o-linear-gradient(bottom, #E7E7E7 0%, #f9f9f9 100%);
+            background-image: -moz-linear-gradient(bottom, #E7E7E7 0%, #f9f9f9 100%);
+            background-image: -webkit-linear-gradient(bottom, #E7E7E7 0%, #f9f9f9 100%);
+            background-image: -ms-linear-gradient(bottom, #E7E7E7 0%, #f9f9f9 100%);
+            background-image: -webkit-gradient(
+                    linear,
+                    left bottom,
+                    left top,
+                    color-stop(0, #E7E7E7),
+                    color-stop(1, #f9f9f9)
+            );
+            -webkit-box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 0 #EEEEEE;
+            -moz-box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 0 #EEEEEE;
+            box-shadow: 0 1px 0 #FFFFFF inset, 0 1px 0 #EEEEEE;
+            -webkit-border-radius: 5px 5px 0 0;
+            -moz-border-radius: 5px 5px 0 0;
+            -o-border-radius: 5px 5px 0 0;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .mobile-hd i {
+            line-height: 35px;
+        }
+
+        .mobile-content {
+            margin: 10px;
+            line-height: 28px;
+        }
+
+        .mobile-content .help-block {
+            margin-bottom: 0;
+            margin-top: 3px;
+            color: #AAA;
+        }
+
+        .mobile-img img {
+            width: 100%;
+        }
+
+        .mobile-submit {
+            margin: 0 5px;
+        }
+
+        .mobile-li {
+            display: block;
+            text-decoration: none;
+            color: #666;
+            height: 35px;
+            line-height: 35px;
+            font-size: 14px;
+            padding: 0 10px;
+            border-top: 1px #CCC solid;
+        }
+
+        .mobile-li:first-child {
+            border-top: 0;
+        }
+
+        .mobile-li i {
+            line-height: 35px;
+        }
+
+        .mobile-li:hover {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .img-rounded {
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+        }
+
+        #nostart span {
+            font-size: 36px;
+            color: red;
+        }
+        .countdown_box {
+            width: 80px;
+            height: 80px;
+            margin: 10px auto;
+            display: block;
+            position: relative;
+        }
+
+        .countdown_box canvas {
+            width: 80px;
+            height: 80px;
+        }
+
+        .countdown_box .countdown_num {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            text-align: center;
+            line-height: 80px;
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+            color: #555;
+        }
+        .round_box
+        {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            font-size: 14px;
+            color: #555;
+            display: none;
+        }
+        .round_box .round_num
+        {
+            font-size: 16px;
+            color: orangered;
+            font-weight: bold;
+        }
+        .tip
+        {
+            padding: 10px;
+            font-size: 20px;
+        }
+    </style>
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="{vifnn:$staticPath}/tpl/static/countdown/circle-progress.js"></script>
+    <script src="{vifnn:$staticPath}/tpl/static/countdown/countdown.js"></script>
+    <script src="{vifnn:$staticPath}/tpl/static/shake/index.js"></script>
+</head>
+<body>
+<div class="page">
+    <img src="/tpl/static/shake/mtop.png" style="width:320px;">
+    <vifnnif where="$wecha_id neq ''">
+        <div class="mobile-div img-rounded">
+            <div class="tip"></div>
+        </div>
+        <div class="mobile-div img-rounded" style="position: relative;">
+            <div class="round_box">第<span class="round_num">1</span>轮</div>
+            <div class="countdown_box">
+                <div class="countdown_num"></div>
+            </div>
+        </div>
+        <else/>
+        <div class="mobile-div img-rounded">
+            <div class="mobile-hd"><a href="javascript:testshade();">友情提醒</a></div>
+            <div class="mobile-content"><p style="color:#f00;line-height:160%">
+                您可能是从朋友圈等分享过的页面打开的链接，无法直接参与此活动，如需参与此活动请按照以下步骤操作：<br>1、关注微信名称“{vifnn:$wxuser.wxname}”或者微信号“{vifnn:$wxuser.weixin}”<br>2、输入关键词：“{vifnn:$lottery.keyword}”
+            </p></div>
+        </div>
+
+    </vifnnif>
+
+    <div class="mobile-div img-rounded">
+        <div class="mobile-hd"><a href="javascript:;">规则</a></div>
+        <div class="mobile-content">{vifnn:$info.rule}</div>
+    </div>
+
+    <div class="mobile-div img-rounded">
+        <div class="mobile-hd">简介</div>
+        <div class="mobile-content">{vifnn:$info.info}</div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    window.shareData = {
+        "moduleName": "Shake",
+        "moduleID": "{vifnn:$info.id}",
+        "imgUrl": "{vifnn:$info.thumb}",
+        "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Shake/index',array('token'=>$token,'id'=>$info['id']))}",
+        "tTitle": "{vifnn:$info.title}",
+        "tContent": "{vifnn:$info.intro}"
+    };
+</script>
+{vifnn:$shareScript}
+</body>
+</html>

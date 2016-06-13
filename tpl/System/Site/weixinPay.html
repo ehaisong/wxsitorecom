@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>微信商户支付</title>
+	<meta http-equiv="x-ua-compatible" content="ie=7" />
+	<link href="{vifnn::RES}/images/style1.css" type="text/css" rel="stylesheet">
+	<style type="text/css">
+		.btnGreen
+		{
+			cursor: pointer;
+		}
+	</style>
+	<script src="{vifnn::RES}/images/jquery-1.7.2.min.js"></script>
+	<script src="{vifnn::RES}/images/jquery.form.js"></script>
+</head>
+<body class="warp">
+<include file="Site:public" />
+<div id="artlist">
+<div id="btl">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" id="addn">
+ <form id="myform" action="" method="post" enctype="multipart/form-data">
+    <tr> 
+      <td  height="48" align="right"><strong>AppId：</strong></td>
+	<td>
+		<?php
+			$appid = $pay['appid'];
+			$pay['appid'] = substr($appid, 0, 2);
+			$pay['appid'] .= '*************************'.substr($appid, -2);
+		?>
+		<span class="appid" style="<?php if(!$appid){?>display:none;<?php }?>width: inherit;">
+			<?php
+				echo $pay['appid'];
+			?>
+			<span class="btnGreen" style="width: inherit;" onclick="$('.appid').hide();$('.appid-edit').show();$('input[name=\'appid\']').val('{vifnn:$appid}');">修改</span>
+		</span>
+		<span class="appid-edit" style="<?php if($appid){?>display:none;<?php }?>width: inherit;">
+			<input type="text" name="appid" value="{vifnn:$appid}" class="ipt" size="45" />
+			<span class="btnGreen" style="width: inherit;" onclick="$('.appid').show();$('.appid-edit').hide();$('input[name=\'appid\']').val('{vifnn:$appid}');">显示</span>
+		</span>
+		<span>&nbsp;&nbsp;总商户appid</span>
+    </td>
+    </tr>
+     <tr> 
+      <td  height="48" align="right"><strong>AppSecret：</strong></td>
+	<td>
+		<?php
+			$appsecret = $pay['appsecret'];
+			$pay['appsecret'] = substr($appsecret, 0, 2);
+			$pay['appsecret'] .= '*************************'.substr($appsecret, -2);
+		?>
+		<span class="appsecret" style="<?php if(!$appsecret){?>display:none;<?php }?>width: inherit;">
+			<?php
+				echo $pay['appsecret'];
+			?>
+			<span class="btnGreen" style="width: inherit;" onclick="$('.appsecret').hide();$('.appsecret-edit').show();$('input[name=\'appsecret\']').val('{vifnn:$appsecret}');">修改</span>
+		</span>
+		<span class="appsecret-edit" style="<?php if($appsecret){?>display:none;<?php }?>width: inherit;">
+			<input type="text" name="appsecret" value="{vifnn:$appsecret}" class="ipt" size="45" />
+			<span class="btnGreen" style="width: inherit;" onclick="$('.appsecret').show();$('.appsecret-edit').hide();$('input[name=\'appsecret\']').val('{vifnn:$appsecret}');">显示</span>
+		</span>
+		<span>&nbsp;&nbsp;总商户appsecret</span>    
+	</td>
+    </tr>
+     <tr> 
+      <td  height="48" align="right"><strong>商户号：</strong></td>
+	<td>
+		<?php
+			$merchant_id = $pay['merchant_id'];
+			$pay['merchant_id'] = substr($merchant_id, 0, 2);
+			$pay['merchant_id'] .= '*************************'.substr($merchant_id, -2);
+		?>
+		<span class="merchant_id" style="<?php if(!$merchant_id){?>display:none;<?php }?>width: inherit;">
+			<?php
+				echo $pay['merchant_id'];
+			?>
+			<span class="btnGreen" style="width: inherit;" onclick="$('.merchant_id').hide();$('.merchant_id-edit').show();$('input[name=\'merchant_id\']').val('{vifnn:$merchant_id}');">修改</span>
+		</span>
+		<span class="merchant_id-edit" style="<?php if($merchant_id){?>display:none;<?php }?>width: inherit;">
+			<input type="text" name="merchant_id" value="{vifnn:$merchant_id}" class="ipt" size="45" />
+			<span class="btnGreen" style="width: inherit;" onclick="$('.merchant_id').show();$('.merchant_id-edit').hide();$('input[name=\'merchant_id\']').val('{vifnn:$merchant_id}');">显示</span>
+		</span>
+		<span>&nbsp;&nbsp;总商户号</span>    
+	</td>
+    </tr>
+    <tr>
+      <td  height="48" align="right"><strong>API密钥：</strong></td>
+	<td>
+		<?php
+			$key = $pay['key'];
+			$pay['key'] = substr($key, 0, 2);
+			$pay['key'] .= '*************************'.substr($key, -2);
+		?>
+		<span class="key" style="<?php if(!$key){?>display:none;<?php }?>width: inherit;">
+			<?php
+				echo $pay['key'];
+			?>
+			<span class="btnGreen" style="width: inherit;" onclick="$('.key').hide();$('.key-edit').show();$('input[name=\'key\']').val('{vifnn:$key}');">修改</span>
+		</span>
+		<span class="key-edit" style="<?php if($key){?>display:none;<?php }?>width: inherit;">
+			<input type="text" name="key" value="{vifnn:$key}" class="ipt" size="45" />
+			<span class="btnGreen" style="width: inherit;" onclick="$('.key').show();$('.key-edit').hide();$('input[name=\'key\']').val('{vifnn:$key}');">显示</span>
+		</span>
+		<span>&nbsp;&nbsp;用于验证签名，请和总商户的支付平台的key保持一致</span>
+	</td>
+    </tr>
+	<tr>
+	<td  height="48" align="right"><strong>apiclient_cert私钥文件:</strong></td>
+  <td>
+  <input type="text" value="{vifnn:$pay.apiclient_cert}" class="px" style="width:200px;"/>
+  <input type="file" name="apiclient_cert" id="apiclient_cert" class="" style="width:175px;" value='{vifnn:$pay.apiclient_cert}'> <input type="submit" onclick="this.value='上传中...'" value="上传" class="btnGreen" name="doSubmit" id="submitbtn"></td>
+</tr>
+<tr>
+<td  height="48" align="right"><strong>apiclient_key公钥文件:</strong></td>
+  <td>
+   <input type="text" value="{vifnn:$pay.apiclient_key}" class="px" style="width:200px;"/>
+  <input type="file" name="apiclient_key" value='{vifnn:$pay.apiclient_key}' id="apiclient_key" class="" style="width:175px;" > <input type="submit" onclick="this.value='上传中...'" value="上传" class="btnGreen" name="doSubmit" id="submitbtn"></td>
+</tr>
+<tr>
+<td  height="48" align="right"><strong>根证书文件:</strong></td>
+  <td>
+  <input type="text" value="{vifnn:$pay.rootca}" class="px" style="width:200px;"/>
+  <input type="file" name="rootca" value='{vifnn:$pay.rootca}' id="rootca" class="" style="width:175px;" > <input type="submit" onclick="this.value='上传中...'" value="上传" class="btnGreen" name="doSubmit" id="submitbtn"></td>
+</tr>
+  <tr>
+    <td  height="48" align="right"><strong>是否启用：</strong></td>
+    <td>
+      <input type="radio" name="status" id="open_tenpay_yes" value="1" <if condition="$pay['status'] eq 1">checked="checked"</if>/>&nbsp;<label for="open_tenpay_yes">开启</label>&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="radio" name="status" id="open_tenpay_no" value="0" <if condition="$pay['status'] eq 0">checked="checked"</if>/>&nbsp;<label for="open_tenpay_no">关闭</label>&nbsp;&nbsp;&nbsp;&nbsp;(需要点击“开启”才能正常使用此功能，开启后在公众号管理中填写商户号的用户才能使用，钱将支付到子商户账号。服务商可以查看流水)
+    </td>
+  </tr>
+    <tr> 
+      <td height="48" colspan="2">
+      <div id="addkey"></div>
+      <div style="padding-left:100px;">
+      <input type="submit" value="保存设置" />
+      </div>
+    </td>
+    </tr>
+  </form>
+</table>
+</div>
+<br />
+<br />
+<br />
+
+</div>
+</body>
+</html>
