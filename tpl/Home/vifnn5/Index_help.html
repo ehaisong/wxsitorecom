@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="微信商城,企业微信营销,微信营销案例,微信营销技巧,微信公共平台"/>
+    <meta name="description" content=""/>
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>帮助接入－-微信智能服务平台,企业微信营销首选</title>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/indeex.css" media="all">
+<script type="text/javascript" src="{vifnn::RES}/newjs/jQuery.js"></script>
+</head>
+<body  style="background-color:#F5F5F5">
+<div id="header">
+  <div class="top">
+    <div class="topCon clearfix">
+            <h1><a href="#"><img src="{vifnn:$f_logo}" height="48" width="180" style="padding-top:18px;"></a></h1>
+      <ul class="nav">
+        <li <if condition="(ACTION_NAME eq 'index') and (GROUP_NAME eq 'Home')">class="hover" </if> ><a href="index.php">首页</a></li>
+        <li <eq name="ACTION_NAME" value="daili">class="hover"</eq>><a href="{vifnn::U('Home/Index/daili')}">渠道加盟</a></li>
+        <li <eq name="ACTION_NAME" value="gongn">class="hover"</eq>><a href="{vifnn::U('Home/Index/gongn')}">功能介绍</a></li>
+		   <li <eq name="ACTION_NAME" value="case">class="hover"</eq>><a href="{vifnn::U('Home/Index/case')}">案例</a></li>
+		<li <eq name="ACTION_NAME" value="pricer">class="hover"</eq>><a href="{vifnn::U('Home/Index/pricer')}">套餐价格</a></li>
+        <li <eq name="ACTION_NAME" value="help">class="hover"</eq>><a href="{vifnn::U('Home/Index/help')}">帮助</a></li>
+        <!--li <eq name="ACTION_NAME" value="about">class="hover"</eq>><a href="{vifnn::U('Home/Index/about')}">联系我们</a></li-->
+		 <li><a href="{vifnn::U('Home/Index/reg')}">注册</a></li>
+		 		 <li><a href="{vifnn::U('User/Index/info')}">管理</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+<style type="text/css">
+
+.normalTitle {
+
+    border-bottom: 1px solid #D7DDE6;
+
+    border-radius: 10px 10px 0 0;
+
+    padding: 20px;
+
+    text-shadow: 0 1px 1px #FFFFFF;
+
+}
+
+.normalTitle h2, .panelTitle h2, .processTitle h2 {
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+.content {
+
+ margin: 0 auto;
+
+    text-align: left;
+
+    width: 707px;
+
+}
+
+.article, .intro, .download, .document, .developer {
+
+margin:40px 0px;
+
+
+
+background:#f5f6f7;
+
+box-shadow:0px 1px 3px #ccc;
+
+}
+
+.section {
+
+padding:0 0 20px 0;
+
+margin:0 0 20px 0;
+
+border-bottom:1px solid #eee;
+
+overflow: hidden;
+
+}
+
+.lastSection {
+
+border:none;
+
+margin-bottom:0px;
+
+}
+
+.normalTitle {
+
+border-bottom:1px solid #d7dde6;
+
+border-radius:10px 10px 0 0;
+
+padding:20px 40px;
+
+text-shadow:0 1px 1px #fff;
+
+}
+
+.normalContent {
+
+background:#fff;/*border-radius:0 0 10px 10px;*/
+
+padding:40px;
+
+}
+
+.normalTitle h2, .panelTitle h2, .processTitle h2 {
+
+font-size:20px;
+
+font-weight:bold;
+
+}
+
+.green{ color:#090}
+
+.red{ color: #F00}
+
+.collapsible {
+
+    background: none repeat scroll 0 0 #FFFFFF;
+
+    padding: 20px;
+
+}
+
+.CollapsiblePanel {
+
+    margin-bottom: 10px;
+
+    width: 870px;
+
+}
+
+.CollapsiblePanelTab {
+
+    background: url(style/images/img/arrow_unclick.png) no-repeat scroll 820px 20px #FFFFFF;
+
+    border: 1px solid #DEDEDE;
+
+    border-radius: 3px 3px 3px 3px;
+
+    color: #626B8A;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    padding: 20px 40px 20px 20px;
+
+    text-shadow: 0 1px 0 white;
+
+}
+
+.CollapsiblePanelTab.hover {
+
+    background: url(style/images/img/arrow_unclick.png) no-repeat scroll 820px 20px #D7DDE6;
+
+border: 1px solid #C1C9D4;
+
+}
+
+.CollapsiblePanelTab.clicked {
+
+    background: url(style/images/img/arrow_click.png) no-repeat scroll 820px 20px #D7DDE6;
+
+border: 1px solid #C1C9D4;
+
+}
+
+.CollapsiblePanelContent {
+
+    display: none;
+
+    overflow: hidden;
+
+}
+
+.CollapsiblePanelContent .normalContent {
+
+    padding: 20px 20px 0;
+
+}
+
+.banner{height:260px; text-align:center; border-bottom:0px solid #ddd;}
+.hbanner{ background: url({vifnn::RES}/images/banner_bag4.jpg) center no-repeat #B4B4B4;}
+.Public-h3{ no-repeat; color:#FFF; width:100%; margin:0 auto; display:block; height:63px;text-shadow:1px 0 3px #666; font-size:30px; text-align:center; line-height:63px;}
+</style>
+<div class="Public-content clearfix">
+<div class="banner hbanner"></div><div class="Public-content">
+<div class="content" style="width:985px;">
+
+
+
+        <h2 class="Public-h3">第一步、在{vifnn::C('site_name')}绑定微信公众号</h2>
+
+        <div class="Public-box">
+
+            <div class="Proxy">
+
+                <if condition="$_GET['token'] eq ''">
+
+                <p>比如你{vifnn::C('site_name')}平台上的地址是： {vifnn::C('site_url')}/index.php/api/demo</p><font color="#FF0000">登录才能复制</font>
+
+                <p>那么URL就是： {vifnn::C('site_url')}/INDEX.PHP/api/demo</p><font color="#FF0000">登录才能复制</font>
+				<p>Token填写是：  demo</p>
+
+                <else/>
+
+                <p>你的URL是 <font color="red">
+                  <!-- -->
+				  <script> 
+function oCopy(obj){
+  obj.select();
+  js=obj.createTextRange();
+  js.execCommand("Copy")
+}
+</script>
+<input  style="width:350px"type="text" value="{vifnn::C('site_url')}/index.php/api/<php>echo $_GET['token'];</php>" onClick="oCopy(this)">  复制</font></p>
+                
+ <script> 
+function toCopy(obj){
+  obj.select();
+  js=obj.createTextRange();
+  js.execCommand("Copy")
+}
+</script>
+<p>Token填写 <font color="red"><input  style="width:150px"type="text" value="<php>echo $_GET['token'];</php>" onClick="toCopy(this)">
+                  复制</font></p></if>
+
+                
+
+                <p>1、注册并登录<a href="{vifnn::U('Index/login')}">{vifnn::C('site_name')}接口平台</a></p>
+
+                <p>2、添加公众号 → 功能管理 → 勾选要开启的功能</p>                                    
+
+                <p><img src="{vifnn::STATICS}/help/help01.jpg" width="790px"></p>
+
+                <p><img src="{vifnn::STATICS}/help/help0.jpg" width="790px"></p>
+
+          </div>
+
+        </div>
+
+        
+
+            <h2 class="Public-h3">第二步、到微信公众平台设置接口。</h2>
+
+        <div class="Public-box">
+
+            <div class="Proxy">
+
+                <p>Token填写 <font color="red"><php>echo $_GET['token'];</php></font></p>
+
+
+
+                <p>1、登录 <a href="http://mp.weixin.qq.com/">微信公众平台</a>（<a href="http://mp.weixin.qq.com/">http://mp.weixin.qq.com/</a>），进行身份认证，填写信息，提交身份证。</p>
+
+                <p>认证后，点击高级功能 → 进入开发模式</p><br>
+
+                <p><img src="{vifnn::STATICS}/help/help002.jpg" width="790px"></p><br>
+
+                <p>2、点击"成为开发者"按钮</p>
+
+                <p><img src="{vifnn::STATICS}/help/help003.jpg" width="790px"></p><br>
+
+                <p>3、填写接口配置信息</p>
+
+                <if condition="$_GET['token'] eq ''">
+
+                <p>比如你{vifnn::C('site_name')}平台上的地址是{vifnn::C('site_url')}/index.php/api/demo</p>
+
+                <p>那么URL就是{vifnn::C('site_url')}/INDEX.PHP/api/demo</p>
+
+                <else/>
+
+                <p>你的URL是 <font color="red">{vifnn::C('site_url')}/index.php/api/<php>echo $_GET['token'];</php></font></p>
+
+                </if>
+
+                <p>Token填写 <font color="red"><php>echo $_GET['token'];</php></font></p>
+
+                <p><img src="{vifnn::STATICS}/help/help004.jpg" width="790px"></p><br>
+
+                <p>4、确认开启</p>
+
+                <p>5、在手机上用微信给你的公众号输入"帮助"，测试你的接口是否配置正常！</p><br>  
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+<div style="display:none">
+
+{vifnn::C('counts')}
+
+</div>
+
+</body></html>

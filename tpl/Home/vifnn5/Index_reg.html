@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="{vifnn::C('keyword')}"/>
+    <meta name="description" content="{vifnn::C('content')}"/>
+<title>帐号注册{vifnn::C('site_name')}</title>
+    <link rel="shortcut icon" href="favicon.ico">
+	<link href="{vifnn::RES}/css/heise2/bootstrap.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="{vifnn::STATICS}/jquery.min.js"></script>
+	 </head>
+<style>
+.logo{
+	magin:0px;
+	margin-top: 100px;
+	margin-right: auto;
+	margin-bottom: 25px;
+	margin-left: auto;
+	text-align: center;
+}
+body {
+	background-image:url({vifnn::RES}/images/heise2/bg01.gif);
+	font-family: "宋体";
+	font-size: 12px;
+	color: #000000;
+}
+.chk_img{display:inline-block;margin-left:5px;padding:0px 10px 0px 0px;vertical-align:super;width:51px;height:28px;line-height:33px;/}
+	.chk_txt{display:inline-block;margin-left:5px;color:#386693;height:33px;line-height:33px;}
+</style>	
+
+<body>
+	<div class="logo"> <a href="/"><img src="{vifnn::RES}/image/logo_big.png" alt="LOGO"></a></div>
+<div id="apply" class="weiba_pop">
+    <a class="pop-close" href="javascript:closeattention('apply');"></a>
+    <div style="width:400px; margin:0 auto; padding:20px; background:#f0f0f0; border-radius:8px;">
+        <h5 style="line-height:45px;background:#090; font-size:16px; text-align:center; color:#fff;padding-bottom: 5px; margin-top: 10px;margin-bottom: -10px; border-radius: 5px 5px  0px 0px;">注册中心帐号</h5>
+        <div> 	<fieldset>
+		  <form action="{vifnn::U('Users/checkreg')}" method="post" >
+		   <div style="background-color:#FFFFFF;border-radius: 0px 0px  5px 5px;">
+            <table  width="100%" height="300" border="0" cellspacing="0" cellpadding="0"  class="font14">
+                <tr>
+                    <td width="25%" align="right"><span style="font-size:12px">用户名：</span></td>
+                    <td width="75%">
+                     <input class="txt_input" id="apply_name"  required="" value="请输入用户名" onClick="if(this.value=='请输入用户名'){this.value=''}" onBlur="if(this.value==''){this.value='请输入用户名'}" type="text" name="username">
+                        <span id="apply_name_err" style="color:#F00; font-size:12px;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"><span style="font-size:12px">输入密码：</span></td>
+                    <td>    <input class="txt_input" id="apply_pass"  type="password" name="password">
+                        <span id="apply_position_err" style="color:#F00; font-size:12px;"></span>
+                    </td>
+                </tr>
+				<tr>
+                    <td align="right"><span style="font-size:12px">确认密码：</span></td>
+                    <td>    <input class="txt_input" id="apply_pass"  type="password" name="repassword">
+                        <span id="apply_position_err" style="color:#F00; font-size:12px;"></span>
+                    </td>
+                </tr>
+				<tr>
+                    <td align="right"><span style="font-size:12px">邮箱地址：</span></td>
+                    <td>    <input class="txt_input" type="text" name="email" value="请输入电子邮箱" onClick="if(this.value=='请输入电子邮箱'){this.value=''}" onBlur="if(this.value==''){this.value='请输入电子邮箱'}">
+                        <span id="apply_position_err" style="color:#F00; font-size:12px;"></span>
+                    </td>
+                </tr>
+				<tr>
+                   
+                </tr>
+                <tr>
+                    <td align="right">&nbsp;</td>
+                    <td>
+                        <input type="submit" class="btn btn-warning" value="注册" />&nbsp; &nbsp; &nbsp; &nbsp; <a href="{vifnn::U('Home/Index/login')}">已有帐号？马上登录</a>
+                    </td>
+                </tr>
+            </table></form> 	</fieldset>
+        </div>
+		<p align="center" style="color:#CCCCCC">Copyright © 123.com版权所有 </p>
+		</div>
+    </div>
+	</div>
+<script type="text/javascript">
+    $(function(){
+        $('.sub_input').on('click',function(){
+            var submitdata = '';
+            var name = $('#apply_name').val();
+            if(!name){
+                $('#apply_name_err').html('用户名不能为空');
+                return false;
+            }
+            $('#apply_name_err').html('');
+            submitdata += 'name='+name;
+            var position = $('#apply_pass').val();
+            if(!position){
+                $('#apply_pass_err').html('密码不能为空哦！');
+                return false;
+            }
+            $('#apply_city_err').html('');
+            submitdata += '&city='+city;
+
+            $.post('/apply/doApply',submitdata,function(result){
+                alert(result.msg);
+                if(result.error == 0){
+                    closeattention('apply');
+                }
+            });
+        });
+    });
+</script>
+    </div>
+</div>
+<div style="display:none">
+{vifnn::C('counts')}
+</div>
+</body></html>

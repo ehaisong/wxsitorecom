@@ -20,7 +20,13 @@
 /cms/smarty/templates/tpls
 /cms/templates
 /cms/manage
-/tpl/Home
+/tpl/Home/agent_1/common
+/tpl/Home/vifnn/common
+/tpl/Home/vifnn2/common
+/tpl/Home/vifnn3/common
+/tpl/Home/vifnn4/common
+/tpl/Home/vifnn5/common
+/tpl/Home/vifnn6/common
 /tpl/static
 /tpl/User/default/common
 

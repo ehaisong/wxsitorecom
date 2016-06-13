@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<style type="text/css">
+* { margin:0; padding:0;}
+body { font-size:12px; font-family:Verdana;}
+a { color:#333; text-decoration:none;}
+ul { list-style:none;margin:0 auto;}
+#pagelist {width:300px; margin:30px auto; padding:6px 0px; height:20px;}
+#pagelist ul li { float:left; border:1px solid #5d9cdf; height:20px; line-height:20px; margin:0px 2px;}
+#pagelist ul li a, .pageinfo { display:block; padding:0px 6px; background:#e6f2fe;}
+.pageinfo  { color:#555;}
+.current { background:#a9d2ff; display:block; padding:0px 6px; font-weight:bold;}
+</style>
+    	<!-- ie browser -->
+		<!--[if IE]>
+			<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+			<script type="text/javascript" src="{vifnn::RES}/js/html5.js"></script>
+		<![endif]-->
+		<!--[if lt IE 7]>
+			<script src="{vifnn::RES}/js/IE7.js">var IE7_PNG_SUFFIX = ".png";</script>
+		<![endif]-->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=1024">
+		<title>关于我们 >> {vifnn:$f_siteName} 移动社交营销专家</title>
+		<meta name="keywords" content="微风VIFNN ,微信营销,微信代运营,微信定制开发,移动场景制作,微信托管,微网站,微商城">
+		<meta name="description" content="微风VIFNN ，国内最新最全的微信公众智能服务平台，为个人和企业提供基于微信公众平台的一系列功能，包括微官网、微活动、微场景、微应用等，个人和企业微营销必备。">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/reset.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.lazyload.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.event.move.js"></script>
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/basic.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/style.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/share.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/pages.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/base.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/main.js"></script>
+</head>
+	<body>
+		<!-------------- 头部开始 -------------->
+		<div class="header">
+			<div class="a">
+				<div class="wrapper">
+					<a class="logo" href="{vifnn::U('Home/Index/index')}"><img src="{vifnn:$f_logo}" alt="{vifnn:$f_siteName}-多用户微信营销服务平台"></a>
+					<if condition="$_SESSION[uid]==false">
+							<div class="btns">
+                            <a href="{vifnn::U('Index/login')}" class="btn"> 登　陆</a>
+							<a href="{vifnn::U('Index/login')}" class="btn e1">在线注册</a>
+                            </div>
+						<else/>
+							<div class="dlh">
+                    			<div class="rtx"><img src="{vifnn::RES}/img/gr.png" width="30" height="31"></div>
+                    			<div class="rtz">您好 <a href="/index.php?g=User&m=Index&a=info" class="dlh1">{vifnn:$Think.session.uname}</a>　<a href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" class="dlh2">退出</a></div>
+                    		</div>
+						</if>
+				</div>
+			</div>
+			<div class="b">
+				<div class="wrapper">
+					<div class="menu">
+						<ul>
+							<li><a href="/" class="home">首 页</a></li>
+                            <li><a href="{vifnn::U('Home/Index/about')}" class="on">关于我们</a></li>
+							<li><a href="{vifnn::U('Home/Index/fc')}">产品功能</a></li>
+                            <li><a href="{vifnn::U('Home/Index/common')}">经典案例</a></li>
+							<li><a href="{vifnn::U('Home/Index/price')}">资费套餐</a></li>
+							<li><a href="{vifnn::U('User/Index/info')}">管理中心</a></li>
+							<li><a href="{vifnn::U('Home/Index/contact')}">联系我们</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-------------- 头部结束 -------------->
+		<!-------------- 主体开始 -------------->
+		<div class="mainer">
+			<div class="pt_bann" style="background-image: url({vifnn::RES}/img/img_b4.jpg);">
+				
+			</div>
+			<div class="pt_tab2">
+				<p>
+					<span>
+						<a href="{vifnn::U('Home/Index/about')}">公司简介</a>
+						<a href="{vifnn::U('Home/Index/culture')}">企业文化</a>
+						<a href="{vifnn::U('Home/Index/partner')}">合作伙伴</a>
+						<a href="{vifnn::U('Home/Index/joinus')}" class="on">加入我们</a>
+					</span>
+				</p>
+			</div>
+			<div class="wrapper">
+				<div class="ht35"></div>
+				<div class="pt_ttl1">
+					<img src="{vifnn::RES}/img/tt_l1-9.png" alt="">
+				</div>
+				<div class="ht30"></div>
+				<div class="pt_txt3">
+					<h3><strong>一、产品经理</strong>（1人）岗位职责：</h3>
+				  <p>1.根据公司和产品发展策略，负责相关的产品调研、分析与产品设计；</p>
+					<p>2.协调各部门资源和支持，快速、高效推动产品上线运营；</p>
+					<p>3.把握用户喜好、产品发展方向，持续改进产品。</p>
+					<p><strong>任职要求：</strong></p>
+				  <p>1.2年以上互联网产品相关经验、1年以上产品设计经验、具备独立设计的能力；</p>
+					<p>2.逻辑思维清晰，语言沟通、组织协调能力出色，善于调动团队积极性；</p>
+					<p>3.拥有强烈的责任心和团队合作精神，有一定抗压能力；</p>
+					<p>4.对移动端产品有研究的热情和兴趣。</p>
+					<p><br></p>
+					<h3>二、运营经理（2人）岗位职责：</h3>
+					<p>1.制定运营工作目标，控制运营成本，带领团队，完成公司任务指标；</p>
+					<p>2.搭建完善的商务运营管理体系，包含运营部工作流程、规范制度、计划和管理；</p>
+					<p>3.整合资源，分配资源，协调各个部门，配合业务有效运营；</p>
+					<p>4.建立完善的业务支持模式和业务绩效支持方案，促进部门的业务发展；</p>
+					<p>5.搭建有效支持的数据平台以及数据运营体系作；</p>
+					<p>6.支持其它业务部门的发展和横向业务关联。</p>
+				  <p><strong>任职资格：</strong></p>
+					<p>1.本科以上学历，3年以上的运营管理工作经验优先；</p>
+					<p>2.工作认真细致，努力踏实，责任心强，执行力强；</p>
+					<p>3.了解市场运营方式及竞争对手的最新动态，有丰富的行业信息渠道；</p>
+					<p>4.擅长运用系统工具，思维清晰而有条理。</p>
+					<p><br></p>
+					<h3>三、PHP开发工程师（2人）岗位职责：</h3>
+					<p>1.负责公司产品的技术研发和实现；</p>
+					<p>2.基于产品的代码测试和维护；</p>
+					<p>3.参与产品的相关研讨；</p>
+					<p>4.参与公司各项目中的Web功能设计、开发和实现。</p>
+				  <p><strong>任职要求：</strong></p>
+					<p>1.1年以上PHP实际项目开发经验，具备良好的代码编程习惯；</p>
+					<p>2.熟练掌握PHP语言，熟悉PHP开源框架；</p>
+					<p>3.熟悉MySQL语言，了解数据库设计调优；</p>
+					<p>4.良好的沟通能力和团队合作精神。</p>
+					<p><br></p>
+					<div id="pagelist">
+  <ul>
+  
+    <!--li class="current"><a href="#">1</a></li>
+    <li><a href="{vifnn::U('Home/Index/joinus1')}">2</a></li>
+    <li><a href="{vifnn::U('Home/Index/joinus2')}">3</a></li>    
+    <li><a href="{vifnn::U('Home/Index/joinus1')}">下页</a></li>
+    <li class="pageinfo">第1页</li>
+    <li class="pageinfo">共3页</li-->
+  </ul>
+</div>
+
+
+				  <img src="{vifnn::RES}/img/pic_3.png" alt="">
+				</div>
+				<div class="ht50"></div>
+                
+			</div>
+		</div>
+		<!-------------- 主体结束 -------------->
+		<include file="Public:footer"/>
+	</body>
+</html>
+<script>
+	$(function(){
+		$(".focusbox").focusbox({during: 5000});
+
+	});
+</script>

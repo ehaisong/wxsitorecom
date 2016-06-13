@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+    	<!-- ie browser -->
+		<!--[if IE]>
+			<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+			<script type="text/javascript" src="{vifnn::RES}/js/html5.js"></script>
+		<![endif]-->
+		<!--[if lt IE 7]>
+			<script src="{vifnn::RES}/js/IE7.js">var IE7_PNG_SUFFIX = ".png";</script>
+		<![endif]-->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=1024">
+<title>登陆与注册 >> {vifnn:$f_siteName} 移动社交营销专家</title>
+		<meta name="keywords" content="微风VIFNN ,微信营销,微信代运营,微信定制开发,移动场景制作,微信托管,微网站,微商城">
+		<meta name="description" content="微风VIFNN ，国内最新最全的微信公众智能服务平台，为个人和企业提供基于微信公众平台的一系列功能，包括微官网、微活动、微场景、微应用等，个人和企业微营销必备。">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/reset.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.lazyload.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.event.move.js"></script>
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/basic.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/style.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/share.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/pages.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/base.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/main.js"></script>
+	</head>
+    	<body>
+		<!-------------- 头部开始 -------------->
+		<div class="header">
+			<div class="a">
+				<div class="wrapper">
+					<a class="logo" href="{vifnn::U('Home/Index/index')}"><img src="{vifnn:$f_logo}" alt="{vifnn:$f_siteName}-多用户微信营销服务平台"></a>
+					<if condition="$_SESSION[uid]==false">
+							<div class="btns">
+                            <a href="{vifnn::U('Index/login')}" class="btn"> 登　陆</a>
+							<a href="{vifnn::U('Index/login')}" class="btn e1">在线注册</a>
+                            </div>
+					<else/>
+							<span style="margin:20px">您好,<a href="/index.php?g=User&m=Index&a=info" hidefocus="true"  ><span style="color:red">{vifnn:$Think.session.uname}</span></a>
+							<a href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" >退出</a></span>
+					</if>
+				</div>
+			</div>
+			<div class="b">
+				<div class="wrapper">
+					<div class="menu">
+						<ul>
+							<li><a href="/" class="home">首 页</a></li>
+                            <li><a href="{vifnn::U('Home/Index/about')}">关于我们</a></li>
+							<li><a href="{vifnn::U('Home/Index/fc')}">产品功能</a></li>
+                            <li><a href="{vifnn::U('Home/Index/common')}">经典案例</a></li>
+							<li><a href="{vifnn::U('Home/Index/price')}">资费套餐</a></li>
+							<li><a href="{vifnn::U('User/Index/index')}" class="on">管理中心</a></li>
+							<li><a href="{vifnn::U('Home/Index/contact')}">联系我们</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-------------- 头部结束 -------------->
+		<!-------------- 主体开始 -------------->
+        <center>
+        <table width="800" height="400" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="400" align="left" valign="top" style="background:url({vifnn::RES}/img/zj.jpg) no-repeat right;"><table width="350" align="left" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="30" colspan="4"></td>
+        </tr>
+      <tr align="center">
+        <td height="50" colspan="4"><strong style="font-size:26px; color: #323232;">用户登录</strong></td>
+        </tr>
+      <form action="{vifnn::U('Users/checklogin')}" method="post" class="login">
+      <tr>
+        <td width="52" height="40" align="right" valign="middle">用户名：</td>
+        <td colspan="3" align="left" valign="middle"><input class="text" type="text" name="username"></td>
+      </tr>
+      <tr>
+         <td height="40" align="right" valign="middle">密　码：</td>
+         <td colspan="3" align="left" valign="middle"><input class="text" type="password" name="password"></td>
+      </tr>
+      <tr>
+         <td height="40" align="right" valign="middle">验证码：<script>
+                        function refreshImg2(){
+                        	document.getElementById("txtCheckCode2").src="/index.php?m=Index&a=verifyLogin&s="+Math.random();
+                        }
+                        </script></td>
+         <td width="90" align="left" valign="middle"><input name="verifycode2" type="text" size="8" style="width:80px;" class="text" maxlength="4" /></td>
+         <td width="73" align="left" valign="middle"><img src="{vifnn::U('Index/verifyLogin')}" id="txtCheckCode2"/></td>
+         <td width="135" align="left" valign="middle"><a href="javascript:refreshImg2();" style="color:#666">看不清？换一张</a></td>
+      </tr>
+	  </br></br></br>
+	  
+      <tr>
+         <td height="80" colspan="4" align="center" valign="middle">
+         <input type="image" style="height:35px" name="imageField" src="{vifnn::RES}/img/dl.jpg" />
+         </td>
+         </tr>
+      <tr align="center">
+         <td height="36" colspan="4" valign="middle">账号审核：QQ:{vifnn:$f_qq}</td>
+         </tr>
+      </form>
+    </table></td>
+
+
+    <td width="400" align="right" valign="top">
+    <table width="350" align="right" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+        <td width="72" height="30"></td>
+        <td colspan="3"></td>
+   </tr>
+  <tr>
+    <td height="50" colspan="4" align="center"><strong style="font-size:26px; color: #323232;">用户注册</strong></td>
+    </tr>
+  <form action="{vifnn::U('Users/checkreg')}" method="post" class="login">
+  <tr>
+    <td height="40" align="right" valign="middle">用户名：</td>
+    <td colspan="3" align="left" valign="middle"><input class="text" required="" value="请输入用户名" onclick="if(this.value=='请输入用户名'){this.value=''}" onblur="if(this.value==''){this.value='请输入用户名'}" type="text" name="username">
+    </td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="middle">密　码：</td>
+    <td colspan="3" align="left" valign="middle"><input class="text" type="password" name="password"></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="middle">重复密码：</td>
+    <td colspan="3" align="left" valign="middle"><input class="text" type="password" name="repassword"></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="middle">手　机：</td>
+    <td colspan="3" align="left" valign="middle"><input class="text" type="text" name="mp" /></td>
+  </tr>
+
+  <tr>
+    <td height="40" align="right" valign="middle">邮　箱：</td>
+    <td colspan="3" align="left" valign="middle"><input class="text" type="text" name="email" value="" onClick="if(this.value=='请输入电子邮箱'){this.value=''}" onBlur="if(this.value==''){this.value=''}"></td>
+  </tr>
+  <tr>
+    <td height="40" align="right" valign="middle">验证码：<script>
+                        function refreshImg(){
+                        	document.getElementById("txtCheckCode").src="/index.php?m=Index&a=verify&s="+Math.random();
+                        }
+                        </script></td>
+    <td width="94" align="left" valign="middle"><input name="verifycode2" type="text" size="8" style="width:80px;" class="text" maxlength="4" /></td>
+    <td width="76" align="left" valign="middle"><img src="{vifnn::U('Index/verify')}" id="txtCheckCode"/></td>
+    <td width="108" align="left" valign="middle"><a href="javascript:refreshImg();" style="color:#666">看不清？换一张</a></td>
+  </tr>
+  <tr>
+    <td height="70" colspan="4" align="center" valign="middle">
+    <input class="text" type="hidden" name="invitecode" value="<?php echo $_GET['invitecode'];?>">
+    <input type="image" style="height:35px" name="imageField" src="{vifnn::RES}/img/zc.jpg" />
+   </td>
+    </tr>
+  </form>
+</table>
+</td>
+  </tr>
+</table>
+</center>
+		<!-------------- 主体结束 -------------->
+
+		<include file="Public:footer"/>
+	</body>
+</html>
+<script>
+	$(function(){
+		$(".focusbox").focusbox({during: 5000});
+
+	});
+</script>

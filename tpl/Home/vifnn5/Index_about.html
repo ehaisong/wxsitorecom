@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="微信商城,企业微信营销,微信营销案例,微信营销技巧,微信公共平台"/>
+    <meta name="description" content=""/>
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>关于我们－-微信智能服务平台,企业微信营销首选</title>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/indeex.css" media="all">
+<script type="text/javascript" src="{vifnn::RES}/newjs/jQuery.js"></script>
+</head>
+
+<body>
+<div id="header">
+  <div class="top">
+    <div class="topCon clearfix">
+            <h1><a href="#"><img src="{vifnn:$f_logo}" height="48" width="180" style="padding-top:18px;"></a></h1>
+      <ul class="nav">
+        <li <if condition="(ACTION_NAME eq 'index') and (GROUP_NAME eq 'Home')">class="hover" </if> ><a href="index.php">首页</a></li>
+        <li <eq name="ACTION_NAME" value="daili">class="hover"</eq>><a href="{vifnn::U('Home/Index/daili')}">渠道加盟</a></li>
+        <li <eq name="ACTION_NAME" value="gongn">class="hover"</eq>><a href="{vifnn::U('Home/Index/gongn')}">功能介绍</a></li>
+		   <li <eq name="ACTION_NAME" value="case">class="hover"</eq>><a href="{vifnn::U('Home/Index/case')}">案例</a></li>
+		<li <eq name="ACTION_NAME" value="pricer">class="hover"</eq>><a href="{vifnn::U('Home/Index/pricer')}">套餐价格</a></li>
+        <li <eq name="ACTION_NAME" value="help">class="hover"</eq>><a href="{vifnn::U('Home/Index/help')}">帮助</a></li>
+        <!--li <eq name="ACTION_NAME" value="about">class="hover"</eq>><a href="{vifnn::U('Home/Index/about')}">联系我们</a></li-->
+		 <li><a href="{vifnn::U('Home/Index/reg')}">注册</a></li>
+		 		 <li><a href="{vifnn::U('User/Index/info')}">管理</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  
+  
+<div class="Public-content clearfix">
+
+<div class="con">
+<div class="content">
+      <br><br>      <br><br>
+					<h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{vifnn::C('site_name')}<span> / 为您提供更好的服务！</span></h4>
+
+		
+		<p style="text-indent:2em;text-align:left;">电　话：{vifnn::C('site_mp')} &nbsp; &nbsp;</p> 
+		
+		<p style="text-indent:2em;text-align:left;">QQ：{vifnn::C('site_qq')}</p>
+		
+		<p style="text-indent:2em;text-align:left;">网　址：{vifnn::C('site_url')}</p>
+		
+		<p style="text-indent:2em;text-align:left;">邮　箱：{vifnn::C('site_email')}</p>  
+		
+		<p style="text-indent:2em;text-align:left;">地　址：{vifnn::C('site_adress')}</p> 
+      
+
+
+ 
+</div>
+</div>
+
+<include file="Public:footer"/>
+<div style="display:none">
+{vifnn::C('counts')}
+</div>
+</body></html>

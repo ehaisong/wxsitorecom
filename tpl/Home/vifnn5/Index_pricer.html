@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="微信商城,企业微信营销,微信营销案例,微信营销技巧,微信公共平台"/>
+    <meta name="description" content=""/>
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>功能介绍－-微信智能服务平台,企业微信营销首选</title>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/indeex.css" media="all">
+	<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/heise2/bootstrap.min.css" media="all">
+<script type="text/javascript" src="{vifnn::RES}/newjs/jQuery.js"></script>
+</head>
+<body  style="background-color:#F5F5F5">
+<div id="header">
+  <div class="top">
+    <div class="topCon clearfix">
+            <h1><a href="#"><img src="{vifnn:$f_logo}" height="48" width="180" style="padding-top:18px;"></a></h1>
+      <ul class="nav">
+        <li <if condition="(ACTION_NAME eq 'index') and (GROUP_NAME eq 'Home')">class="hover" </if> ><a href="index.php">首页</a></li>
+        <li <eq name="ACTION_NAME" value="daili">class="hover"</eq>><a href="{vifnn::U('Home/Index/daili')}">渠道加盟</a></li>
+        <li <eq name="ACTION_NAME" value="gongn">class="hover"</eq>><a href="{vifnn::U('Home/Index/gongn')}">功能介绍</a></li>
+		   <li <eq name="ACTION_NAME" value="case">class="hover"</eq>><a href="{vifnn::U('Home/Index/case')}">案例</a></li>
+		<li <eq name="ACTION_NAME" value="pricer">class="hover"</eq>><a href="{vifnn::U('Home/Index/pricer')}">套餐价格</a></li>
+        <li <eq name="ACTION_NAME" value="help">class="hover"</eq>><a href="{vifnn::U('Home/Index/help')}">帮助</a></li>
+        <!--li <eq name="ACTION_NAME" value="about">class="hover"</eq>><a href="{vifnn::U('Home/Index/about')}">联系我们</a></li-->
+		 <li><a href="{vifnn::U('Home/Index/reg')}">注册</a></li>
+		 		 <li><a href="{vifnn::U('User/Index/info')}">管理</a></li>
+      </ul>
+    </div>
+  </div>
+
+   
+<style type="text/css">
+.table-plan p{
+	font-size:14px;
+	margin:0;
+	line-height:30px;
+}
+.table-plan th {
+	text-align: center;
+	font-size: 16px;
+	color: #888;
+	padding: 15px 8px;
+}
+.table-plan td {
+	width: 20%;
+	text-align:center;
+}
+.table-plan td.item {
+	text-align:left;
+	width: 20%;
+	padding-left: 40px;
+}
+.rmb {
+	margin: 5px;
+	vertical-align: bottom;
+	font-size: 24px;
+	font-weight: bold;
+	color: #DC4F09;
+	font-family: Tahoma;
+}
+.table tbody tr:hover td, .table tbody tr:hover th {
+	background-color: white;
+}
+.what {
+	vertical-align: -5px;	
+}
+.checkbox input[type='radio'] {
+	vertical-align: -1px;
+}
+.checkbox.inline {
+	padding-left: 0;
+}
+#personal_plan thead tr th{
+	vertical-align: middle;
+}
+#personal_plan thead tr code{
+	border:1px solid #ceecd9;
+	background-color:#eefaf2;
+	font-weight:normal;
+	color:#27a654;
+	position:relative;
+	line-height:30px;
+	padding:6px;
+}
+#personal_plan tr code span{
+	display:inline-block;
+	padding:0 4px;
+	position:relative;
+	top:4px;
+	font-weight:bold;
+	font-style:italic;
+	font-size:26px;
+	color:red;
+}
+#use_coupon {
+	margin: 10px 0;
+}
+#coupon {
+	width: 260px;
+}
+.container{width:960px;}
+[class*="span"] {
+	float: left;
+	margin-left: 12px;
+}
+.row{margin-left:-12px;}
+.nav-pills > .active > a, .nav-pills > .active > a:hover {
+	color: #494949;
+	background-color: #D4DBE2;
+}
+.nav-pills > li  a{
+	text-shadow: 0 1px 0 #fff;
+}
+.nav-pills > li.active  a{
+	box-shadow: 0 1px 1px #eaf0f6, inset 1px 1px 3px #BDC5CB;
+	text-shadow: 0 1px 0 #fff;
+}
+  .span12 {
+    width: 960px;
+  }
+  .span11 {
+    width: 879px;
+  }
+  .span10 {
+    width: 798px;
+  }
+  .span9 {
+    width: 717px;
+  }
+  .span8 {
+    width: 636px;
+  }
+  .span7 {
+    width: 555px;
+  }
+  .span6 {
+    width: 474px;
+  }
+  .span5 {
+    width: 393px;
+  }
+  .span4 {
+    width: 312px;
+  }
+  .span3 {
+    width: 231px;
+  }
+  .span2 {
+    width: 150px;
+  }
+  .span1 {
+    width: 69px;
+  }
+  .offset12 {
+    margin-left: 984px;
+  }
+  .offset11 {
+    margin-left: 903px;
+  }
+  .offset10 {
+    margin-left: 822px;
+  }
+  .offset9 {
+    margin-left: 741px;
+  }
+  .offset8 {
+    margin-left: 660px;
+  }
+  .offset7 {
+    margin-left: 579px;
+  }
+  .offset6 {
+    margin-left: 498px;
+  }
+  .offset5 {
+    margin-left: 417px;
+  }
+  .offset4 {
+    margin-left: 336px;
+  }
+  .offset3 {
+    margin-left: 255px;
+  }
+  .offset2 {
+    margin-left: 174px;
+  }
+  .offset1 {
+    margin-left: 93px;
+  }
+  .container #vipTop{
+	float: left;
+	color: #FFFFFF;
+}
+.container{width:980px;}
+.banner{height:200px; text-align:center; border-bottom:2px solid #ddd;}
+.hbanner{ background: url({vifnn::RES}/images/pri.jpg) center no-repeat #B4B4B4;}
+.tip_container {
+	display:none;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left:50%;
+    margin-left: -288px;
+    text-align: left;
+    min-width: 576px;
+}
+
+</style>
+<div class="Public-content clearfix">
+  <div class="banner hbanner"></div>
+	</div>
+	<div class="welll">
+		<div style="margin:20px auto;">
+			<table bgcolor="#FFFFFF" class="table table-bordered table-plan" id="personal_plan"> 
+				<thead>
+					<tr>
+						<th width="595">服务</th>
+						<th width="57">
+						<div align="center">加盟版</div>	
+					  <p align="center">&nbsp;</p>						  </th>
+						<th width="58">
+						<div align="center">旗舰版</div>						
+					  <p align="center">&nbsp;</p>					  </th>	
+						<th width="40"><div align="center">高级版</div><p align="center">&nbsp;</p>	</th>
+					    <th width="42"><div align="center">基础版</div><p align="center">&nbsp;</p>	</th>
+					</tr>
+				</thead>
+				</tbody>					
+					<tr bgcolor="#FFFFFF">
+						<td class="item" style="border-radius:0;"><p style="margin:24px auto;">产品价格 <a  class="tooltips" ></a></p></td>
+						<td style="vertical-align:middle;">
+							<div class="price">
+								<p align="center" style="margin-top:-5px">
+								￥
+								<b class="rmb">98</b>
+								/月								</p>
+								<p align="center" style="margin-top:-5px">
+								￥
+								<b class="rmb">980</b>
+								/年								</p>
+							</div>			<div align="center"><a  class="btnt btn-warning" href="/#"><font color="#ccc">卖光了</font></a>						        </div></td>
+						<td>
+							<div class="price">
+								<p align="center" style="margin-top:-5px">
+								￥
+								<b class="rmb">58</b>
+								/月								</p>
+								<p align="center" style="margin-top:-5px">
+								￥
+								<b class="rmb">580</b>
+								/年								</p>
+							</div>
+						<div align="center"><a  class="btnt btn-warning" href="/index.php?g=User&m=Alipay&a=index&gid=3"><font color="#FFFFFF">立即购买</font></a>					        </div></td>
+						<td style="vertical-align:middle;">
+							<div class="price">
+								<p align="center" style="margin-top:-5px">
+							
+								<b class="rmb"></b>
+														</p>
+								<p align="center" style="margin-top:-5px">
+								￥
+								<b class="rmb">300</b>
+								/年								</p>
+							</div><div align="center"><a  class="btnt btn-warning" href="/index.php?g=User&m=Alipay&a=index&gid=2"><font color="#FFFFFF">立即购买</font></a>						        </div></td>
+					    <td style="vertical-align:middle;">	<div class="price">
+							<p align="center" style="margin-top:-5px">
+								<b class="rmb"></b>
+										<p align="center" style="margin-top:-5px">
+								￥
+								<b class="rmb">120</b>
+								/年								</p>
+						</div><div align="center"><a  class="btnt btn-warning" href="/index.php?g=User&m=Alipay&a=index&gid=1"><font color="#FFFFFF">立即购买</font></a>						        </div></td>
+					</tr>
+					<tr>
+						<td class="item"><p>自定义图文限额数</p></td>
+						<td><p align="center">10000</p></td>
+						<td><p align="center">1000</p></td>
+						<td><p align="center">500</p></td>
+					    <td><p align="center">200</p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>月赠送请求次数</p></td>
+						<td><p align="center">100000</p></td>
+						<td><p align="center">5000</p></td>
+						<td><p align="center">1000</p></td>
+					    <td><p align="center">500</p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>每月创建活动次</p>
+						<i class="icon-question-sign" style="margin-top: 3px;"></i></a></p>
+						  </p></td>
+						<td><p align="center">500</p></td>
+						<td><p align="center">200</p></td>
+						<td><p align="center">100</p></td>
+					    <td><p align="center">50</p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>可创建公共帐号</td>
+						<td><p align="center">30</p></td>
+						<td><p align="center">15</p></td>
+						<td><p align="center">5</p></td>
+					    <td><p align="center">2</p></td>
+					</tr>
+										<tr>
+						<td class="item"><p>会员卡数量</p></td>
+						<td><p align="center">200</p></td>
+						<td><p align="center">100</p></td>
+						<td><p align="center">50</p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+					
+		             <tr>
+						<td  bgcolor="#E2FEEC"colspan="5" class="item"><p> 
+						  <p align="center" style="font-size:18px">基础功能</p></td>
+					</tr>
+					<tr>
+						<td class="item"><p>天气,快递,百科等查询</td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>糗事,笑话,解梦功能</td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p> 发地理位置显示周边 </p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></td>
+					</tr>
+	
+					<tr>
+						<td class="item"><p> 自定义LBS数据 </p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>   图文本回复模糊匹配 </p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>   回答不上启用第三方</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+       
+					<tr>
+						<td class="item"><p>  刮刮卡,大转盘活动 </p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>投票,  优惠券活动  </p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+					 <tr>
+						<td  bgcolor="#FDF3DF"colspan="5" class="item"><p> 
+						  <p align="center" style="font-size:18px">高级功能</p></td>
+					</tr>
+					<tr>
+						<td class="item"><p>微商城店铺管理</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>支付宝签约支付</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>淘宝客模块</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>	
+
+					<tr>
+						<td class="item"><p>3G网站页面</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>图文,语言,文本自定义</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>DIY二维码宣传页</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>无线网络订餐</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+	
+					<tr>
+						<td class="item"><p>在线团购</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>微喜帖</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>360全景</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+
+					<tr>
+						<td class="item"><p>会员资料管理</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>
+				
+					<tr>
+						<td class="item"><p>砸金蛋</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>	
+								<tr>
+						<td class="item"><p>行业模块</p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/yes.gif"></p></td>
+						<td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					    <td><p align="center"><img src="{vifnn::RES}/images/no.gif"></p></td>
+					</tr>					
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+<include file="Public:footer"/>
+<div style="display:none">
+{vifnn::C('counts')}
+</div>
+</body></html>

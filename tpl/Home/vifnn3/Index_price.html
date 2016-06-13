@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+    	<!-- ie browser -->
+		<!--[if IE]>
+			<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+			<script type="text/javascript" src="{vifnn::RES}/js/html5.js"></script>
+		<![endif]-->
+		<!--[if lt IE 7]>
+			<script src="{vifnn::RES}/js/IE7.js">var IE7_PNG_SUFFIX = ".png";</script>
+		<![endif]-->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=1024">
+		<title>资费套餐 >> {vifnn:$f_siteName} 移动社交营销专家</title>
+		<meta name="keywords" content="微风VIFNN ,微信营销,微信代运营,微信定制开发,移动场景制作,微信托管,微网站,微商城">
+		<meta name="description" content="微风VIFNN ，国内最新最全的微信公众智能服务平台，为个人和企业提供基于微信公众平台的一系列功能，包括微官网、微活动、微场景、微应用等，个人和企业微营销必备。">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/reset.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.lazyload.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.event.move.js"></script>
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/basic.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/style.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/share.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/pages.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/base.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/main.js"></script>
+	</head>
+    	<body>
+		<!-------------- 头部开始 -------------->
+		<div class="header">
+			<div class="a">
+				<div class="wrapper">
+					<a class="logo" href="{vifnn::U('Home/Index/index')}"><img src="{vifnn:$f_logo}" alt="{vifnn:$f_siteName}-多用户微信营销服务平台"></a>
+					<if condition="$_SESSION[uid]==false">
+							<div class="btns">
+                            <a href="{vifnn::U('Index/login')}" class="btn"> 登　陆</a>
+							<a href="{vifnn::U('Index/login')}" class="btn e1">在线注册</a>
+                            </div>
+					<else/>
+							<div class="dlh">
+                    			<div class="rtx"><img src="{vifnn::RES}/img/gr.png" width="30" height="31"></div>
+                    			<div class="rtz">您好 <a href="/index.php?g=User&m=Index&a=info" class="dlh1">{vifnn:$Think.session.uname}</a>　<a href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" class="dlh2">退出</a></div>
+                    		</div>
+					</if>
+				</div>
+			</div>
+			<div class="b">
+				<div class="wrapper">
+					<div class="menu">
+						<ul>
+							<li><a href="/" class="home">首 页</a></li>
+                            <li><a href="{vifnn::U('Home/Index/about')}">关于我们</a></li>
+							<li><a href="{vifnn::U('Home/Index/fc')}">产品功能</a></li>
+                            <li><a href="{vifnn::U('Home/Index/common')}">经典案例</a></li>
+							<li><a href="{vifnn::U('Home/Index/price')}"  class="on">资费套餐</a></li>
+							<li><a href="{vifnn::U('User/Index/info')}">管理中心</a></li>
+							<li><a href="{vifnn::U('Home/Index/contact')}">联系我们</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-------------- 头部结束 -------------->
+		<!-------------- 主体开始 -------------->
+        <div class="mainer">
+			<div class="pt_bann" style="background-image: url({vifnn::RES}/img/img_b2.jpg);">
+				
+			</div>
+			<br>
+				<div class="pt_ttl1">
+				  <img src="{vifnn::RES}/img/tt_l1-4.png" alt="">
+				</div>			
+			
+			
+<script language="javascript">
+	$(function () {
+		$("a").click(function () {
+			var rel = $(this).attr("rel");
+			if (rel) {
+				var pos = $(rel).offset().top-60;
+				$("html,body").animate({ scrollTop: pos }, 800);
+			}
+
+		})
+	})
+</script>
+<script>
+	$().ready(function(){
+
+		window.onscroll = window.onresize = function(){
+			showSideBar();
+		}
+	});
+	function showSideBar(){
+		if(!window.sideMenu){
+			window.sideMenu = $("#sideToolbar");
+		}
+		if((document.body.scrollTop||document.documentElement.scrollTop)>500){
+			sideMenu.addClass("on");
+		}else{
+			sideMenu.removeClass("on");
+		}
+	}
+
+
+
+</script>
+
+
+<div id="top"></div><style>
+	.table th, .table td {
+		padding: 8px;
+		line-height: 20px;
+		text-align: left;
+	  vertical-align:middle;
+		border-top: 1px solid #ddd;
+	}
+	#package{ width:1300px; margin: 49px auto 0 auto; }
+
+</style>			
+
+
+			
+<div id="package">
+<table id="listTable" class="table table-bordered table-hover dataTable table-striped" style="padding-top:1px;width:1300px;" >
+<tbody>
+<tr style="background:#f5f5f5;">
+	<th rowspan="2" style="width:64px;">服务项</th>
+	<th rowspan="2" style="width:208px;">服务明细</th>
+	<vifnnlist array="groups" foreach="g">	
+	<th rowspan="2" style="width:51px;"><vifnnif where="$i eq $count"></vifnnif>{vifnn:$g.name}</th>
+    </vifnnlist>
+	<th colspan="8" style="text-align:center;">行业版</th>
+	<th rowspan="2">加盟版</th>
+	<th rowspan="2" style="width:20px;padding:6px; ">订阅号</th>
+	<th rowspan="2" style="width:20px;padding:6px;">服务号</th>
+	<th rowspan="2" style="width:19px;padding:6px;">认证服务号</th>
+</tr>
+<tr style="background:#f5f5f5;border-bottom:1px solid #bdbdbd;" >
+	<th style="width:60px;">微医疗</th>
+	<th style="width:60px;">微酒店</th>
+	<th style="width:60px;">微餐饮</th>
+	<th style="width:59px;">微汽车</th>
+	<th style="width:59px;">微房产</th>
+	<th style="width:59px;">微生活</th>
+	<th style="width:59px;">微商城</th>
+</tr>
+</table>
+<table id="listTable" class="table table-bordered table-hover dataTable table-striped" style="padding-top:1px;" >
+<tbody>
+<tr>
+	<td style="width:64px;">VIP价格</td>
+	<td style="width:208px;" >VIP只是流量套餐！</td>
+	<vifnnlist array="prices" foreach="g">
+	<td style="width:51px;"><vifnnif where="$i eq $count"></vifnnif>{vifnn:$g}元 / 月</td>
+	</vifnnlist>
+	<td style="width:60px;">不限</td>
+	<td style="width:60px;">不限</td>
+	<td style="width:60px;">不限</td>
+	<td style="width:59px;">不限</td>
+	<td style="width:59px;">不限</td>
+	<td style="width:59px;">不限</td>
+	<td style="width:59px;">不限</td>
+	<td style="width:52px;">不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+
+<tr >
+	<td>公众号</td>
+	<td>允许创建公众号数量</td>
+	<vifnnlist array="wechatNums" foreach="g">
+    <td <vifnnif where="$i eq $count"> class="norightborder"</vifnnif>>{vifnn:$g}</td>
+	</vifnnlist>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<tr>
+	<td>自定义图文条数</td>
+	<td>每个月可以创建的图文回复数量</td>
+	<vifnnlist array="diynums" foreach="g">
+    <td <vifnnif where="$i eq $count"> class="norightborder"</vifnnif>>{vifnn:$g}</td>
+    </vifnnlist>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<tr>
+	<td>请求数</td>
+	<td>每个月可以进行多少次回复请求</td>
+	<vifnnlist array="connectnums" foreach="g">
+    <td <vifnnif where="$i eq $count"> class="norightborder"</vifnnif>>{vifnn:$g}</td>
+    </vifnnlist>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<tr>
+	<td>每月活动创建费次数</td>
+	<td>每月允许创建的大转盘等互动活动数量</td>
+	<vifnnlist array="activitynums" foreach="g">
+    <td <vifnnif where="$i eq $count"> class="norightborder"</vifnnif>>{vifnn:$g}</td>
+    </vifnnlist>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<tr>
+	<td>每月会员卡开卡数量</td>
+	<td>每个月允许创建多少张会员卡提供给会员领取</td>
+	<vifnnlist array="create_card_nums" foreach="g">
+    <td <vifnnif where="$i eq $count"></vifnnif>>{vifnn:$g}</td>
+    </vifnnlist>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<tr>
+	<td>版权信息</td>
+	<td>显示{vifnn:$f_siteName}版权</td>
+    <vifnnlist array="copyrights" foreach="g">
+<td <vifnnif where="$i eq $count"> class="norightborder"</vifnnif>><vifnnif where="$g">无<else/>有</vifnnif></td>
+    </vifnnlist>	
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<tr>
+	<td>购买VIP套餐</td>
+	<td>简单购买流程提醒</td>
+	<vifnnlist array="create_card_nums" foreach="g">
+    <td <vifnnif where="$i eq $count"> class=""</vifnnif>><a  href="{vifnn::U('User/Alipay/index',array('gid'=>0))}"><em>充值</em></a></td>
+    </vifnnlist>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+<vifnnlist foreach="f" array="funs">
+<tr>
+
+    <td>{vifnn:$f.name}</td>
+	<td>{vifnn:$f.info}</td>
+<?php 
+if ($f['access']){
+	$i=1;
+	foreach ($f['access'] as $v){
+		
+
+?>
+    <td class="<?php if ($v){echo 'checked';}else{echo 'error';}?><?php if ($i==$count){echo ' norightborder';}?>"></td>
+ <?php 
+ $i++;
+ 	}
+}  
+?>
+
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>不限</td>
+	<td>√</td>
+	<td>√</td>
+	<td>√</td>
+</tr>
+                				</vifnnlist>
+</tbody></table>
+
+</div>
+		<!-------------- 主体结束 -------------->
+
+<include file="Public:footer"/>
+	</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="{vifnn::C('keyword')}" name="Keywords">
+<meta content="{vifnn::C('content')}" name="Description">
+<title>{vifnn::C('site_name')}|{vifnn::C('site_title')}</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<include file="Public:header"/>
+ <div class="banner">
+    <div class="bannerBtn"> <span class="bannerBtn_left"></span> <span class="bannerBtn_right"></span> </div>
+    <div class="bannerBody moving">
+      <div class="bannerBox clearfix" style="width: 4900px; ">
+        <div class="bannerItem" style="left: 145.70151479856395px; display: block; " ind="1"><img src="{vifnn::RES}/image/banner-1.png"></div>
+        <div class="bannerItem" style="left: 1125.701514798564px; display: block; " ind="2"><img src="{vifnn::RES}/image/banner-2.png"></div>
+        <div class="bannerItem" style="left: 2105.701514798564px; display: block; " ind="3"><img src="{vifnn::RES}/image/banner-3.png"></div>
+      </div>
+      <div id="login">
+        <div class="loginBg"></div>
+        <div class="loginCon">
+        
+          <div class="login" id="login_v">
+		<form method="post"  action="{vifnn::U('Users/checklogin')}" id="login_form" >
+        <table width="276" border="0">
+          <tr>
+            <td width="258" height="59">帐号：<input type="text" id="tel" name="username" value="  您的帐号" onBlur="blur_Tel(this)" onFocus="this.value=''""/><span id="tel_tip"></span></td>
+            <td COLSPAN=2>&nbsp;</td>
+            <td width="2">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>密码：<input name="password" class="login_i" id="password_i" type="password" value="  ....." onFocus="this.value=''" ></td>
+            <td COLSPAN=2>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+        
+        <table width="262" border="0" style="margin-top:20px;">
+          <tr>
+            <td width="92" style="text-align:center;"><input type="radio" name="type" value="0" checked="checked">登录管理中心</td>
+          </tr>
+        </table>
+		 <p> <input type="submit" class="big" value="登录"> </p>
+        </form>
+</div>
+
+          <p><a href="{vifnn::U('Home/Index/reg')}"><img src="{vifnn::RES}/image/fl.png" height="66" width="286" style="margin-top:-10px; margin-left:-3px;"></a></p>
+        </div>
+      </div>
+    </div>
+    <div class="bannerIcon clearfix"><i class="hover" "=""></i><i class="" "=""></i><i class="" "=""></i><i class="" "=""></i><i class="" "=""></i></div>
+  </div>
+</div>
+<center>
+ 
+</center>
+<div id="func">
+  <div class="content_moban_bot">产品功能模块</div>
+  <ul class="clearfix">
+    <li><a href="{vifnn::U('Home/Index/gongn')}#site"> <img src="{vifnn::RES}/image/f1.png" alt="微官网">
+      <p>微官网</p>
+      <div>微网站有多种风格的行业模版 精致美观，适合各类企业！</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#member"> <img src="{vifnn::RES}/image/f13.png" alt="自定义表单">
+      <p>自定义表单</p>
+      <div>自定义界面让公众帐号大幅度<br>
+        提高了交互属性</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#activities"> <img src="{vifnn::RES}/image/f10.png" alt="微喜帖">
+      <p>微喜帖</p>
+      <div>特别为婚庆客户订制的新功能<br>
+        界面华丽、形式新颖</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#push"> <img src="{vifnn::RES}/image/f12.png" alt="微会员">
+      <p>微会员</p>
+      <div>微会员用户可直接享受商家<br/>
+        提供的会员折扣和优惠</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#services"> <img src="{vifnn::RES}/image/f14.png" alt="微表单">
+      <p>微表单</p>
+      <div>注册后可参与有权限的留言墙<br>
+        大转盘、刮刮卡等活动</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#message"> <img src="{vifnn::RES}/image/f15.png" alt="微淘宝">
+      <p>微淘宝</p>
+      <div>此功能可以为淘宝店主们创造<br/>
+        迷你掌上淘宝店铺</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#photo"> <img src="{vifnn::RES}/image/f8.png" alt="微商城">
+      <p>微商城</p>
+      <div>企业商城电子化可以让<br>
+        用户随时随地购物</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#menu"> <img src="{vifnn::RES}/image/f6.png" alt="微餐饮">
+      <p>微餐饮</p>
+      <div>实现手机微信操作订餐<br>
+        足不出户、美食即来</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#research"> <img src="{vifnn::RES}/image/f26.png" alt="微团购">
+      <p>微团购</p>
+      <div>新增团购功能<br>
+        出行聚餐必备</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#estate" target="_blank"> <img src="{vifnn::RES}/image/f16.png" alt="第三方接口">
+      <p>第三方接口</p>
+      <div>可以设置对向外部的接口</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#car" target="_blank"> <img src="{vifnn::RES}/image/f9.png" alt="位置LBS">
+      <p>位置LBS</p>
+      <div>LBS范围内精准定位 一键导航商家位置</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#wedd" target="_blank"> <img src="{vifnn::RES}/image/f7.png" alt="留言墙">
+      <p>留言墙</p>
+      <div>互动的一种平台吗，注册完后即可发送言论，经过审核后既能上墙</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#medical"> <img src="{vifnn::RES}/image/f3.png" alt="大转盘">
+      <p>大转盘</p>
+      <div>可以自定义设定奖品、抽奖次数和参与人数</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#hotels" target="_blank"> <img src="{vifnn::RES}/image/f17.png" alt="刮刮卡">
+      <p>刮刮卡</p>
+      <div>时尚潮流的电子活动，提高企业对用户的吸引力和关注度</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#lbs" target="_blank"> <img src="{vifnn::RES}/image/f18.png" alt="优惠券">
+      <p>优惠券</p>
+      <div>制作和传播成本低，传播效果可精准量化</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#cate" target="_blank"> <img src="{vifnn::RES}/image/f5.png" alt="文字投票">
+      <p>文字投票</p>
+      <div>可设置是否重复投票，投票结果何时公开以及各类回复</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#vshop"> <img src="{vifnn::RES}/image/f19.png" alt="图文投票">
+      <p>图文投票</p>
+      <div>加入图片元素的投票环节，可用于美食、风景等的投票</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#cm" target="_blank"> <img src="{vifnn::RES}/image/f20.png" alt="猜谜达人">
+      <p>猜谜达人</p>
+      <div>可以猜玩各种有趣的谜题<br>
+        既放松又锻炼健脑。</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#yz" target="_blank"> <img src="{vifnn::RES}/image/f21.png" alt="验证抽奖">
+      <p>验证抽奖</p>
+      <div>可自定义验证码、奖品<br>
+        排行等</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#qd" target="_blank"> <img src="{vifnn::RES}/image/f22.png" alt="微签到">
+      <p>微签到</p>
+      <div>可以让用户随时随地<br>
+        与友人联系</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#zf"> <img src="{vifnn::RES}/image/f23.png" alt="微转发">
+      <p>微转发</p>
+      <div>可以帮用户解决订阅号一天发一条的限制、服务号一月发一条的限制</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#fb" target="_blank"> <img src="{vifnn::RES}/image/f24.png" alt="翻板抽奖">
+      <p>翻板抽奖</p>
+      <div>新式娱乐功能，让客户感受新颖的互动功能</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#jd"> <img src="{vifnn::RES}/image/f25.png" alt="砸金蛋">
+      <p>砸金蛋</p>
+      <div>互动娱乐功能，可以拉近企业与客户的关系</div>
+      </a> </li>
+      <li><a href="{vifnn::U('Home/Index/gongn')}#tppb" target="_blank"> <img src="{vifnn::RES}/image/f27.png" alt="图片评比">
+      <p>图片评比</p>
+      <div>让消费者上传图片进行评比<br/>拉近与消费者的距离</div>
+      </a> </li>
+    <li><a href="{vifnn::U('Home/Index/gongn')}#fwyy"> <img src="{vifnn::RES}/image/f28.png" alt="服务预约">
+      <p>服务预约</p>
+      <div>支持各种预约、预订功能 <br/>随时随地查看预约订单</div>
+      </a> </li>
+  </ul>
+  <div class="more"><a href="javascript:void(0);">了解更多网奇微信功能</a></div>
+</div>
+<div id="case">
+  <div class="caseCon">
+    <div class="tit">
+      <h2>经典案例</h2>
+      <a href="#">更多 &gt;&gt;</a> </div>
+    <div class="caseScroll">
+      <div class="btn"> <span class="btn_left"></span> <span class="btn_right"></span> </div>
+      <div class="box">
+        <ul class="clearfix moving" style="width: 865px; ">
+          <li style="left: 465.63725694846715px; "><img src="{vifnn::RES}/image/p1.jpg"></li>
+          <li style="left: 691.6372569484672px; "><img src="{vifnn::RES}/image/p2.jpg"></li>
+          <li style="left: 917.6372569484672px; "><img src="{vifnn::RES}/image/p3.jpg"></li>
+          <li style="left: 1143.6372569484672px; "><img src="{vifnn::RES}/image/p4.jpg"></li>
+          <li style="left: 1369.6372569484672px; "><img src="{vifnn::RES}/image/p5.jpg"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div><div style="display:none">
+{vifnn::C('counts')}
+</div>
+<include file="Public:footer"/>
+</body></html>

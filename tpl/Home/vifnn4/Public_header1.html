@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script>var SITEURL='';</script>
+<title>首页 | {vifnn::C('site_name')}|{vifnn::C('site_title')}</title>
+<meta name="keywords" content="{vifnn::C('keyword')}" />
+<meta name="description" content="{vifnn::C('content')}" />
+<link href="{vifnn::RES}/css/index-one.css" rel="stylesheet" type="text/css" />
+<script src="{vifnn::RES}/js/jquery-1.7.2.min.js"></script>
+<link href="{vifnn::RES}/css/basic.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.banner{height:200px; text-align:center; border-bottom:2px solid #ddd;}
+.hbanner{ background: url({vifnn::RES}/images/banner/huang.jpg) center no-repeat #FFCA22;}
+</style>
+</head>
+<body id="nv_member">
+
+<div id="herder" >
+	<div id="top">
+<img src="{vifnn::RES}/logo.png" /></a>
+		<a href="/" >网站首页</a>
+		<a href="{vifnn::U('Home/Index/an')}" >案例展示</a>
+		<a href="{vifnn::U('Home/Index/jm')}" >加盟合作</a>
+		<a href="{vifnn::U('Home/Index/help')}" >帮助中心</a>
+		<a href="{vifnn::U('Home/Index/about')}" >关于我们</a>
+		<a href="{vifnn::U('User/Index/info')}" >管理中心</a>
+		<a class="line" ></a>
+        <if condition="$_SESSION[uid]==false"><a class="a0" href="{vifnn::U('Index/login')}">登录</a>
+		<a class="a0" href="{vifnn::U('Index/reg')}">注册</a>	
+		<else/>
+		<script type="text/javascript">
+function ying(){
+	 document.getElementById('tiduser').style.display="none";
+	 document.getElementById('quit').style.display="block";
+}
+function xian(){
+	 document.getElementById('tiduser').style.display="block";
+	 document.getElementById('quit').style.display="none";
+}
+setTimeout("xian()",2000);
+</script>
+		<a href="#" class="a" id="tiduser" onmouseover="ying();" >您好：<span>{vifnn:$Think.session.uname}</span></a>
+		<a href="#" class="a1" id="quit" onclick="Javascript:window.open('{vifnn::U('System/Admin/logout')}')" onLoad=setTimeout("abc.style.display='none'",5000) >安全退出</a>
+		</if>
+	</div>
+</div>
+<div class="banner hbanner"></div>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+<title>店员登陆登录-{vifnn::C('site_name')} </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{vifnn::C('site_name')}微信营销系统" />
+<meta name="Description" content="{vifnn::C('site_name')}微信营销系统" />
+<link type="text/css" rel="stylesheet" href="/tpl/System/common/css/reset.css" />
+<link type="text/css" rel="stylesheet" href="/tpl/System/common/css/common.css" />
+<link type="text/css" rel="stylesheet" href="/tpl/System/common/css/page.css" />
+<script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+</head>
+<body style="background: #378ECD url(tpl/static/bg2.jpg)repeat-x;">    
+    <body>
+
+        <div class="content">
+
+            <!--end congtX-->
+
+            <div class="congtX" style="margin-top:200px;">
+            	<div class="contLt clr">
+                    <form action="{vifnn::U('Users/staff_checklogin')}" method="post" class="login">
+</BR></BR></BR>
+<div align="center">  <h2 style="font-size:20px;margin-bottom:10px;">店员登陆</h2>	</div>
+                    	<div class="name clr" align="center">
+                        	<span style="padding-right:10px;">账  号</span> 
+                            <input class="text" type="text" name="username" />
+                        </div><br/>
+                        <div class="password clr" align="center">
+                        	<span style="padding-right:10px;">密  码</span> 
+                            <input class="text" type="password" name="password" />
+                        </div><br/><br/>
+                        <div class="yanzheng clr" align="center">
+                        	<span style="padding-right:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;验证码</span> 
+                             <input name="verifycode2" type="text" size="8" style="width:80px;" class="text" maxlength="4" />&nbsp;<img src="{vifnn::U('Index/verifyLogin')}" id="txtCheckCode2" style="width:70px;margin-top:-5px"/>&nbsp;<a href="javascript:refreshImg2();" style="color:#666">看不清？换一张</a>
+                            <script>
+                            function refreshImg2(){
+                                document.getElementById("txtCheckCode2").src="/index.php?g=Home&m=Index&a=verifyLogin&s="+Math.random();
+                            }
+                            </script>
+                        </div><br/>
+						<input type="hidden" name="token" value="{vifnn:$token}" />
+                       <div align="center"> <button class="submit" type="submit">登录</button> </div>
+                    </form>
+                </div>
+              
+                <!--end right-->
+                
+            </div>
+
+        </div>
+    </body>
+</html>

@@ -1,0 +1,102 @@
+<div id="online_qq_layer">
+    <div id="online_qq_tab">
+        <div class="online_icon">
+            <a title id="floatShow" style="display: block;" href="javascript:void(0);">&nbsp;</a>
+            <a title id="floatHide" style="display: none;" href="javascript:void(0);">&nbsp;</a>
+        </div>
+   </div>
+    <div id="onlineService">
+        <div class="online_windows overz">
+            <div class="online_w_top"></div>
+ 
+            <div class="online_w_c overz">
+                <div class="online_bar expand" id="onlineSort1">
+                    <h2><a onClick="changeOnline(1)">城市加盟</a></h2>
+                    <div class="online_content overz" id="onlineType1">
+                                                    <ul class="overz">
+                                <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes" class="qq_icon">李经理</a></li>
+                                <li>电话：<a href="#">{vifnn::C('site_mp')}</a></li>
+                                <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes" class="qq_icon">钱经理</a></li>
+                                <li>电话：<a href="#">{vifnn::C('site_mp')}</a></li>
+                            </ul>
+                  </div>
+                    <!--online_content end--></div>
+                <!--online_bar end-->
+                <div class="online_bar collapse" id="onlineSort2">
+                    <h2><a onClick="changeOnline(2)">售前咨询</a></h2>
+                    <div class="online_content overz" id="onlineType2">
+                        <ul class="overz">
+                            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes" class="qq_icon">微微</a></li>
+                            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes" class="qq_icon">风风</a></li>
+                            <li>电话：<a href="#">{vifnn::C('site_mp')}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!--online_bar end-->
+                <div class="online_bar collapse" id="onlineSort3">
+                    <h2><a onClick="changeOnline(3)">售后支持</a></h2>
+                    <div class="online_content overz" id="onlineType3">
+                        <ul class="overz">
+                            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes" class="qq_icon">小艾</a></li>
+                            <li><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={vifnn::C('site_qq')}&site=qq&menu=yes" class="qq_icon">小美</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!--online_bar end--></div>
+            <!--online_w_c end-->
+            <div class="online_w_bottom"></div>
+            <!--online_w_bottom end--></div>
+        <!--online_windows end--></div>
+</div>
+<script type="text/javascript">
+    function showattention(obj){
+        //document.getElementById(obj).style.display = 'block';
+        $('#'+obj).show();
+    }
+    function closeattention(obj){
+        //document.getElementById(obj).style.display = 'none';
+        $('#'+obj).hide();
+    }
+    function changeOnline(num) {
+        if (isNaN(num) && num == "")
+            return;
+        for (var i = 1; i <=6 ; i++)
+        {
+            if (i == num)
+            {
+                $('#onlineSort'+i).attr('class','online_bar expand');
+                $('#onlineType'+i).show();
+            }
+            else
+            {
+                $('#onlineSort'+i).attr('class','online_bar collapse');
+                $('#onlineType'+i).hide();
+            }
+        }
+    }
+
+    $(document).ready(function(){
+        $("#floatShow").bind("click",function(){
+            $('#onlineService').animate({width: 'show', opacity: 'show'}, 'normal',function(){ $('#onlineService').show(); });$('#floatShow').attr('style','display:none');$('#floatHide').attr('style','display:block');
+            return false;
+        });
+        $("#floatHide").bind("click",function(){
+            $('#onlineService').animate({width: 'hide', opacity: 'hide'}, 'normal',function(){ $('#onlineService').hide(); });$('#floatShow').attr('style','display:block');$('#floatHide').attr('style','display:none');
+        });
+        $(document).bind("click",function(event){
+            if ($(event.target).isChildOf("#online_qq_layer") == false)
+            {
+                $('#onlineService').animate({width: 'hide', opacity: 'hide'}, 'normal',function(){ $('#onlineService').hide(); });$('#floatShow').attr('style','display:block');$('#floatHide').attr('style','display:none');
+            }
+        });
+        jQuery.fn.isChildAndSelfOf = function(b){
+            return (this.closest(b).length > 0);
+        };
+        jQuery.fn.isChildOf = function(b){
+            return (this.parents(b).length > 0);
+        };
+        //$(window).scroll(function(){
+        //$('#online_qq_layer').stop().animate({top:$(document).scrollTop() + $("#online_qq_layer").height()}, 100)
+        //});
+    });
+</script>  

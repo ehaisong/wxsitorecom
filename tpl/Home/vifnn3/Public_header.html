@@ -1,0 +1,35 @@
+		<!-------------- 头部开始 -------------->
+		<div class="header">
+			<div class="a">
+				<div class="wrapper">
+					<a class="logo" href="{vifnn::U('Home/Index/index')}"><img src="{vifnn:$f_logo}" alt="{vifnn:$f_siteName}-多用户微信营销服务平台"></a>
+						<if condition="$_SESSION[uid]==false">
+							<div class="btns">
+                            <a href="{vifnn::U('Index/login')}" class="btn"> 登　陆</a>
+							<a href="{vifnn::U('Index/login')}" class="btn e1">在线注册</a>
+                            </div>
+						<else/>
+							<div class="dlh">
+                    			<div class="rtx"><img src="{vifnn::RES}/img/gr.png" width="30" height="31"></div>
+                    			<div class="rtz">您好 <a href="/index.php?g=User&m=Index&a=info" class="dlh1">{vifnn:$Think.session.uname}</a>　<a href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" class="dlh2">退出</a></div>
+                    		</div>
+						</if>
+				</div>
+			</div>
+			<div class="b">
+				<div class="wrapper">
+					<div class="menu">
+						<ul>
+							<li><a href="/" class="home on">首 页</a></li>
+                            <li><a href="{vifnn::U('Home/Index/about')}">关于优网</a></li>
+							<li><a href="{vifnn::U('Home/Index/fc')}">产品功能</a></li>
+                            <li><a href="{vifnn::U('Home/Index/common')}">经典案例</a></li>
+							<li><a href="{vifnn::U('Home/Index/price')}">资费套餐</a></li>
+							<li><a href="{vifnn::U('User/Index/info')}">管理中心</a></li>
+							<li><a href="{vifnn::U('Home/Index/contact')}">联系我们</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-------------- 头部结束 -------------->

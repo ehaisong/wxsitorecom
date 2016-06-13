@@ -1,0 +1,90 @@
+<div class="head" id="top">
+  <div class="wrap">
+    <div class="fl">
+      <a href="/">
+        <img src="/tpl/Home/vifnn/logo.png" alt="{vifnn::C('site_name')}" width="370" height="73" />
+      </a>
+    </div>
+    <div class="fr">
+      <span class="span1">
+       咨询热线：{vifnn::C('site_mp')}
+      </span>
+       <if condition="$_SESSION[uid]==false">
+			<span><a href="{vifnn::U('Index/login')}" class="hover navtwo">登录</a></span>
+			<span><a href="{vifnn::U('Index/reg')}">注册</a></span>
+			<else/>
+			<span><a href="{vifnn::U('User/Index/info')}" hidefocus="true"  >您好，{vifnn:$Think.session.uname}</a></span>
+			<span><a id="logon" href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" >退出</a></span>
+	</if>
+    </div>
+  </div>
+</div>
+<div class="nav">
+  <div class="wrap">
+    <ul>
+         <li><a href="/" 
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)==""){
+          echo "class=active";
+          }
+          ?>
+         >首页</a></li>
+         <li><a href="{vifnn::U('Home/Index/youshi')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="youshi"){
+          echo "class=active";
+          }
+          ?>
+         >特色优势</a></li>
+         <li><a href="{vifnn::U('Home/Index/moban')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="moban"){
+          echo "class=active";
+          }
+          ?>
+         >微信模板</a></li>
+         <li><a href="{vifnn::U('Home/Index/anlie')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="anlie"){
+          echo "class=active";
+          }
+          ?>
+         >用户案例</a></li>
+         <li><a href="{vifnn::U('Home/Index/solution')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="solution"){
+          echo "class=active";
+          }
+          ?>
+         >解决方案</a></li>
+         <li><a href="{vifnn::U('Home/Index/nav')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="nav"){
+          echo "class=active";
+          }
+          ?>
+         >功能导航</a></li>
+         <li><a href="{vifnn::U('Home/Index/daili')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="daili"){
+          echo "class=active";
+          }
+          ?>
+         >渠道代理</a></li>
+         <li><a href="{vifnn::U('Home/Index/about')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="about"){
+          echo "class=active";
+          }
+          ?>
+         >关于我们</a></li>
+         <li><a href="{vifnn::U('Home/Index/contact')}"
+          <?php
+          if (substr($_SERVER["QUERY_STRING"],17)=="contact"){
+          echo "class=active";
+          }
+          ?>
+         >联系我们</a></li>
+    </ul>
+  </div>
+</div>

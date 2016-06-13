@@ -1,0 +1,67 @@
+
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h5, h6, pre, code, form, fieldset, legend, input, textarea, blockquote, th, td {
+	margin:0;
+	padding:0;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset, img {
+	border:0;
+}
+address, caption, cite, code, dfn,  th, var {
+	font-style:normal;
+	font-weight:normal;
+}
+ol, ul {
+	list-style: none outside none;
+	margin:0;
+	padding: 0;
+}
+caption, th {
+	text-align:left;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+a {
+	color:#999;
+	text-decoration: none;
+}
+img{border:0 none;}
+form{display:block;min-height:100%;}
+.cf,ul,ol,li{*zoom:1;}
+.cf:after,ul:after,ol:after,li:after{display:table;content:"";clear:both;}
+.fl{float:left;}
+.fr{float:right;}
+.hide{display:none;}
+.mt20{margin-top:20px;}
+.ml20{margin-left:20px;}
+.text-red{color:#f00;}
+.text-blue{color:#03c;}
+.text-orange{color:#ff6c00;}
+.text-green{color:#83b62b;}
+.text-center{text-align:center;}
+.text-right{text-align:right;}
+/*edit*/
+.edit{width:100%;overflow:hidden;color:#000;line-height:1.8;}
+.edit img{max-width:775px;overflow:hidden;}
+/*layout*/
+.wrap{width:1000px;margin:0 auto;}
+/*head*/
+.head{width:100%;height:73px;border-top:6px solid #0083a1;min-width:1000px;background:#fff;;}
+.head img{display:block;}
+.nav{width:100%;height:52px;text-align:center;background:#028DB4;}
+.nav li{width:110px;float:left; line-height:52px;}
+.nav a{display:block;color:#fff; font-family:"Microsoft Yahei"; font-size:16px; font-weight:bold;}
+.nav .active,.nav a:hover{color:#0083a1;background:#e4f5f9;}
+.head .fr span{ float:left;margin-top:26px;display:block;color:#00849f;font-size:16px}
+.head .fr span a{color:#00849f;font-size:16px; display:block; padding:0px 10px;}
+.head .fr .span1{background: url(../img/home_upload/phone.png) no-repeat;padding-left: 50px;padding-top:0;}
+/*banner*/
+/*.banner img{display:block;}*/
+/*btn*/
+.regedit-btn{display:block;width:127px;height:42px;margin:45px auto;background:url(../img/home_upload/regedit.png);}

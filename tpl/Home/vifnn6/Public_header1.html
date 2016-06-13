@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="favicon.ico">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title>{vifnn::C('site_name')}|{vifnn::C('site_title')}</title>
+<link href="{vifnn::RES}/css/style.css" rel="stylesheet" type="text/css" />
+<script src="{vifnn::RES}/js/jquery-1.9.1.min.js"></script>
+<script src="{vifnn::RES}/js/parallax.js"></script>
+<!--[if IE 6]><script type="text/javascript" src="js/dd_belatedpng.js"></script><![endif]-->
+<!--[if IE 6]>
+<script type="text/javascript">
+ DD_belatedPNG.fix("img");
+</script>
+<![endif]-->
+
+</head>
+<!--[if lte IE 6]>
+<style>
+/*ie6提示*/
+#ie6-warning{width:100%;background:#ffffe1;padding:5px 0;font-size:12px}
+#ie6-warning p{width:1100px;margin:0 auto;}
+</style>
+<div id="ie6-warning" class="cl wp"><p>您正在使用 Internet Explorer 6，您的IE浏览器版本过低，在本页面的显示效果可能有差异。建议您升级到 <a href="http://www.microsoft.com/china/windows/internet-explorer/" target="_blank">Internet Explorer 8</a> 或以下浏览器：
+<a href="http://www.mozillaonline.com/">Firefox</a> / <a href="http://www.google.com/chrome/?hl=zh-CN">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.operachina.com/">Opera</a></p></div>
+<![endif]-->
+<body>
+<!-- <div class="load" id="load">
+	<div id="loadInside" style="display:none;">
+		<p><img src="" data-src="images/load_2.png" alt="微风" /></p>
+		<p id="loadImg" style="width: 0;"><img src="" data-src="images/load.png" alt="微风" /></p>
+		<p class="loadTxt"><span id="loadTxt">0</span>%</p>
+	</div>
+	<p><img src="images/loading.gif" alt=""></p>
+	<div class="load_bg"></div>
+</div> -->
+<div class="wrapHeader">
+	<div class="header">
+		<h1 class="logo"><a href="index.php"><img src="{vifnn::C('site_logo')}" alt="" title="" width="200" height="56" /></a></h1>
+		<ul class="nav">
+			<li><a href="javascript:void(0)" class="cur">首页</a></li>
+			
+	       <if condition="$_SESSION[uid]==false">
+			<span><a href="{vifnn::U('Index/login')}" class="hover navtwo">登录</a></span>
+			<span><a href="{vifnn::U('Index/reg')}">注册</a></span>
+			<else/>
+			<span><a href="{vifnn::U('User/Index/info')}" hidefocus="true"  >您好，{vifnn:$Think.session.uname}</a></span>
+			<span><a id="logon" href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" >退出</a></span>
+	</if>
+
+			
+		</ul>
+	</div>
+</div>

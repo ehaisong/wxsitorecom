@@ -1,0 +1,49 @@
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<link href="{vifnn::RES}/newcss/css.css" rel="stylesheet" type="text/css" media="all">
+<link href="{vifnn::RES}/newcss/online.css" rel="stylesheet" type="text/css" media="all">
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/base.css">
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/style.css">
+
+<script src="{vifnn::RES}/newjs/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="{vifnn::RES}/newjs/jquery.windstagball.js"></script>
+<script type="text/javascript" src="{vifnn::RES}/newjs/index.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/m-front-icon.css">
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/m-front-mess.css">
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/newcss/m-front-invite.css">
+ 
+<style type="text/css">
+.login table input{ background:#eee; box-shadow:1px 1px 3px #666; -moz-box-shadow:1px 1px 3px #666; -webkit-box-shadow:1px 1px 3px #666; 
+border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; font-size:14px;}
+.login table tr td{ font-size:14px;}
+#tel_tip{ color:#F00; display:block; clear:both; margin-left:35px;}
+.login {width: 300px; line-height: 40px; margin-top:10px;}
+#tel{ height:30px; line-height:30px; width:210px; color:#666; font-size:14px;}
+#password_i{ height:30px; line-height:30px; width:210px; color:#666; font-size:14px;}
+.bl{ color:#CCC;}
+.fo{ color:#000;}
+.er{ color:#F36; padding-left:10px;}
+.ri{color:#0C3; padding-left:10px;}
+</style>
+</head>
+<body>
+<div id="header">
+  <div class="top">
+    <div class="topCon clearfix">
+      <h1><a href="#"><img src="{vifnn:$f_logo}" height="48" width="180" style="padding-top:18px;"></a></h1>
+      <ul class="nav">
+        <li <if condition="(ACTION_NAME eq 'index') and (GROUP_NAME eq 'Home')">class="hover" </if> ><a href="index.php">首页</a></li>
+        <li <eq name="ACTION_NAME" value="daili">class="hover"</eq>><a href="{vifnn::U('Home/Index/daili')}">渠道加盟</a></li>
+        <li <eq name="ACTION_NAME" value="gongn">class="hover"</eq>><a href="{vifnn::U('Home/Index/gongn')}">功能介绍</a></li>
+		   <li <eq name="ACTION_NAME" value="case">class="hover"</eq>><a href="{vifnn::U('Home/Index/case')}">案例</a></li>
+		<li <eq name="ACTION_NAME" value="pricer">class="hover"</eq>><a href="{vifnn::U('Home/Index/pricer')}">套餐价格</a></li>
+        <li <eq name="ACTION_NAME" value="help">class="hover"</eq>><a href="{vifnn::U('Home/Index/help')}">帮助</a></li>
+        <!--li <eq name="ACTION_NAME" value="about">class="hover"</eq>><a href="{vifnn::U('Home/Index/about')}">联系我们</a></li-->
+		 <li><a href="{vifnn::U('Home/Index/reg')}">注册</a></li>
+		 <li><a href="{vifnn::U('User/Index/info')}">管理</a></li>
+      </ul>
+    </div>
+  </div>
+
+  
+ 

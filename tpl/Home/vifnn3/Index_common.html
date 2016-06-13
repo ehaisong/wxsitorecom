@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+    	<!-- ie browser -->
+		<!--[if IE]>
+			<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+			<script type="text/javascript" src="{vifnn::RES}/js/html5.js"></script>
+		<![endif]-->
+		<!--[if lt IE 7]>
+			<script src="{vifnn::RES}/js/IE7.js">var IE7_PNG_SUFFIX = ".png";</script>
+		<![endif]-->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=1024">
+		<title>经典案例 >> {vifnn:$f_siteName} 移动社交营销专家</title>
+		<meta name="keywords" content="微风VIFNN ,微信营销,微信代运营,微信定制开发,移动场景制作,微信托管,微网站,微商城">
+		<meta name="description" content="微风VIFNN ，国内最新最全的微信公众智能服务平台，为个人和企业提供基于微信公众平台的一系列功能，包括微官网、微活动、微场景、微应用等，个人和企业微营销必备。">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/reset.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.lazyload.min.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/jquery.event.move.js"></script>
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/basic.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/style.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/share.css">
+		<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/pages.css">
+		<script type="text/javascript" src="{vifnn::RES}/js/base.js"></script>
+		<script type="text/javascript" src="{vifnn::RES}/js/main.js"></script>
+	</head>
+    	<body>
+		<!-------------- 头部开始 -------------->
+		<div class="header">
+			<div class="a">
+				<div class="wrapper">
+					<a class="logo" href="{vifnn::U('Home/Index/index')}"><img src="{vifnn:$f_logo}" alt="{vifnn:$f_siteName}-多用户微信营销服务平台"></a>
+					<if condition="$_SESSION[uid]==false">
+							<div class="btns">
+                            <a href="{vifnn::U('Index/login')}" class="btn"> 登　陆</a>
+							<a href="{vifnn::U('Index/login')}" class="btn e1">在线注册</a>
+                            </div>
+						<else/>
+							<div class="dlh">
+                    			<div class="rtx"><img src="{vifnn::RES}/img/gr.png" width="30" height="31"></div>
+                    			<div class="rtz">您好 <a href="/index.php?g=User&m=Index&a=info" class="dlh1">{vifnn:$Think.session.uname}</a>　<a href="/#" onClick="Javascript:window.open('{vifnn::U('System/Admin/logout')}','_blank')" class="dlh2">退出</a></div>
+                    		</div>
+						</if>
+				</div>
+			</div>
+			<div class="b">
+				<div class="wrapper">
+					<div class="menu">
+						<ul>
+							<li><a href="/" class="home">首 页</a></li>
+                            <li><a href="{vifnn::U('Home/Index/about')}">关于我们</a></li>
+							<li><a href="{vifnn::U('Home/Index/fc')}">产品功能</a></li>
+                            <li><a href="{vifnn::U('Home/Index/common')}" class="on">经典案例</a></li>
+							<li><a href="{vifnn::U('Home/Index/price')}">资费套餐</a></li>
+							<li><a href="{vifnn::U('User/Index/info')}">管理中心</a></li>
+							<li><a href="{vifnn::U('Home/Index/contact')}">联系我们</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-------------- 头部结束 -------------->
+		<!-------------- 主体开始 -------------->
+		<div class="mainer">
+			<div class="pt_bann" style="background-image: url({vifnn::RES}/img/img_b3.jpg);">
+				
+			</div>
+			<div class="pt_tab2">
+				<p>
+					<span>
+						<a href="" class="on">生活服务</a>
+						<a href="{vifnn::U('Home/Index/common1')}">金融机构</a>
+						<a href="{vifnn::U('Home/Index/common2')}">房产汽车</a>
+						<a href="{vifnn::U('Home/Index/common3')}">餐饮酒店</a>
+						<a href="{vifnn::U('Home/Index/common4')}">教育培训</a>
+						<a href="{vifnn::U('Home/Index/common5')}">电子商贸</a>
+						<a href="{vifnn::U('Home/Index/common6')}">母婴儿童</a>
+					</span>
+				</p>
+			</div>
+			<div class="wrapper">
+				<div class="ht35"></div>
+				<div class="pt_ttl1">
+					<img src="{vifnn::RES}/img/tt_l1-5.png" alt="">
+				</div>
+				<div class="ht30"></div>
+				<div class="pt_sld1">
+					<div class="imgsilder">
+						<a href="javascript:;" class="narrow prev"></a>
+						<a href="javascript:;" class="narrow next"></a>
+						<div class="imgs">
+							<div class="wrap">
+								<div class="img">
+									<a href="javascript:;" onClick="setimg1(0, this);" class="item on"><i></i><img src="{vifnn::RES}/img/img_1-1.png" alt=""></a>
+								</div>
+								<div class="img">
+									<a href="javascript:;" onClick="setimg1(1, this);" class="item"><i></i><img src="{vifnn::RES}/img/img_1-2.png" alt=""></a>
+								</div>
+								<div class="img">
+									<a href="javascript:;" onClick="setimg1(2, this);" class="item"><i></i><img src="{vifnn::RES}/img/img_1-3.png" alt=""></a>
+								</div>
+								<div class="img">
+									<a href="javascript:;" onClick="setimg1(3, this);" class="item"><i></i><img src="{vifnn::RES}/img/img_1-4.png" alt=""></a>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ht40"></div>
+				<div class="pt_img1">
+					<ul>
+						<li style="display: block;"><img src="{vifnn::RES}/img/v_sh1.png" alt="">
+							<div class="ct">
+								<img src="{vifnn::RES}/img/img_11.jpg" alt="">
+							</div>
+						</li>
+						<li><img src="{vifnn::RES}/img/v_sh2.png" alt="">
+							<div class="ct">
+								<img src="{vifnn::RES}/img/img_21.jpg" alt="">
+							</div>
+						</li>
+						<li><img src="{vifnn::RES}/img/v_sh3.png" alt="">
+							<div class="ct">
+								<img src="{vifnn::RES}/img/img_31.jpg" alt="">
+							</div>
+						</li>
+						<li><img src="{vifnn::RES}/img/v_sh4.png" alt="">
+							<div class="ct">
+								<img src="{vifnn::RES}/img/img_42.jpg" alt="">
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+				<div class="ht50"></div>
+			</div>
+		</div>
+		<!-------------- 主体结束 -------------->
+		<include file="Public:footer"/>
+	</body>
+</html>
+<script>
+	$(function(){
+		$(".imgsilder").imgsilder({speed: 300});
+	});
+</script>
