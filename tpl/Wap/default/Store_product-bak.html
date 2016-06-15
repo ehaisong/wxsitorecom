@@ -4,35 +4,39 @@
 .infodetail img{
     max-width: 100%;
 }
+.focusPic img{ 	
+width:100%;
+margin-top:1px;}
 </style>
+<link type="text/css" rel="stylesheet" href="{vifnn::$staticFilePath}/css/swiper.min.css">
 <!--轮播--->
-<div class="focusPic">
-	<div class="views">
-		<if condition="empty($imageList) neq true">
-			<ul class="warp" id="fd">
-				<volist name="imageList" id="img">
-				<li class="li"><img src="{vifnn:$img.image}"></li>
-				</volist>
-			</ul>
-		<else/>
-			<ul class="warp" id="fd">
-				<li class="li"><img src="{vifnn:$product.logourl}"></li>
-			</ul>
-		</if>
-	</div>
-	<if condition="empty($imageList) neq true">
-		<ul class="tabs">
-			<volist name="imageList" id="img" key="i">
-			<li class="li">{vifnn:$i}</li>
-			</volist>
-		</ul>
-	<else/>
-		<ul class="tabs"><li>0</li></ul>
-	</if>
+<div class="focusPic" style="max-height:100%;">
+<div class="swiper-container">
+  <div class="swiper-wrapper views">
+	<volist name="imageList" id="img">
+		<div class="swiper-slide blue-slide"><img src="{vifnn:$img.image}"></div>
+	</volist>
+  </div>
 </div>
-<script>
-var focusPic = new Swiper('.focusPic .views',{pagination: '.focusPic .tabs',autoplay:3000})
+<if condition="empty($imageList) neq true">
+	<ul class="tabs" style="position: relative; height: 40px;line-height: 50px;">
+		<volist name="imageList" id="img" key="i">
+		<li class="li">{vifnn:$i}</li>
+		</volist>
+	</ul>
+<else/>
+	<ul class="tabs"><li>0</li></ul>
+</if>
+</div>
+<script src="{vifnn::$staticFilePath}/js/swiper.min_new.js" type="text/javascript"></script>
+<script type="text/javascript">
+  var mySwiper = new Swiper('.swiper-container',{
+    pagination: '.tabs',
+	loop: true,
+	autoplay: 3000,
+  });
 </script>
+<script src="{vifnn::$staticFilePath}/js/swiper.min.js" type="text/javascript"></script>
 <!--轮播结束--->
 <div class="d-info">
 <form id="product_buy_form" name="product_buy_form" action="#" method="POST">
@@ -148,7 +152,7 @@ var buyDetailId = '';
 $(document).ready(function() {
 	$(".com_pg-num").click(function(){
 		var page = parseInt($(this).attr('id'));
-		$.get("{vifnn::U('Store/getcomment',array('token'=>$token,'pid'=>$product['id'],'wecha_id'=>$_GET['wecha_id'], 'twid' => $twid,'cid' => $cid))}" + '&page='+page, function(response){
+		$.get("{vifnn::U('Store/getcomment',array('token'=>$token,'pid'=>$product['id'], 'twid' => $twid,'cid' => $cid))}" + '&page='+page, function(response){
 			if (response.error_code == false) {
 				var html = '';
 				$.each(response.data, function(i, data){
@@ -257,7 +261,7 @@ function add_cart() {
 		return floatNotify.simple('抱歉，您的购买量超过了库存了');
 	}
 	$.ajax({
-		url: "{vifnn::U('Store/addProductToCart',array('token'=>$token,'id'=>$product['id'],'wecha_id'=>$_GET['wecha_id'], 'twid' => $twid,'cid' => $cid))}" + '&count='+count + '&did=' + did,
+		url: "{vifnn::U('Store/addProductToCart',array('token'=>$token,'id'=>$product['id'], 'twid' => $twid,'cid' => $cid))}" + '&count='+count + '&did=' + did,
 		success: function(data) {
 			if(data){
 				var datas=data.split('|');
@@ -285,10 +289,10 @@ function QuickBuy() {
 		return floatNotify.simple('抱歉，您的购买量超过了库存了');
 	}
 	$.ajax({
-		url: "{vifnn::U('Store/addProductToCart',array('token'=>$token,'id'=>$product['id'],'wecha_id'=>$_GET['wecha_id'], 'twid' => $twid,'cid' => $cid))}" + '&count='+count + '&did=' + did,
+		url: "{vifnn::U('Store/addProductToCart',array('token'=>$token,'id'=>$product['id'], 'twid' => $twid,'cid' => $cid))}" + '&count='+count + '&did=' + did,
 		success: function(data) {
 			if(data){
-				location.href = "{vifnn::U('Store/cart',array('token' => $token,'wecha_id' => $_GET['wecha_id'], 'twid' => $twid,'cid' => $cid))}";;
+				location.href = "{vifnn::U('Store/cart',array('token' => $token, 'twid' => $twid,'cid' => $cid))}";;
 			} else {
 				return floatNotify.simple('抱歉，您的请求不正确');
 			}

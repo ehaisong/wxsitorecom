@@ -14,7 +14,7 @@
 <script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/voteimg/js/jquery.lightbox-0.5.min.js"></script>
 <script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/voteimg/js/tanchuang.js"></script>
 <script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/voteimg/js/exif.js"></script>
-<input type="hidden" id="maxsize" value="{vifnn:$maxSize*2014}" />
+<input type="hidden" id="maxsize" value="{vifnn:$maxSize*1024}" />
 <script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/voteimg/js/apply_upload.js"></script>
 <script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/alert/alert.js"></script>
 <link href="{vifnn:$staticPath}/tpl/static/voteimg/css/base.css" rel="stylesheet">
@@ -53,13 +53,13 @@
         <li class=" clearfix">
             <div class="sign_txt"><b style="color:red;">*</b><if condition="$apply_fields_name['vote_title'] neq ''">{vifnn:$apply_fields_name['vote_title']}<else />选项标题</if>：</div>
             <div class="sign_input">
-                <input type="text" placeholder="请输入选项标题" name="vote_title" id="vote_title" <if condition="$disabled neq ''">{vifnn:$disabled}<elseif condition="$notice_content eq 'no_follow' or $notice_content eq 'no_register'" />disabled = 'disabled'</if>/>
+                <input type="text" placeholder="<if condition="$apply_fields_name['vote_title'] neq ''">{vifnn:$apply_fields_name['vote_title']}<else />选项标题</if>" name="vote_title" id="vote_title" <if condition="$disabled neq ''">{vifnn:$disabled}<elseif condition="$notice_content eq 'no_follow' or $notice_content eq 'no_register'" />disabled = 'disabled'</if>/>
             </div>
         </li>
         <li class=" clearfix">
             <div class="sign_txt"><b style="color:red;">*</b><if condition="$apply_fields_name['contact'] neq ''">{vifnn:$apply_fields_name['contact']}<else />联系电话</if>：</div>
             <div class="sign_input">
-                <input type="text" placeholder="请输入您真实的手机号" name="contact" id="contact"  <if condition="$disabled neq ''">{vifnn:$disabled}<elseif condition="$notice_content eq 'no_follow' or $notice_content eq 'no_register'" />disabled = 'disabled'</if>/>
+                <input type="text" placeholder="<if condition="$apply_fields_name['contact'] neq ''">{vifnn:$apply_fields_name['contact']}<else />联系电话</if>" name="contact" id="contact"  <if condition="$disabled neq ''">{vifnn:$disabled}<elseif condition="$notice_content eq 'no_follow' or $notice_content eq 'no_register'" />disabled = 'disabled'</if>/>
             </div>
         </li>
         <li class=" clearfix">
@@ -76,10 +76,10 @@
         <li class="clearfix">
             <div class="sign_txt"><b style="color:red;">*</b><if condition="$apply_fields_name['manifesto'] neq ''">{vifnn:$apply_fields_name['manifesto']}<else />参赛宣言</if>：</div>
             <div class="sign_input">
-                <textarea name="manifesto" id="manifesto" cols="45" rows="5"  class="baotext" placeholder="输入自我介绍，个人详情，拉票宣言等等!" <if condition="$disabled neq ''">{vifnn:$disabled}<elseif condition="$notice_content eq 'no_follow' or $notice_content eq 'no_register'" />disabled = 'disabled'<else /></if>></textarea>
+                <textarea name="manifesto" id="manifesto" cols="45" rows="5"  class="baotext" placeholder="<if condition="$apply_fields_name['manifesto'] neq ''">{vifnn:$apply_fields_name['manifesto']}<else />参赛宣言</if>" <if condition="$disabled neq ''">{vifnn:$disabled}<elseif condition="$notice_content eq 'no_follow' or $notice_content eq 'no_register'" />disabled = 'disabled'<else /></if>></textarea>
             </div>
         </li>
-		{vifnn:$formData}
+		<if condition="$formData neq ''">{vifnn:$formData}</if>
 		<if condition="$onoff_voice eq 1">
 		<if condition="$winxintype eq 3">
         <li class="clearfix">
@@ -258,8 +258,8 @@ $(function(){
 		$.post('index.php?g=Wap&m=Voteimg&a=apply&token={vifnn:$token}',submitData,function(data){
 			var obj =eval('('+data+')');
 			if(obj.status == 'success'){
-				var note = need_check == 2 ? '报名成功' : '报名成功,等待审核';
-				alert(note,'#FFFFFF','#a797b2','#ffe900','#000000');
+				//var note = need_check == 2 ? '报名成功' : '报名成功,等待审核';
+				//alert(note,'#FFFFFF','#a797b2','#ffe900','#000000');
 				window.location.href = obj.returnurl;
 			}else{
 				alert(obj.msg,'#FFFFFF','#a797b2','#ffe900','#000000');

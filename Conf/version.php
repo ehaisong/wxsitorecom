@@ -6,8 +6,8 @@
 *本程序由微风科技制作(vifnn.com)
 */
 return array (
-  'ver' => '14.2',
-  'release' => '20160613',
+  'ver' => '14.3',
+  'release' => '20160615',
   'vername' => 'VIFNN微信营销系统',  
 );
 ?>
