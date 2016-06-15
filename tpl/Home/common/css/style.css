@@ -1,0 +1,197 @@
+﻿body{
+	font-family: 微软雅黑;
+	background: #fff;
+}
+
+div.wrapper{
+	width:1100px;
+	margin:0 auto;
+	position:relative;
+}
+html.mobile div.wrapper{
+	width: 100%;
+}
+
+/*----------header----------*/
+.header{
+	position: relative;
+	z-index: 1;
+}
+.header >.a{
+	height: 65px;
+	background: url(../img/opacity_w70.png);
+}
+.header >.b{
+	height: 45px;
+	background: url(../img/bg_2.png);
+}
+.header .logo{
+	display: inline-block;
+	width: 435px;
+	height: 44px;
+	background: url(../img/logo.png);
+	position: absolute;
+	top: 10px;
+	left: 30px;
+}
+.header .btns{
+	position: absolute;
+	top: 15px;
+	right: 30px;
+}
+.header .btns a{
+	display: inline-block;
+	width: 100px;
+	height: 35px;
+	background: url(../img/btn_1.png);
+	line-height: 35px;
+	color: #ffffff;
+	text-indent: 42px;
+	float: left;
+	margin-left: 5px;
+}
+.header .btns a.e1{
+	width: 75px;
+	background: url(../img/btn_2.png);
+	text-indent: 0;
+	text-align: center;
+}
+.header .menu{
+	padding-left: 90px;
+}
+.header .menu ul{
+
+}
+.header .menu ul li{
+	height: 45px;
+	background: url(../img/le_1.png) no-repeat 100% 50%;
+	float: left;
+}
+.header .menu ul li.lc{
+	background: none;
+	padding-right: 0;
+	margin-right: 0;
+}
+.header .menu ul li a{
+	display: inline-block;
+	height: 45px;
+	padding: 0 45px;
+	background: none no-repeat 50% 100%;
+	line-height: 45px;
+	color: #fff;
+	font-size: 14px;
+}
+.header .menu ul li a.home{
+	background: url(../img/ico_2.png) no-repeat 0 50% !important;
+	padding-left: 30px;
+}
+.header .menu ul li a:hover,
+.header .menu ul li a.on{
+	background-image: url(../img/menu-on.png);
+	text-decoration: none;
+	color: #00baff;
+}
+
+/*----------mainer----------*/
+.mainer{
+	background: url(../img/bg_1.jpg) no-repeat 50% 180px;
+}
+.ho .mainer{
+	background: url(../img/bg_1.jpg) no-repeat 50% 690px;
+	position: relative;
+	top: -110px;
+}
+
+/*----------footer----------*/
+.footer{
+	height: 180px;
+	background: url(../img/bg_2.png) repeat-x 0 100%;
+	border-top: 1px solid #333333;
+}
+.footer >.a{
+
+}
+.footer >.b{
+
+}
+.footer .link{
+	width: 700px;
+	margin: 0 auto;
+	background: url(../img/logo-bt.png) no-repeat 0 50%;
+	padding-left: 250px;
+}
+.footer .link p{
+	line-height: 35px;
+	color: #fff;
+	font-size: 14px;
+}
+.footer .link p a{
+	margin: 0 10px;
+	color: #fff;
+}
+.footer .link p a:hover{
+	color: #ff9400;
+}
+.footer .info{
+
+}
+.footer .info p{
+	line-height: 20px;
+	font-size: 14px;
+	color: #6e6e6e;
+	text-align: center;
+}
+.fixbar{
+	position: fixed;
+	top: 45%;
+	left: 50%;
+	margin-left: 550px;
+	display: none;
+}
+.fixbar >a{
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	position: absolute;
+	right: 0;
+}
+.fixbar >a.u{
+	top: 0;
+	background: url(../img/awt2-u.png);
+}
+.fixbar >a.d{
+	top: 20px;
+	background: url(../img/awt2-d.png);
+}
+.erwei {
+position: fixed;
+bottom: 8px;
+left: 8px;
+z-index: 999;
+padding: 35px 5px 0 5px;
+border: 1px solid #d1d1d1;
+background: white url(../img/erwei_small.png) no-repeat scroll center 5px;
+color: #56a91d;
+cursor: pointer;
+}
+.hudongzhushou {
+display: block;
+padding-bottom: 5px;
+}
+.erwei_big {
+position: absolute;
+bottom: -2px;
+left: 75px;
+display: none;
+padding-top: 258px;
+width: 258px;
+border: 1px solid #d1d1d1;
+background: white url(../img/erwei_big.jpg) no-repeat scroll center 0;
+cursor: default;
+}
+.erwei_big p {
+padding: 0 17px 10px 17px;
+color: #969696;
+}
+/*----------common----------*/
+/**/
