@@ -1,4 +1,4 @@
-Marketools
+Marketools.
 ===============================
 A powerful wechat public account management platform!
 
