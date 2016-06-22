@@ -5,6 +5,14 @@ class ApiAction extends UserAction{
 		$data=D('Api');
 		$this->assign('api',$data->where(array('token'=>session('token'),'uid'=>session('uid')))->select());
 		if(IS_POST){
+			if ($this->_post("delall") == "del") {
+				foreach ($this->_post("del_id") as $key => $value ) {
+					M("Api")->where(array("id" => $value))->delete();
+				}
+
+				$this->success("操作成功");
+				exit();
+			}
 			$_POST['uid']=SESSION('uid');
 			$_POST['token']=SESSION('token');
 			if($data->create()){				
@@ -114,10 +122,6 @@ class ApiAction extends UserAction{
 			}
 		}
 	}
-
-
-
-
 }
 
 

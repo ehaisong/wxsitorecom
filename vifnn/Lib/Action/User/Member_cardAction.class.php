@@ -1206,7 +1206,7 @@ class Member_cardAction extends UserAction{
 				M('Member_card_pay_record')->add(array('orderid' => $orderid , 'ordername' => '后台手动充值' , 'createtime' => time() , 'token' => $this->token , 'wecha_id' => $uinfo['wecha_id'] , 'price' => $_POST['price'] , 'type' => 1 , 'paid' => 1 , 'module' => 'Card' , 'paytime' => time() , 'paytype' => 'recharge', 'cardid'=>$cardid));
 
                 /*模板消息*/
-				// $model      = new templateNews();
+				 $model      = new templateNews();
                  $dataKey    = 'OPENTM201231580';
                  $dataArr    = array(
                  	'wecha_id'		=> $uinfo['wecha_id'],

@@ -20,6 +20,10 @@ class SiteAction extends AgentAction{
 	}
 	public function regConfig(){
 		if (IS_POST){
+			if(isset($_POST['reggid']))
+			{
+				$this->validateGid($_POST['reggid'],$this->thisAgent['id']);
+			}
 			if($this->agent_db->create()){
 				$this->agent_db->where(array('id'=>$this->thisAgent['id']))->save($_POST);
 
@@ -28,11 +32,21 @@ class SiteAction extends AgentAction{
 				$this->error($this->agent_db->getError());
 			}
 		}else {
-			$groups=M('User_group')->where($this->agentWhere)->order('id ASC')->select();
+			$where['agentid']=$this->thisAgent['is_package']=='1'?$this->thisAgent['id']:'0';
+			$groups=M('User_group')->where($where)->order('id ASC')->select();
 			$this->assign('groups',$groups);
 			$this->display();
 		}
 	}
+
+	private function validateGid($gid,$agentid)
+	{
+		$agentid=$this->thisAgent['is_package']=='1'?$agentid:'0';
+		$num=M('User_group')->where(array('agentid'=>$agentid,'id'=>$gid))->count();
+		if(!$num)
+			$this->error('用户组不存在');
+	}
+
 	public function functions(){
 		$db=M('Function');
 		$agent_function_db=M('Agent_function');
@@ -329,11 +343,6 @@ class SiteAction extends AgentAction{
 			$this->error('新闻信息设置失败',U('Site/news'));
 		}
 	}
-
-	/**
-        * banner 管理
-        */
-	
 	public function banner(){
 		$db=D('Banners');
 		$count      = $db->where($this->agentWhere)->count();
@@ -531,6 +540,29 @@ class SiteAction extends AgentAction{
 		$this->assign('names',$names);
 		$this->assign('list',$list);
 		$this->display();
+	}
+	
+	public function weixin()
+	{
+		$this->agentid;
+		$account = D('Weixin_account')->where(array('agentid' => $this->agentid))->find();
+		$this->assign('account', $account);
+		if (IS_POST){
+			$data['appId'] = isset($_POST['appId']) ? htmlspecialchars($_POST['appId']) : '';
+			$data['appSecret'] = isset($_POST['appSecret']) ? htmlspecialchars($_POST['appSecret']) : '';
+			$data['token'] = isset($_POST['token']) ? htmlspecialchars($_POST['token']) : '';
+			$data['encodingAesKey'] = isset($_POST['encodingAesKey']) ? htmlspecialchars($_POST['encodingAesKey']) : '';
+			$data['type'] = isset($_POST['type']) ? intval($_POST['type']) : 0;
+			if ($account) {
+				D('Weixin_account')->where(array('agentid' => $this->agentid))->save($data);
+			} else {
+				$data['agentid'] = $this->agentid;
+				D('Weixin_account')->add($data);
+			}
+			$this->success('操作成功！',U('Site/weixin'));
+		}else {
+			$this->display();
+		}
 	}
 }
 

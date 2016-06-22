@@ -1,4 +1,6 @@
 <?php
+
+
 class BaseScene
 {
 	protected $token;
@@ -9,8 +11,8 @@ class BaseScene
 	protected $data;
 	protected $param;
 	protected $eventData;
-
-	public function __construct($token, $wecha_id, $thisWxUser, $siteUrl, $eventData, $param)
+	protected $fun;
+	public function __construct($token, $wecha_id, $thisWxUser, $siteUrl, $eventData, $param, $fun)
 	{
 		$this->token = $token;
 		$this->wecha_id = $wecha_id;
@@ -20,13 +22,16 @@ class BaseScene
 		$this->fans = M('Userinfo')->where(array('token' => $token, 'wecha_id' => $wecha_id))->find();
 		$this->data = json_decode($param['data'], true);
 		$this->param = $param;
+		if (empty($fun)) {
+			$open = M('Token_open')->where(array('token' => $this->token))->find();
+			$this->fun = $open['queryname'];
+		} else {
+			$this->fun = $fun;
+		}
 	}
-
 	public function parseKeyword($keyword)
 	{
-		return A('Home/Weixin')->api('keyword', $keyword, $this->token, $this->eventData, $this->siteUrl);
+		$keywordModel = new KeywordModel($this->token, $this->eventData, $this->fun, $this->sitUrl);
+		return $keywordModel->handler($keyword);
 	}
 }
-
-
-?>

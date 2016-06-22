@@ -1,0 +1,161 @@
+<include file="Public:head2" />
+<link href="{vifnn:$staticPath}/tpl/static/icomoon/style.css" rel="stylesheet" type="text/css" />
+<style>
+    .field_tip
+    {
+        font-size: 12px;
+        margin: 0px;
+        margin-top: 5px;
+        color: #888;
+    }
+    .ips_list
+    {
+        display: block;
+        width: 280px;
+        max-height: 600px;
+        overflow: auto;
+    }
+    .ips_list li
+    {
+        height: 32px;
+        width: 250px;
+        margin-bottom: 5px;
+    }
+    .ips_list li .remove_btn
+    {
+        height: 32px;
+        line-height: 32px;
+        display: inline-block;
+    }
+    .ips_input
+    {
+        border: solid 1px #dcdcdc;
+        height: 20px;
+        line-height: 20px;
+        width: 200px;
+        padding: 5px;
+        font-size: 14px;
+        background-color: #fff;
+        margin-right: 10px;
+    }
+    .ips_input:focus
+    {
+        border: solid 1px #090;
+    }
+</style>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/laydate/laydate.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/blacklist/add.js"></script>
+
+<div class="content">
+    <div class="cLineB">
+        <h4>添加规则</h4>
+        <a href="javascript:history.back();" class="right btnGrayS vm" style="margin-top:-27px">返回</a>
+    </div>
+    <form class="form" method="post" id="form" action="">
+        <div class="msgWrap bgfc">
+            <table class="userinfoArea" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <tbody>
+                <tr>
+                    <th><span class="red">*</span>IP列表：</th>
+                    <td>
+                        <ul class="ips_list"></ul>
+                        <input type="hidden" name="ips" value="{vifnn:$_info.ips}" />
+                        <p class="field_tip">输入多个IP可以按回车键新增输入框,支持↑ ↓键移动哦，支持IP段限制，如:192.168.0.1-192.168.0.100</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="red">*</span>URL：</th>
+                    <td>
+                        <input type="text" id="url" name="url" value="{vifnn:$_info.url}" class="px" style="width:400px;" /><a href="javascript:;" onclick="addLink('url',0)" class="a_choose" style="margin-left: 10px;display: inline-block;">从功能库添加</a>
+                        <p class="field_tip">如：http://demo.com/index.php?g=User&m=Voteimg&a=add&id=10；“*”表示限制限制所有请求</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>POST参数：</th>
+                    <td>
+                        <textarea class="px" style="width:400px;height:80px;" name="post">{vifnn:$_info.post}</textarea>
+                        <p class="field_tip">如：id=10；多个参数，请用“&”或换行符分隔</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>备注：</th>
+                    <td>
+                        <textarea name="remark" class="px" style="width:400px;height:80px;">{vifnn:$_info.remark}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th valign="top">有效时间：</th>
+                    <td>
+                         <label style="margin-right: 10px;"><input type="radio" name="is_limit_time"  value="0" checked >&nbsp;永久有效</label>
+                        <label><input type="radio" name="is_limit_time"  value="1">&nbsp;自定义时间段</label>
+                        <div class="limit_box" style="margin-top: 10px;display: none;">
+                            <div>开始时间：<input id="limit_start" type="text" name="limit_start" value="{vifnn:$_info.limit_start|format_time='','time'}" class="px" style="width:340px;" /></div>
+                            <div style="margin-top: 10px;">结束时间：<input id="limit_end" type="text" name="limit_end" value="{vifnn:$_info.limit_end|format_time='','time'}" class="px" style="width:340px;" /></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th valign="top">状态：</th>
+                    <td>
+                        <volist name=":selectList('status',$_info['status'],'1','checked')" id="rt">
+                            <input type="radio" name="status" {vifnn:$rt.mark} id="status_{vifnn:$rt.value}" value="{vifnn:$rt.value}">
+                            <label class="radioLabel" for="status_{vifnn:$rt.value}">{vifnn:$rt.text}</label>&nbsp;&nbsp;&nbsp;
+                        </volist>
+                    </td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td>
+                        <notempty name="_info['id']">
+                            <input type="hidden" name="id" value="{vifnn:$_info.id}" />
+                        </notempty>
+                        <button type="button" class="btnGreen" ajax="post" style="margin-right: 10px;">保存</button>
+                        <a href="javascript:history.back();" class="btnGray vm">取消</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    function addLink(domid,iskeyword){
+        art.dialog.data('domid', domid);
+        art.dialog.open('?g=User&m=Link&a=insert&iskeyword='+iskeyword,{lock:true,title:'插入链接或关键词',width:600,height:400,yesText:'关闭',background: '#000',opacity: 0.45});
+    }
+</script>
+
+<include file="Public:footer" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

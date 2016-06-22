@@ -23,7 +23,8 @@ class LinksAction extends BaseAction{
 	}
 	public function index(){
 		$modules = $this->link->modules();
-		if(isset($_GET['auth'])){
+		$hmuch= isset($_POST['hmuch']) ? trim($_POST['hmuch']) :'';/***H5动态自定义模板里需要获取所有的功能库***/
+		if(isset($_GET['auth']) && ($hmuch!='all')){
 			$this->homeAuth = A('Home/Auth');
 			$allowModules = isset($_POST['modules']) ? $_POST['modules'] : $this->homeAuth->_accessListAction;
 			foreach($modules as $key=>$val){
@@ -42,7 +43,19 @@ class LinksAction extends BaseAction{
 		if($_POST['method']) $_GET['module'] = $this->_post('method','trim,htmlspecialchars');
 		if($_POST['p']) $_GET['p'] = $this->_post('p','trim,intval');
 		if($_POST['pid']) $_GET['pid'] = $this->_post('pid','trim,intval');
-		$this->link->$module();
+		if(isset($_POST['cc'])) $_GET['c'] = $this->_post('cc','trim');
+		
+		$displayArr=array('OutsideLink','outsideLinkDetail');
+		if(in_array($module,$displayArr)){
+		    if($module=='OutsideLink' || $module=='outsideLinkDetail'){
+				$list=$this->link->$module(false);
+				$this->assign('list',$list);
+			    $this->display('OutsideLink');
+			}
+		}else{
+		  $this->link->$module();
+		}
+		
 		$_SESSION = array();
 	}
 	public function urlformat($data){

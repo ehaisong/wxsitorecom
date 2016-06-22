@@ -1,0 +1,165 @@
+<include file="Public:head2"/>
+<link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css"/>
+<style>
+    /*开关按钮*/
+    .toggle_radio
+    {
+        display: inline-block;
+        width:60px;
+        height:24px;
+        position: relative;
+        font-size:12px;
+    }
+
+    .toggle_radio div
+    {
+        position:relative;
+        display: inline-block;
+        width:50px;
+        height:24px;
+        line-height:24px;
+        border-radius:20px;
+        cursor: pointer;
+    }
+
+    .toggle_radio .text
+    {
+       border: none;
+    }
+
+    .toggle_radio div .circle
+    {
+        position: absolute;
+        display: inline-block;
+        width:20px;
+        height:20px;
+        border-radius:20px;
+    }
+
+    .toggle_radio .on
+    {
+        padding-left:10px;
+        color:#ffffff;
+        background-color:#1FAE66;
+        text-align: left;
+    }
+
+    .toggle_radio .on .circle
+    {
+        right:2px;
+        top:2px;
+        background-color:#ffffff;
+    }
+
+    .toggle_radio .off
+    {
+        padding-right:10px;
+        color:#ffffff;
+        background-color:#aaaaaa;
+        text-align: right;
+    }
+
+    .toggle_radio .off .circle
+    {
+        left:2px;
+        top:2px;
+        background-color:#eeeeee;
+    }
+
+    .hide_radio
+    {
+        display: none;
+    }
+</style>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+
+<div class="content">
+    <div class="cLineB">
+        <h4 class="left">IP黑名单</h4>
+        <div class="clr"></div>
+    </div>
+    <div class="cLine">
+        <div class="left">
+            <a href="{vifnn::U('add',array('token'=>$token))}" title="添加规则" class="btnGrayS vm bigbtn">
+                <img src="{vifnn::RES}/images/product/add.png" class="vm">
+                添加规则
+            </a>
+            <div style="margin-left: 10px;display: inline-block">
+                黑名单一键操作：<div on_name="开启" off_name="关闭" class="toggle_radio" value="{vifnn:$wxuser.blacklist_status}" name="blacklist_status" url="{vifnn::U('changeBlacklistStatus',array('token'=>I('get.token')))}"></div>
+            </div>
+        </div>
+
+        <div class="searchbar right">
+            <input type="text" id="msgSearchInput" class="txt left finder" placeholder="输入IP或关键词" name="keyword" value="{vifnn:$Think.get.keyword}"
+                   style="height:22px;">
+            <input type="button" value="搜索" id="msgSearchBtn" href="javascript:;" class="btnGrayS finder" title="搜索"
+                   style="height:30px;">
+        </div>
+        <div class="clr"></div>
+    </div>
+
+    <div class="msgWrap">
+        <form method="post" action="" id="info">
+            <input name="delall" type="hidden" value="">
+            <input name="wxid" type="hidden" value="">
+            <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>URL</th>
+                    <th >有效时间</th>
+                    <th >备注</th>
+                    <th>状态</th>
+                    <th class="norightborder">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <empty name="_list">
+                    <tr>
+                        <td colspan="6">
+                            <p style="line-height: 60px;text-align: center;">您还没有黑名单规则！请 <a href="{vifnn::U('add',array('token'=>$token))}">添加规则</a></p>
+                        </td>
+                    </tr>
+                    <else/>
+                    <volist name="_list" id="vo">
+                        <tr>
+                            <td>{vifnn:$vo.ips_str}</td>
+                            <td style="width: 30%;">{vifnn:$vo.url}</td>
+                            <td >
+                                <notempty name="vo['limit_start']">
+                                    {vifnn:$vo.limit_start|format_time='未设置'}至
+                                    <br/>{vifnn:$vo.limit_end|format_time='未设置'}
+                                    <else/>
+                                    永久有效
+                                </notempty>
+                            </td>
+                            <td >
+                                {vifnn:$vo.remark|short=15}
+                            </td>
+                            <td >
+                                <div on_name="开启" off_name="关闭" class="toggle_radio" value="{vifnn:$vo.status}" name="status" url="{vifnn::U('changeStatus',array('id'=>$vo['id']))}"></div>
+                            </td>
+                            <td class="norightborder">
+                                <a href="{vifnn::U('edit',array('id'=>$vo['id'],'token'=>$_GET['token']))}">修改</a>
+                                <a confirm href="javascript:;" ajax="get" url="{vifnn::U('del',array('id'=>$vo['id'],'token'=>$_GET['token']))}">删除</a>
+                            </td>
+                        </tr>
+                    </volist>
+                </empty>
+                </tbody>
+            </table>
+        </form>
+
+    </div>
+    <div class="cLine">
+        <div class="pageNavigator right">
+            <div class="pages">{vifnn:$page}</div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+<script>
+    $s.finderController('.finder','{vifnn::U("index",array("token"=>$_GET["token"]))}');
+</script>
+<include file="Public:footer"/>

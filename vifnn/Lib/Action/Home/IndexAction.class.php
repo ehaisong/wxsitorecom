@@ -940,5 +940,105 @@ class IndexAction extends BaseAction{
 		$this->assign('token',$_GET['token']);
 		$this->display('staff_login');
 	}
+	public function ajax_news()
+	{
+		$zhu_id = $_POST['zhu_id'];
+		if (is_numeric($zhu_id)) {
+			$res = M('Funintro')->where(array('classid' => $zhu_id))->order('id desc')->field(true)->select();
+		} else {
+			$res = M('Funintro')->where(array('is_new' => 1))->order('id desc')->limit(20)->field(true)->select();
+		}
+		if (!empty($res)) {
+			foreach ($res as $k => $v) {
+				if ($k == 0) {
+					$caidan_li .= '<li key=' . $v['id'] . '><img src=\'' . $v['img_w'] . '\' alt=\'icon\'><p>' . $v['title'] . '</p><div class=\'hoverUp\'><img src=\'' . $v['img_x'] . '\' alt=\'icon\'><p>' . $v['title'] . '</p></div></li>';
+					if (!empty($v['img1'])) {
+						$img_all .= '<li> <img src=\'' . $v['img1'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img2'])) {
+						$img_all .= '<li> <img src=\'' . $v['img2'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img3'])) {
+						$img_all .= '<li> <img src=\'' . $v['img3'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img4'])) {
+						$img_all .= '<li> <img src=\'' . $v['img4'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img5'])) {
+						$img_all .= '<li> <img src=\'' . $v['img5'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (empty($img_all)) {
+						$img_style .= '<li><div class=\'insideScroll\'><ol class=\'img_id\' img_url=\'0\'>' . $img_all . '</ol><div class=\'scrollPage\'>' . $one_point . '</div><div class=\'scrollBtn\'><a href=\'javascript:;\' class=\'prev\'></a><a href=\'javascript:;\' class=\'next\'></a></div></div></li>';
+					} else {
+						$img_style .= '<li><div class=\'insideScroll\'><ol class=\'img_id\' img_url=\'1\'>' . $img_all . '</ol><div class=\'scrollPage\'>' . $one_point . '</div><div class=\'scrollBtn\'><a href=\'javascript:;\' class=\'prev\'></a><a href=\'javascript:;\' class=\'next\'></a></div></div></li>';
+					}
+					unset($img_all);
+					unset($one_point);
+				} else {
+					$caidan_li .= '<li key=' . $v['id'] . '><img src=\'' . $v['img_w'] . '\' alt=\'icon\'><p>' . $v['title'] . '</p><div class=\'hoverUp\'><img src=\'' . $v['img_x'] . '\' alt=\'icon\'><p>' . $v['title'] . '</p></div></li>';
+					if (!empty($v['img1'])) {
+						$img_all .= '<li> <img src=\'' . $v['img1'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img2'])) {
+						$img_all .= '<li> <img src=\'' . $v['img2'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img3'])) {
+						$img_all .= '<li> <img src=\'' . $v['img3'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img4'])) {
+						$img_all .= '<li> <img src=\'' . $v['img4'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (!empty($v['img5'])) {
+						$img_all .= '<li> <img src=\'' . $v['img5'] . '\'/></li>';
+						$one_point .= '<i></i>';
+					}
+					if (empty($img_all)) {
+						$img_style .= '<li><div class=\'insideScroll\'><ol class=\'img_id\'  img_url=\'0\'>' . $img_all . '</ol><div class=\'scrollPage\'>' . $one_point . '</div><div class=\'scrollBtn\'><a href=\'javascript:;\' class=\'prev\'></a><a href=\'javascript:;\' class=\'next\'></a></div></div></li>';
+					} else {
+						$img_style .= '<li><div class=\'insideScroll\'><ol class=\'img_id\'  img_url=\'1\'>' . $img_all . '</ol><div class=\'scrollPage\'>' . $one_point . '</div><div class=\'scrollBtn\'><a href=\'javascript:;\' class=\'prev\'></a><a href=\'javascript:;\' class=\'next\'></a></div></div></li>';
+					}
+					unset($img_all);
+					unset($one_point);
+				}
+			}
+		}
+		$data['img_style'] = $img_style;
+		$data['li'] = $caidan_li;
+		$this->ajaxReturn($data, 'JSON');
+	}
+	public function ajax_dan()
+	{
+		$key_id = intval($_POST['key_id']);
+		$res = M('Funintro')->where(array('id' => $key_id))->field(true)->find();
+		foreach ($res as $k => $v) {
+			if (empty($v)) {
+				$res[$k] = 0;
+			}
+			if ($k == 'desc' && !empty($v)) {
+				if (mb_stripos('&nbsp;' . $v, 'VIFNNcms', 0, 'utf-8')) {
+					$res[$k] = str_ireplace('VIFNNcms', C('site_name'), $v);
+				}
+			}
+			if ($k == 'sce_content' && !empty($v)) {
+				if (mb_stripos('&nbsp;' . $v, 'VIFNNcms', 0, 'utf-8')) {
+					$res[$k] = str_ireplace('VIFNNcms', C('site_name'), $v);
+				}
+			}
+		}
+		$this->ajaxReturn($res, 'JSON');
+	}
+	public function closeAD()
+	{
+		$_SESSION['closeAD'] = 1;
+	}	
 }
 ?>

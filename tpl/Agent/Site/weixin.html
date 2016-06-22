@@ -1,0 +1,52 @@
+<include file="Frame:header"/>
+<script type="text/javascript" src="tpl/Agent/Common/js/formCheck/lang/cn.js"> </script>
+<script type="text/javascript" src="tpl/Agent/Common/js/formCheck/formcheck.js"> </script>
+<link rel="stylesheet" href="tpl/Agent/Common/js/formCheck/theme/grey/formcheck.css" type="text/css" media="screen" />
+<link href="tpl/Agent/Common/style/calendar.css" type="text/css" rel="stylesheet">
+<script src="tpl/Agent/Common/js/calendar.js"></script>
+<script src="tpl/Agent/Common/js/artDialog4.1.6/artDialog.js?skin=default"></script>
+<script src="tpl/Agent/Common/js/artDialog4.1.6/plugins/iframeTools.js"></script>
+<script type="text/javascript">
+window.addEvent('domready', function(){
+	new FormCheck('myform');
+});
+</script>
+
+<div class="columntitle">微信托管</div>
+<form action="?g=Agent&m=Site&a=weixin" method="post" name="form" enctype="multipart/form-data" id="myform">
+            <table class="addTable">
+            <tr>
+          <th>appId</th>
+          <td><input type="text" name="appId" style="width:300px;" class="colorblur" value="{vifnn:$account.appId}" /><span class="tdtip">微信公众平台应用appId</span></td>
+        </tr>
+        <tr>
+          <th>appSecret</th>
+          <td><input type="text" name="appSecret" style="width:300px;" class="colorblur" value="{vifnn:$account.appSecret}" /> <span class="tdtip">微信公众平台应用appSecret</span></td>
+        </tr>
+        <tr>
+          <th>token</th> 
+          <td><input type="text" name="token" style="width:300px;" class="colorblur" value="{vifnn:$account.token}" /> <span class="tdtip">公众号消息校验Token</span></td>
+        </tr>
+        <tr>
+          <th>aesKey</th>
+          <td><input type="text" name="encodingAesKey" style="width:300px;" class="colorblur" value="{vifnn:$account.encodingAesKey}" /> <span class="tdtip"> 公众号消息加解密Key</span></td>
+        </tr>
+        <tr>
+			<th height="48" align="right"><strong>是否启用:</strong></th>
+			<td>
+				<label><input type="radio" class="radio" value="1" name="type" <if condition="$account['type'] eq 1">checked</if> >启用</label>
+				<label><input type="radio" class="radio" value="0" name="type"  <if condition="$account['type'] eq 0">checked</if> >关闭</label>
+				<span class="tdtip">  (需要点击“开启”才能正常使用此功能【注意：“全网发布接入检测”时需要暂时开启选项，通过检测完成后立即关闭，直到审核通过后重新开启，以免造成接口不能使用】)</span>
+			</td>
+		</tr>
+				
+         <tr>
+            <td class="addName"></td>
+            <td>
+   
+            <input type="submit" name="doSubmit" value="提交" class="button"/></td>
+          </tr>
+        </table>
+        <input type="hidden" value="<?php echo $_SERVER['HTTP_REFERER'];?>" name="referer" />
+</form>
+<include file="Frame:footer"/>

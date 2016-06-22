@@ -19,42 +19,26 @@ class ThirdPayHotels
 		
 				Sms::sendSms($order['token'] . "_" . $order['cid'], "顾客{$order['name']}刚刚对订单号：{$orderid}的订单进行了支付，请您注意查看并处理");
 				$model = new templateNews();
-				$href = C('site_url').'/index.php?g=Wap&m=Hotels&a=my&token=' . $order['token'] . '&wecha_id=' . $order['wecha_id'] . '&cid=' . $order['cid'];
-				$model->sendTempMsg('OPENTM202521011', array('href' => $href, 'wecha_id' => $order['wecha_id'], 'first' => '预订房间提醒', 'keyword1' => $orderid, 'keyword2' => date("Y年m月d日H时i分s秒"), 'remark' => '预订房间成功，感谢您的光临，欢迎下次再次光临！'));
-				//给商家发站内信
+				$siteurl = $_SERVER["HTTP_HOST"];
+				$siteurl = strtolower($siteurl);
+				if ((strpos($siteurl, "http:") === false) && (strpos($siteurl, "https:") === false)) {
+					$siteurl = "http://" . $siteurl;
+				}
+
+				$siteurl = rtrim($siteurl, "/");
+				$href = $siteurl . "/index.php?g=Wap&m=Hotels&a=my&token=" . $order["token"] . "&wecha_id=" . $order["wecha_id"] . "&cid=" . $order["cid"];
+				$model->sendTempMsg("OPENTM202521011", array("href" => $href, "wecha_id" => $order["wecha_id"], "first" => "预订房间提醒", "keyword1" => $orderid, "keyword2" => date("Y年m月d日H时i分s秒"), "remark" => "预订房间成功，感谢您的光临，欢迎下次再次光临！"));
 				$params = array();
 				$params['site'] = array('token'=>$order['token'], 'from'=>'酒店宾馆消息','content'=>"顾客{$order['name']}刚刚对订单号：{$orderid}的订单进行了支付，请您注意查看并处理");
 				MessageFactory::method($params, 'SiteMessage');
 		
 			}
-			header('Location:/index.php?g=Wap&m=Hotels&a=my&token='.$order['token'].'&wecha_id='.$order['wecha_id'].'&cid='.$order['cid']);
-// 			$this->redirect(U('Hotels/my', array('token'=>$this->token, 'wecha_id' => $this->wecha_id)));
-		}else{
-			exit('订单不存在');
+
+			header("Location:/index.php?g=Wap&m=Hotels&a=my&token=" . $order["token"] . "&wecha_id=" . $order["wecha_id"] . "&cid=" . $order["cid"]);
 		}
-		
-		
-// 		$product_cart_model=M('product_cart');
-// 		$out_trade_no=$orderid;
-// 		$order=$product_cart_model->where(array('orderid'=>$out_trade_no))->find();
-// 		if (!$this->wecha_id){
-// 			$this->wecha_id=$order['wecha_id'];
-// 		}
-// 		$sepOrder=0;
-// 		if (!$order){
-// 			$order=$product_cart_model->where(array('id'=>$out_trade_no))->find();
-// 			$sepOrder=1;
-// 		}
-// 		if($order){
-// 			if($order['paid']!=1){exit('该订单还未支付');}
-// 			/************************************************/
-// 			Sms::sendSms($this->token,'您的微信里有团购订单已经付款');
-// 			/************************************************/
-// 			header('Location:/index.php?g=Wap&m=Groupon&a=myOrders&token='.$order['token'].'&wecha_id='.$order['wecha_id']);
-			
-// 		}else{
-// 			exit('订单不存在：'.$out_trade_no);
-// 		}
+		else {
+			exit("订单不存在");
+		}
 	}
 }
 ?>

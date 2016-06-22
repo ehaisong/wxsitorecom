@@ -45,20 +45,15 @@ class WeixinAction extends Action{
 				if ($data['Content'] == 'TESTCOMPONENT_MSG_TYPE_TEXT') {
 					$content = 'TESTCOMPONENT_MSG_TYPE_TEXT_callback';
 					$oauth->response($content);
-				}
-				else if (strstr($data['Content'], 'QUERY_AUTH_CODE')) {
+				}else if (strstr($data['Content'], 'QUERY_AUTH_CODE')) {
 					$auth_code = str_replace('QUERY_AUTH_CODE:', '', $data['Content']);
 					$authorization_info = $apiOauth->get_authorization_info($auth_code);
 					$access_token = $authorization_info['authorizer_access_token'];
 					$url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=' . $access_token;
 					$content = $auth_code . '_from_api';
-					$call["touser"]=$openid;
-					$call["msgtype"]="text";
-					$call["text"]["content"]=$content;
-					$call=json_encode($call);
+					$call = '{' . "\r\n" . '									"touser":"' . $openid . '",' . "\r\n" . '									"msgtype":"text",' . "\r\n" . '									"text":' . "\r\n" . '									{' . "\r\n" . '										 "content":"' . $content . '"' . "\r\n" . '									}' . "\r\n" . '								}';
 					$apiOauth->https_request($url, $call);
 				}
-
 				break;
 
 			case 'event':
@@ -2086,22 +2081,5 @@ class WeixinAction extends Action{
 		$params = func_get_args();
 		return self::$mothod($params[1], $params[2], $params[3], $params[4], $params[5]);
 	}
-	private function mergeRouteReply($other_reply, $route_reply)
-	{
-		if (empty($route_reply[0])) {
-			return $other_reply;
-		}
-
-		return array_merge($other_reply, $route_reply);
-	}
-
-	public function logResult($word = '')
-	{
-		$fp = fopen($_SERVER['DOCUMENT_ROOT'] . '/Conf/logs/wxlog.txt', 'a');
-		flock($fp, LOCK_EX);
-		fwrite($fp, '执行日期：' . strftime('%Y%m%d%H%M%S', time()) . "\n" . $word . "\n");
-		flock($fp, LOCK_UN);
-		fclose($fp);
-	}		
 }
 ?>

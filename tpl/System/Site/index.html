@@ -249,7 +249,42 @@ $(function(){
       <td  height="48" align="right"><strong>底部版权：</strong></td>
       <td><textarea	 type="text" name="copyright" class="ipt" style="width:450px;height:60px;margin:5px 0 5px 0;" />{vifnn::C('copyright')}</textarea><span>&nbsp;&nbsp;例:vifnn版权所有</span>
     </tr>
+   <tr> 
 
+      <td  height="48" align="right"><strong>场景秀网址：</strong></td>
+
+      <td><input type="text" name="eqxsiteurl" value="{vifnn:$eqx_siteUrl}" class="ipt" size="45" />
+      <span>&nbsp;&nbsp;例:http://h5.vifnn.com</span>
+      （有购买高级场景秀源码 功能才有效）</tr> 
+      <tr> 
+
+      <td  height="48" align="right"><strong>场景秀数据库地址：</strong></td>
+
+      <td><input type="text" name="eqxdburl" value="{vifnn:$eqx_dbUrl}" class="ipt" size="45" /><span>&nbsp;&nbsp;默认127.0.0.1或者localhost</span>
+
+    </tr> 
+	
+     <tr> 
+
+      <td  height="48" align="right"><strong>场景秀数据库名称：</strong></td>
+
+      <td><input type="text" name="eqxname" value="{vifnn:$eqx_name}" class="ipt" size="45" /><span>&nbsp;&nbsp;例:数据库名称</span>
+
+    </tr>  
+    <tr> 
+
+      <td  height="48" align="right"><strong>场景秀数据库帐号：</strong></td>
+
+      <td><input type="text" name="eqxuser" value="{vifnn:$eqx_user}" class="ipt" size="45" />
+
+    </tr>  
+    <tr> 
+
+      <td  height="48" align="right"><strong>场景秀数据库密码：</strong></td>
+
+      <td><input type="text" name="eqxpassword" value="{vifnn:$eqx_password}" class="ipt" size="45" />
+
+    </tr>   
     <tr> 
       <td  height="48" align="right"><strong>调试模式：</strong></td>
       <td><input type="radio" name="vifnn_debug" value="1" <php>if(C('vifnn_debug')==='1')echo checked;</php> /> 开启调试 <input type="radio" name="vifnn_debug" value="0" <php>if(C('vifnn_debug')==='0')echo checked;</php> /> 关闭调试<span>&nbsp;&nbsp;打开调试模式后，如果系统有问题就能看到具体问题，需要vifnn售后排查问题的时候开启</span>

@@ -6,6 +6,7 @@ class CollectwordAction extends WapAction{
 	public $collectword;
 	public function _initialize() {
 		parent::_initialize();
+		
 		$this->fans = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id))->find();
 		if($this->fans == ''){
 			//$this->error('商家未开启获取粉丝信息授权！获取不到您的个人信息！');exit;
@@ -135,7 +136,11 @@ class CollectwordAction extends WapAction{
 			}
 		}
 		if($this->info['is_attention'] == 1 && !$this->isSubscribe()) {
-			$this->memberNotice('',1);
+			$noticeData['title']=$this->info['title'];
+			$noticeData['reply_pic']=$this->info['reply_pic'];
+			$noticeData['intro']=$this->info['intro'];
+			$noticeData['url']=__SELF__;
+			$this->memberNotice('',1,'','','replyNews',$noticeData);
 			$this->assign('subscribe', 1);
 		}else if(($this->info['is_reg'] == 1 || $this->info['is_sms'] == 1) && empty($this->fans['tel'])) {
 			if($this->Collectword['is_sms'] == 0){
@@ -205,10 +210,19 @@ class CollectwordAction extends WapAction{
 	
 	public function ajaxPrize() {
 		$id 		= $this->_get('id','intval');
+		if($this->info['is_attention'] == 1 && !$this->isSubscribe()) {
+			$result['status'] = '-1';
+			exit(json_encode($result));
+		}else if(($this->info['is_reg'] == 1 || $this->info['is_sms'] == 1) && empty($this->fans['tel'])) {
+			$result['status'] = '-1';
+			exit(json_encode($result));
+		}else if($this->info['is_sms'] == 1 && empty($this->fans['tel']) && $this->fans['isverify'] != 1){
+			$result['status'] = '-1';
+			exit(json_encode($result));
+		}
 		$modelUser = M('CollectwordUser');
 		$modelRecord = M('CollectwordRecord');
 		$prize_count = $modelUser->where(array('token'=>$this->token, 'wecha_id'=>$this->wecha_id, 'pid'=>$id))->getField('count');
-		
 		if($this->info['end']<time()){
 			$is_over 	= 2;
 			$result['status'] = '-1';

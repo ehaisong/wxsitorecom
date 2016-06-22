@@ -1,11 +1,11 @@
 <?php
 
-class GameAction extends BaseAction
+
+class BoostAction extends BaseAction
 {
 	public $token;
 	public $gameConfig;
 	public $uid;
-
 	public function _initialize()
 	{
 		parent::_initialize();
@@ -13,26 +13,21 @@ class GameAction extends BaseAction
 		$this->gameConfig = M('Game_config')->where(array('uid' => $this->uid))->find();
 		$this->token = $this->gameConfig['token'];
 	}
-
-	public function gamearr()
+	public function boostarr()
 	{
 		if ($this->_post('uuu') == 2) {
 			$jsonStrs = '{';
-
-			if (S('game_' . $this->_post('token') . '_' . $this->_post('id'))) {
+			if (S('boost_' . $this->_post('token') . '_' . $this->_post('id'))) {
 				$comma = '';
-
-				foreach (S('game_' . $this->_post('token') . '_' . $this->_post('id')) as $key => $value) {
+				foreach (S('boost_' . $this->_post('token') . '_' . $this->_post('id')) as $key => $value) {
 					$jsonStrs .= $comma . '"' . $key . '":"' . $value . '"';
 					$comma = ',';
 				}
 			}
-
 			$jsonStrs .= '}';
 			echo $jsonStrs;
 		}
 	}
-
 	public function tel()
 	{
 		$wecha_id = $this->_post('wecha_id');
@@ -40,161 +35,129 @@ class GameAction extends BaseAction
 		$data['tel'] = $phone;
 		M('Userinfo')->where(array('wecha_id' => $wecha_id))->save($data);
 	}
-
 	public function api_playuser()
 	{
 		$wecha_id = $_GET['openid'];
 		$score = $_GET['score'];
-		$gameid = intval($_GET['gameid']);
-
+		$boostid = intval($_GET['boostid']);
 		if ($_GET['key'] == $this->gameConfig['key']) {
-			$data = array('token' => $this->token, 'gameid' => $gameid, 'wecha_id' => $wecha_id, 'score' => $score, 'time' => time());
+			$data = array('token' => $this->token, 'boostid' => $boostid, 'wecha_id' => $wecha_id, 'score' => $score, 'time' => time());
 			M('game_records')->add($data);
 		}
 	}
-
 	public function api_playcount()
 	{
 		if ($_GET['key'] == $this->gameConfig['key']) {
-			M('games')->where(array('id' => intval($_GET['gameid'])))->setInc('playcount');
+			M('boosts')->where(array('id' => intval($_GET['boostid'])))->setInc('playcount');
 		}
 	}
-
-	public function api_user_game()
+	public function api_user_boost()
 	{
 		$uid = $this->_post('uid', 'intval');
 		$key = $this->_post('key', 'trim');
 		$wxid = $this->_post('wxid', 'trim');
 		$where = array('uid' => $uid);
 		$conf = M('Game_config')->where($where)->find();
-
 		if (empty($conf)) {
 			echo '{"success":"-1","msg":"uid not exist"}';
-			exit();
+			die;
 		}
-
 		if ($conf['key'] != $key) {
 			echo '{"success":"-2","msg":"key error"}';
-			exit();
+			die;
 		}
-
-		$list = M('Games')->where(array('token' => $conf['token']))->field('id as ugameid,gameid,time,intro,token')->select();
-		$game = array();
-
+		$list = M('Boosts')->where(array('token' => $conf['token']))->field('id as uboostid,boostid,time,intro,token')->select();
+		$boost = array();
 		foreach ($list as $key => $value) {
-			$where = array('token' => $value['token'], 'gameid' => $value['ugameid']);
-			$value['score_max'] = M('Game_records')->where($where)->max('score');
-			$user = M('Game_records')->where($where)->group('wecha_id')->getField('id');
+			$where = array('token' => $value['token'], 'boostid' => $value['uboostid']);
+			$user = M('Boost_records')->where($where)->group('wecha_id')->getField('id');
 			$value['user_count'] = count($user);
-			$game[$value['gameid']] = $value;
+			$boost[$value['boostid']] = $value;
 		}
-
-		echo json_encode($game);
+		echo json_encode($boost);
 	}
-
-	public function api_game_record()
+	public function api_boost_record()
 	{
 		$uid = $this->_post('uid', 'intval');
 		$key = $this->_post('key', 'trim');
 		$gid = $this->_post('gid', 'trim');
 		$where = array('uid' => $uid);
 		$conf = M('Game_config')->where($where)->find();
-
 		if (empty($conf)) {
 			echo '{"success":"-1","msg":"uid not exist"}';
-			exit();
+			die;
 		}
-
 		if ($conf['key'] != $key) {
 			echo '{"success":"-2","msg":"key error"}';
-			exit();
+			die;
 		}
-
-		$data = array('token' => $conf['token'], 'gameid' => $this->_post('gid', 'intval'), 'wecha_id' => $this->_post('openid', 'trim'), 'uid' => $uid, 'u_game_id' => $this->_post('ugid', 'intval'));
-		$max_score = M('Game_records')->field('id,score')->where($data)->order('score DESC')->find();
-
+		$data = array('token' => $conf['token'], 'boostid' => $this->_post('bid', 'intval'), 'wecha_id' => $this->_post('openid', 'trim'), 'uid' => $uid, 'u_boost_id' => $this->_post('ubid', 'intval'));
+		$max_score = M('Boost_records')->field('id,score')->where($data)->order('score DESC')->find();
 		if ($max_score) {
 			$score = (double) $this->_post('score', 'trim');
-
 			if ($max_score['score'] < $score) {
-				M('Game_records')->where($data)->save(array('score' => $score, 'time' => time()));
+				M('Boost_records')->where($data)->save(array('score' => $score, 'time' => time()));
 			}
-
 			echo '{"success":"1","msg":"record ok"}';
-			exit();
-		}
-		else {
+			die;
+		} else {
 			$data['score'] = (double) $this->_post('score', 'trim');
 			$data['time'] = time();
-
-			if (M('Game_records')->add($data)) {
+			if (M('Boost_records')->add($data)) {
 				echo '{"success":"1","msg":"record ok"}';
-				exit();
+				die;
 			}
 		}
 	}
-
 	public function getCouponCount()
 	{
 		$cardId = $this->_post('card_id', 'intval');
 		$couponData = M('Member_card_coupon')->where(array('card_id' => $cardId))->find();
 		echo json_encode(array('total' => $couponData['total']));
 	}
-
 	public function getConvertData()
 	{
 		$uid = $this->uid;
-		$gameId = $this->_post('game_id', 'intval');
-		$uGameId = $this->_post('u_game_id', 'intval');
+		$boostId = $this->_post('boost_id', 'intval');
+		$uBoostId = $this->_post('u_boost_id', 'intval');
 		$fansId = $this->_post('fans_id', 'intval');
 		$data = array('status' => 0);
-		$convertData = D('Game_convert')->field('id, convert_code, is_use, awards_level')->where(array('uid' => $uid, 'game_id' => $gameId, 'u_game_id' => $uGameId, 'fans_id' => $fansId))->find();
-
+		$convertData = D('Boost_convert')->field('id, convert_code, is_use, awards_level')->where(array('uid' => $uid, 'boost_id' => $boostId, 'u_boost_id' => $uBoostId, 'fans_id' => $fansId))->find();
 		if (!empty($convertData)) {
 			$data = array('status' => 1, 'id' => $convertData['id'], 'convert_level' => $convertData['awards_level'], 'convert_code' => $convertData['convert_code'], 'is_use' => $convertData['is_use']);
 		}
-
 		echo json_encode($data);
 	}
-
 	public function createConvertData()
 	{
 		$uid = $this->uid;
-		$gameId = $this->_post('game_id', 'intval');
-		$uGameId = $this->_post('u_game_id', 'intval');
+		$boostId = $this->_post('boost_id', 'intval');
+		$uBoostId = $this->_post('u_boost_id', 'intval');
 		$fansIds = unserialize(htmlspecialchars_decode($_POST['fans_ids']));
-
 		foreach ($fansIds as $fansInfo) {
-			$convertData = D('Game_convert')->where(array('uid' => $uid, 'game_id' => $gameId, 'u_game_id' => $uGameId, 'fans_id' => $fansInfo['fans_id']))->find();
-
+			$convertData = D('Boost_convert')->where(array('uid' => $uid, 'boost_id' => $boostId, 'u_boost_id' => $uBoostId, 'fans_id' => $fansInfo['fans_id']))->find();
 			if (empty($convertData)) {
 				$convertCode = $this->createConvertCode();
-				$data = array('uid' => $uid, 'game_id' => $gameId, 'u_game_id' => $uGameId, 'fans_id' => $fansInfo['fans_id'], 'convert_code' => $convertCode, 'awards_level' => $fansInfo['level'], 'is_use' => 0, 'create_time' => date('Y-m-d H:i:s'));
-				D('Game_convert')->add($data);
+				$data = array('uid' => $uid, 'boost_id' => $boostId, 'u_boost_id' => $uBoostId, 'fans_id' => $fansInfo['fans_id'], 'convert_code' => $convertCode, 'awards_level' => $fansInfo['level'], 'is_use' => 0, 'create_time' => date('Y-m-d H:i:s'));
+				D('Boost_convert')->add($data);
 			}
 		}
-
 		echo json_encode(array('status' => 1));
 	}
-
 	private function createConvertCode($len = 12)
 	{
 		$str = '';
 		$randString = '0123456789';
 		$max = strlen($randString) - 1;
-
 		for ($i = 0; $i < $len; $i++) {
 			$str .= $randString[rand(0, $max)];
 		}
-
-		if (D('Game_convert')->isValideCode($str)) {
+		if (D('Boost_convert')->isValideCode($str)) {
 			return $str;
-		}
-		else {
+		} else {
 			return $this->createConvertCode();
 		}
 	}
-
 	public function getQrImg()
 	{
 		$result = array('url' => '');
@@ -207,26 +170,12 @@ class GameAction extends BaseAction
 
 		if (!$newQrImg) {
 			$result["error"] = $recognitionDB->getError();
+		
+		} else {
+			$result['url'] = $newQrImg['show'];
 		}
-		else {
-			$result["url"] = $newQrImg["show"];
-		}
-
 		echo json_encode($result);
 	}
-
-	public function updateVerifyCode()
-	{
-		$verifyCode = $_POST["verify_code"];
-		$topDomain = trim(C("server_topdomain"));
-
-		if (!$topDomain) {
-			$topDomain = _getTopDomain();
-		}
-
-		D("Domain_verify_code")->setVerifyCode($topDomain, $_SERVER["SERVER_NAME"], $verifyCode);
-	}
-
 	public function api_notice_increment($url, $data)
 	{
 		$ch = curl_init();
@@ -243,21 +192,16 @@ class GameAction extends BaseAction
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$tmpInfo = curl_exec($ch);
 		$errorno = curl_errno($ch);
-
 		if ($errorno) {
 			$this->error('发生错误：curl error' . $errorno);
-		}
-		else {
+		} else {
 			$js = json_decode($tmpInfo, true);
-
 			if (isset($js['ticket'])) {
 				return $js['ticket'];
-			}
-			else {
+			} else {
 				$this->error('发生错误：错误代码' . $js['errcode'] . ',微信返回错误信息：' . $js['errmsg']);
 			}
 		}
 	}
 }
-
 ?>

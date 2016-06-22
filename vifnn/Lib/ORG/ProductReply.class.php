@@ -24,7 +24,7 @@ class ProductReply {
 		$thisItems=$this->item;
 		foreach ($thisItems as $item) {
 			if (!$item['groupon']){
-				$url = $this->siteUrl.U('Wap/Store/product',array('id'=>$item['id'],'token'=>$this->token,'wecha_id'=>$this->wechat_id));
+				$url = $this->siteUrl.U('Wap/Store/product',array('id'=>$item['id'],'token'=>$this->token,'wecha_id'=>$this->wechat_id, "cid" => $item["cid"]));
 			}else {
 				$url = $this->siteUrl.U('Wap/Groupon/product',array('id'=>$item['id'],'token'=>$this->token,'wecha_id'=>$this->wechat_id));
 			}
