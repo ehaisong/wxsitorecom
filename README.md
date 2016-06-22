@@ -3,6 +3,12 @@ Marketools.
 A powerful wechat public account management platform!
 
 
+特别说明
+--------------------------------
+如果从GIT新部署系统，首页会出现循环重定向访问不了的情况。
+解决方法是：登入后台，设置一下前台模板即可。同时可以清除缓存。
+
+
 ```
 # 一
 以下目录是缓存目录或上传文件目录，禁止提交到GIT
