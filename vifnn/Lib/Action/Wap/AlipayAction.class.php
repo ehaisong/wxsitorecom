@@ -142,9 +142,9 @@ class AlipayAction extends BaseAction{
 			}
 		}
 		if($_GET['pay_type'] == 'Weixin'){
-			if (strpos(CONF_PATH,'DataPig')){
+			if (strpos(CONF_PATH,'Datavifnn')){
 				$fileName='index_datapig.php';
-			}elseif (strpos(CONF_PATH,'PigData')){
+			}elseif (strpos(CONF_PATH,'vifnnData')){
 				$fileName='index_pigdata.php';
 			}else {
 				$fileName='index.php';
@@ -158,9 +158,9 @@ class AlipayAction extends BaseAction{
 	
 	public function go_pay(){
 		if($_GET['pay_type'] == 'Weixin'){
-			if (strpos(CONF_PATH,'DataPig')){
+			if (strpos(CONF_PATH,'Datavifnn')){
 				$fileName='index_datapig.php';
-			}elseif (strpos(CONF_PATH,'PigData')){
+			}elseif (strpos(CONF_PATH,'vifnnData')){
 				$fileName='index_pigdata.php';
 			}else {
 				$fileName='index.php';

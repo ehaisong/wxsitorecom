@@ -21,30 +21,6 @@ $(function(){
 		var appid = $("input[name='appid']").val();
 		var secret = $("input[name='appsecret']").val();
 		var winxintype = $(this).val();
-		/*if(winxintype == 4){
-			$.ajax({
-				type:"POST",
-				url:"{vifnn::U('User/Index/dyajax')}",
-				dataType:"json",
-				data:{
-					appid:appid,
-					secret:secret
-				},
-				success:function(data){
-					if(data.error == 2){
-						alert('您填的appid和appsecret未认证！');
-						$("input[name='appid']").val('');
-						$("input[name='appsecret']").val('');
-						location.reload();
-					}else if(data.error == 1){
-						alert('您填的appid和appsecret不正确！');
-						$("input[name='appid']").val('');
-						$("input[name='appsecret']").val('');
-						location.reload();
-					}
-				}
-			});
-		}else */
 		if(winxintype == 3){
 			$.ajax({
 				type:"POST",
@@ -52,16 +28,12 @@ $(function(){
 				dataType:"json",
 				data:{
 					appid:appid,
-					secret:secret
+					appsecret:secret,
+					token:'{vifnn:$info.token}'
 				},
 				success:function(data){
 					if(data.error == 2){
 						alert('您填的appid和appsecret不是认证后的服务号！');
-						$("input[name='appid']").val('');
-						$("input[name='appsecret']").val('');
-						location.reload();
-					}else if(data.error == 1){
-						alert('您填的appid和appsecret不正确！');
 						$("input[name='appid']").val('');
 						$("input[name='appsecret']").val('');
 						location.reload();
@@ -130,14 +102,23 @@ $(function(){
                 </tr>
                 <tr>
                   <th><span class="red">*</span>AppSecret：</th>
-                  <td><input type="text" name="appsecret" value="{vifnn:$info.appsecret}" class="px" tabindex="1" size="25">　用于自定义菜单等高级功能 </td>
+                  <td> 
+				  
+                  	<span class="appsecret"  <if condition="empty($appsecret)">style="display:none;"</if> >
+                  		{vifnn:$info.appsecret} <span class="btnGreen" onclick="$('.appsecret').hide();$('.appsecret-edit').show();">修改</span> 修改appSecret 如忘记请去微信公众平台查看
+                  	</span>
+                  	<span class="appsecret-edit" <if condition="!empty($appsecret)">style="display:none;"</if> >
+                  		<input type="text" name="appsecret" value="{vifnn:$appsecret}" class="px" tabindex="1" size="25" placeholder="请输入公众号的appsecret"> <span class="btnGreen" onclick="$('.appsecret').show();$('.appsecret-edit').hide();">显示</span>　用于自定义菜单等高级功能（注：<font color="red">一键绑定的拿不到appsecret的，请手动填写一下</font>）
+                  	</span>
+
+                  </td>
                 </tr>
 				<tr>
 					<th><span class="red">*</span>二维码：</th>
 					<td>
 						<input type="text" id="qr" class="px" name="qr" value="{vifnn:$info.qr}" tabindex="1" size="25">
 						<a href="###" onclick="upyunPicUpload('qr',500,500,'admin')" class="a_upload">上传</a>
-						<a href="###" onclick="viewImg('qr')">预览</a>
+						&nbsp;&nbsp;<a href="###" onclick="viewImg('qr')">预览</a>
 					</td>
 				</tr>
                 <tr>
@@ -153,7 +134,30 @@ $(function(){
                   <td><input type="text" name="aeskey" value="{vifnn:$info.aeskey}" class="px" tabindex="1" size="55">　加密消息的AesEncodingKey </td>
                 </tr>
                 
-
+				<?php if($info['type'] == 1){?>
+				<tr>
+					<th><span class="red"></span>微信号类型：</th>
+					<td>
+						<?php
+						switch($info['winxintype']){
+							case 1:
+								echo "订阅号";
+							break;
+							case 2:
+								echo "服务号";
+							break;
+							case 3:
+								echo "认证服务号";
+							break;
+							case 4:
+								echo "认证订阅号";
+							break;
+							
+						}
+						?>
+					</td>
+				</tr>
+				<?php }else{?>
                 <tr>
                   <th><span class="red"></span>微信号类型：</th>
                   <td><select id="winxintype" name="winxintype">                  
@@ -163,8 +167,19 @@ $(function(){
                   <option value="4" <eq name="info.winxintype" value="4">selected</eq>>认证订阅号</option>
                   </select>　认证服务号是指每年向微信官方交300元认证费的公众号 </td>
                 </tr>
+                <?php }?>
 
-				
+	         <tr>
+              <th>是否是认证的政府或媒体类订阅号</th>
+              <td>
+                <input type="radio" name="type_of_media_or_gov" value="0" <if condition="$info.type_of_media_or_gov neq 1">checked</if>>否
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="type_of_media_or_gov" value="1" <if condition="$info.type_of_media_or_gov eq 1">checked</if>>是
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/tpl/static/help-for-mp-type.html" target="_blank"><img src="{vifnn::RES}/images/help.png" class="vm helpimg" title="帮助"></a>
+              </td>
+            </tr>
+
                 <tr>
                   <th><span class="red">*</span>地区</th>
                   <td>
@@ -233,6 +248,13 @@ $(function(){
           </td>
         </tr>
         </eq>
+
+		<tr>
+			  <th>微信客服昵称:</th>
+			  <td>
+				  <input type="text" name="kfaccount_nickname" class="px" value="{vifnn:$info.kfaccount_nickname|default=$info['wxname']}" size="25" />　<eq name="info['kfaccount_error']" value="0">创建客服账号时将使用此昵称，避免使用敏感词语，否则将会被腾讯屏蔽<else/><span style="color: #F00;">昵称包含敏感词语，已被腾讯屏蔽，请更换后重试</span></eq>
+			  </td>
+		  </tr>
                 <tr>
                   <th></th>
                   <td><button type="submit" class="btnGreen" id="saveSetting">保存</button></td>
@@ -250,4 +272,5 @@ $(function(){
   </div>
   <!--底部-->
     </div>
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
 <include file="Public:footer"/> 

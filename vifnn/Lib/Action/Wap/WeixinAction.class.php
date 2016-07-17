@@ -31,8 +31,8 @@ class WeixinAction extends BaseAction
 		} else {
 			$payConfigInfo['new_appid'] = C('appid');
 			$payConfigInfo['appsecret'] = C('secret');
-			$payConfigInfo['mchid'] = C('platform_weixin_mchid');
-			$payConfigInfo['key'] = C('platform_weixin_key');
+			$payConfigInfo["mchid"] = ((C("platform_open") == 1) && (C("platform_weixin_open") == 1) ? C("platform_weixin_mchid") : "");
+			$payConfigInfo["key"] = ((C("platform_open") == 1) && (C("platform_weixin_open") == 1) ? C("platform_weixin_key") : "");
 			$this->payConfig = $payConfigInfo;
 			$this->_issystem = 1;
 		}
@@ -40,10 +40,11 @@ class WeixinAction extends BaseAction
 		if (ACTION_NAME == 'pay' || ACTION_NAME == 'new_pay') {
 			if (empty($this->payConfig['is_old'])) {
 				$this->new_pay();
-				die;
-			} else {
+				exit();
+			}
+			else {
 				$this->pay();
-				die;
+				exit();
 			}
 		}
 	}
@@ -125,7 +126,7 @@ class WeixinAction extends BaseAction
 		if ($orderInfo['paid']) {
 			$returnUrl = $this->siteUrl . '/index.php?g=Wap&m=' . $_GET['from'] . '&a=payReturn&nohandle=1&token=' . $_GET['token'] . '&wecha_id=' . $_GET['wecha_id'] . '&orderid=' . $orderid;
 			$this->redirect($returnUrl);
-			die;
+			exit();
 		}
 		if ($this->_issystem) {
 			$url = $this->code($orderid, $price, $_GET['orderName']);
@@ -152,6 +153,7 @@ class WeixinAction extends BaseAction
 			}
 			$jsApi = new JsApi_pub($this->payConfig['new_appid'], $this->payConfig['mchid'], $this->payConfig['key'], $this->payConfig['appsecret']);
 			$unifiedOrder = new UnifiedOrder_pub($this->payConfig['new_appid'], $this->payConfig['mchid'], $this->payConfig['key'], $this->payConfig['appsecret']);
+			$is_sub = 0;
 			if ($weixinPay['status'] && $wxuser['merchant_id']) {
 				if ($wxuser['winxintype'] != 3) {
 					$unifiedOrder->setParameter('sub_appid', C('appid'));
@@ -231,7 +233,7 @@ class WeixinAction extends BaseAction
 		$orderInfo = $payHandel->beforePay($orderid);
 		$price = $orderInfo['price'];
 		if ($orderInfo['paid']) {
-			die('您已经支付过此次订单！');
+			exit("您已经支付过此次订单！");
 		}
 		$wxPayHelper = new WxPayHelper($this->payConfig['appid'], $this->payConfig['paysignkey'], $this->payConfig['partnerkey']);
 		$wxPayHelper->setParameter('bank_type', 'WX');
@@ -286,10 +288,12 @@ class WeixinAction extends BaseAction
 			if (class_exists('ThirdPay' . $_GET['from'])) {
 				$className::index($out_trade_no, 'weixin', $_GET['transaction_id']);
 			}
-			die('<xml><return_code><![CDATA[SUCCESS]]></return_code></xml>');
-			die('SUCCESS');
-		} else {
-			die('付款失败');
+
+			exit("<xml><return_code><![CDATA[SUCCESS]]></return_code></xml>");
+			exit("SUCCESS");
+		}
+		else {
+			exit("付款失败");
 		}
 	}
 	public function return_url()
@@ -305,10 +309,12 @@ class WeixinAction extends BaseAction
 			if (class_exists('ThirdPay' . $_GET['from'])) {
 				$className::index($out_trade_no, 'weixin', $_GET['transaction_id']);
 			}
-			die('<xml><return_code><![CDATA[SUCCESS]]></return_code></xml>');
-			die('SUCCESS');
-		} else {
-			die('付款失败');
+
+			exit("<xml><return_code><![CDATA[SUCCESS]]></return_code></xml>");
+			exit("SUCCESS");
+		}
+		else {
+			exit("付款失败");
 		}
 	}
 	public function notify_url()
@@ -344,3 +350,4 @@ class WeixinAction extends BaseAction
 		}
 	}
 }
+?>
