@@ -101,7 +101,7 @@ class ImgBaseAction extends UserAction{
 		$where['id']=$this->_get('id','intval');
 		$where['uid']=session('uid');
 		$res=D('Img')->where($where)->find();
-		$res['info'] = htmlspecialchars_decode($res['info']);
+		
 		$thisClass=M('Classify')->field('id,path')->where(array('id'=>$res['classid']))->find();
 
 		$path = $thisClass['path'].'-'.$thisClass['id'];
@@ -302,7 +302,7 @@ class ImgBaseAction extends UserAction{
 		}
 
 		$_POST['url'] = $this->replaceUrl($_POST['url'], array('query'=>array('wecha_id'=>'{wechat_id}')));
-		$_POST['info'] = htmlspecialchars_decode($_POST['info']);
+		$_POST['info'] = filterWeiXinContent($_POST['info']);
 		$_POST['text'] = str_replace(array("'"), "", $_POST['text']);
 		$_POST['wechat_group'] = nulltoblank(implode(',', $_POST['wechat_group']));
 		$_POST['dashang_price_min'] = $_POST['dashang_price_min']*100;

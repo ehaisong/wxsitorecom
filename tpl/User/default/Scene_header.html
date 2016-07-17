@@ -1,12 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-<title>{vifnn:$info.title}</title>
-<link rel="stylesheet" type="text/css" href="/tpl/static/wall/css/base.css">
-<link rel="stylesheet" type="text/css" href="/tpl/static/wall/css/zAlert.css">
+		<div class="clearfix header">
+			<span class="logo-t fl">
+			<a href="##">
+				<img class="logoScreenLeft" src="{vifnn:$info.logo}">
+			</a>
+			</span>
+			<div class="word-scroll fl">
+		        <div class="clearfix">
+					<div class="scrollbox fl">
+			            <ul class="word-list wordList">
+							<li class="themeBox" style="display: none;">
+								微信号：{vifnn:$info.wxuser}<br>
+			               		 关注后回复“{vifnn:$info.keyword}”即可<?php if(ACTION_NAME == 'signin'){echo "签到";}else{?>参与<?php }?>
+							</li>
+							{vifnn:$info.header}
+						</ul>
+					</div>
+					<div class="num-t fl">
+		            	<p><em class="messageTotal">{vifnn:$join_count}</em><span class="totalname">{vifnn:$join_title}</span></p>
+					</div>
+				</div>
+			</div>
+			<span class="reserved fr showIntroBtn">          
+			    <if condition="$info.qrcode neq ''">
+					<img src="{vifnn:$info.qrcode}" style="max-width:100px;max-height:100px;">
+			    </if>
+			</span>
+		</div>
 
-<script type="text/javascript" src="/tpl/static/wall/js/jquery-2.0.3.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/tpl/static/wall/js/zAlert.js" charset="utf-8"></script>
-</head>

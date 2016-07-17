@@ -1,54 +1,78 @@
-<include file="Scene:header"/>
-<link rel="stylesheet" type="text/css" href="/tpl/static/wall/css/screen_wall.css">
-
-<body class="FUN WALL" style="background-image:url({vifnn:$info.background});" onload="screen_init();">
-<div class="Panel Top" style="top: 0px;">
-    <if condition="$info['logo'] neq ''">
-        <img class="activity_logo" src="{vifnn:$info.logo}">
-    </if>
-    <div class="top_title" style="font-size: 30px">
-        <div>欢迎您参加-{vifnn:$info.title}</div>    
-    </div>
-    <if condition="$info.qrcode neq ''">
-        <img class="mp_account_codeimage" src="{vifnn:$info.qrcode}">
-    </if>
-</div>
-
-<div id="Msg" class="Panel MsgList" style="display: block; opacity: 1;"> 
-    <volist  name="message" id="item" key="key">
-            <div class="MsgItem" msg_id="{vifnn:$item.id}">
-                <div class="head" style="background-image: url({vifnn:$item.portrait});"></div>
-                <div class="nickname">
-                    {vifnn:$item.nickname}
-                </div>
-                <div class="msgword">
-                    {vifnn:$item.content}
-                </div>
-            </div>
-    </volist>
-</div>
-<div id="MsgBox" class="Panel MsgList" style="display: none; opacity: 1;">
-    <volist  name="temp" id="item" key="key">
-    		<?php if('1' == $key) continue; ?>
-            <div class="MsgItem" msg_id="{vifnn:$item.id}">
-                <div class="head" style="background-image: url({vifnn:$item.portrait});"></div>
-                <div class="nickname">
-                    {vifnn:$item.nickname}
-                </div>
-                <div class="msgword">
-                    {vifnn:$item.content}
-                </div>
-            </div>
-    </volist>
-</div>
-
-<script>
-var status      = 1;    //请求状态
-var load_time   = 2000; //请求间隔
-var sceneid     = '{vifnn:$sceneid}';
-var is_pic      = 0;
-var url         = '/index.php?g=User&m=Scene&a=ajaxWall&token={vifnn:$token}&id={vifnn:$info.id}';
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>{vifnn:$info.title}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/base.css">
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/semantic.min.css">
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/style.css">
+<script src="{vifnn::STATICS}/scene/js/jquery-for-qiang.min.js"></script>
+<script src="{vifnn::STATICS}/scene/js/semantic.min.js"></script>
+<script src="{vifnn::STATICS}/scene/js/scroll-marquee.js"></script>
+<script src="{vifnn::STATICS}/scene/js/jquery.soChange.js"></script>
+<script src="{vifnn::STATICS}/scene/js/jquery.tooltipster.min.js"></script>
+<script src="{vifnn::STATICS}/scene/js/weixin.js"></script>
+<script type="text/javascript">
+$(function(){
+	//弹窗定位
+	setTopAndLeft(".flagPosition", ".mone");
+	$(window).resize(function() {
+		setTopAndLeft(".flagPosition", ".mone");
+	});
+	//scrollItem(".scrollBox","vertical",3);
+});
+//设置div的位置，a是目标div位置，b是需要设置的div
+function setTopAndLeft(a, b) {
+	var aOffset=$(a).offset();
+	var flagPositionX =aOffset.left;
+	var flagPositionY =aOffset.top;
+	$(b).css({
+		"top": flagPositionY,
+		"left": flagPositionX
+	});
+}
 </script>
-<input type="hidden" name="ajax_time" style="width:100px;" value="<?php echo time();?>" id="ajax_time" />
-<script type="text/javascript" src="/tpl/static/wall/js/scene_wall.js" charset="utf-8"></script>
+</head>
+<body style="background:#000 url({vifnn:$info.background});background-size: cover;">
+<div class="wrapbg content">
+	<div class="whole">
+	<!-- Header -->
+	<include file="Scene:header"/>
+	<div class="mian mt20 clearfix">
+		<div class="userWord flagPosition">
+			<div class="row scrollBox">
+				<ul id="list" class="user-list ui transition visible">
+					<!----------------------------------------------------------->
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- Toolbar -->
+	<include file="Scene:toolbar"/>
+	</div>
+</div>
+<!-- Footer -->
 <include file="Scene:footer"/>
+<!--微博墙层-->
+<div class="mone" id="mone" onClick="viewOneHide();">
+	<div class="leftside">
+		<div class="part">
+			<div class="pic">
+				<img class="msgconimg" src="" width="100" height="100">
+			</div>
+			<div class="username" style="color: #fff">
+				<span style="color: #fff"></span>
+			</div>
+		</div>
+		<div class="rconner"></div>
+	</div>
+	<div class="rightside">
+		<div class="rightmain">
+			<span class="msgcon"> </span>
+		</div>
+	</div>
+</div>
+<script src="{vifnn::STATICS}/scene/js/common.js"></script>
+</body>
+</html>

@@ -759,8 +759,8 @@ class WapAction extends BaseAction
 			$actRow = M($actModel)->where(array('vifnn_id' => $modelId))->find();
 		}
 		$users = M('Users')->where(array('id' => $this->wxuser['uid']))->find();
-		$micrstore_url = $users['source_domain'] ? $users['source_domain'] : 'http://vd.vifnn.com';
-		$salt = C('encryption') ? C('encryption') : 'vifnn.com';
+		$micrstore_url = $users['source_domain'] ? $users['source_domain'] : 'http://www.11jie.cn';
+		$salt = C('encryption') ? C('encryption') : '11jie.cn';
 		$post_data = array('title' => $actRow['name'], 'info' => $actRow['info'], 'image' => $actRow['wxpic'], 'token' => $actRow['token'], 'keyword' => $actRow['keyword'], 'model' => $modules, 'modelId' => $modelId);
 		$sort_data = $post_data;
 		$sort_data['salt'] = $salt;
@@ -989,8 +989,8 @@ class WapAction extends BaseAction
 	protected function wdIsSubscribe()
 	{
 		$users = M('Users')->where(array('id' => $this->wxuser['uid']))->find();
-		$micrstore_url = $users['source_domain'] ? $users['source_domain'] : 'http://vd.vifnn.com';
-		$salt = C('encryption') ? C('encryption') : 'vifnn.com';
+		$micrstore_url = $users['source_domain'] ? $users['source_domain'] : 'http://www.11jie.cn';
+		$salt = C('encryption') ? C('encryption') : '11jie.cn';
 		$post_data = array('token' => $this->token, 'openid' => $this->wecha_id);
 		$sort_data = $post_data;
 		$sort_data['salt'] = $salt;

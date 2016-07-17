@@ -7,37 +7,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/base.css">
     <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/style.css">
+    <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/index.css">
 </head>
-<body style="background-image:url(<?php echo $info['shake_background'] ? $info['shake_background'] : STATICS.'/scene/images/shake_background.png' ?>);">
+<body style="background-image:url(<?php echo $info['vote_background'] ? $info['vote_background'] : STATICS.'/scene/images/vote_background.png' ?>);background-size: cover;">
+
+<!-- <aside class="aside">
+<div class="layer" style=" display:none"></div>
+<div class="setTime_tou"><div class="setTime_tou_img"><img src="{vifnn::STATICS}/scene/images/tou11_03.png" /></div><button class="starBtn starBtn2"> </button></div>
+</aside> -->
+
 <div class="wrapbg">
-    <div class="whole">    	
-    
+    <div class="whole">
 		<include file="Scene:header"/>
-		
         <div class="mian mt40 clearfix">
-            <div class="yaoyiyao">
-                <div class="topText">
-                    <img class="yytext" src="{vifnn::STATICS}/scene/images/yytext.png" height="95" alt="yytext">
-                </div>
-                
-                <div class="hand">
-                    <img src="{vifnn::STATICS}/scene/images/hand.png" height="280" alt="hand"/>
-                </div>
-                <div class="starBtn">
-                    <a href="javascript:;">开始倒计时……</a>
-                </div>
-            </div>
-        </div>
-        
+			<div class="setTime_tou"><div class="setTime_tou_img"><img src="{vifnn::STATICS}/scene/images/tou11_03.png" /></div><button class="starBtn starBtn2"> </button></div>
+		</div>        
 		<include file="Scene:toolbar"/>
-		
     </div>
 </div>
 <include file="Scene:footer"/>
 <param class="param"
-url-location="{vifnn::U('Scene/shake_active', array('token'=>$token, 'id'=>$id))}"
-url-start="{vifnn::U('Scene/startShake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}"
-nowait="1"
+url-location="{vifnn::U('Scene/vote', array('token'=>$token, 'id'=>$id))}"
+url-start="{vifnn::U('Scene/active_start', array('token'=>$token, 'id'=>$id, 'type'=>'vote'))}"
 />
 <script src="{vifnn::STATICS}/scene/js/jquery-1.7.2.min.js"></script>
 <script src="{vifnn::STATICS}/scene/js/scroll-marquee.js"></script>

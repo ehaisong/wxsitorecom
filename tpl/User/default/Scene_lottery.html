@@ -1,72 +1,128 @@
-<include file="Scene:header"/>
-<link rel="stylesheet" href="/tpl/static/wall/css/screen_lottery_free.css">
-<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
-<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>{vifnn:$info.title}</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/base.css">
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/style.css">
+<link href="{vifnn::STATICS}/scene/css/index.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/v6_common.css" type="text/css">
+<link rel="stylesheet" href="{vifnn::STATICS}/scene/css/animate.css" type="text/css">
+</head>
+<body style=" background:#000 url(<?php echo $info['prize_background'] ? $info['prize_background'] : STATICS.'/scene/images/choujiang_background.jpg' ?>);background-size: cover;
+ " >
+<div class="wrapbg content">
+    <div class="whole">
+        <!-- Header -->
+        <include file="Scene:header"/>
+        <div class="mian mt40 toupiao clearfix"> 
+            <!----中间部分------>
+            <div class="choujiang">
+                <div class="choujiang_title">
+                    <span class="span0">
+                        <div class="choulist clearfix">
+                            <input type="text" autocomplete="off" value="{vifnn:$prize[0]['name']}" readonly pid="{vifnn:$prize[0]['id']}" />
+                            <ul>
+                                <volist name="prize" id="vo">
+                                  <li value="{vifnn:$vo.id}">{vifnn:$vo.name}</li>   
+                                </volist>
+                            </ul>
+                            <i> <span></span></i></div>
+                    </span>
+                    <span class="span1"><i>奖品数量：{vifnn:$prize_num}</i></span>
+                </div>
+                <div class="choujiang_content clearfix">
+                
+                    <div class="choujiang_l">
+                        <div class="choujiang_img"><img src="<if condition="empty($prize[0]['pic'])">{vifnn::STATICS}/scene/images/12.jpg<else />{vifnn:$prize[0]['pic']}</if>" /></div>
+                        <p class="pname">{vifnn:$prize[0]['pname']}</p>
+                    </div>
 
-<body class="FUN WALL" style="background-image:url({vifnn:$info.background});" >
-<div class="Panel Top" style="top: 0px;">
-    <img class="activity_logo" src="<if condition="$info.logo eq ''">tpl/static/wall/images/activity_default_logo.png<else />{vifnn:$info.logo}</if>">
-    <div class="top_title" style="font-size: 30px">
-        <div>欢迎您参加-{vifnn:$info.title}</div>    </div>
-    <if condition="$info.qrcode neq ''">
-        <img class="mp_account_codeimage" src="{vifnn:$info.qrcode}">
-    </if>
-</div>
+                    <div class="choujiang_r">
+                        <ul>
+                            <if condition="!empty($prize_users)">
+                            
+                                <volist name="prize_users" id="user">
 
-<div class="Panel Lottery" style="display: block; opacity: 1;">
-    <div class="lottery-left">
-        <div class="lottery-title">
-            <span class="title-label">抽奖</span>
-            <span class="usercount-label">{vifnn:$users}人参与</span>
-        </div>
-        <div class="lottery-run">
-            <div class="user" id="header" >
-                <span class="nick-name"></span>
-            </div>
-            <div class="control button-run" style="display: block;">开始抽奖</div>
-            <div class="control button-stop" style="display: none;">停止</div><!--
-            <div class="control button-nextround" style="display: none;">下一轮</div>-->
-        </div>
-        <div class="lottery-bottom">
-            <div class="round-num">
-                <div class="select-panel">奖项：
-                    <select name="lottery_rank" id="prize_rank">
-                      <option value="">请选择...</option>
-                    <volist name="prize" id="prize">
-                      <option value="{vifnn:$prize.id}">{vifnn:$prize.name}</option>   
-                    </volist>
-                    </select>
+                                    <li>
+										<i><?php echo ((count($prize_users)+1)-$i);?></i><em uid="{vifnn:$user.uid}"></em>
+                                        <div class="head_img"><img src="{vifnn:$user['portrait']}"></div>
+                                        <p>{vifnn:$user['nickname']}</p>
+                                    </li>
+                                </volist>
 
-                    <div class="select-value">名额：<b id="prize_num">0</b></div>
+                            </if>
+                        </ul>
+                    </div>
+                </div>
+                  <div class="choujian_bot clearfix">
+                    <div class="choujiang_bot_txt"><span>剩余人数<i>{vifnn:$users}</i></span></div>
+                    <div class="choujiang_con" id="box">
+                        <li>
+                            <a href="#">
+                                <div class="head_img"><img src="{vifnn::STATICS}/scene/images/12.jpg" /></div>
+                                <p></p>
+                            </a>
+                       </li>
+                        <li>
+                    </div>
+                    <div class="choujiang_num">
+						<div class="people clearfix" <?php if($prize_num < 1){echo "style='display:none'";}?>>
+						<em>一次抽取</em>
+							<div  class="people_list clearfix">
+								<ul class="">
+								<?php
+								if($prize_num < 10){
+									for($i=1;$i<=$prize_num;$i++){
+										if($i == 1){
+											echo "<li class='people_ta'>$i</li>";
+										}else{
+											echo "<li>$i</li>";
+										}
+									}
+								}else{
+									$list = "";
+									for($i=1;$i<10;$i++){
+										if($i == 1){
+											$list .= "<li class='people_ta'>$i</li>";
+										}else{
+											$list .= "<li>$i</li>";
+										}
+									}
+									$list .= "<li>全部</li>";
+									echo $list;
+								}
+								?>
+								</ul>
+								<i> <span></span></i>
+							</div> 
+						<em>人</em>
+						</div>
+						<div class="choujiang_re"  id="start">滚动</div>
+						<div class="choujiang_re"  id="stop">停止</div>
+                    </div>
                 </div>
             </div>
-
-            <!--
-            <div class="button-reset">重新抽奖</div>-->
-            <div class="button-showresult" onclick="showIntroDetail({vifnn:$info.id})">查看奖品</div>
-            <div class="button-reload">重新抽奖</div>
-            <div class="button-save" onclick="lottery_log({vifnn:$info.id})">中奖记录</div>
-        </div>
-    </div>
-
-<script>
-    var id = '{vifnn:$info.id}';
-    var lottery_type = '{vifnn:$info.lottery_type}';
-    var loadTime     = 3000;
-    var userinterval = '';
-    var interval     = '';
-    var tempData     = [];
-</script>
-<script type="text/javascript" src="/tpl/static/wall/js/scene_lottery.js" charset="utf-8"></script>
-<script>
-function showIntroDetail(id){
-    art.dialog.open('{vifnn::U('Scene/show_prize',array('token'=>$token))}&id='+id,{lock:false,title:'信息详情',width:1200,height:600,yesText:'关闭',background: '#000',opacity: 0.87});
-}
-function lottery_log(id){
-    art.dialog.open('{vifnn::U('Scene/show_plog',array('token'=>$token))}&id='+id,{lock:false,title:'信息详情',width:1200,height:600,yesText:'关闭',background: '#000',opacity: 0.87});
-}
-</script>
-    <div class="lottery-right"></div>
+              
+            </div>
+    </div>    
+    <!-- Toolbar -->
+    <include file="Scene:toolbar"/>
 </div>
-
+<!-- Footer -->
 <include file="Scene:footer"/>
+<param class="lottery"
+url-prize="{vifnn::U('Scene/prize_data', array('token'=>$token, 'id'=>$id))}"
+url-start="{vifnn::U('Scene/get_lottery', array('token'=>$token, 'id'=>$id))}"
+url-stop="{vifnn::U('Scene/lottery_ok', array('token'=>$token, 'id'=>$id))}"
+url-del="{vifnn::U('Scene/lottery_del', array('token'=>$token, 'id'=>$id))}"
+/>
+<script src="{vifnn::STATICS}/scene/js/jquery-1.7.2.min.js"></script> 
+<script src="{vifnn::STATICS}/scene/js/scroll-marquee.js"></script> 
+<script src="{vifnn::STATICS}/scene/js/jquery.soChange.js"></script> 
+<script src="{vifnn::STATICS}/scene/js/jquery.tooltipster.min.js"></script> 
+<script src="{vifnn::STATICS}/scene/js/common.js"></script> 
+<script src="{vifnn::STATICS}/scene/js/index.js"></script>
+</body>
+</html>

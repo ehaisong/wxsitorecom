@@ -10,11 +10,11 @@ class MicrstoreAction extends UserAction
 		$this->canUseFunction('Micrstore');
 
 		if (updateSync::getIfWeidian()) {
-			$this->Micrstore_URL = C('weidian_domain') ? C('weidian_domain') : 'http://wd.sitore.com';
-			$this->SALT = C('encryption') ? C('encryption') : 'sitore.com';
+			$this->Micrstore_URL = C('weidian_domain') ? C('weidian_domain') : 'http://www.11jie.cn';
+			$this->SALT = C('encryption') ? C('encryption') : '11jie.cn';
 		}else {
-			$this->Micrstore_URL = 'http://wd.sitore.com';
-			$this->SALT = 'sitore.com';
+			$this->Micrstore_URL = 'http://www.11jie.cn';
+			$this->SALT = '11jie.cn';
 		}
 	}
 

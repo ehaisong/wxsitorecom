@@ -374,9 +374,18 @@ class AttachmentAction extends UserAction{
 	}
 	public function my(){
 		$db=M('Files');
-		$where=array('token'=>$this->token);
+		//dump($_SESSION);exit;
+		//echo $_SESSION['administrator'];exit;
+		$where = array();
+		//总后台上传
+		if($_GET['from'] == 'System'){
+			$where['token'] = array(array('eq','admin'),array('eq',$this->token), 'or');
+		}else{
+			$where['token'] = $this->token;
+		}
+		$where['type'] = array('neq', 'xls');	
 		$count      = $db->where($where)->count();
-		$Page       = new Page($count,5);
+		$Page       = new Page($count,20);
 		$show       = $Page->show();
 		$list=$db->where($where)->limit($Page->firstRow.','.$Page->listRows)->order('id DESC')->select();
 		//

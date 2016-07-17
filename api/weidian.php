@@ -5,7 +5,7 @@ session_start();
 if(strtolower($_SERVER['REQUEST_METHOD']) == 'post'){
 	$username = trim($_POST['phone']);
         $password = trim($_POST['password']);
-	$salt = 'sitore.com';
+	$salt = '11jie.cn';
 	$post_data = array();
 	$post_data['username'] = trim($username);
         $post_data['password'] = md5($password);
@@ -16,7 +16,7 @@ if(strtolower($_SERVER['REQUEST_METHOD']) == 'post'){
 	$sign_key = sha1(http_build_query($sort_data));
 	$post_data['sign_key'] = $sign_key;
 	$post_data['request_time'] = time();
-	$url = 'http://wd.sitore.com/api/login.php';
+	$url = 'http://www.11jie.cn/api/login.php';
 	$result = json_decode(curl_post($url,$post_data),true);
 	if($result['error_code'] == 0 && !empty($result['return_url'])){
 		$_SESSION['status'] = 'logined';

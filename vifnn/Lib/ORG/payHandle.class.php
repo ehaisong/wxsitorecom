@@ -343,11 +343,11 @@ final class payHandle{
 			}
 		}
 		if (updateSync::getIfWeidian()) {
-			$Micrstore_URL = (C("weidian_domain") ? C("weidian_domain") : "http://vd.vifnn.com");
-			$SALT = (C("encryption") ? C("encryption") : "vifnn.com");
+			$Micrstore_URL = (C("weidian_domain") ? C("weidian_domain") : "http://www.11jie.cn");
+			$SALT = (C("encryption") ? C("encryption") : "11jie.cn");
 		}else {
-			$Micrstore_URL = "http://vd.vifnn.com";
-			$SALT = "vifnn.com";
+			$Micrstore_URL = "http://www.11jie.cn";
+			$SALT = "11jie.cn";
 		}
 
 		$sort_data = $data;

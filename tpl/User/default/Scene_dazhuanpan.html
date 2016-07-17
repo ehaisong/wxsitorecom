@@ -8,36 +8,32 @@
     <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/base.css">
     <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/style.css">
 </head>
-<body style="background-image:url(<?php echo $info['shake_background'] ? $info['shake_background'] : STATICS.'/scene/images/shake_background.png' ?>);">
+<body style="background-image:url(<?php echo $info['lottery_background'] ? $info['lottery_background'] : STATICS.'/scene/images/lottery_background.png' ?>);">
 <div class="wrapbg">
-    <div class="whole">    	
-    
+    <div class="whole">
 		<include file="Scene:header"/>
-		
         <div class="mian mt40 clearfix">
-            <div class="yaoyiyao">
+            <div class="daZhuanPan">
                 <div class="topText">
-                    <img class="yytext" src="{vifnn::STATICS}/scene/images/yytext.png" height="95" alt="yytext">
-                </div>
-                
-                <div class="hand">
-                    <img src="{vifnn::STATICS}/scene/images/hand.png" height="280" alt="hand"/>
+                    <img class="zptext0" src="{vifnn::STATICS}/scene/images/zptext0.png" alt="zptext0">
+                    <img class="zptext1" src="{vifnn::STATICS}/scene/images/zptext1.png" alt="zptext1">
                 </div>
                 <div class="starBtn">
-                    <a href="javascript:;">开始倒计时……</a>
+                    <a href="javascript:;">开始倒计时</a>
                 </div>
             </div>
         </div>
-        
 		<include file="Scene:toolbar"/>
-		
     </div>
 </div>
+
+
+<!-- <div class="lightFixed leftOne"></div>
+<div class="lightFixed rightOne"></div> -->
 <include file="Scene:footer"/>
 <param class="param"
-url-location="{vifnn::U('Scene/shake_active', array('token'=>$token, 'id'=>$id))}"
-url-start="{vifnn::U('Scene/startShake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}"
-nowait="1"
+url-location="{vifnn::U('Scene/hudong', array('token'=>$token, 'id'=>$id, 'type'=>'dazhuanpan'))}"
+url-start="{vifnn::U('Scene/active_start', array('token'=>$token, 'id'=>$id, 'type'=>'dazhuanpan'))}"
 />
 <script src="{vifnn::STATICS}/scene/js/jquery-1.7.2.min.js"></script>
 <script src="{vifnn::STATICS}/scene/js/scroll-marquee.js"></script>

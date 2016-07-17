@@ -30,13 +30,13 @@
   <TH valign="top"><span class="red">*</span><label for="text">奖品图片：</label></TH>
   <TD>
     <input type="input" class="px" id="pic" value="{vifnn:$info.pic}" name="pic" style="width:300px">  
-    <a href="###" onclick="upyunPicUpload('pic',400,400,'{vifnn:$token}')" class="a_upload">上传</a>
-    <a href="###" onclick="viewImg('logo')" class="a_upload">预览</a>[400*400]
+    <a href="###" onclick="upyunPicUpload('pic',165,165,'{vifnn:$token}')" class="a_upload">上传</a>
+    <a href="###" onclick="viewImg('logo')" class="a_upload">预览</a>[165*165]
   </TD>
 </TR>
 <TR>
   <TH valign="top"><label for="text">顺序：</label></TH>
-  <TD><input type="input" class="px" id="sort" value="<if condition="$info.sort gt 0">{vifnn:$info.sort}<else/>50</if>" name="sort" >  </TD>
+  <TD><input type="input" class="px" id="sort" value="<if condition="$info.sort gt 0">{vifnn:$info.sort}<else/>50</if>" name="sort" >  &nbsp; <tt>数值越大排名越前，所有奖品中数值最大的一个将被视为默认奖品</tt></TD>
 </TR>
 <TR>
   <TH></TH>

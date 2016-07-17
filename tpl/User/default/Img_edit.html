@@ -18,7 +18,8 @@ allowPreviewEmoticons : false,
 allowImageUpload : true,
 postParams:{'PHPSESSID':"<?php echo session_id();?>"},
 uploadJson : '/index.php?g=User&m=Upyun&a=kindedtiropic',
-items : [<include file="Public:editorToolbar" />]
+items : [<include file="Public:editorToolbar" />],
+ afterBlur: function () { this.sync(); }
 });
 
 });

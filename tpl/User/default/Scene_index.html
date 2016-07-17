@@ -6,9 +6,13 @@
   <h4>微现场管理<span class="FAQ"></span></h4>
  </div>
 <div class="cLineC" style="line-height: 32px;">
- <a href="{vifnn::U('Scene/set')}" class="btnGrayS vm bigbtn" >添加现场活动</a>　   
+ <a href="{vifnn::U('Scene/set')}" class="btnGrayS vm bigbtn" ><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 添加现场活动</a>　   
 </div>
-<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;">温馨提示：现场活动是综合类微现场应用，包含摇一摇、微信墙、对对碰、抽奖和投票功能
+<if condition="$usertplid eq 2">
+<div class="alert alert-success alert-dismissable" style="margin-top:20px;">
+<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+<else />
+<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;"></if>温馨提示：现场活动是综合类微现场应用，包含摇一摇、微信墙、对对碰、抽奖功能<span class="red">（建议使用谷歌浏览器）</span>
 </div>
  <div class="msgWrap form">
 <div class="bdrcontent">
@@ -37,29 +41,32 @@
       <else /><span style="color:green">开启中</span>
       </if></td>
   <td class="norightborder">
-      <a target="_blank" href="{vifnn::U('Scene/wall',array('sceneid'=>$list['id'],'id'=>$list['wall_id'],'token'=>$_SESSION['token']))}">大屏幕</a>
+      <a target="_blank" href="{vifnn::U('Scene/wall',array('id'=>$list['id'],'token'=>$_SESSION['token']))}">大屏幕</a>
         |
       <if condition="$list['shake_id'] neq ''">
         <a href="{vifnn::U('Scene/show_fans',array('id'=>$list['id'],'token'=>$_SESSION['token']))}">参与粉丝</a>
         |
       </if>
-      <if condition="$list.wall_id gt 0">
-        <a href="{vifnn::U('Wall/check_msg',array('token'=>$token,'id'=>$list['wall_id'],'sceneid'=>$list['id']))}">微信墙消息</a>
+        <a href="{vifnn::U('Scene/check_msg',array('token'=>$token,'id'=>$list['id']))}">微信墙消息</a>
         |
-      </if>
       <if condition="$list['open_lottery'] eq '1'">
         <a href="{vifnn::U('Scene/prize',array('id'=>$list['id'],'token'=>$_SESSION['token']))}">抽奖设置</a>
         |
       </if>
       <if condition="$list['open_vote'] eq '1'">
-        <a href="{vifnn::U('Vote/index',array('type'=>'scene','id'=>$list['vote_id'],'token'=>$_SESSION['token']))}">查看投票</a>
+        <!-- <a href="{vifnn::U('Vote/index',array('type'=>'scene','id'=>$list['vote_id'],'token'=>$_SESSION['token']))}">查看投票</a>
+         | -->
       </if>
+	  <if condition="($list['red_packet_id'] gt 0) OR ($list['jiugongge_id'] gt 0) OR ($list['zajindan_id'] gt 0) OR ($list['shuiguoji_id'] gt 0) OR ($list['guaguaka_id'] gt 0) OR ($list['dazhuanpan_id'] gt 0)">
+		<a href="{vifnn::U('Scene/luckrecord',array('token'=>$token,'id'=>$list['id'],'type'=>'red_packet'))}">查看中奖记录</a>
+		|
+	  </if>
       <!--
       <if condition="$list['open_zzle'] eq '1'">
         |
         <a href="javascript:supperzzle_log({vifnn:$list['id']});">对对碰结果</a>
       </if>-->
-        |  
+       
         <a href="{vifnn::U('Scene/set',array('id'=>$list['id'],'token'=>$_SESSION['token']))}" >编辑</a>  
         |
         <a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Scene/del',array('token'=>$token,'id'=>$list['id']))}');">删除</a>

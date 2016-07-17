@@ -30,7 +30,7 @@
   <th style=" width:80px;">联系方式</th>
   <th style=" width:100px;">操作
       <span class="tooltips">
-      <img align="absmiddle" src="./tpl/User/default/common/images/price_help.png">
+      <if condition="$usertplid eq 2"><i class="fa fa-bullhorn" style="color:#1ab394;"></i><else /><img src="{vifnn::RES}/images/price_help.png" align="absmiddle" /></if>
       <span>
         <p>
           删除操作将删除粉丝的所有活动信息<br />请谨慎操作！
@@ -58,7 +58,7 @@
   </td>
   <td>{vifnn:$list.phone}</td>
   <td>
-    <a href="{vifnn::U('Wall/check_msg',array('token'=>$token,'id'=>$scene['wall_id'],'uid'=>$list['id'],'sceneid'=>$sceneid))}">查看信息</a>
+    <a href="{vifnn::U('Scene/check_msg',array('token'=>$token,'id'=>$sceneid,'uid'=>$list['id']))}">查看信息</a>
     |
     <a href="javascript:void(0);" onclick="showShakeRank({vifnn:$list['id']},{vifnn:$scene['shake_id']},{vifnn:$sceneid})">摇一摇名次</a>
     |

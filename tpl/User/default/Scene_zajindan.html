@@ -8,36 +8,31 @@
     <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/base.css">
     <link rel="stylesheet" href="{vifnn::STATICS}/scene/css/style.css">
 </head>
-<body style="background-image:url(<?php echo $info['shake_background'] ? $info['shake_background'] : STATICS.'/scene/images/shake_background.png' ?>);">
+<body style="background-image:url(<?php echo $info['goldenegg_background'] ? $info['goldenegg_background'] : STATICS.'/scene/images/goldenegg_background.png' ?>);">
 <div class="wrapbg">
-    <div class="whole">    	
-    
+    <div class="whole">
 		<include file="Scene:header"/>
-		
         <div class="mian mt40 clearfix">
-            <div class="yaoyiyao">
-                <div class="topText">
-                    <img class="yytext" src="{vifnn::STATICS}/scene/images/yytext.png" height="95" alt="yytext">
+            <div class="zaJinDan">
+                <div class="starBtn fl">
+                    <img class="chui" src="{vifnn::STATICS}/scene/images/chui.png" alt="chui">
+                    <img class="dan" src="{vifnn::STATICS}/scene/images/dan.png" alt="dan">
+                    <img class="yy" src="{vifnn::STATICS}/scene/images/yy.png" alt="yy">
+                    <a href="javascript:;">开始倒计时</a>
                 </div>
-                
-                <div class="hand">
-                    <img src="{vifnn::STATICS}/scene/images/hand.png" height="280" alt="hand"/>
-                </div>
-                <div class="starBtn">
-                    <a href="javascript:;">开始倒计时……</a>
+                <div class="topText fl">
+                    <img class="zjdtext0" src="{vifnn::STATICS}/scene/images/zjdtext0.png" alt="zjdtext0">
+                    <img class="zjdtext1" src="{vifnn::STATICS}/scene/images/zjdtext1.png" alt="zjdtext1">
                 </div>
             </div>
         </div>
-        
 		<include file="Scene:toolbar"/>
-		
     </div>
 </div>
 <include file="Scene:footer"/>
 <param class="param"
-url-location="{vifnn::U('Scene/shake_active', array('token'=>$token, 'id'=>$id))}"
-url-start="{vifnn::U('Scene/startShake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}"
-nowait="1"
+url-location="{vifnn::U('Scene/hudong', array('token'=>$token, 'id'=>$id, 'type'=>'zajindan'))}"
+url-start="{vifnn::U('Scene/active_start', array('token'=>$token, 'id'=>$id, 'type'=>'zajindan'))}"
 />
 <script src="{vifnn::STATICS}/scene/js/jquery-1.7.2.min.js"></script>
 <script src="{vifnn::STATICS}/scene/js/scroll-marquee.js"></script>
