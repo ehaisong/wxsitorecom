@@ -1,11 +1,9 @@
 <?php
-
-class PintuanAction extends UserAction
-{
-	public function _initialize()
-	{
+//拼团购
+class PintuanAction extends UserAction{
+	public function _initialize(){
 		parent::_initialize();
-		
+	
 		$this->canUseFunction('Pintuan');
 		$timeout_order = M('pintuan_order')->where(array(
 	'token'   => $this->token,
@@ -14,6 +12,7 @@ class PintuanAction extends UserAction
 	))->select();
 
 		foreach ($timeout_order as $time) {
+			M("pintuan")->where(array("token" => $this->token, "id" => $time["tid"]))->setInc("quantity", $time["num"]);
 			M('pintuan_team')->where(array('token' => $this->token, 'head_id' => $time['id'], 'tid' => $time['tid']))->delete();
 			M('pintuan_order')->where(array('token' => $this->token, 'id' => $time['id']))->delete();
 		}
@@ -54,7 +53,7 @@ class PintuanAction extends UserAction
 		$set = M('pintuan')->where(array('token' => $this->token, 'id' => $id))->find();
 
 		if (IS_POST) {
-			$pintuan_data = array('keyword' => $_POST['keyword'], 'info' => trim($_POST['info']), 'title' => $_POST['title'], 'wxpic' => $_POST['wxpic'], 'wxinfo' => $_POST['wxinfo'], 'price' => $_POST['price'] * 100, 'facepic' => $_POST['facepic'], 'startdate' => strtotime($_POST['startdate']), 'enddate' => strtotime($_POST['enddate']), 'goods_info' => $_POST['goods_info'], 'tuan_info' => $_POST['tuan_info'], 'display' => $_POST['display'], 'custom_sharetitle' => trim($_POST['custom_sharetitle']), 'custom_sharedsc' => trim($_POST['custom_sharedsc']), 'sort' => $_POST['sort'], 'tel' => $_POST['tel'], 'quantity' => intval($_POST['quantity']));
+			$pintuan_data = array('keyword' => $_POST['keyword'], 'info' => trim($_POST['info']), 'title' => $_POST['title'], 'wxpic' => $_POST['wxpic'], 'wxinfo' => $_POST['wxinfo'], 'price' => $_POST['price'] * 100, 'facepic' => $_POST['facepic'], 'startdate' => strtotime($_POST['startdate']), 'enddate' => strtotime($_POST['enddate']), 'goods_info' => $_POST['goods_info'], 'tuan_info' => $_POST['tuan_info'], 'display' => $_POST['display'], 'custom_sharetitle' => trim($_POST['custom_sharetitle']), 'custom_sharedsc' => trim($_POST['custom_sharedsc']), 'sort' => $_POST['sort'], 'tel' => $_POST['tel'], 'isopenlimit' => (int) $_POST['isopenlimit'], 'quantity' => intval($_POST['quantity']));
 			$changepic = $_POST['changepic'];
 			$number = $_POST['number'];
 			$discount = $_POST['discount'];
@@ -72,8 +71,10 @@ class PintuanAction extends UserAction
 					M('pintuan_guize')->where(array('token' => $this->token, 'tid' => $id))->delete();
 
 					foreach ($number as $nk => $nv) {
-						$add_guize = array('token' => $this->token, 'tid' => $id, 'number' => $nv, 'discount' => $discount[$nk] * 10);
-						M('pintuan_guize')->add($add_guize);
+						if (($nv != 1) && ($discount[$nk] != 10)) {
+						   $add_guize = array('token' => $this->token, 'tid' => $id, 'number' => $nv, 'discount' => $discount[$nk] * 10);
+						   M('pintuan_guize')->add($add_guize);
+						}
 					}
 				}
 
@@ -93,10 +94,13 @@ class PintuanAction extends UserAction
 				}
 
 				foreach ($number as $nk => $nv) {
-					$add_guize = array('token' => $this->token, 'tid' => $id, 'number' => $nv, 'discount' => $discount[$nk] * 10);
-					M('pintuan_guize')->add($add_guize);
+					if (($nv != 1) && ($discount[$nk] != 10)) {
+					   $add_guize = array('token' => $this->token, 'tid' => $id, 'number' => $nv, 'discount' => $discount[$nk] * 10);
+					   M('pintuan_guize')->add($add_guize);
+					}
 				}
-
+                $oneArr = array("token" => $this->token, "tid" => $id, "number" => 1, "discount" => 100);
+				M("pintuan_guize")->add($oneArr);
 				$this->handleKeyword($id, 'Pintuan', $this->_post('keyword', 'trim'));
 				$this->success('添加成功', U('User/Pintuan/index', array('token' => $this->token)));
 			}
@@ -232,7 +236,7 @@ class PintuanAction extends UserAction
 
 		foreach ($list as $lk => $lv) {
 			$list[$lk]['order'] = M('pintuan_order')->where(array('token' => $this->token, 'id' => $lv['head_id']))->find();
-			$list[$lk]['guize'] = M('pintuan_guize')->where(array('token' => $this->token, 'id' => $lv['guize_id']))->find();
+			$list[$lk]["guize"] = (0 < $lv["type"] ? M("pintuan_guize")->where(array("token" => $this->token, "id" => $lv["guize_id"]))->find() : M("pintuan_guize")->where(array("token" => $this->token, "tid" => $lv["tid"]))->order("discount DESC")->find());
 			$list[$lk]['pintuan'] = M('pintuan')->where(array('token' => $this->token, 'id' => $lv['tid']))->find();
 			$list[$lk]['guize_list'] = M('pintuan_guize')->where(array('token' => $this->token, 'tid' => $lv['tid']))->select();
 		}
@@ -248,7 +252,7 @@ class PintuanAction extends UserAction
 		$this->assign('team', $team);
 		$pintuan = M('pintuan')->where(array('token' => $this->token, 'id' => $team['tid']))->find();
 		$this->assign('pintuan', $pintuan);
-		$jilu_guize = M('pintuan_guize')->where(array('token' => $this->token, 'id' => $team['guize_id']))->find();
+		$jilu_guize = (0 < $team["type"] ? M("pintuan_guize")->where(array("token" => $this->token, "id" => $team["guize_id"]))->find() : M("pintuan_guize")->where(array("token" => $this->token, "tid" => $team["tid"]))->order("discount DESC")->find());
 		$config_list = M('pintuan_guize')->where(array('token' => $this->token, 'tid' => $team['tid']))->order('discount desc')->select();
 		$this_guize = array();
 
@@ -268,7 +272,7 @@ class PintuanAction extends UserAction
 		$where['token'] = $this->token;
 		$where_page['token'] = $this->token;
 		$where['team_id'] = intval($_GET['team_id']);
-		$where_page['token'] = intval($_GET['team_id']);
+		$where_page['team_id'] = intval($_GET['team_id']);
 
 		if (!empty($_GET['search'])) {
 			$where['orderid|user_name|user_tel|user_address'] = array('like', '%' . $_GET['search'] . '%');
@@ -351,7 +355,7 @@ class PintuanAction extends UserAction
 			$order = M('pintuan_order')->where(array('token' => $this->token, 'id' => intval($_GET['id'])))->find();
 			$pintuan = M('pintuan')->where(array('token' => $this->token, 'id' => $order['tid']))->find();
 			$team = M('pintuan_team')->where(array('token' => $this->token, 'id' => $order['team_id']))->find();
-			$jilu_guize = M('pintuan_guize')->where(array('token' => $this->token, 'id' => $team['guize_id']))->find();
+			$jilu_guize = (0 < $team["type"] ? M("pintuan_guize")->where(array("token" => $this->token, "id" => $team["guize_id"]))->find() : M("pintuan_guize")->where(array("token" => $this->token, "tid" => $team["tid"]))->order("discount DESC")->find());
 			$config_list = M('pintuan_guize')->where(array('token' => $this->token, 'tid' => $team['tid']))->order('discount desc')->select();
 			$this_guize = array();
 
@@ -367,7 +371,7 @@ class PintuanAction extends UserAction
 			else {
 				$guize = $jilu_guize;
 			}
-
+            $order["team_status"] = ($jilu_guize["number"] <= $team["count"] ? 1 : 0);
 			$shifu = $order['price'];
 			$yingfu = (($pintuan['price'] * $guize['discount']) / 10000) * $order['num'];
 
@@ -405,6 +409,7 @@ class PintuanAction extends UserAction
 			$paytype_name = array('cardpay' => '会员卡支付', 'alipay' => '支付宝', 'weixin' => '微信支付', 'tenpay' => '财付通[wap手机]', 'tenpayComputer' => '财付通[即时到帐]', 'yeepay' => '易宝支付', 'allinpay' => '通联支付', 'daofu' => '货到付款', 'dianfu' => '到店付款', 'chinabank' => '网银在线');
 			$order['paystr'] = $paytype_name[strtolower($order['paytype'])];
 			$this->assign('thisOrder', $order);
+			$this->assign("pintuan", $pintuan);
 			$this->display();
 		}
 	}
@@ -568,6 +573,69 @@ class PintuanAction extends UserAction
 		}
 
 		return $refund;
+	}
+
+	public function sendMsg()
+	{
+		$tid = (int) $_GET["tid"];
+		$page = ($_GET["page"] ? (int) $_GET["page"] : 0);
+		$total = ($_GET["total"] ? (int) $_GET["total"] : M("pintuan_order")->where(array("token" => $this->token, "tid" => $tid))->count());
+		$orderlist = M("pintuan_order")->where(array(C("DB_PREFIX") . "pintuan_order.token" => $this->token, C("DB_PREFIX") . "pintuan_order.tid" => $tid))->field("wecha_id,type,count,guize_id,goods_name,team_id")->join(C("DB_PREFIX") . "pintuan_team on " . C("DB_PREFIX") . "pintuan_order.team_id =" . C("DB_PREFIX") . "pintuan_team.id")->limit($page . ",100")->select();
+
+		if (empty($orderlist)) {
+			M("pintuan")->where(array("id" => $tid))->setField("is_sendmsg", 1);
+			$this->success("发送完成", U("Pintuan/index", array("token" => $this->token)));
+			exit();
+		}
+
+		$cache_teamname = S($this->token . "_" . $tid . "_teamname");
+
+		if ($cache_teamname != "") {
+			$team_name = $cache_teamname;
+		}
+		else {
+			$team_name = M("pintuan_order")->where(array("token" => $this->token, "tid" => $tid, "ishead" => 1))->getField("team_id,user_name");
+			S($this->token . "_" . $tid . "_teamname", $team_name);
+		}
+
+		$cache_guizhe = S($this->token . "_" . $tid . "_guizhelist");
+
+		if ($cache_guizhe != "") {
+			$guizhelist = $cache_guizhe;
+		}
+		else {
+			$guizhelist = M("pintuan_guize")->where(array("token" => $this->token, "tid" => $tid))->getField("id,number");
+			S($this->token . "_" . $tid . "_guizhelist", $guizhelist);
+		}
+
+		$model = new templateNews();
+
+		foreach ($orderlist as $key => $value ) {
+			$guizhe_number = (0 < $value["type"] ? $guizhelist[$value["guize_id"]] : min($guizhelist));
+
+			if ($guizhe_number <= $value["count"]) {
+				$remark = "恭喜您，您参加的团购【" . $value["goods_name"] . "】已成功，我们会尽快为您发货。";
+			}
+			else {
+				$remark = "很遗憾，您参加的团购【" . $value["goods_name"] . "】已失败，我们会尽快为您退款";
+			}
+
+			$model->sendTempMsg("TM00353", array("href" => "", "wecha_id" => $value["wecha_id"], "first" => "团购结果通知", "Pingou_ProductName" => $value["goods_name"], "Weixin_ID" => $team_name[$value["team_id"]], "Remark" => $remark));
+		}
+
+		$page = $page + 100;
+
+		if (100 < $total) {
+			$this->success("发送人数过多将进行分批发送，正在进行第二批发送。。。", U("Pintuan/sendMsg", array("token" => $this->token, "tid" => $tid, "page" => $page, "total" => $total)));
+			exit();
+		}
+		else {
+			S($this->token . "_" . $tid . "_teamname", NULL);
+			S($this->token . "_" . $tid . "_guizhelist", NULL);
+			M("pintuan")->where(array("id" => $tid))->setField("is_sendmsg", 1);
+			$this->success("发送成功", U("Pintuan/index", array("token" => $this->token)));
+			exit();
+		}
 	}
 }
 

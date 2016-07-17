@@ -5,7 +5,7 @@ class JiugongAction extends LotteryBaseAction
 	public function _initialize()
 	{
 		parent::_initialize();
-		$this->canUseFunction('Jiugong');
+		$this->canUseFunction("Jiugong");
 	}
 
 	public function cheat()
@@ -22,7 +22,7 @@ class JiugongAction extends LotteryBaseAction
 
 	public function sn()
 	{
-		$type = (isset($_GET['type']) ? intval($_GET['type']) : 10);
+		$type = (isset($_GET["type"]) ? intval($_GET["type"]) : 10);
 		parent::sn($type);
 		$this->display();
 	}
@@ -40,8 +40,9 @@ class JiugongAction extends LotteryBaseAction
 	public function record()
 	{
 		parent::lottery_record(10);
-		$this->display('Lottery:record');
+		$this->display("Lottery:record");
 	}
 }
+
 
 ?>

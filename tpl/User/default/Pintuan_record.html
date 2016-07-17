@@ -35,6 +35,7 @@
 					<td>{vifnn:$lv['count']}</td>
 					<td>
 						<?php
+						if($pintuan['display']==2){
 							if($lv['pintuan']['enddate'] > time()){
 								echo "拼团中";
 							}elseif($lv['count'] >= $lv['guize']['number']){
@@ -54,6 +55,9 @@
 							}else{
 								echo "失败";
 							}
+						}else{
+							echo '已关闭';
+						}
 						?>
 					</td>
 					<td>{vifnn:$lv['addtime']|date="Y-m-d H:i:s",###}</td>

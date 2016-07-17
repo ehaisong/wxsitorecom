@@ -84,7 +84,7 @@ function fwy_confirm(msg,url){
 	});
 }
 function showIntroDetail(id){
-	art.dialog.open('{vifnn::U('Pintuan/orderinfo',array('token'=>$token))}&id='+id,{lock:false,title:'订单详情',width:1000,height:620,yesText:'关闭',background: '#000',opacity: 0.87, close: function(){location.reload();}});
+	art.dialog.open('{vifnn::U('Pintuan/orderinfo',array('token'=>$token))}&id='+id,{lock:false,title:'订单详情',width:500,height:480,yesText:'关闭',background: '#000',opacity: 0.87, close: function(){location.reload();}});
 }
 </script>
 <include file="Public:footer"/>

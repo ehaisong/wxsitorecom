@@ -48,19 +48,26 @@
 					<td>{vifnn:$lv['keyword']}</td>
 					<td>{vifnn:$lv.quantity}</td>
 					<td>
-						<?php
-							if($lv['startdate'] > time()){
-								echo "未开始";
-							}elseif($lv['enddate'] < time()){
-								echo "已结束";
-							}else{
-								echo "进行中";
-							}
-						?>
+					<?php
+					if($lv['display']==2){
+						if($lv['startdate'] > time()){
+							echo "未开始";
+						}elseif($lv['enddate'] < time()){
+							echo "已结束";
+						}else{
+							echo "进行中";
+						}
+					}else{
+						echo '已关闭';
+					}
+					?>
 					</td>
 					<td><?php echo $lv['display']==2?'已开启':'已关闭';?></td>
 					<td>{vifnn:$lv.tuan_count}</td>
 					<td class="norightborder">
+						<if condition="$lv['display'] eq 2 and  $lv['enddate'] lt time()">
+							<if condition="$lv['is_sendmsg'] eq 1"><a href="#" onclick="alert('模板消息已经发送过');">拼团已完成</a><else /><a href="{vifnn::U('User/Pintuan/sendMsg',array('token'=>$token,'tid'=>$lv['id']))}">完成拼团</a></if>
+						</if>
 						<a href="{vifnn::U('User/Pintuan/record',array('token'=>$token,'id'=>$lv['id']))}">记录</a>
 						<a href="{vifnn::U('User/Pintuan/set',array('token'=>$token,'id'=>$lv['id']))}">编辑</a>
 						<?php if($lv['tuan_count'] < 1 && $lv['display'] == 1){?>

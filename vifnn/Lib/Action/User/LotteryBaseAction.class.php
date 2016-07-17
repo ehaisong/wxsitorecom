@@ -330,7 +330,7 @@ class LotteryBaseAction extends UserAction
 		$where = array();
 		$where['token'] = $this->token;
 		$where['lid'] = (int) $_GET['id'];
-		$where['type'] = (int) $type;
+		//$where['type'] = (int) $type; //Lottery_record 表内的type为空值，不能以此字段做为条件查询
 
 		if (isset($_GET['islottery'])) {
 			$where['islottery'] = $_GET['islottery'] ? (int) $_GET['islottery'] : 0;

@@ -199,12 +199,7 @@ $(document).ready(function(){
 								return false;
 							}
 						</if>
-						<if condition="$item['match'] neq '' AND $item['item_name'] neq 'portrait'">
-							if (!new RegExp(/{vifnn:$item['match']}/).test($.trim($("#field_id_{vifnn:$item['id']}").val())) && $("#field_id_{vifnn:$item['id']}").val() != "") {
-								alert("{vifnn:$item['name']}的输入格式不正确")
-								return false;
-							}
-						</if>			
+		
 				</if>
 				</volist>
 				

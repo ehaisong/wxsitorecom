@@ -21,7 +21,7 @@ class LotteryAction extends LotteryBaseAction
 
 	public function sn()
 	{
-		$type = (isset($_GET['type']) ? intval($_GET['type']) : 1);
+		$type = (isset($_GET["type"]) ? intval($_GET["type"]) : 1);
 		parent::sn($type);
 		$this->display();
 	}
@@ -42,5 +42,6 @@ class LotteryAction extends LotteryBaseAction
 		$this->display();
 	}
 }
+
 
 ?>

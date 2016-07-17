@@ -68,9 +68,9 @@
 					<li class="accAndPwd">
 						<dl>价格：{vifnn:$order['price']}元</dl>
 					</li>
-					<!-- <li class="accAndPwd">
-						<dl>邮费：{vifnn:$_GET['postage']}元</dl>
-					</li> -->
+					<li class="accAndPwd">
+						<dl><span style="color:red;">请在5分钟之内付款，若超时付款，订单不予以生效，如需退款请联系商家</span></dl>
+					</li>
 					<li><a id="btnNext" class="orangeBtn loginBtn">下一步</a></li>
 				</ul>
 			</div>
@@ -82,7 +82,7 @@
 					var phone = $("#phone").val();
 					var phone_length = phone.length;
 					var phone_str = phone.substr(0,1);
-					var name = $("#name").val();
+					var name = $("#name").val(); 
 					var message = $("#message").val();
 					if(name == ""){
 						alert("请填写您的姓名");

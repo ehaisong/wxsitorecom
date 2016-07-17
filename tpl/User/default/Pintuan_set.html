@@ -165,6 +165,14 @@
 					</td>
 				</tr>
 				<tr>
+					<th valign="top"><span class="red"></span>是否开启限制参团人数：</th>
+					<td colspan="2">
+						<input type="radio" name="isopenlimit" id="isopenlimit1" value="1" <if condition="($set['isopenlimit'] eq 1) OR($set['isopenlimit'] eq '')">checked</if>><label for="isopenlimit1">否</label>
+						&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="isopenlimit" id="isopenlimit2" value="2" <if condition="($set['isopenlimit'] eq 2)">checked</if>><label for="isopenlimit2">是</label><span class="red">&nbsp;&nbsp;&nbsp;开启限制参团人数，参团人数超过开团规则的最大级别人数时将禁止参团</span>
+					</td>
+				</tr>
+				<tr>
 					<th valign="top"><span class="red"></span>是否开启：</th>
 					<td colspan="2">
 						<input type="radio" name="display" id="display1" value="1" <if condition="($set['display'] eq 1)">checked</if>><label for="display1">否</label>
@@ -357,6 +365,13 @@ $(document).ready(function(){
 		}
 		for(j=1;j<=guizenum;j++){
 			var number = $('#number'+j).val();
+			if(number == 1){
+				is_error_msg += "参团人数1会默认加上请勿填写！<br>";
+				buterror("#number"+j);
+				error_id[error_i] = "#number"+j;
+				error_i++;
+				is_error = false;
+			}
 			if(number*1 <= 0){
 				is_error_msg += "请填写参团人数"+j+"！<br>";
 				buterror("#number"+j);
@@ -365,6 +380,13 @@ $(document).ready(function(){
 				is_error = false;
 			}
 			var discount = $('#discount'+j).val();
+			if(discount == 10){
+				is_error_msg += "开团折扣10会默认加上请勿填写！<br>";
+				buterror("#discount"+j);
+				error_id[error_i] = "#discount"+j;
+				error_i++;
+				is_error = false;
+			}
 			if(discount*1 <= 0){
 				is_error_msg += "请填写开团折扣"+j+"！<br>";
 				buterror("#discount"+j);

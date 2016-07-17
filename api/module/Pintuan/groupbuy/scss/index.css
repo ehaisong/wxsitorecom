@@ -250,8 +250,8 @@ select {
   .index-shop-info-left-left h2 {
     font-size: 18px;
     font-weight: normal;
-    height: 30px;
-    line-height: 30px; }
+    height: 138px;
+    /*line-height: 30px;*/ }
   .index-shop-info-left-left div {
     color: #f15353;
     height: 30px;
@@ -259,6 +259,7 @@ select {
     font-size: 14px;
     display:  block;
     float: left;
+	width:290px;
   }
   .index-shop-info-left-left div span{
     font-size: 16px;

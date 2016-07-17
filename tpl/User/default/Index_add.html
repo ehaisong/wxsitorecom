@@ -3,6 +3,7 @@
 <script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
 <script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
 <script>
 $(function(){
 	$("select").change(function(){
@@ -40,7 +41,7 @@ $(function(){
 				dataType:"json",
 				data:{
 					appid:appid,
-					secret:secret
+					appsecret:secret
 				},
 				success:function(data){
 					if(data.error == 2){
@@ -117,7 +118,7 @@ $(function(){
                 </tr>
                 <tr>
                   <th><span class="red">*</span>微信号：</th>
-                  <td><input type="text" required="" name="weixin" value="" class="px" tabindex="1" size="25">　比如：tencent </td>
+                  <td><input type="text" required="" name="weixin" value="" class="px" tabindex="1" size="25">　比如：lentu123 </td>
                 </tr>
                 <tr>
                   <th><span class="red">*</span>AppID（公众号）：</th>

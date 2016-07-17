@@ -12,7 +12,7 @@ class PintuanReturnAction extends Action{
 			$data['err_msg'] = "获取token失败";
 			$this->ajaxReturn($data,'JSON');exit;
 		}
-		$this->wecha_id = $_SESSION['pintuan_'.$this->token.'_wecha_id'];
+		$this->wecha_id = $_SESSION['pintuan_'.$this->token.'_wecha_id'] ? $_SESSION['pintuan_'.$this->token.'_wecha_id'] : $_COOKIE['pintuan_'.$this->token.'_wecha_id'];
 		if($this->wecha_id == null){
 			$data['err_code'] = 2;
 			$data['err_msg'] = "获取wecha_id失败";
@@ -23,11 +23,12 @@ class PintuanReturnAction extends Action{
 			$this->wxuser['appid'] = C("appid") ;
 			$this->wxuser['appsecret'] = C("secret") ;
 		}
-		$this->site_url =$_SESSION['pintuan_'.$this->token.'_siteurl'];
+		$this->site_url = $_SESSION['pintuan_'.$this->token.'_siteurl'] ? $_SESSION['pintuan_'.$this->token.'_siteurl'] : $_COOKIE['pintuan_'.$this->token.'_siteurl'];
+		$this->site_url = trim($this->site_url,'"');
 		//删除超5分钟未支付订单并返回库存
 		$timeout_order = M('pintuan_order')->where(array('token'=>$this->token,'paid'=>0,'addtime'=>array('lt',(time() - 5*60))))->select();
 		foreach($timeout_order as $time){
-			//M('pintuan')->where(array('token'=>$this->token,'id'=>$time['tid']))->setInc('quantity',$time['num']);
+			M('pintuan')->where(array('token'=>$this->token,'id'=>$time['tid']))->setInc('quantity',$time['num']);
 			M('pintuan_team')->where(array('token'=>$this->token,'head_id'=>$time['id'],'tid'=>$time['tid']))->delete();
 			M('pintuan_order')->where(array('token'=>$this->token,'id'=>$time['id']))->delete();
 		}
@@ -117,7 +118,7 @@ class PintuanReturnAction extends Action{
 			}
 			if($pintuan['startdate'] > $_SERVER['REQUEST_TIME']){
 				$status =  1; //未开始
-			}elseif($pintuan['enddate'] < $_SERVER['REQUEST_TIME']){
+			}elseif($pintuan['enddate'] < $_SERVER['REQUEST_TIME'] || $pintuan['display'] == 1){
 				$status = 3; //结束
 			}else{
 				$status = 2; //进行中
@@ -178,6 +179,8 @@ class PintuanReturnAction extends Action{
 			$data['err_msg']['tuan']['status'] = 1; //未开始
 		}elseif($pintuan['enddate'] < time()){ //结束后
 			if($team['count'] >= $jilu_guize['number']){
+				$data['err_msg']['tuan']['status'] = 3;
+			}elseif($pintuan['display'] == 1){
 				$data['err_msg']['tuan']['status'] = 3;
 			}else{
 				$data['err_msg']['tuan']['status'] = 4;
@@ -345,6 +348,10 @@ class PintuanReturnAction extends Action{
 				$data['err_code'] = 0;
 				$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>'end','tid'=>$tuan_id));
 				$data['err_msg']['url'] = $url;
+			}elseif($pintuan['display'] == 1){
+				$data['err_code'] = 0;
+				$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>'close','tid'=>$tuan_id));
+				$data['err_msg']['url'] = $url;
 			}elseif($num > $pintuan['quantity']){
 				$data['err_code'] = 0;
 				$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>'nonum','tid'=>$tuan_id));
@@ -359,8 +366,12 @@ class PintuanReturnAction extends Action{
 				}
 				if($team_id > 0){ //参团
 					$team = M('pintuan_team')->where(array('token'=>$this->token,'id'=>$team_id))->find();
-					$head_order = M('pintuan_order')->where(array('token'=>$this->token,'id'=>$team['head_id']))->find();
-					$myorder = M('pintuan_order')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id,'tid'=>$tuan_id,'team_id'=>$team_id))->find();
+					$head_order = M('pintuan_order')->where(array('id'=>$team['head_id']))->find();
+					$myorder = M('pintuan_order')->where(array('team_id'=>$team_id,'wecha_id'=>$this->wecha_id))->find();
+					//获取该团规则允许的最多人数
+					$maxnumber = M('pintuan_guize')->where(array('token'=>$this->token,'tid'=>$tuan_id))->max('number');
+					//获取已下单人数
+					$orderNum = M('pintuan_order')->where(array('team_id'=>$team_id))->count();
 					if($this->wecha_id == $head_order['wecha_id']){
 						$data['err_code'] = 0;
 						$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>'head','tid'=>$tuan_id));
@@ -368,6 +379,10 @@ class PintuanReturnAction extends Action{
 					}elseif($myorder != '' && $myorder['paid'] == 1){ // 支付成功才算参加此团
 						$data['err_code'] = 0;
 						$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>'myorder','tid'=>$tuan_id));
+						$data['err_msg']['url'] = $url;
+					}elseif($orderNum >= $maxnumber && $pintuan['isopenlimit'] == 2){
+						$data['err_code'] = 0;
+						$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>'overnumer','tid'=>$tuan_id));
 						$data['err_msg']['url'] = $url;
 					}else{
 						$jilu_guize = M('pintuan_guize')->where(array('token'=>$this->token,'id'=>$team['guize_id']))->find();
@@ -388,7 +403,7 @@ class PintuanReturnAction extends Action{
 						$order_id = M('pintuan_order')->add($order_add);
 						$orderid = $order_id.'PINGTUAN'.time();
 						M('pintuan_order')->where(array('id'=>$order_id))->save(array('orderid'=>$orderid));
-						//M('pintuan')->where(array('token'=>$this->token,'id'=>$tuan_id))->setDec('quantity',$num);
+						M('pintuan')->where(array('token'=>$this->token,'id'=>$tuan_id))->setDec('quantity',$num);
 						$data['err_code'] = 0;
 						$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>$order_id,'tid'=>$tuan_id));
 						$data['err_msg']['url'] = $url;
@@ -429,7 +444,7 @@ class PintuanReturnAction extends Action{
 						M('pintuan_team')->where(array('id'=>$team_id))->save(array('head_id'=>$order_id));
 						$orderid = $order_id.'PINGTUAN'.time();
 						M('pintuan_order')->where(array('id'=>$order_id))->save(array('orderid'=>$orderid));
-						//M('pintuan')->where(array('token'=>$this->token,'id'=>$tuan_id))->setDec('quantity',$num);
+						M('pintuan')->where(array('token'=>$this->token,'id'=>$tuan_id))->setDec('quantity',$num);
 						$data['err_code'] = 0;
 						$url = $this->site_url.U('Wap/Pintuan/buyinfo',array('token'=>$this->token,'orderid'=>$order_id,'tid'=>$tuan_id));
 						$data['err_msg']['url'] = $url;
