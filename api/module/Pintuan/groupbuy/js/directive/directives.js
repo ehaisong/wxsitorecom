@@ -1330,7 +1330,9 @@ dire.directive('carouselRepeatFinish', ["lazyLoadService", "$timeout", function 
                 $timeout(function () {
                     var html = "";
                     var mySwiper = new Swiper('.swiper-container', {    // swiper插件初始化
-                        pagination: '.swiper-pagination'
+                        pagination: '.swiper-pagination',
+						loop: true,
+						autoplay: 3000,
                     });
                 }, 500);
             }

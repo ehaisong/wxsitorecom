@@ -794,6 +794,60 @@ class StoreAction extends WapAction{
 			unset($_SESSION[$this->session_cart_name]);
 			//TODO 发货的短信提醒
 			if ($normal_rt && empty($orid)) {
+//VIFNN增加邮件通知			
+			$info=M('deliemail')->where(array('token'=>$this->_get('token')))->find();
+			$mail->CharSet    = 'UTF-8'; //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
+			$emailstatus=$info['shangcheng'];
+			$emailreceive=$info['receive'];
+			$content = $this->sms1();
+			if($info['type'] == 1){
+			$emailsmtpserver=$info['smtpserver'];
+			$emailport=$info['port'];
+			$emailsend=$info['name'];
+			$emailpassword=$info['password'];
+			}else{
+			$emailsmtpserver=C('email_server');
+			$emailport=C('email_port');
+			$emailsend=C('email_user');
+			$emailpassword=C('email_pwd');
+			}
+			$emailuser=explode('@', $emailsend);
+			$emailuser=$emailuser[0];
+			if ($emailstatus == 1) {
+				if ($content) {
+					date_default_timezone_set('PRC');
+					require("class.phpmailer.php");
+					$mail = new PHPMailer();
+					$mail->IsSMTP();                                      // set mailer to use SMTP
+					$mail->Host = "$emailsmtpserver";  // specify main and backup server
+					$mail->SMTPAuth = true;     // turn on SMTP authentication
+					$mail->Username = "$emailuser"; // SMTP username
+					$mail->Password = "$emailpassword"; // SMTP password
+					$mail->From = $emailsend;
+					$mail->FromName = C('site_name');
+					$mail->AddAddress("$emailreceive", "商户");
+					//$mail->AddAddress("ellen@example.com");                  // name is optional
+					$mail->AddReplyTo($emailsend, "Information");
+
+					$mail->WordWrap = 50;                                 // set word wrap to 50 characters
+					//$mail->AddAttachment("/var/tmp/file.tar.gz");         // add attachments
+					//$mail->AddAttachment("/tmp/image.jpg", "new.jpg");    // optional name
+					$mail->IsHTML(false);                                  // set email format to HTML
+
+					$mail->Subject = '有新的商城订单';
+					$mail->Body    = $content;
+					$mail->AltBody = "";
+
+					if(!$mail->Send())
+					{
+					   echo "Message could not be sent. <p>";
+					   echo "Mailer Error: " . $mail->ErrorInfo;
+					   exit;
+					}
+					//echo "Message has been sent";    
+				}
+			}
+//VIFNN增加邮件通知				
 				$tdata = $this->getCat($carts);
 				$list = array();
 				foreach ($tdata[0] as $va) {
@@ -1592,7 +1646,81 @@ class StoreAction extends WapAction{
 		$this->assign('metaTitle', '填写提现信息');
 		$this->display();
 	}
+//VIFNN增加邮件通知		
+	public function sms1(){
+		$where['token']=$this->token;
+		$where['wecha_id']=$this->wecha_id;
+		$where['printed']=0;
+		$this->product_cart_model=M('product_cart');
+		$count      = $this->product_cart_model->where($where)->count();
+		$orders=$this->product_cart_model->where($where)->order('time DESC')->limit(0,1)->select();
+		
+		$now=time();
+		if ($orders){
+			$thisOrder=$orders[0];
+			switch ($thisOrder['diningtype']){
+				case 0:
+					$orderType='购物';
+					break;
+				case 1:
+					$orderType='点餐';
+					break;
+				case 2:
+					$orderType='外卖';
+					break;
+				case 3:
+					$orderType='预定餐桌';
+					break;
+			}
+			
+			//订餐信息
+			$product_diningtable_model=M('product_diningtable');
+			if ($thisOrder['tableid']) {
+				$thisTable=$product_diningtable_model->where(array('id'=>$thisOrder['tableid']))->find();
+				$thisOrder['tableName']=$thisTable['name'];
+			}else{
+				$thisOrder['tableName']='未指定';
+			}
+			$str="订单类型：".$orderType."\r\n订单编号：".$thisOrder['orderid']."\r\n姓名：".$thisOrder['truename']."\r\n电话：".$thisOrder['tel']."\r\n地址：".$thisOrder['address']."\r\n下单时间：".date('Y-m-d H:i:s',$thisOrder['time'])."\r\n";
+			//
+			$carts=unserialize($thisOrder['info']);
 
+			//
+			$totalFee=0;
+			$totalCount=0;
+			$products=array();
+			$ids=array();
+			foreach ($carts as $k=>$c){
+				
+					$productid=$k;
+					$price=$c['price'];
+					$count=$c['count'];
+					//
+					
+						array_push($ids,$productid);
+					
+					$totalFee+=$price*$count;
+					$totalCount+=$count;
+				
+			}
+			
+				$products=$this->product_model->where(array('id'=>array('in',$ids)))->select();
+			
+			
+				$i=0;
+				foreach ($products as $p){
+					$products[$i]['count']=$carts[$p['id']]['count'];
+					$str.=$p['name']."  ".$products[$i]['count']."份  单价：".$p['price']."元\r\n";
+					$i++;
+				}
+			
+			$str.="合计：".$thisOrder['price']."元";
+			return $str;
+		}else {
+			return '';
+		}
+	}	
+//VIFNN增加邮件通知	
     //检测店铺名称
     public function check_name()
     {

@@ -424,6 +424,7 @@ class RepastAction extends UserAction {
                 $erweima = array();
                 if (!empty($tmps)) {
                     foreach ($tmps as $vv) {
+			$vv["code_url"] = ($vv["ticket"] ? $vv["ticket"] : $vv["code_url"]);
                         $erweima['c' . $vv['type']] = $vv;
                     }
                     $this->assign('erweima', $erweima);
@@ -515,7 +516,7 @@ class RepastAction extends UserAction {
         $mDishC = $_SESSION["session_MaindishSet_{$token}"];
         $mDishC = !empty($mDishC) ? unserialize($mDishC) : false;
         if ($cache && !empty($mDishC)) {
-            return $DishC;
+		return $mDishC;
         } else {
             $MainC = M('Company')->where(array('token' => $token, 'isbranch' => 0))->find();
             $m_cid = $MainC['id'];
@@ -763,8 +764,8 @@ class RepastAction extends UserAction {
                     $newk = $flag . 'jc' . $did;
                     if (!($data['paycount'] > 0) || ($kk == $newk)) {
 
-                        $dishofcid = $cid;
-                        if (($mDishSet['cid'] != $cid) && ($mDishSet['dishsame'] == 1)) {
+			$dishofcid = $data['cid'];
+			if (($mDishSet['cid'] != $data['cid']) && ($mDishSet['dishsame'] == 1)) {
                             $dishofcid = $mDishSet['cid'];
                             $kconoff = $mDishSet['kconoff'];
                         }
@@ -975,7 +976,7 @@ class RepastAction extends UserAction {
             $db_dish_reply = M('Dish_reply');
             $jointable = C('DB_PREFIX') . 'recognition';
             $db_dish_reply->join('as d_r LEFT JOIN ' . $jointable . ' as rg on d_r.reg_id=rg.id');
-            $tmps = $db_dish_reply->where('d_r.cid=' . $this->_cid . ' AND d_r.token="' . $this->token . '" AND d_r.cf="dish" AND d_r.type=0 AND tableid=' . $tableid)->field('d_r.*,rg.code_url,rg.status')->find();
+	    $tmps = $db_dish_reply->where('d_r.cid=' . $this->_cid . ' AND d_r.token="' . $this->token . '" AND d_r.cf="dish" AND d_r.type=0 AND tableid=' . $tableid)->field('d_r.*,rg.code_url,rg.status,rg.ticket')->find();
             if (empty($tmps)) {
                 $keyword = $this->_cid . '餐台' . $tableid;
                 $tmps = array('cid' => $this->_cid, 'token' => $this->token, 'tableid' => $tableid, 'keyword' => $keyword, 'cf' => 'dish', 'addtime' => time());
@@ -988,6 +989,7 @@ class RepastAction extends UserAction {
                     $this->handleKeyword($inser_id, 'MicroRepast', $keyword);
                 }
             }
+	    $tmps['code_url'] = $tmps['ticket'] ? $tmps['ticket'] : $tmps['code_url'];
             $this->assign('erweima', $tmps);
         }
         $this->assign('tid', $tableid);
@@ -1002,7 +1004,7 @@ class RepastAction extends UserAction {
         $tableid = $this->_get('tid') ? intval($this->_get('tid')) : 0;
         $typ = $this->_get('typ') ? $this->_get('typ', 'trim') : false;
 
-        include './vifnn/Lib/ORG/phpqrcode.php';
+        include './PigCms/Lib/ORG/phpqrcode.php';
         if ($tableid > 0) {
             $viewUrl = C('site_url') . U('Wap/Repast/dishMenu', array('token' => $this->token, 'cid' => $this->_cid, 'tid' => $tableid));
         } else {
