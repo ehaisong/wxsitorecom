@@ -169,7 +169,7 @@
             <div class="box">
                 <div class="title-red">活动结束说明：</div>
                 <div class="Detail">
-                <p> {vifnn:$Dazpan.endinfo}</p>
+                <p  style="white-space:pre-wrap;"> {vifnn:$Dazpan.endinfo}</p>
                 </div>
             </div>
         </div>
@@ -316,7 +316,7 @@
     <div class="box">
         <div class="title-green">活动说明：</div>
         <div class="Detail">
-        <p>{vifnn:$Dazpan.info}</p>
+<p style="white-space:pre-wrap;">{vifnn:$Dazpan.info}</p>
         <?php if($Dazpan['other_source'] == ''){?><p>活动时间:{vifnn:$Dazpan.statdate|date="Y-m-d H:i",###}至{vifnn:$Dazpan.enddate|date="Y-m-d H:i",###}</p><?php }?>
         <p><strong>{vifnn:$Dazpan.txt}</strong></p>  
         </div>
@@ -627,8 +627,9 @@ window.shareData = {
             "moduleID":"{vifnn:$Dazpan.id}",
             "imgUrl": "{vifnn:$Dazpan.starpicurl}", 
             "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Lottery/index',array('token'=>$token,'id'=>$Dazpan['id'],'type'=>1))}",
-            "tTitle": "{vifnn:$Dazpan.title}",
-            "tContent": "",
+            "tTitle": "{vifnn:$Dazpan.title|shareFilter}",
+            "tContent": "{vifnn:$Dazpan.info|shareFilter}",
+			"fTitle": "{vifnn:$Dazpan.title|shareFilter}",
 			"isShareNum":1,
 			"ShareNumData":"lottery_record,wecha_id;lid,{vifnn:$wecha_id};{vifnn:$Dazpan.id},sharecount"
 };

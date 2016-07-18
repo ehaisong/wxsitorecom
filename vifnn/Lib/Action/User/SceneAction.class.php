@@ -464,7 +464,13 @@ class SceneAction extends UserAction{
 	/*ajax加载消息*/
 	public function ajaxWall(){
 		$sceneid = $this->_get('sceneid','intval');
-		$where	= array('token'=>$this->token,'wallid'=>$this->info['id'],'check_time'=>array('gt',intval($_GET['ajax_time'])), 'id'=>array('gt', $this->_get('lastid')));
+		$lastidd = $this->_get('lastidd', 'intval');
+		$where = array(
+			'token'      => $this->token,
+			'wallid'     => $this->info['id'],
+			'time'       => array('gt', $lastidd),
+			'check_time' => array('egt', $this->_get('lastid'))
+			);
 		$data 	= $this->_getWallList($where,'check_time asc,time asc','',$sceneid,'msg');
 		$result = array();
 		if($data){
@@ -792,7 +798,8 @@ class SceneAction extends UserAction{
             unset($where['id']);
             $data 	= M('Wall_message')->where($where)->order($order)->find();
 		}
-		if (empty($data) || $data['id'] == $this->_get('lastid')) {
+
+		if (empty($data)) {
 			return false;
 		}
 		$wuser_db 	= M('Wall_member');
@@ -805,7 +812,7 @@ class SceneAction extends UserAction{
 		$message['image'] 	= $data['type'] == 'image' ? 'index.php?g=User&m=Wechat_group&a=showExternalPic&url='.$data['content'].'&wecha_id='.$data['wecha_id'].$data['id'] : '';
 
 		$message['fromtype'] = 'weixin';	
-		//$message['content'] = M('Wall_message')->_sql();
+		$message['atime'] = $data['time'];
  		return $message;
 	}
 

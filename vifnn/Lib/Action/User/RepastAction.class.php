@@ -835,7 +835,7 @@ class RepastAction extends UserAction {
                     $msg = ArrayToStr::array_to_str($msg, 1);
                     $op->printit($this->token, $this->_cid, 'Repast', $msg, 1);
                 }
-                Sms::sendSms($this->token, "{$company['name']}欢迎您，本店对您的订单号为：{$thisOrder['orderid']}的订单状态进行了修改，如有任何疑意，请您及时联系本店！", $thisOrder['tel']);
+                Sms::sendSms($this->token, "你好！{$company['name']}欢迎您，本店对您的订单号为：{$thisOrder['orderid']}的订单状态进行了修改，如有任何疑意，请您及时联系本店！", $thisOrder['tel']);
                 $this->success('修改成功', U('Repast/orderInfo', array('token' => session('token'), 'id' => $thisOrder['id'])));
             } else {
                 $payarr = array('alipay' => '支付宝', 'weixin' => '微信支付', 'tenpay' => '财付通[wap手机]', 'tenpaycomputer' => '财付通[即时到帐]', 'yeepay' => '易宝支付', 'allinpay' => '通联支付', 'daofu' => '货到付款', 'dianfu' => '到店付款', 'chinabank' => '网银在线');
@@ -1004,7 +1004,7 @@ class RepastAction extends UserAction {
         $tableid = $this->_get('tid') ? intval($this->_get('tid')) : 0;
         $typ = $this->_get('typ') ? $this->_get('typ', 'trim') : false;
 
-        include './PigCms/Lib/ORG/phpqrcode.php';
+        include './vifnn/Lib/ORG/phpqrcode.php';
         if ($tableid > 0) {
             $viewUrl = C('site_url') . U('Wap/Repast/dishMenu', array('token' => $this->token, 'cid' => $this->_cid, 'tid' => $tableid));
         } else {
