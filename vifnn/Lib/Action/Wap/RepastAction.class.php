@@ -1344,7 +1344,7 @@ class RepastAction extends WapAction
 					$msg = ArrayToStr::array_to_str($msg, 0);
 					$op->printit($this->token, $this->_cid, 'Repast', $msg, 0);
 				}
-
+/*
 				if ($kitchens_list = D('Dish_kitchen')->where(array('cid' => $this->_cid))->select()) {
 					$t_list = array();
 
@@ -1379,7 +1379,7 @@ class RepastAction extends WapAction
 						}
 					}
 				}
-
+*/
 				$alipayConfig = M('Alipay_config')->where(array('token' => $this->token))->find();
 
 				if ($alipayConfig['open']) {

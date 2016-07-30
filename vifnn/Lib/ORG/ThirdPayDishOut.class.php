@@ -64,7 +64,7 @@ class ThirdPayDishOut {
                 $op->printit($token, $order['cid'], 'DishOut', $msg, $order['paid']);
 
 
-                /*厨房打印菜单*/
+/*
                 if ($kitchens_list = D('Dish_kitchen')->where(array('cid' => $order['cid']))->select()) {
 	                $t_list = array();
 	                foreach ($temp as $dish) $t_list[$dish['kitchen_id']][] = $dish;
@@ -100,7 +100,7 @@ class ThirdPayDishOut {
 	                	}
 	                }
                 }
-                /*厨房打印菜单*/
+*/
             }
             header('Location:' . U('DishOut/myOrder', array('token' => $token, 'wecha_id' => $wecha_id, 'cid' => $order['cid'])));
         } else {

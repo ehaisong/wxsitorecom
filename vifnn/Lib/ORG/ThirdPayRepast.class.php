@@ -135,7 +135,7 @@ class ThirdPayRepast
 				$msg = ArrayToStr::array_to_str($msg, 1);
 				$op->printit($token, $cid, 'Repast', $msg, 1);
 				unset($msg);
-
+/*
 				if ($kitchens_list = D('Dish_kitchen')->where(array('cid' => $cid))->select()) {
 					$j_list = $t_list = array();
 
@@ -173,7 +173,7 @@ class ThirdPayRepast
 						}
 					}
 				}
-
+*/
 				Sms::sendSms($token . '_' . $cid, '顾客' . $order['name'] . '刚刚对订单号：' . $orderid . '的订单进行了支付，请您注意查看并处理');
 				$siteurl = $_SERVER['HTTP_HOST'];
 				$siteurl = strtolower($siteurl);
