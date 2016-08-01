@@ -67,7 +67,7 @@ class CompanyAction extends UserAction{
 					if(empty($_POST['password'])) $this->error('分支登陆密码不能为空');
 					$jump_url = 'branches';
 				}
-				if($this->wxuser['winxintype'] == 3){
+				if($this->wxuser['winxintype'] == 5){
 					if($_POST['categories'] == ""){
 						$this->error('门店类型未获取到,请确定您是否开启了微信门店插件');
 					}
@@ -77,7 +77,7 @@ class CompanyAction extends UserAction{
 				$_POST['add_time'] = $_SERVER["REQUEST_TIME"];
 				$company_id = $this->company_model->add($_POST);
 				if($company_id){
-					if($this->wxuser['winxintype'] == 3){
+					if($this->wxuser['winxintype'] == 5){
 						$coupons 	= new WechatCoupons($this->wxuser);
 						$res  		= $coupons->addCompany($_POST);
 						if($res['errcode'] == 0){
@@ -93,7 +93,7 @@ class CompanyAction extends UserAction{
 					$this->error('添加失败');
 				}
 			} else {
-				if($this->wxuser['winxintype'] == 3 && $thisCompany['available_state'] == 2){
+				if($this->wxuser['winxintype'] == 5 && $thisCompany['available_state'] == 2){
 					$this->error('门店还在审核中');
 				}
 				$amap = new amap();
@@ -117,7 +117,7 @@ class CompanyAction extends UserAction{
 					$update = $this->company_model->where($where)->save($_POST);
 					$_POST['id'] = $thisCompany['id'];
 					if($update){
-						if($this->wxuser['winxintype'] == 3){
+						if($this->wxuser['winxintype'] == 5){
 							$coupons 	= new WechatCoupons($this->wxuser);
 							$res  		= $coupons->updatepoi($_POST);
 							if($res['errcode'] == 0){
@@ -133,7 +133,7 @@ class CompanyAction extends UserAction{
 				}
 			}
 		} else {
-			if($this->wxuser['winxintype'] == 3){
+			if($this->wxuser['winxintype'] == 5){
 				$category_list = include('./vifnn/Lib/ORG/CategoryList.php');
 			}
 			$this->assign('category_list',$category_list['category_list']);
@@ -174,7 +174,7 @@ class CompanyAction extends UserAction{
 		$where=array('token'=>$this->token,'id'=>intval($_GET['id']));
 		$jump = ($_GET['isBranch'] == 1) ? 'branches' : 'index';
 		$thisCompany=$this->company_model->where($where)->find();
-		if($this->wxuser['winxintype'] == 3 && $thisCompany['available_state'] == 2){
+		if($this->wxuser['winxintype'] == 5 && $thisCompany['available_state'] == 2){
 			$this->error('门店还在审核中');
 		}
 		$rt=$this->company_model->where($where)->delete();
