@@ -53,7 +53,7 @@
 			<div class="total_money" style="display: block;"><span>恭喜你，抢到红包啦！</span>赶紧<if condition="$getway eq 1 || $getway eq ''">领取<else />充值</if>吧~</div>
 			<!--按钮样式 start-->
 			<button style="list-style-type:none;border-top-style: none;border-right-style: none;border-bottom-style: none;border-left-style: none;" id="get_way" way='<if condition="$getway eq 1 || $getway eq ''">1<else />2</if>'><div class="invite_btn" style="display: block;top:70%"><if condition="$getway eq 1 || $getway eq ''">领取红包<else />会员卡充值</if></div>  </button>
-			<div class="total_count" style="bottom: 9%;"><div>已有<span>{vifnn:$total}</span>人抢红包</div><!--a href="javascript:void(0)" class="active_rule">活动规则</a--></div>
+			<div class="total_count" style="bottom: 9%;"><div>已有<span class="total">0</span>人抢红包</div><!--a href="javascript:void(0)" class="active_rule">活动规则</a--></div>
 		</div>
 		<div id="common_packets"></div>
 		<!--幸运大神  合体进度   end-->
@@ -80,10 +80,6 @@
  <div id="note"></div> 
 <script>
 $(function(){
-	//加载幸运大神和我的进度公共数据
-	$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
-		$("#common_packets").html(data);
-	});
 	$("#get_way").click(function(){
 		$(this).attr("disabled","disabled");
 		var way = $(this).attr('way') ? $(this).attr('way') : 1;
@@ -128,6 +124,16 @@ $(function(){
 	$(".progress_status").find('li').eq(1).click(function(){
 		window.location.href='{vifnn::U("packets", array("id" => $action_id ,"token" => $token))}';
 	});
+	//幸运大神
+	setTimeout(
+		$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
+			$("#common_packets").html(data);
+	}),500);
+	//总共参与人数
+	setTimeout(
+		$.get('{vifnn::U("gettotal", array("id" => $action_id))}',function(data){
+			$(".total").text(data);
+	}),500);
 });
 function note_popup(){
 	if(!$('#note').is(':visible')){ 

@@ -47,27 +47,18 @@
 			<div class="total_money1" style="display: block;top:26%"><span>你的好友'{vifnn:$grabber.grabber_nickname}'</span>正在参加微信合体红包活动,帮他合体将增大他的红包金额~</div>
 			<div id="combine_btn" style="bottom: 16%;">我也要抢</div>
 			<div id="combine_bt" style="bottom: 35%;">帮他合体</div>
-			<div class="total_count"><div>已有<span>{vifnn:$total}</span>人抢红包</div><!--a href="javascript:void(0)" class="active_rule" data-toggle="modal" data-target="#active_rule_pop">活动规则</a--></div>
+			<div class="total_count"><div>已有<span class="total">0</span>人抢红包</div><!--a href="javascript:void(0)" class="active_rule" data-toggle="modal" data-target="#active_rule_pop">活动规则</a--></div>
 			<!--注册信息填写  end-->
 		</div>
 		<div id="common_packets"></div>
 	</section>
-		<footer data-role="footer"><div id="copyright">
-					<if condition="$iscopyright eq 1">
-                        {vifnn:$homeInfo.copyright}
-                        <else/>
-                        {vifnn:$siteCopyright}
-                        </if>
-		</div></footer>
+		<footer data-role="footer"><div id="copyright"></div></footer>
 	</div>
 </div>
 <!--提示信息-->
  <div id="note"></div> 
 <script>
 $(function(){
-	$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
-		$("#common_packets").html(data);
-	});
 	$(".progress_status").find('li').eq(1).click(function(){
 		window.location.href='{vifnn::U("packets", array("id" => $action_id ,"token" => $token))}';
 	});
@@ -88,6 +79,16 @@ $(function(){
 			note_popup();
 	});
 	});
+	//幸运大神
+	setTimeout(
+		$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
+			$("#common_packets").html(data);
+	}),500);
+	//总共参与人数
+	setTimeout(
+		$.get('{vifnn::U("gettotal", array("id" => $action_id))}',function(data){
+			$(".total").text(data);
+	}),500);
 });
 function note_popup(){
 	if(!$('#note').is(':visible')){ 

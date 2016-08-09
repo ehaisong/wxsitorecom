@@ -43,11 +43,11 @@
 		<!--注册信息填写  start-->
 		<div id="register">
 			<div id="combine_btn" style="bottom: 23%;" onclick="packets_grab()">抢红包</div>
-			<div class="total_count"><div>已有<span>{vifnn:$total}</span>人抢红包</div><a href="javascript:void(0)" class="active_rule" onclick="show_rules()">活动规则</a></div>
+			<div class="total_count"><div>已有<span class="total">0</span>人抢红包</div><a href="javascript:void(0)" class="active_rule" onclick="show_rules()">活动规则</a></div>
 		</div>
 		<div class="info" style="display:none">
 			<div id="combine_btn" style="bottom: 23%;" onclick="packets_grab_1()">抢红包</div>
-			<div class="total_count"><div>已有<span>{vifnn:$total}</span>人抢红包</div><a href="javascript:void(0)" class="active_rule" onclick="show_rules()">活动规则</a></div>
+			<div class="total_count"><div>已有<span class="total">0</span>人抢红包</div><a href="javascript:void(0)" class="active_rule" onclick="show_rules()">活动规则</a></div>
 		</div>
 		<div id="common_packets"></div>
 		<!--活动规则 start-->
@@ -79,9 +79,6 @@ function packets_grab_1(){
 	window.location.href='{vifnn::U("grab_packet", array("id" => $action_id ,"token" => $token))}';
 }
 $(function(){
-	$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
-		$("#common_packets").html(data);
-	});
 	var isgrabbed = "{vifnn:$isgrabbed}";
 	$(".progress_status").find('li').eq(1).click(function(){
 		if(isgrabbed == 0){
@@ -97,10 +94,16 @@ $(function(){
 		}
 		window.location.href='{vifnn::U("my_wallet", array("id" => $action_id ,"token" => $token))}';
 	});
-	//抢红包
-/*	$("#combine_btn").click(function(){
-		window.location.href='{vifnn::U("grab_packet", array("id" => $action_id ,"token" => $token))}';
-	});*/
+	//幸运大神
+	setTimeout(
+		$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
+			$("#common_packets").html(data);
+	}),500);
+	//总共参与人数
+	setTimeout(
+		$.get('{vifnn::U("gettotal", array("id" => $action_id))}',function(data){
+			$(".total").text(data);
+	}),500);
 });
 function show_rules(){
 	$("#register").html($('.rules').html());

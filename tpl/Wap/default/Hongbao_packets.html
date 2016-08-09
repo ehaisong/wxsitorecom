@@ -44,7 +44,7 @@
 			<div class="total_money" style="display: block;"><span>恭喜你，抢到红包啦！</span>赶紧找好友合体，抢红包啦~</div>
 			<!--按钮样式 start-->
 			<div id="find_helper" class="invite_btn" style="display: block;"><if condition="($sharetimes - $my_share_times) gt 0">还需{vifnn:$sharetimes-$my_share_times}人合体 <else />找人合体</if></div> 
-			<div class="total_count"><div>已有<span>{vifnn:$total}</span>人抢红包</div><!--a href="javascript:void(0)" class="active_rule">活动规则</a--></div>
+			<div class="total_count"><div>已有<span class="total">0</span>人抢红包</div><!--a href="javascript:void(0)" class="active_rule">活动规则</a--></div>
 		</div>
 		<div id="common_packets"></div>
 		<!--活动规则 start-->
@@ -63,13 +63,7 @@
 		</div>
 		<!--活动规则 end-->
 	</section>
-		<footer data-role="footer"><div id="copyright">
-					<if condition="$iscopyright eq 1">
-                        {vifnn:$homeInfo.copyright}
-                        <else/>
-                        {vifnn:$siteCopyright}
-                        </if>
-		</div></footer>
+		<footer data-role="footer"><div id="copyright"></div></footer>
 	</div>
 </div>
 <div class="share">
@@ -77,9 +71,6 @@
 </div>
 <script type="text/javascript">
 $(function(){
-	$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
-		$("#common_packets").html(data);
-	});
 	$("#find_helper").click(function(){
 		$(".share").show() ;
 		
@@ -93,6 +84,16 @@ $(function(){
 	$(".progress_status").find('li').eq(2).click(function(){
 		window.location.href='{vifnn::U("my_wallet", array("id" => $action_id ,"token" => $token))}';
 	});
+	//幸运大神
+	setTimeout(
+		$.get('{vifnn::U("common_packets", array("id" => $action_id ,"token" => $token))}',function(data){
+			$("#common_packets").html(data);
+	}),500);
+	//总共参与人数
+	setTimeout(
+		$.get('{vifnn::U("gettotal", array("id" => $action_id))}',function(data){
+			$(".total").text(data);
+	}),500);
 });
 
 	window.shareData = {  

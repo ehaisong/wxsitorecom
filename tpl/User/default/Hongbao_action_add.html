@@ -34,9 +34,9 @@
   <if condition="$set.reply_pic neq ''">
 	<img class="thumb_img" id="picurl_src1" src="{vifnn:$set.reply_pic}" style="max-height:100px;max-width: 200px;">
 	<else />
-	<img class="thumb_img" id="picurl_src1" src="{vifnn:$f_siteUrl}/tpl/static/hongbao/images/weixinheti.png" style="max-height:100px;max-width: 200px;">
+	<img class="thumb_img" id="picurl_src1" src="{vifnn:$staticPath}/tpl/static/hongbao/images/weixinheti.png" style="max-height:100px;max-width: 200px;">
   </if>
-  <input type="text" name="reply_pic" value='<if condition="$set[\'reply_pic\'] neq ''">{vifnn:$set.reply_pic}<else/>{vifnn:$f_siteUrl}/tpl/static/hongbao/images/weixinheti.png</if>' id="pic1" class="px" style="width:200px;" >
+  <input type="text" name="reply_pic" value='<if condition="$set[\'reply_pic\'] neq ''">{vifnn:$set.reply_pic}<else/>{vifnn:$staticPath}/tpl/static/hongbao/images/weixinheti.png</if>' id="pic1" class="px" style="width:200px;" >
   <a href="###" onclick="upyunPicUpload('pic1',365,158,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('pic1')">预览</a>   &nbsp; 建议图片尺寸365*158，图片大小不超过300K</td>
 </tr>
 <tr>
@@ -63,15 +63,24 @@
 </tbody>
 </table>
   	<table class="userinfoArea" style=" margin: 0;" border="0" cellspacing="0" cellpadding="0" width="100%">
-  		<tbody>			
-			<tr>
+  		<tbody>
+  		<php>if(session('is_syn') == '2'){</php>
+			<tr hidden="hidden">
+  				<td>
+	  				<input type="radio" name="need_follow" value="2" checked >
+  				</td>
+  			</tr>
+		<php>}else{</php>	
+		<tr>
   				<th>未关注是否可以参与：</th>
   				<td>
 	  				<input type="radio" name="need_follow" value="1" <if condition="$set.need_follow eq 1 || $set.need_follow eq ''"> checked </if>>否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	  				<input type="radio" name="need_follow" value="2" <if condition="$set.need_follow eq 2"> checked </if>>是&nbsp;&nbsp;&nbsp;&nbsp;<span>{vifnn:$__access_remind__}</span>
   				</td>
-  			</tr>
-			 <tr>
+  			</tr>		
+			
+  		<php>}</php>
+  		<tr>
   				<th>是否需要粉丝信息：</th>
   				<td>
 	  				<input type="radio" name="need_phone" value="1" <if condition="$set.need_phone eq 1 || $set.need_phone eq ''"> checked </if>>是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -79,7 +88,6 @@
 					 &nbsp;&nbsp;&nbsp;&nbsp;(没有粉丝详细信息参加活动的处理方式)
   				</td>
   			</tr>
-        
         <tr>
           <th valign="top"><span class="red">*</span>随机金额范围：</th>
           <td>
@@ -98,6 +106,18 @@
           <th valign="top"><span class="red">*</span>分享人数：</th>
           <td>
             <input type="input" class="px" id="sharetimes" name="sharetimes"   value="{vifnn:$set.sharetimes}" />
+          </td>
+          </tr>
+		  		<tr>
+          <th valign="top"><span class="red">*</span>限制参与人数：</th>
+          <td>
+            <input type="input" class="px" id="limit_join" name="limit_join"   value="{vifnn:$set.limit_join}" />&nbsp;&nbsp;&nbsp;限制手机端抢红包人数,0表示不限制
+          </td>
+          </tr>
+		  <tr>
+          <th valign="top">领取记录显示条数：</th>
+          <td>
+            <input type="input" class="px" id="display_nums" name="display_nums" <if condition="$set['display_nums'] neq ''">value="{vifnn:$set.display_nums}"<else /> value="0"</if> />&nbsp;&nbsp;&nbsp;限制手机端领取记录显示的条数,默认显示100条
           </td>
           </tr>
 		   <tr>
@@ -152,6 +172,9 @@ $(function(){
 		var sharetimes = $("#sharetimes").val();
 		var remind_link = $("#remind_link").val();
 		var remind_word = $("#remind_word").val();
+		var display_nums = $("#display_nums").val();
+		var limit_join = $("#limit_join").val();
+		var number = /^[0-9]\d*$/;
 		var msg = '';
 		if(action_name == ''){
 			msg += '活动名称不能为空\n';
@@ -185,12 +208,22 @@ $(function(){
 		}
 		if(sharetimes == ''){
 			msg += '分享次数不能为空\n';
+		}else if(!number.test(sharetimes)){
+			msg += '分享次数请输入整数\n';
+		}
+		if(limit_join == ''){
+			msg += '限制参与人数不能为空\n';
+		}else if(!number.test(limit_join)){
+			msg += '限制参与人数输入整数\n';
 		}
 		if(remind_link == ''){
 			msg += '提示连接不能为空\n';
 		}
 		if(remind_word == ''){
 			msg += '提示语不能我空';
+		}
+		if(!number.test(display_nums)){
+			msg += '领取记录显示条数请输入整数\n';
 		}
 		if(msg != ''){
 			alert(msg);

@@ -53,7 +53,7 @@ class Hongbao extends Hongbao_common{
 			$this->key 		 = trim($this->weixin['weixin']['key']);
 		}
 		$this->openid 	 = $config['openid'];
-		$this->money  	 = (float)$config['money'];
+		$this->money = (double) $config["money"];
 		$this->total_num = ($config['total_num']) ? (int)$config['total_num'] : 1;
 		$this->nick_name = (!empty($config['nick_name'])) ? $config['nick_name'] : '合体红包';
 		$this->send_name = (!empty($config['send_name'])) ? $config['send_name'] : '合体红包';
@@ -88,9 +88,11 @@ class Hongbao extends Hongbao_common{
 		$this->parameters = array();
 		$this->setParameter('nonce_str',$this->createNoncestr());
 		$this->setParameter('mch_id',$this->mchid);
-		$this->setParameter('sub_mch_id',$this->sub_mch_id);
-		$this->setParameter('wxappid',$this->wxappid);
-		$this->setParameter('msgappid',$this->msgappid);
+		if (($this->sub_mch_id != "") && ($this->msgappid != "")) {
+		        $this->setParameter('sub_mch_id',$this->sub_mch_id);
+			$this->setParameter("msgappid", $this->msgappid);
+		}
+		$this->setParameter("wxappid", $this->wxappid);
 		$this->setParameter('nick_name',$this->nick_name);
 		$this->setParameter('send_name',$this->send_name);
 		$this->setParameter('total_num',1);
@@ -315,3 +317,4 @@ class Hongbao extends Hongbao_common{
 		}
 	}
 }
+?>

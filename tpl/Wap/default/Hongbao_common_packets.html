@@ -13,7 +13,9 @@
 				<div class="luck_con swipe_con">
 				<vifnnif where="$lucky_guys neq ''">
 				<volist name="lucky_guys" id="vo">
-					<div class="luck-manito"><ul><li><img src="{vifnn:$vo.grabber_headimgurl}"></li><li><div><span class="nickname">{vifnn:$vo.grabber_nickname}</span><span class="date">{vifnn:$vo.grabber_time|date="m-d H:i",###}</span></div><!--div><p>{vifnn:$vo.share_content}</p></div--></li><li>{vifnn:$vo.money}元</li></ul></div>
+					<if condition="$vo['isgrabbed'] neq 0">
+						<div class="luck-manito"><ul><li><img src="{vifnn:$vo.grabber_headimgurl}"></li><li><div><span class="nickname">{vifnn:$vo.grabber_nickname}</span><span class="date">{vifnn:$vo.grabber_time|date="m-d H:i",###}</span></div><!--div><p>{vifnn:$vo.share_content}</p></div--></li><li>{vifnn:$vo.money}元</li></ul></div>
+					</if>
 					</volist>	
 					<else />
 					<div class="fit-plan_end">
