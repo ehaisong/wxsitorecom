@@ -47,8 +47,12 @@
         </volist>
     </ul>
 </section><!--container end-->
-<div style="height: 34px;line-height: 34px;font-size: 12px;background: #e3e2dd;text-align: center;color: #999;">
-  <p>技术支持：<a href="http://m.gexia.com/" target="_blank" style="color: #666666;text-decoration: none;">{vifnn:$tpl['wxname']}</a></p>
+<div style="height: 34px;line-height: 34px;font-size: 12px;text-align: center;color: #999;">
+<if condition="$iscopyright eq 1">
+{vifnn:$homeInfo.copyright}
+<else/>
+{vifnn:$siteCopyright}
+</if>
 </div>
 <script type="text/javascript">
 var _initX = 0;

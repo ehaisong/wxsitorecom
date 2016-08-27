@@ -1,0 +1,106 @@
+<include file="Public:head" />
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/bargain/css/cymain.css" />
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">优惠接力</h4>
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<a href="{vifnn::U('User/YouSetDiscount/set',array('token'=>$token))}" title="添加活动" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/product/add.png" width="16" class="vm">添加活动</a>
+		</div>
+		<div class="searchbar right">
+			<input type="text" id="msgSearchInput" class="txt left" placeholder="输入活动名称搜索" name="search" value="<?php echo $_GET['search'];?>" style="margin-top:13px;width:200">
+			<a value="搜索" id="msgSearchBtn" href="javascript:search();" class="btnGrayS" title="搜索" style="margin-top:10px">搜索</a>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th width="120px">活动名称</th>
+					 <if condition="$Think.session.is_syn ELT 0"><th width="100px">关键词</th></if>
+					<th width="140px">开始/结束时间</th>
+					<th width="50px">类型</th>
+					<th width="50px">状态</th>
+					<th width="">参与人数</th>
+					<th width="">未兑换人数</th>
+					<th width="">已兑换人数</th>
+					<th class="norightborder">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<volist name="list" id="lv">
+				<tr>
+					<td>{vifnn:$lv.name}</td>
+					 <if condition="$Think.session.is_syn ELT 0"><td>{vifnn:$lv.keyword}</td></if>
+					<td>
+						{vifnn:$lv.startdate|date="Y-m-d H:i:s",###}
+						<br/>
+						{vifnn:$lv.enddate|date="Y-m-d H:i:s",###}
+					</td>
+					<td><?php echo $lv['discount_type']==1?'金额':'折扣';?></td>
+					<td><?php echo $lv['is_open']?'<span style="color:red">已关闭</span>':'<span style="color:green">已开启</span>';?></td>
+					<td>{vifnn:$lv.allcount}</td>
+					<td>{vifnn:$lv.wdhcount}</td>
+					<td>{vifnn:$lv.ydhcount}</td>
+					<td class="norightborder">
+					<if condition="$Think.session.is_syn eq 2">
+<if condition="$usertplid neq 2">
+	<script type="text/javascript">
+   $(document).ready(function(){
+      var bheight=document.body.clientHeight;
+      $("#lay{vifnn:$lv.id}").click(function(){
+   $("#brg{vifnn:$lv.id}").css("display","block");
+   $("#showdiv{vifnn:$lv.id}").css("display","block");
+   //$("#testdiv").load("test.html");
+   });
+   $("#close{vifnn:$lv.id}").click(function(){
+      $("#brg{vifnn:$lv.id}").css("display","none");
+   $("#showdiv{vifnn:$lv.id}").css("display","none");
+   });
+   });
+ </script>
+ <style type="text/css">
+   #brg{vifnn:$lv.id}{ width:100%; height:100%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
+   #showdiv{vifnn:$lv.id}{z-index:20; display:none;position:fixed; *position:absolute; width:100px; height:100px; top:20%; left:50%; margin:-50px 0 0 -50px;}
+   #testdiv{vifnn:$lv.id}{ width:300px; height:300px; margin:0 auto; border:1px solid #4d4d4d; background:#f2f2f2;}
+   #close{vifnn:$lv.id}{width:300px; height:27px; line-height:27px; font-size:14px; font-weight:bold; border:1px solid #4d4d4d; text-align:center; cursor:pointer; margin:0 auto; background:#333; color:#fff;margin-top: 15%;}
+ </style>
+	 <div id="brg{vifnn:$lv.id}"></div>
+ <div id="showdiv{vifnn:$lv.id}">
+   <div id="close{vifnn:$lv.id}">您想关闭就点我吧</div>
+   <div id="testdiv{vifnn:$lv.id}"><img src="{vifnn:$Think.session.source_domain}/wap.php?c=Wxapp&a=qrcode&id={vifnn:$lv.id}&modle=Yousetdiscount" width="300" height="300" class="cateimg_small"></div>
+ </div>
+	<a id="lay{vifnn:$lv.id}"  style="width:75px;">查看二维码</a>
+</if>
+</if>
+						<a href="{vifnn::U('User/YouSetDiscount/data',array('id'=>$lv['id'],'token'=>$token))}">数据</a>
+						<a href="{vifnn::U('User/YouSetDiscount/set',array('id'=>$lv['id'],'token'=>$token))}">修改</a>
+						<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('User/YouSetDiscount/del',array('id'=>$lv['id'],'token'=>$token))}');">删除</a>
+					</td>
+				</tr>
+				</volist>
+			</tbody>
+		</table>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator right">
+			<div class="pages">{vifnn:$page}</div>
+		</div>
+		<div class="clr"></div>
+	</div>
+</div>
+<script>
+	$(document).ready(function(){});
+	function search(){
+		var search = $("input[name='search']").val();
+		if(search != ""){
+			window.location.href="{vifnn::U('User/YouSetDiscount/index',array('token'=>$token))}&search="+search;
+		}else{
+			window.location.href="{vifnn::U('User/YouSetDiscount/index',array('token'=>$token))}";
+		}
+	}
+</script>
+<include file="Public:footer" />
