@@ -1,0 +1,100 @@
+<include file="Public:head"/>
+<include file="Public:bs"/>
+
+<div class="container-fluid">
+    
+    <div class="page-header">
+      <h1>推广设置 <small>全局推广参数设置</small></h1>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">基本设置</div>
+        <div class="panel-body">
+            <form class="form-horizontal" method="post">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">全局开关</label>
+                    <div class="col-sm-10">
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="1" <if condition="$option['status'] eq 1">checked="checked"</if> /> 开启推广
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="status" value="0" <if condition="$option['status'] eq 0">checked="checked"</if> /> 关闭推广
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">推广二维码</label>
+                    <div class="col-sm-10">
+                        <label class="radio-inline">
+                            <input type="radio" name="qrcode_type" value="1" <if condition="$option['qrcode_type'] eq 1">checked="checked"</if> /> 永久（最多生成10万个）
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="qrcode_type" value="0" <if condition="$option['qrcode_type'] eq 0">checked="checked"</if> /> 临时（无上限，但二维码有效期为30天）
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="auto_group_id" class="col-sm-2 control-label">推广员自动分组</label>
+                    <div class="col-sm-10">
+                        <select id="auto_group_id" name="auto_group_id" class="form-control">
+                        <volist name="groups" id="row">
+                            <option value="{vifnn::$row['wechatgroupid']}" <if condition="$option['auto_group_id'] eq $row['wechatgroupid']">selected="selected"</if> >{vifnn::$row['name']}</option>
+                        </volist>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="validity" class="col-sm-2 control-label">推广有效期</label>
+                    <div class="col-sm-10">
+                        <select id="validity" name="validity" class="form-control">
+                        <volist name="validity" id="row">
+                            <option value="{vifnn::$row[0]}" <if condition="$option['validity'] eq $row[0]">selected="selected"</if> >{vifnn::$row[1]}</option>
+                        </volist>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="min_cash_amount" class="col-sm-2 control-label">最低提现金额</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="min_cash_amount" name="min_cash_amount" value="{vifnn::$option['min_cash_amount']}" placeholder="例如：100" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-danger">
+        <div class="panel-heading">推广佣金</div>
+        <div class="panel-body">
+            <form class="form-horizontal" method="post">
+                <div class="form-group">
+                    <label for="sale_commission" class="col-sm-2 control-label">订单佣金</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="sale_commission" name="sale_commission" value="{vifnn::$option['sale_commission']}" placeholder="请输入固定金额或百分比，例如：1 或 1%" required="required" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register_commission" class="col-sm-2 control-label">关注佣金</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="register_commission" name="register_commission" value="{vifnn::$option['register_commission']}" placeholder="请输入固定金额，例如：1，表示一个有效关注佣金为1元" required="required" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-danger">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<include file="Public:foot"/>
