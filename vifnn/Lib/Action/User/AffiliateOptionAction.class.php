@@ -13,8 +13,7 @@ class AffiliateOptionAction extends UserAction
 
         // 偶尔会出现公众号ID为空的情况
         if (empty($this->wxuser['id'])) {
-            $this->error('公众号参数丢失，请重新登录！');
-            return;
+            return $this->error('公众号参数丢失，请重新登录！');
         }
 
         // 初始化推广参数
@@ -65,14 +64,20 @@ class AffiliateOptionAction extends UserAction
         }
 
         if (!empty($data2save)) {
+            if (isset($data2save['sale_commission'])) {
+                if (!preg_match('/^\d+(.\d{1,2})?%?$/', $data2save['sale_commission'])) {
+                    return $this->error('订单佣金错误，请输入数字或百分比！');
+                }
+            }
+
             $data2save['wxuser_id'] = $this->wxuser['id'];
             if (M('Affiliate_option')->save($data2save)) {
-                $this->success('恭喜，设置成功！');
+                return $this->success('恭喜，设置成功！');
             } else {
-                $this->success('您未更新或保存失败！');
+                return $this->success('您未更新或保存失败！');
             }
         } else {
-            $this->error('您没有提交可用的数据。');
+            return $this->error('您没有提交可用的数据。');
         }
     }
 
