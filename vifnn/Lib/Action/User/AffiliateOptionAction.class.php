@@ -10,7 +10,13 @@ class AffiliateOptionAction extends UserAction
     public function _initialize()
     {
         parent::_initialize();
-        
+
+        // 偶尔会出现公众号ID为空的情况
+        if (empty($this->wxuser['id'])) {
+            $this->error('公众号参数丢失，请重新登录！');
+            return;
+        }
+
         // 初始化推广参数
         $this->affiliate_option = M('Affiliate_option')->where(array('wxuser_id' => $this->wxuser['id']))->find();
         if (empty($this->affiliate_option)) {
