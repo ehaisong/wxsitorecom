@@ -8,7 +8,11 @@
 
 <div class="container-fluid">
     
-    <div class="page-header"><h1>制作海报 <small>请在素材上框选二维码区域大小及位置，然后点击保存海报！</small></h1></div>
+    <div class="page-header">
+        <h1>制作海报 <small>请在素材上框选二维码区域大小及位置，然后点击保存海报！</small>
+        <a class="btn btn-danger pull-right" href="javascript:window.history.go(-1);"><i class="glyphicon glyphicon-menu-left"></i> 返回</a>
+        </h1>
+    </div>
     <div class="row">
         <div class="col-sm-4 text-center"><a class="btn btn-lg btn-success <if condition="$banner['id'] neq 0">disabled</if>" href="javascript:;" onclick="upyunPicUpload('current_filepath', 10000, 10000, '{vifnn:$token}')"><i class="glyphicon glyphicon-upload"></i> 1:上传/选取素材</a></div>
         <div class="col-sm-4 text-center"><a class="btn btn-lg btn-warning <if condition="$banner['id'] neq 0">disabled</if>" href="javascript:;" id="beginmake"><i class="glyphicon glyphicon-picture"></i> 2:开始制作</a></div>

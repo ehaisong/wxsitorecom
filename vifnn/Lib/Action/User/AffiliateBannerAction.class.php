@@ -23,13 +23,13 @@ class AffiliateBannerAction extends UserAction
     {
         $model = M('affiliate_banner');
 
-        $where = [];
+        $where = array();
         $where['wxuser_id'] = $this->wxuser['id'];
         
         $count = $model->where($where)->count();
         $page = new Page($count, 20);
 
-        $banner = $model->where($where)->limit($page->firstRow . ',' . $page->listRows)->select();
+        $banner = $model->where($where)->order('`id` desc')->limit($page->firstRow . ',' . $page->listRows)->select();
         $this->assign('page', $page->show());
         $this->assign('banner', $banner);
         
@@ -46,7 +46,7 @@ class AffiliateBannerAction extends UserAction
         }
 
         // 如果传入ID，则编辑对应的海报
-        $banner = [
+        $banner = array(
             'id' => 0,
             'name' => '',
             'filepath' => '',
@@ -55,13 +55,13 @@ class AffiliateBannerAction extends UserAction
             'x2' => 100,
             'y2' => 100,
             'is_enable' => 0,
-        ];
+        );
         $id = $this->_get('id','intval');
         if (!empty($id)) {
-            $where = [
+            $where = array(
                 'id' => $id,
                 'wxuser_id' => $this->wxuser['id'],
-            ];
+            );
             $banner = M('affiliate_banner')->where($where)->find();
             if (empty($banner)) {
                 return $this->error('没有找到您要编辑的海报！');
@@ -85,7 +85,7 @@ class AffiliateBannerAction extends UserAction
         $sql .= ' and `id` = ' . $id;
 
         M('affiliate_banner')->query($sql);
-        $this->success('禁用海报成功', U(MODULE_NAME . '/index', ['_rand' => time()]));
+        $this->success('禁用海报成功', U(MODULE_NAME . '/index', array('_rand' => time())));
     }
 
     /**
@@ -101,7 +101,7 @@ class AffiliateBannerAction extends UserAction
 
         M('affiliate_banner')->query($sql);
         $this->disableAll($id);
-        $this->success('启用海报成功', U(MODULE_NAME . '/index', ['_rand' => time()]));
+        $this->success('启用海报成功', U(MODULE_NAME . '/index', array('_rand' => time())));
     }
 
     /**
@@ -110,7 +110,7 @@ class AffiliateBannerAction extends UserAction
      */
     private function smartysave()
     {
-        $data = [];
+        $data = array();
         $data['name'] = $this->_post('name', 'string');
         $data['filepath'] = $this->_post('filepath', 'string');
         $data['x1'] = $this->_post('x1', 'integer');
@@ -122,17 +122,21 @@ class AffiliateBannerAction extends UserAction
             $data['is_enable'] = 0;
         }
 
-        $data['filepath'] = preg_replace('/^http(s)?:\/\//', '', $data['filepath']);
-        $data['filepath'] = str_replace($_SERVER["SERVER_NAME"], '', $data['filepath']);
+        if (preg_match('/^http(s)?:/\/\/', $data['filepath'])) {
+            $data['filepath'] = preg_replace('/^http(s)?:\/\//', '', $data['filepath']);
+            $pathinfo = explode('/', $data['filepath']);
+            array_shift($pathinfo);
+            $data['filepath'] = join('/', $pathinfo);
+        }
 
         $abspath = THINK_PATH . $data['filepath'];
         if (!file_exists($abspath)) {
-            return $this->error('素材文件不存在！');
+            return $this->error('素材文件不存在！' . $abspath);
         }
         $im = getimagesize($abspath);
         $data['origin_width'] = $im[0];
         $data['origin_height'] = $im[1];
-        if (!in_array($im[2], [2,3])) {    // 2 jpg, 3 png
+        if (!in_array($im[2], array(2, 3))) {    // 2 jpg, 3 png
             return $this->error('素材文件必须是JPG或PNG格式！');
         }
 
@@ -183,14 +187,14 @@ class AffiliateBannerAction extends UserAction
      */
     public function delete()
     {
-        $where = [];
+        $where = array();
         $where['id'] = $this->_get('id', 'intval');
         $where['wxuser_id'] = $this->wxuser['id'];
 
         if(M('affiliate_banner')->where($where)->delete()) {
-            $this->success('删除成功', U(MODULE_NAME . '/index', ['_rand' => time()]));
+            $this->success('删除成功', U(MODULE_NAME . '/index', array('_rand' => time())));
         }else{
-            $this->error('删除失败', U(MODULE_NAME . '/index'), ['_rand' => time()]);
+            $this->error('删除失败', U(MODULE_NAME . '/index'), array('_rand' => time()));
         }
     }
 
