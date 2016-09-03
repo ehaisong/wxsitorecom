@@ -1,0 +1,135 @@
+<include file="Public:head"/>
+<include file="Public:bs"/>
+<link href="{vifnn::STATICS}/imgareaselect/css/imgareaselect-default.css" rel="stylesheet" type="text/css" />
+<script src="{vifnn::STATICS}/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn::STATICS}/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn::STATICS}/upyun.js?{vifnn::date('YmdHis',time())}"></script>
+<script src="{vifnn::STATICS}/imgareaselect/scripts/jquery.imgareaselect.min.js"></script>
+
+<div class="container-fluid">
+    
+    <div class="page-header"><h1>制作海报 <small>请在素材上框选二维码区域大小及位置，然后点击保存海报！</small></h1></div>
+    <div class="row">
+        <div class="col-sm-4 text-center"><a class="btn btn-lg btn-success <if condition="$banner['id'] neq 0">disabled</if>" href="javascript:;" onclick="upyunPicUpload('current_filepath', 10000, 10000, '{vifnn:$token}')"><i class="glyphicon glyphicon-upload"></i> 1:上传/选取素材</a></div>
+        <div class="col-sm-4 text-center"><a class="btn btn-lg btn-warning <if condition="$banner['id'] neq 0">disabled</if>" href="javascript:;" id="beginmake"><i class="glyphicon glyphicon-picture"></i> 2:开始制作</a></div>
+        <div class="col-sm-4 text-center"><a class="btn btn-lg btn-primary" href="javascript:;" id="showBannerModal"><i class="glyphicon glyphicon-ok"></i> 3:保存海报</a></div>
+    </div>
+    <input type="text" id="current_filepath" class="form-control col-sm-12 text-center mt10" readonly="readonly" placeholder="请上传或选取素材..." value="{vifnn::$banner['filepath']}" />
+    <div class="text-center">
+        <img id="banner" class="mt10" src="{vifnn::$banner['filepath']}" />
+    </div>
+
+    <div id="bannerModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">保存海报</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="bannerForm" method="POST">
+                        <input type="hidden" name="filepath" id="filepath" value="{vifnn::$banner['filepath']}" />
+                        <input type="hidden" name="x1" id="x1" value="{vifnn::$banner['x1']}" />
+                        <input type="hidden" name="y1" id="y1" value="{vifnn::$banner['y1']}" />
+                        <input type="hidden" name="x2" id="x2" value="{vifnn::$banner['x2']}" />
+                        <input type="hidden" name="y2" id="y2" value="{vifnn::$banner['y2']}" />
+                        <input type="hidden" name="id" id="id" value="{vifnn::$banner['id']}" />
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">海报名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" name="name" maxlength="60" value="{vifnn::$banner['name']}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="is_enable" value="1" <if condition="$banner['is_enable'] eq 1">checked="checked"</if> /> 启用（任何时候只能有一个海报处于启用状态）</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="save">保存</button>
+                    &nbsp;&nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+</div>
+
+<script type="text/javascript">
+var __ias__ = null;
+function initIas() {
+    var filepath = $('#current_filepath').val();
+    if (filepath == '') {
+        return false;
+    }
+
+    $('img#banner').attr('src', filepath);
+    if (__ias__ != null) {
+        __ias__.setOptions({ remove: true });
+        __ias__.update();
+        __ias__ = null;
+    }
+    __ias__ = $('img#banner').imgAreaSelect({
+        persistent: true,
+        instance: true,
+        handles: true,
+        maxWidth: 400,
+        minWidth: 100,
+        x1: $('input[name="x1"]').val(),
+        y1: $('input[name="y1"]').val(),
+        x2: $('input[name="x2"]').val(),
+        y2: $('input[name="y2"]').val(),
+        aspectRatio: '1:1',
+        onSelectEnd: function (img, selection) {
+            $('input[name="x1"]').val(selection.x1);
+            $('input[name="y1"]').val(selection.y1);
+            $('input[name="x2"]').val(selection.x2);
+            $('input[name="y2"]').val(selection.y2);            
+        },
+    });
+}
+$(document).ready(function () {
+
+// 初始化IAS
+initIas();
+
+$('#beginmake').click(function(){
+    var filepath = $('#current_filepath').val();
+    if (filepath == '') {
+        alert('请先上传或选取素材文件！');
+        return false;
+    }
+    initIas();
+});
+$('#bannerModal').modal('hide');
+$('#showBannerModal').click(function(){
+    var filepath = $('#current_filepath').val();
+    if (filepath == '') {
+        alert('请先上传或选取素材文件！');
+        return false;
+    }
+    if ($('input[name="x1"]').val() == '' || $('input[name="y1"]').val() == '' || $('input[name="x2"]').val() == '' || $('input[name="y2"]').val() == '') {
+        alert('请框选二维码区域！');
+        return false;
+    }
+    $('#bannerModal').modal('show');
+});
+$('#save').click(function(){
+    if ($('#name').val() == '') {
+        alert('请输入海报名称！');
+        return false;
+    }
+    $('#filepath').val($('#current_filepath').val());
+
+    $('#bannerForm').submit();
+});
+
+});
+</script>
+
+<include file="Public:foot"/>

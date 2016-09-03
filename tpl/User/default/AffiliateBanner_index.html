@@ -1,0 +1,62 @@
+<include file="Public:head"/>
+<include file="Public:bs"/>
+
+<div class="container-fluid">
+    
+    <div class="page-header">
+        <h1>推广海报 <small>二维码海报素材管理</small>
+            <a class="btn btn-success pull-right" href="{vifnn::U('AffiliateBanner/make')}"><i class="glyphicon glyphicon-plus"></i> 制作海报</a>
+        </h1>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-2">#</th>
+                <th>名称</th>
+                <th class="col-sm-2">状态</th>
+                <th class="col-sm-2">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        <volist name="banner" id="row">
+        <tr>
+            <td>{vifnn:$row.id}</td>
+            <td>{vifnn:$row.name}</td>
+            <td>
+                <if condition="$row['is_enable'] eq 1">
+                    <a class="btn btn-xs btn-success disable" data-method="post" href="{vifnn::U('AffiliateBanner/disable', array('id' => $row['id']))}" title="点击禁用">启用</a>
+                <else />
+                    <a class="btn btn-xs btn-danger enable" data-method="post" href="{vifnn::U('AffiliateBanner/enable', array('id' => $row['id']))}" title="点击启用">禁用</a>
+                </if>
+            </td>
+            <td>
+                <a class="btn btn-xs btn-primary edit" href="{vifnn::U('AffiliateBanner/make', array('id' => $row['id']))}">编辑</a>
+                <a class="btn btn-xs btn-danger remove" data-method="post" href="{vifnn::U('AffiliateBanner/delete', array('id' => $row['id']))}">删除</a>
+            </td>
+        </tr>
+        </volist>
+        </tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$('.disable').click(function(){
+    return window.confirm('确认禁用该海报\n如果所有海报都被禁用，系统将直接返回二维码给推广员？');
+});
+
+$('.enable').click(function(){
+    return window.confirm('确认启用该海报？');
+});
+
+$('.remove').click(function(){
+    return window.confirm('确认删除该海报？');
+});
+
+});
+</script>
+
+<include file="Public:foot"/>
