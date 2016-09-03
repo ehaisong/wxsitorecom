@@ -10,10 +10,10 @@ class AffiliateOptionAction extends UserAction
     public function _initialize()
     {
         parent::_initialize();
-
-        // 偶尔会出现公众号ID为空的情况
-        if (empty($this->wxuser['id'])) {
-            return $this->error('公众号参数丢失，请重新登录！');
+        
+        // 登录超时后未刷新框架页面时会导致公众号信息丢失
+        if (!is_array($this->wxuser) || empty($this->wxuser) || empty($this->wxuser['id'])) {
+            return $this->error('公众号参数丢失，请刷新当前框架页面并重新登录！');
         }
 
         // 初始化推广参数
