@@ -55,7 +55,7 @@ class AffiliateOptionAction extends UserAction
     {
         $data2save = array();
         $exists_fields = array(
-            'status', 'qrcode_type', 'auto_group_id', 'validity', 'min_cash_amount', 'register_commission', 'sale_commission'
+            'status', 'signup_type', 'qrcode_type', 'auto_group_id', 'validity', 'min_cash_amount', 'register_commission', 'sale_commission'
         );
         foreach ($_POST as $key => $value) {
             if (in_array($key, $exists_fields)) {
