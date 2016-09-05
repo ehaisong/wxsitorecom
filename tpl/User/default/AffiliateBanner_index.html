@@ -4,10 +4,13 @@
 <div class="container-fluid">
     
     <div class="page-header">
-        <h1>推广海报 <small>二维码海报素材管理</small>
+        <h1>回复插件/推广海报
             <a class="btn btn-success pull-right" href="{vifnn::U('AffiliateBanner/make')}"><i class="glyphicon glyphicon-plus"></i> 制作海报</a>
+            <a class="btn btn-danger pull-right mr10" href="{vifnn::U('AffiliateResponsePlugin/index')}"><i class="glyphicon glyphicon-menu-left"></i> 返回</a>
         </h1>
     </div>
+
+    <div class="well">温馨提示：任何时候只能有一个海报被启用，如果没有可用海报，系统将直接返回二维码！</div>
 
     <table class="table table-hover">
         <thead>
@@ -38,6 +41,10 @@
         </volist>
         </tbody>
     </table>
+
+    <div class="pageNavigator pull-left">
+        <div class="pages">{vifnn:$page}</div>
+    </div>
 
 </div>
 

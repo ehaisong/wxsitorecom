@@ -27,7 +27,7 @@ class AffiliateBannerAction extends UserAction
         $where['wxuser_id'] = $this->wxuser['id'];
         
         $count = $model->where($where)->count();
-        $page = new Page($count, 20);
+        $page = new Page($count, 1);
 
         $banner = $model->where($where)->order('`id` desc')->limit($page->firstRow . ',' . $page->listRows)->select();
         $this->assign('page', $page->show());

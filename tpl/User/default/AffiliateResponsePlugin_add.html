@@ -1,0 +1,42 @@
+<include file="Public:head"/>
+<include file="Public:bs"/>
+<style type="text/css">
+.thumbnail .glyphicon {
+    font-size: 96px;
+    color: #ddd;
+}
+</style>
+<div class="container-fluid">
+    
+    <div class="page-header">
+        <h1>添加插件
+            <a class="btn btn-danger pull-right" href="javascript:window.history.go(-1);"><i class="glyphicon glyphicon-menu-left"></i> 返回</a>
+        </h1>
+    </div>
+
+    <div class="row">
+    <volist name="plugin_available" id="row">
+        <div class="col-xs-6 col-md-3">
+            <form method="POST">
+                <input type="hidden" name="plugin_id" value="{vifnn::$row['plugin_id']}" />
+                <div class="thumbnail text-center">
+                    <i class="glyphicon {vifnn::$row['icon_cls']}"></i>
+                    <h3>{vifnn::$row['plugin_name']}</h3>
+                    <p>{vifnn::$row['desc']}</p>
+                    <php>
+                        $disabled = in_array($row['plugin_id'], $exists_plugins) ? 1 : 0;
+                        if ($disabled) {
+                            echo '<p><button type="button" class="add btn btn-default disabled">已添加</button></p>';
+                        } else {
+                            echo '<p><button type="submit" class="add btn btn-success">添加</button></p>';
+                        }
+                    </php>
+                </div>
+            </form>
+        </div>
+    </volist>
+    </div>
+
+</div>
+
+<include file="Public:foot"/>

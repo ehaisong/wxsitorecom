@@ -1,0 +1,118 @@
+<include file="Public:head"/>
+<include file="Public:bs"/>
+
+<div class="container-fluid">
+    
+    <div class="page-header">
+        <h1>回复插件
+            <a class="btn btn-success pull-right" href="{vifnn::U('AffiliateResponsePlugin/add')}"><i class="glyphicon glyphicon-plus"></i> 添加插件</a>
+        </h1>
+    </div>
+
+    <div class="well">温馨提示：在插件里设定的<code>关键字</code>优先级最高，用户一旦发送，将首先触发插件返回响应内容！</div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-2">插件ID</th>
+                <th class="col-sm-3">插件名称</th>
+                <th class="col-sm-3">触发关键字</th>
+                <th class="col-sm-2">状态</th>
+                <th class="col-sm-2">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        <volist name="data_provider" id="row">
+        <tr>
+            <td>{vifnn:$row.plugin_id}</td>
+            <td>{vifnn:$row.plugin_name}</td>
+            <td class="keyword text-danger" data-id="{vifnn::$row['plugin_id']}"><if condition="$row['keyword'] neq ''">{vifnn:$row.keyword}<else /><span class="text-danger">(点此设置)</span></if></td>
+            <td>
+                <if condition="$row['is_enable'] eq 1">
+                    <a class="btn btn-xs btn-success disable" data-method="post" href="{vifnn::U('AffiliateResponsePlugin/disable', array('id' => $row['plugin_id']))}" title="点击禁用">启用</a>
+                <else />
+                    <a class="btn btn-xs btn-danger enable" data-method="post" href="{vifnn::U('AffiliateResponsePlugin/enable', array('id' => $row['plugin_id']))}" title="点击启用">禁用</a>
+                </if>
+            </td>
+            <td>
+                <if condition="$row['action_name'] neq ''">
+                    <a class="btn btn-xs btn-primary edit" href="{vifnn::U($row['action_name'] . '/index')}">设置</a>
+                </if>
+                <a class="btn btn-xs btn-danger remove" data-method="post" href="{vifnn::U('AffiliateResponsePlugin/delete', array('id' => $row['plugin_id']))}">删除</a>
+            </td>
+        </tr>
+        </volist>
+        </tbody>
+    </table>
+
+    <div class="pageNavigator pull-left">
+        <div class="pages">{vifnn:$page}</div>
+    </div>
+
+</div>
+
+<div id="keywordModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">关键字设定</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="keywordForm" method="POST" action="{vifnn::U('AffiliateResponsePlugin/setkeyword')}">
+                    <input type="hidden" name="plugin_id" id="plugin_id" value="" />
+                    <div class="form-group">
+                        <label for="keyword" class="col-sm-2 control-label">关键字</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="keyword" name="keyword" maxlength="60" value="" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="save">保存</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+$('.disable').click(function(){
+    return window.confirm('确认禁用该插件？');
+});
+
+$('.enable').click(function(){
+    return window.confirm('确认启用该插件？');
+});
+
+$('.remove').click(function(){
+    return window.confirm('确认删除该插件？');
+});
+
+$('#keywordModal').modal('hide');
+$('.keyword').click(function(){
+    var keyword = $(this).text();
+    if (keyword == '(点此设置)') {
+        keyword = '';
+    }
+    $('#plugin_id').val($(this).attr('data-id'));
+    $('#keyword').val(keyword);
+    $('#keywordModal').modal('show');
+});
+$('#save').click(function(){
+    if ($('#keyword').val() == '') {
+        alert('请输入关键字！');
+        return;
+    }
+    $('#keywordForm').submit();
+});
+
+
+});
+</script>
+
+<include file="Public:foot"/>
