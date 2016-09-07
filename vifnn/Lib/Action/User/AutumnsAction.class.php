@@ -235,7 +235,46 @@ class AutumnsAction extends ActivityBaseAction{
 		}else{
 			return array('error'=>$error,'msg'=>$msg);
 		}
-		
+	}
+
+	public function record()
+	{
+		$lid = (int) $_GET["id"];
+		$id = M("Lottery")->where(array("zjpic" => $lid, "token" => $this->token))->getField("id");
+		$type = (int) $_GET["type"];
+		$lottery = M("Activity")->where(array("token" => $this->token, "id" => $lid, "type" => $type))->find();
+		$recordcount = $lottery["fistlucknums"] + $lottery["secondlucknums"] + $lottery["thirdlucknums"] + $lottery["fourlucknums"] + $lottery["fivelucknums"] + $lottery["sixlucknums"];
+		$datacount = $lottery["fistnums"] + $lottery["secondnums"] + $lottery["thirdnums"] + $lottery["fournums"] + $lottery["fivenums"] + $lottery["sixnums"];
+		$box = M("Autumns_box");
+		$where["token"] = $this->token;
+		$where["bid"] = $id;
+
+		if ($_GET["isprize"] != "all") {
+			$where["isprize"] = (int) $_GET["isprize"];
+		}
+
+		$lcount = $box->where($where)->count();
+		$page = new Page($lcount, 20);
+		$list = $box->where($where)->order("id desc")->limit($page->firstRow . "," . $page->listRows)->select();
+
+		foreach ($list as $key => $val ) {
+			$user = M("Userinfo")->where(array("token" => $this->token, "wecha_id" => $val["wecha_id"]))->field("wechaname,tel")->find();
+			$list[$key]["tel"] = $user["tel"];
+			$list[$key]["name"] = $user["wechaname"];
+		}
+
+		$this->assign("list", $list);
+		$send = $box->where(array("bid" => $id, "isprize" => 1, "sendstutas" => 1))->count();
+		$this->assign("send", $send);
+		$count = $box->where(array("bid" => $id, "isprize" => 1, "isprizes" => 1))->count();
+		$this->assign("count", $count);
+		$lottery = M("Activity")->where(array("id" => $lid, "token" => $this->token))->find();
+		$this->assign("id", $id);
+		$this->assign("Activity", $lottery);
+		$this->assign("datacount", $datacount);
+		$this->assign("recordcount", $recordcount);
+		$this->assign("page", $page->show());
+		$this->display();
 	}
 }
 

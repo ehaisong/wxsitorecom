@@ -1,0 +1,42 @@
+<include file="Public:head"/>
+	<div class="content">
+        <div class="cLineB">
+          <h4>
+			<if condition="$set['id'] eq ''">添加会员卡级别<else />修改会员卡级别</if>
+          </h4>
+          <a href="{vifnn::U('Member_card/grade',array('token'=>$token))}" class="right btnGrayS vm" style="margin-top:-27px">返回</a>
+        </div>
+        <form method="post" action="">
+          <div class="msgWrap form">
+            <table class="userinfoArea" border="0" cellspacing="0" cellpadding="0" width="100%">
+              <tbody>       		
+				<tr>
+					<th>级别名称</th>
+					<td>
+						<input type="input" class="px"  style="width:250px;" value="{vifnn:$set.grade_name}" name="grade_name" placeholder="级别名称">
+					</td>
+				</tr> 
+				
+				<tr>
+					<th>状态：</th>
+					<td>
+						<input type="radio" name="status" value="1" <if condition="$set.status eq '1' or $list.status eq ''">checked</if>>开启
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="status" value="0" <if condition="$set.status eq '0'">checked</if>>关闭
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<input type="hidden" name="id" value="{vifnn:$set.id}">
+						<button type="submit" id="button" name="button" class="btnGreen">保存</button>
+						<a href="" class="btnGray vm">取消</a>
+					</td>
+				</tr>
+			 </tbody>
+			</table>
+            
+		  </div>
+		</form>
+	</div>
+<include file="Public:footer"/>

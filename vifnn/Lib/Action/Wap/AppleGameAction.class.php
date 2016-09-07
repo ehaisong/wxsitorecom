@@ -7,7 +7,7 @@ class AppleGameAction extends LotteryBaseAction{
 		if(!$id) $this->error('不存在的活动');
 		$wecha_id	= $this->wecha_id;
 		$token		= $this->_get('token');
-		$Lottery 	= M('Lottery')->field('statdate,enddate,canrqnums,aginfo,title')->where(array('id'=>$id,'token'=>$token,'type'=>7))->find();
+		$Lottery 	= M('Lottery')->field('statdate,enddate,canrqnums,aginfo,title,status')->where(array('id'=>$id,'token'=>$token,'type'=>7))->find();
 		if(!$Lottery) $this->error('不存在的活动');
 		$record 	= M('Lottery_record')->field('usenums')->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id))->find();
 
@@ -16,6 +16,9 @@ class AppleGameAction extends LotteryBaseAction{
 			$this->error('活动未开始，请在'.date('Y-m-d H:i:s',$Lottery['statdate']).'后再来参加活动!');
 		}
 		
+		if (($Lottery["enddate"] < time()) || ($Lottery["status"] == 0)) {
+			$this->error("活动已结束");
+		}
 		$mpName = M('Wxuser')->where(array('token'=>$token))->getField('weixin');
 		$keyword = M('Keyword')->where(array('token'=>$token,'module'=>'Lottery','pid'=>$id))->getField('keyword');
 		$this->assign('mpName',$mpName);

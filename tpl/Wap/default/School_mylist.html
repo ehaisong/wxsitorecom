@@ -64,24 +64,29 @@
         </li>
 </a>
 <li><a href="javascript:;">
-            </a><div class="text"><a href="javascript:;">
-                <p>姓名：{vifnn:$vo['truename']}</p>
-                <p>联系电话：{vifnn:$vo['tel']}</p>
-                <p>课程名称：{vifnn:$vo['housetype']}</p>
-                <p>授课老师：{vifnn:$vo['choose']}</p>
-                <p>开课时间：{vifnn:$vo['dateline']}</p>
-                <p>上课地址：{vifnn:$vo['address']}</p>
-                <p>我的备注 ：{vifnn:$vo['info']} </p>
-                <p>提交时间：{vifnn:$vo['booktime']|date='Y年m月d日 H时i分',###}</p>
-                </a><div class="footReturn"><a href="javascript:;"></a>
-<if condition="$vo['remate'] eq 0">
-<a id="" style="color:#fff;" class="submit" href="{vifnn::U('School/del',array('token'=>$token,'wecha_id'=>$wecha_id,'id'=>$vo['id'],'type'=>$vo['type']))}" onclick="return(confirm('您确定要删除吗?删除表示您放弃本次预约.'));return false;">删除订单 </a></if>
-<if condition="$vo['remate'] neq 0">
-<p>客服回复：<font color="#2c2a24">{vifnn:$vo['kfinfo']}</font></p>
-</if>
-
-                </div>
-        </div>
+</a><div class="text"><a href="javascript:;">
+	<p>姓名：{vifnn:$vo['truename']}</p>
+	<p>联系电话：{vifnn:$vo['tel']}</p>
+	<p>课程名称：{vifnn:$vo['housetype']}</p>
+	<p>授课老师：{vifnn:$vo['choose']}</p>
+	<p>开课时间：{vifnn:$vo['dateline']}</p>
+	<p>上课地址：{vifnn:$vo['address']}</p>
+	<p>我的备注 ：{vifnn:$vo['info']} </p>
+	<p>提交时间：{vifnn:$vo['booktime']|date='Y年m月d日 H时i分',###}</p>
+	<p>客服回复：<font color="#2c2a24">{vifnn:$vo['kfinfo']}</font></p>
+	</a>
+	<div class="footReturn">
+	<?php if($vo['remate'] == 0){?>
+	<a style="background:gray;border: 1px solid gray;color:#fff;-webkit-box-shadow: 0px 1px 0px gray;margin-bottom:10px;" class="submit" href="javascript:;">待回复</a>
+	<?php }elseif($vo['remate'] == 1){ ?>
+	<a style="background:green;border: 1px solid green;color:#fff;-webkit-box-shadow: 0px 1px 0px green;margin-bottom:10px;" class="submit" href="javascript:;">已确认</a>
+	<?php }else{?>
+	<a style="background:red;border: 1px solid red;color:#fff;-webkit-box-shadow: 0px 1px 0px red;margin-bottom:10px;" class="submit" href="javascript:;">已拒绝</a>
+	<?php } ?>
+	<if condition="$vo['remate'] eq 0">
+	<a id="" style="color:#fff;" class="submit" href="{vifnn::U('School/del',array('token'=>$token,'wecha_id'=>$wecha_id,'id'=>$vo['id'],'type'=>$vo['type']))}" onclick="return(confirm('您确定要删除吗?删除表示您放弃本次预约.'));return false;">删除订单 </a></if>
+ </div>
+ </div>
 </li>
 </volist>
 <if condition="$count gt 5">
@@ -134,3 +139,15 @@ if (typeof WeixinJSBridge == "undefined"){
     #plug-wrap{z-index: 0}
 </style>
 </body></html>
+<script type="text/javascript">
+window.shareData = {
+	"moduleName":"School",
+	"moduleID":"0",
+	"imgUrl": "{vifnn:$info['head_url']}",
+	"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('School/mylist',array('rid'=>$where['rid'],'type'=>$where['type'],'token'=>$token,'check'=>$check))}",
+	"tTitle": "{vifnn:$info['title']|shareFilter}",
+	"tContent": "{vifnn:$info['info']|shareFilter}",
+	"fTitle": "{vifnn:$info['title']|shareFilter}",
+};
+</script>
+{vifnn:$shareScript}

@@ -67,6 +67,27 @@
 		<div class="clr"></div>
 	</div>
 
+	<div class="cLineB">
+		<ul id="tags">
+			<li class="selectTag">
+				<a href="javascript:void(0);">参与管理</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=blacklist&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">黑名单</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=qrConvert&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">扫码兑奖</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=convert&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">兑换管理</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=statistics&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">统计</a>
+			</li>
+		</ul>
+		<div class="clr"></div>
+	</div>
+
 	<div class="msgWrap">
 		<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
 		  <THEAD>
@@ -91,7 +112,10 @@
 			          <img class="ztUserAvatar" src="{vifnn:$fans[$list['fans_id']]['portrait']|default='/tpl/User/default/common/images/portrait.jpg'}" width="50" height="50" alt="" style="border: 1px solid #F3F3F3; border-radius: 25px; ">
 			          <div class="ztShit">
 				          <span>{vifnn:$fans[$list['fans_id']]['wechaname']}</span><br />
-				          <span class="f60">玩了<em>{vifnn:$scores[$list['fans_id']]['counts']}</em>次，<em>{vifnn:$scores[$list['fans_id']]['fraction']}</em>分</span>
+
+				          <if condition="$gameCate neq 4">
+				            <span class="f60">玩了<em>{vifnn:$scores[$list['fans_id']]['counts']}</em>次，<em>{vifnn:$scores[$list['fans_id']]['fraction']}</em>分</span>
+				          </if>
 			          </div>
 		          </TD>
 			      <if condition="$isPhone eq 1">
@@ -117,8 +141,14 @@
 		          </TD>
 		          <TD style="text-align:center">{vifnn:$lastTimeData[$list['fans_id']]}</TD>
 		          <TD style="text-align:center" class="norightborder">
+			          <a href="index.php?g=User&m=Game&a=record_del&gid={vifnn:$list.gameid}&ugid={vifnn:$id}&id={vifnn:$list.id}&fansid={vifnn:$list.fans_id}">删除</a>
 			          <if condition="$game['is_share'] eq 1">
 				          <a href="javascript:void(0); " onclick="showPrizeList('{vifnn:$list.fans_id}', '{vifnn:$game.share_callback}')">查看奖励记录</a>
+			          </if>
+			          <if condition="$list['inBlacklist']">
+				          <a class="fans_{vifnn:$list.fans_id}" href="javascript:void(0); " onclick="deleteFromBlacklist('{vifnn:$list.fans_id}')">从黑名单移除</a>
+			          <else />
+				          <a class="fans_{vifnn:$list.fans_id}" href="javascript:void(0); " onclick="addToBlacklist('{vifnn:$list.fans_id}')">添加到黑名单</a>
 			          </if>
 		          </TD>
 		      </TR>
@@ -282,6 +312,40 @@
 	$('.editPicClose').click(function (e) {
 		$('.setWindow').hide();
 	});
+
+	function addToBlacklist (fansId) {
+		$.ajax({
+			url:      "{vifnn::U('Game/addToBlacklist',array('token'=>$token))}",
+			type:     "post",
+			data:     {id: {vifnn:$id}, gid: {vifnn:$gid}, fansId: fansId},
+			dataType: "json",
+			success:  function (ret) {
+				if (ret.status == 200) {
+					$(".fans_" + fansId).text("从黑名单移除");
+					$(".fans_" + fansId).attr("onclick", "deleteFromBlacklist(" + fansId + ")");
+				}else{
+					if (ret.status == 41004) {
+						alert('添加失败，请重新添加');
+					}
+				}
+			}
+		});
+	}
+
+	function deleteFromBlacklist (fansId) {
+		$.ajax({
+			url:      "{vifnn::U('Game/deleteFromBlacklist',array('token'=>$token))}",
+			type:     "post",
+			data:     {id: {vifnn:$id}, gid: {vifnn:$gid}, fansId:fansId},
+			dataType: "json",
+			success:  function (ret) {
+				if (ret.status == 200) {
+					$(".fans_" + fansId).text("添加到黑名单");
+					$(".fans_" + fansId).attr("onclick", "addToBlacklist(" + fansId + ")");
+				}
+			}
+		});
+	}
 </script>
   	</div>
 <include file="Public:footer"/>

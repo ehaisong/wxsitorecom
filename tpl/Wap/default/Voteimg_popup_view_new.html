@@ -385,16 +385,16 @@ $(function(){
 	<li class="ico_1" id="foot_bu"><a href="{vifnn:$bo.bottom_link}"><span class="ico"><img src="{vifnn:$bo.bottom_icon}"></span><span class="txt">{vifnn:$bo.bottom_name|mb_substr=0,5,'utf-8'}</span></a></li>
 	</volist>
 	<if condition="$bottom[0]['hide'] eq 1">
-        <li class="ico_1" id="foot_bu"><a href="tel:{vifnn:$action_info['phone']}"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[0]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[0]['bottom_name']|mb_substr=0,5,'utf-8'}</span></a></li>
+        <li class="ico_1" id="foot_bu"><a href="tel:{vifnn:$action_info['phone']}"><span class="ico"><img src="{vifnn:$bottom[0]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[0]['bottom_name']|mb_substr=0,5,'utf-8'}</span></a></li>
 	</if>	
 	<if condition="$bottom[1]['hide'] eq 1">
-        <li class="ico_2" id="foot_bu"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[1]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[1]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
+        <li class="ico_2" id="foot_bu"><span class="ico"><img src="{vifnn:$bottom[1]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[1]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
 	</if>	
 	<if condition="$bottom[2]['hide'] eq 1">
-        <li class="ico_3" id="foot_bu"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[2]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[2]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
+        <li class="ico_3" id="foot_bu"><span class="ico"><img src="{vifnn:$bottom[2]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[2]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
 	</if>	
 	<if condition="$bottom[3]['hide'] eq 1">
-        <li class="ico_4" id="foot_bu"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[3]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[3]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
+        <li class="ico_4" id="foot_bu"><span class="ico"><img src="{vifnn:$bottom[3]['bottom_icon']}"></span><span class="txt">{vifnn:$bottom[3]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
 	</if>	
     </ul>
 </div>
@@ -528,7 +528,6 @@ $(".close").click(function(){
 function vote(id,obj){
 	var stat = $("#stat").val();
 	var last_id = $("#last_id").val();
-	var allowlottery = '{vifnn:$allowlottery}';
 	if(last_id == id && stat == 'false'){
 		votenotice($("#last_notice").val());
 	}else{
@@ -551,7 +550,7 @@ function vote(id,obj){
 				var vid = $("#vote_id_"+id).text();
 				$("#vote_id_"+id).text((parseInt(vid)+1)+'票');
 				SetCookie('refresh_vote_new_{vifnn:$id}',1);
-				if(allowlottery == 'yes'){
+				if(data.data.allowlottery == 'yes'){
 					$(".asideLayer").fadeIn('500');
 					$(".asideLayerCenter").fadeIn('300');
 				}else{
@@ -789,6 +788,7 @@ window.shareData = {
 };
 </script>
 {vifnn:$shareScript}
+<include file="Public:tongji" />
 <div style="display:none"></div>
 </body>
 </html>

@@ -12,7 +12,7 @@ class CollectwordAction extends WapAction{
 			//$this->error('商家未开启获取粉丝信息授权！获取不到您的个人信息！');exit;
 		}
 		$id = $this->_get('id','intval');
-
+		$this->checkTongji($this->token, "collectword", $id);
 		$info = M('Collectword')->where(array('id'=>$id,'token'=>$this->token,'is_open'=>0))->find();
 		$this->info = $info;
 		

@@ -1,0 +1,44 @@
+<include file="Public:head"/>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/zuliconfig.css">
+
+<div class="content">
+	<div class="cLineB">
+		<h4>扫码兑换</h4>
+		<a href="/index.php?g=User&m=Boost&a=index&token={vifnn:$token}" class="right btnGrayS vm">返回我的活动</a>
+
+		<div class="clr"></div>
+	</div>
+
+	<br/>
+
+	<div class="msgWrap">
+
+		<if condition="$usertplid eq 2">
+			<div class="alert alert-success alert-dismissable" style="margin-top:20px;">
+				<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+		<else/>
+			<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
+		</if>
+		温馨提示：<br>
+		　1、此页面为扫描兑奖页面。
+		<br>
+		　2、此页面需要使用扫码枪，并在英文输入状态下，通过扫描玩家的获奖二维码，来兑换玩家所获得奖品。
+	</div>
+
+	<form action="" method="post">
+		<input type="text" id="url" name="url" placeholder="请将鼠标移动到这里并且为选中状态……"
+		       style="width: 80%; height: 45px;  margin-bottom: 30px; ">
+	</form>
+</div>
+</div>
+</div>
+</div>
+<script>
+	$("#url").focus(function () {
+		$(this).val('');
+	});
+</script>
+
+</div>
+<include file="Public:footer"/>

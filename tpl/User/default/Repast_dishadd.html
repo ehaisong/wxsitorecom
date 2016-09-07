@@ -1,14 +1,83 @@
 <if condition="$ischild neq 1">
-<include file="Public:head" />
+<include file="Public:head2" />
 <else />
 <include file="Repast:head" />
 </if>
+<style>
+    .spec_price_tr
+    {
+        display: none;
+    }
+    .sku_list
+    {
+        margin: 0px;
+    }
+    .sku_list li{
+        margin-bottom: 5px;
+    }
+    .sku_list .spec_name
+    {
+        font-size: 14px;
+        font-weight: bold;
+        color: #282828;
+        margin-right:10px;
+    }
+    .sku_list label
+    {
+        margin-right: 5px;
+    }
+
+    .field_tip
+    {
+        font-size: 12px;
+        margin: 0px;
+        margin-top: 5px;
+        color: #888;
+    }
+    .opts_list
+    {
+        display: block;
+        width: 280px;
+        max-height: 600px;
+        overflow: auto;
+    }
+    .opts_list li
+    {
+        height: 32px;
+        width: 250px;
+        margin-bottom: 5px;
+    }
+    .opts_list li .remove_btn
+    {
+        height: 32px;
+        line-height: 32px;
+        display: inline-block;
+    }
+    .opts_input
+    {
+        border: solid 1px #dcdcdc;
+        height: 20px;
+        line-height: 20px;
+        width: 200px;
+        padding: 5px;
+        font-size: 14px;
+        background-color: #fff;
+        margin-right: 10px;
+    }
+    .opts_input:focus
+    {
+        border: solid 1px #090;
+    }
+</style>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/dish/dishadd.js"></script>
 <div class="content"> 
 	<div class="cLineB"> 
 		<h4>菜品设置</h4> 
-		<a href="{vifnn::U('Repast/dish',array('token' => $token,'cid'=>$cid,'p' => $pa))}" class="right  btnGreen" style="margin-top:-27px">返回</a> <!--自行增加  , 'p' => $pa  分类码-->
+		<a href="{vifnn::U('Repast/dish',array('token' => $token,'cid'=>$cid))}" class="right  btnGreen" style="margin-top:-27px">返回</a> 
 	</div> 
 <if condition="$usertplid eq 2">
 <div class="alert alert-success alert-dismissable" style="margin-top:20px;">
@@ -17,7 +86,7 @@
 <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;"></if>
 <span>温馨提示：</span>
 <p>1、<b>餐饮订单支持无线打印，购买无线打印机（购买请直接联系{vifnn:$f_siteName}）后便可以实现订单的自动打印</b><br>此处只显示总店信息，连锁店订单及菜品请进入相应平台进行管理，连锁店登录账号密码及登录地址请在LBS里设置查看</p>
-<p>2、本功能使用了模板消息中的“订单完成通”知模板消息，模板编号OPENTM202521011。
+<p>2、本功能使用了模板消息中的“订单完成通知”模板消息，模板编号OPENTM202521011。
           开通微信支付功能的公众号在使用此功能的时候可以在”基本设置——微信模板消息“中配置对应的模板消息</p>
 <p>3、餐桌预定：如果是时间插件选择时间，预定时会根据客户选定的预定时间来判断餐桌是否可预定，如果当前餐桌状态是在使用中，那么往后俩个小时后默认可被预定；如果是自己定义的就餐名称如早餐、中餐、晚餐选择，那么如果当前餐桌是使用中，将一直不可被预定，直到该餐桌处于未使用时才能预定。餐桌的使用状态必须由管理员或员工到餐台管理或手机端餐台管理页面手动更新</p>		  
 		  </div>
@@ -34,15 +103,9 @@
         </td> 
        </tr>
        <tr> 
-        <th><span class="red">*</span>价格：</th> 
-        <td>
-        <input type="text" name="price" id="price" value="{vifnn:$tableData.price}" class="px" style="width:100px;" /> 元
-        </td> 
-       </tr>
-       <tr> 
         <th><span class="red">*</span>计量单位：</th> 
         <td>
-        <input type="text" name="unit" id="unit" value="{vifnn:$tableData.unit}" class="px" style="width:100px;" /> (如：份，例，碟)
+        <input type="text" name="unit" id="unit" value="{vifnn:$tableData.unit|default='份'}" class="px" style="width:100px;" /> (如：份，例，碟)
         </td> 
        </tr>
        <tr> 
@@ -54,6 +117,54 @@
 	        </volist>
 	        </select>
         </td> 
+       </tr>
+       <tr>
+           <th><span class="red">*</span>规格类型：</th>
+           <td>
+               <select name="spec" selectedval="{vifnn:$tableData.spec}">
+                   <option value="">请选择</option>
+                   <volist name="spec_list" id="spec">
+                       <option value="{vifnn:$spec.id}" opts="{vifnn:$spec.opts}">{vifnn:$spec.name}</option>
+                   </volist>
+               </select>
+           </td>
+       </tr>
+       <tr class="price_tr">
+           <th><span class="red">*</span>价格：</th>
+           <td>
+               <input type="text" name="price" id="price" value="{vifnn:$tableData.price}" class="px" style="width:100px;" /> 元
+           </td>
+       </tr>
+       <tr class="price_tr">
+           <th>在售库存值：</th>
+           <td>
+               <input type="text" name="instock" id="instock" class="px" value="{vifnn:$tableData.instock}"/>
+               <div class="red" style="margin-top: 5px;">在卖的真实库存（在餐厅管理里开启了菜品库存管理方有效可用）当开启了菜品库存管理后此值如果小于1，此菜品将不可被顾客点选</div>
+           </td>
+       </tr>
+       <tr class="price_tr">
+           <th>刷新库存值：</th>
+           <td>
+               <input type="text" name="refreshstock" id="refreshstock" class="px" value="{vifnn:$tableData.refreshstock}" />
+               <div class="red" style="margin-top: 5px;">当点击刷新库存按钮时系统会自动将在售库存值为零的修改为刷新库存的值（开启了菜品库存管理方有效可用）<p style="margin-left:152px;"></p></div>
+           </td>
+       </tr>
+       <tr class="spec_price_tr">
+           <td></td>
+           <td>
+               <ul class="sku_list"></ul>
+               <input type="hidden" class="sku_json" name="sku_json" value="{vifnn:$sku_json|htmlspecialchars}" />
+           </td>
+       </tr>
+       <tr>
+           <th>标签：</th>
+           <td>
+               <div class="opts_controller">
+                   <ul class="opts_list"></ul>
+                   <input type="hidden" class="opts_val" name="attr" value="{vifnn:$tableData.attr|default=''}" />
+                   <p class="field_tip">如：微辣，中辣，重辣; 输入多个选项可以按回车键新增输入框,支持↑ ↓键移动哦</p>
+               </div>
+           </td>
        </tr>
        <tr> 
         <th>是否推荐：</th> 
@@ -71,8 +182,16 @@
         <th>是否外卖：</th> 
         <td>
         <input type="checkbox" name="istakeout" id="istakeout" value="1" <if condition="$tableData['istakeout'] eq 1">checked</if> />
-		<label class="red" for="istakeout">&nbsp;&nbsp;勾选后此菜品会陈列在微外卖功能的外卖菜单列表里</label>
+		<label class="red" for="istakeout">勾选后此菜品会陈列在微外卖功能的外卖菜单列表里</label>
         </td> 
+       </tr>
+       <tr>
+           <th>每份收取餐盒费：</th>
+           <td>
+               <input type="checkbox" name="is_meal" id="is_meal" value="1" <if condition="$tableData['is_meal'] eq 1">checked</if> />
+               <label class="red" for="is_meal">勾选后每增加一份将会收取一份餐盒费（餐盒费：{vifnn:$manage['meal_fee']/100}元）</label>
+               <a target="_self" href="{vifnn::U('DishOut/manageTime')}">修改餐盒费</a>
+           </td>
        </tr>
 
 	    <tr> 
@@ -82,21 +201,6 @@
 		&nbsp;&nbsp;&nbsp;<span class="red">（开启了菜品会员折扣方有效可用）</span>
         </td> 
        </tr>
-	    <tr> 
-        <th>在售库存值：</th> 
-        <td>
-        <input type="text" name="instock" id="instock" class="px" value="{vifnn:$tableData.instock}"/>
-		&nbsp;&nbsp;&nbsp;<span class="red">在卖的真实库存（在餐厅管理里开启了菜品库存管理方有效可用）<p style="margin-left:152px;">当开启了菜品库存管理后此值如果小于1，此菜品将不可被顾客点选</p></span>
-        </td> 
-       </tr>
-	   	 <tr> 
-        <th>刷新库存值：</th> 
-        <td>
-        <input type="text" name="refreshstock" id="refreshstock" class="px" value="{vifnn:$tableData.refreshstock}" />
-		&nbsp;&nbsp;&nbsp;<span class="red">当点击刷新库存按钮时系统会自动将在售库存值为零的修改为刷新库存的值（开启了菜品库存管理方有效可用）<p style="margin-left:152px;"></p></span>
-        </td> 
-       </tr>
-
        <tr> 
         <th>展示图片：</th>
         <td><input type="text" name="image" value="{vifnn:$tableData.image}" class="px" id="pic" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('pic',700,700,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('pic')">预览</a></td> 
@@ -104,7 +208,7 @@
        <tr> 
         <th>描述：</th> 
         <td><textarea name="des" class="px" style="width:400px;height:80px;">{vifnn:$tableData.des}</textarea>
-		 <span class="red">请不要超过200个汉字字符，多了会影响前端页面展现效果</span>
+		 <div style="margin-top: 5px;" class="red">请不要超过200个汉字字符，多了会影响前端页面展现效果</div>
 		</td> 
        </tr>
        <tr> 
@@ -127,31 +231,11 @@
        <tr>
        <th>&nbsp;</th>
        <td>
-       <a type="submit" name="submit" class="btnGreen" id="toSaveThis">保 存</a> &nbsp; <a href="{vifnn::U('Repast/dish',array('token' => $token, 'cid' => $cid))}" class="btnGray vm">取消</a></td> 
+       <a type="button" ajax-before="ajaxBefore" ajax="post" name="submit" class="btnGreen">保 存</a></td>
        </tr> 
       </tbody> 
      </table> 
      </div>
 </form>
-</div> 
-<script type="text/javascript">
-$('#toSaveThis').click(function(){
-   var numREG=/^[0-9]+$/;
-   var instock=$.trim($('#instock').val());
-   instock=parseFloat(instock);
-   var refreshstock=$.trim($('#refreshstock').val());
-   refreshstock=parseFloat(refreshstock);
-   if(instock>0){
-	 if(!numREG.test(instock)){
-       alert('在售库存值必须为一个正整数');
-	   return false;
-	 }
-	if(!(refreshstock>0) || !numREG.test(refreshstock)){
-       alert('刷新库存值必须为一个正整数');
-	   return false;
-	 }
-   }
-	document.mydishform.submit();
-});
-</script>
+</div>
 <include file="Public:footer" />

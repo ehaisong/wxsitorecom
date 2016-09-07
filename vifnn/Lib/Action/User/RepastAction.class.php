@@ -3,6 +3,8 @@
 class RepastAction extends UserAction {
 
     public $_cid = 0;
+    protected $company;
+    protected $shop_id;
 
     public function _initialize() {
         parent::_initialize();
@@ -14,6 +16,7 @@ class RepastAction extends UserAction {
         }
         if (empty($this->_cid)) {
             $company = M('Company')->where(array('token' => $this->token, 'isbranch' => 0))->find();
+            $this->company=$company;
             if ($company) {
                 $this->_cid = $company['id'];
                 //主店的k存session
@@ -24,6 +27,7 @@ class RepastAction extends UserAction {
         } else {
             $k = session('companyk');
             $company = M('Company')->where(array('token' => $this->token, 'id' => $this->_cid))->find();
+            $this->company=$company;
             if (empty($company)) {
                 $this->error('非法操作', U('Repast/index', array('token' => $this->token)));
             } else {
@@ -38,6 +42,20 @@ class RepastAction extends UserAction {
         if (($mDishSet['cid'] != $this->_cid) && ($mDishSet['dishsame'] == 1) && ($ischild == 1)) {
             $this->assign('dishsame', 1);
         }
+        if($this->company['isbranch']!='1'){
+            $shop_id=isset($_REQUEST['shop_id'])?$_REQUEST['shop_id']:'';
+            if($shop_id!=''){
+                $branch=M('company')->where(array('token'=>$this->token,'id'=>I('get.shop_id')))->field('id')->find();
+                if(empty($branch)){
+                    $this->error('门店不存在');
+                }
+            }
+            $companyList=M('company')->where(array('token'=>$this->token))->order('isbranch asc')->field('id,name,isbranch')->select();
+            $this->assign('company_list',$companyList);
+        }else{
+            $shop_id=$this->_cid;
+        }
+        $this->shop_id=$shop_id;
         $this->assign('ischild', $ischild);
         $this->assign('cid', $this->_cid);
     }
@@ -315,48 +333,17 @@ class RepastAction extends UserAction {
         $dataBase = D('Dish_company');
         $findData = $dataBase->where(array('cid' => $this->_cid))->find();
         if (IS_POST) {
-            $starttime = trim($_POST['starttime']);
-            $endtime = trim($_POST['endtime']);
-            $starttime2 = trim($_POST['starttime2']);
-            $endtime2 = trim($_POST['endtime2']);
-            if (!empty($starttime)) {
-                $starttime = strtotime(date('Y-m-d ') . $starttime);
-                $_POST['starttime'] = $starttime;
-            } else {
-                $starttime = 0;
-                $_POST['starttime'] = 0;
+            $times=json_decode($_POST['open_times'],true);
+            $openTimes=array();
+            foreach ($times as $key=>$value){
+                $start=preg_replace('/\s/','',$value['start']['time']);
+                $end=preg_replace('/\s/','',$value['end']['time']);
+                if(str_replace(':','',$start)<=str_replace(':','',$end)){
+                    $openTimes[]=$value;
+                }
             }
-            if (!empty($endtime)) {
-                $endtime = strtotime(date('Y-m-d ') . $endtime);
-                $_POST['endtime'] = $endtime;
-            } else {
-                $endtime = 0;
-                $_POST['endtime'] = 0;
-            }
-            if (($endtime > 0) && ($starttime >= $endtime)) {
-                $this->error('第一段营业结束时间必须大于第一段开始时间!');
-                exit();
-            }
-            if (!empty($starttime2)) {
-                $starttime2 = strtotime(date('Y-m-d ') . $starttime2);
-                $_POST['starttime2'] = $starttime2;
-            } else {
-                $starttime2 = 0;
-                $_POST['starttime2'] = 0;
-            }
-
-            if (!empty($endtime2)) {
-                $endtime2 = strtotime(date('Y-m-d ') . $endtime2);
-                $_POST['endtime2'] = $endtime2;
-            } else {
-                $endtime2 = 0;
-                $_POST['endtime2'] = 0;
-            }
-             if (($endtime2 > 0) && ($starttime2 >= $endtime2)) {
-                $this->error('第二段营业结束时间必须大于第二段开始时间!');
-                exit();
-            }
-
+            $openTimes=$openTimes?$openTimes:array(array('start'=>'00:00','end'=>'23:59'));
+            $_POST['open_times']=json_encode($openTimes);
             $nameofcan = $_POST['biaoq'];
             $nameofcan_id = $_POST['bqid'];
             unset($_POST['biaoq'], $_POST['bqid']);
@@ -420,11 +407,11 @@ class RepastAction extends UserAction {
 
                 $jointable = C('DB_PREFIX') . 'recognition';
                 $db_dish_reply->join('as d_r LEFT JOIN ' . $jointable . ' as rg on d_r.reg_id=rg.id');
-                $tmps = $db_dish_reply->where('d_r.cid=' . $this->_cid . ' AND d_r.token="' . $this->token . '" AND d_r.cf="dish" AND d_r.type!=0')->field('d_r.*,rg.code_url,rg.status')->select();
+                $tmps = $db_dish_reply->where('d_r.cid=' . $this->_cid . ' AND d_r.token="' . $this->token . '" AND d_r.cf="dish" AND d_r.type!=0')->field('d_r.*,rg.code_url,rg.ticket,rg.status')->select();
                 $erweima = array();
                 if (!empty($tmps)) {
                     foreach ($tmps as $vv) {
-			$vv["code_url"] = ($vv["ticket"] ? $vv["ticket"] : $vv["code_url"]);
+						$vv['code_url']=$vv['ticket']?$vv['ticket']:$vv['code_url'];
                         $erweima['c' . $vv['type']] = $vv;
                     }
                     $this->assign('erweima', $erweima);
@@ -434,8 +421,23 @@ class RepastAction extends UserAction {
             }
             $tmp = M('Dish_name')->where(array('cid' => $this->_cid, 'token' => $this->token))->select();
             $this->assign('Dcname', $tmp);
+            //兼容旧版
+            if(empty($findData['open_times'])){
+                $times=array();
+                if(!empty($tmp['starttime'])||!empty($tmp['endtime'])){
+                    $starttime=$tmp['starttime']?date('H:i',$tmp['starttime']):'00:00';
+                    $endtime=$tmp['endtime']?date('H:i',$tmp['endtime']):'23:59';
+                    $times[]=array('start'=>$starttime,'end'=>$endtime);
+                }
+                if(!empty($tmp['starttime2'])||!empty($tmp['endtime2'])){
+                    $starttime2=$tmp['starttime2']?date('H:i',$tmp['starttime2']):'00:00';
+                    $endtime2=$tmp['endtime2']?date('H:i',$tmp['endtime2']):'23:59';
+                    $times[]=array('start'=>$starttime2,'end'=>$endtime2);
+                }
+                $times=$times?$times:array(array('start'=>'00:00','end'=>'23:59'));
+                $findData['open_times']=json_encode($times);
+            }
             $this->assign('company', $findData);
-            $this->assign('bookingtime', $bookingtime);
             $this->display();
         }
     }
@@ -516,7 +518,7 @@ class RepastAction extends UserAction {
         $mDishC = $_SESSION["session_MaindishSet_{$token}"];
         $mDishC = !empty($mDishC) ? unserialize($mDishC) : false;
         if ($cache && !empty($mDishC)) {
-		return $mDishC;
+            return $mDishC;
         } else {
             $MainC = M('Company')->where(array('token' => $token, 'isbranch' => 0))->find();
             $m_cid = $MainC['id'];
@@ -538,9 +540,10 @@ class RepastAction extends UserAction {
     public function dishadd() {
         $dataBase = D('Dish');
         $dish_sort = M('Dish_sort');
-		 //自行增加
-		$p = $_GET['p'];  //获取当前面码
-		//自行增加结束
+        $dishSkuModel=XD('User/DishSku');
+        //自行增加
+	$p = $_GET['p'];  //获取当前面码
+	//自行增加结束
         if (IS_POST) {
             $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
             $_POST['ishot'] = isset($_POST['ishot']) ? intval($_POST['ishot']) : 0;
@@ -548,10 +551,36 @@ class RepastAction extends UserAction {
             $_POST['istakeout'] = isset($_POST['istakeout']) ? intval($_POST['istakeout']) : 0;
             $_POST['isdiscount'] = isset($_POST['isdiscount']) ? intval($_POST['isdiscount']) : 0;
             $_POST['kitchen_id'] = isset($_POST['kitchen_id']) ? intval($_POST['kitchen_id']) : 0;
+            $_POST['is_meal']=isset($_POST['is_meal'])?$_POST['is_meal']:'0';
+            $spec=I('post.spec');
+            if(!empty($spec)){
+                $specInfo=M('dish_spec')->where(array('id'=>$spec,'_string'=>"token='' OR token='{$this->token}'"))->find();
+                if(empty($specInfo))
+                    $this->error('规格类型不存在');
+                $opts=explode(',',$specInfo['opts']);
+                $obj=$dishSkuModel->checkSku($opts,I('post.sku'));
+                if($obj===false){
+                    $this->error($dishSkuModel->getError());
+                }
+                $_POST['price']=$obj['price'];
+                $_POST['instock']=$obj['instock'];
+                $_POST['refreshstock']=0;
+            }
             if ($id) {//edit
+                $info=M('dish')->where(array('id'=>$id,'cid'=>$this->_cid))->find();
+                $_POST['update_time']=time();
                 if ($dataBase->create() !== false) {
                     $temp = M('Dish')->where(array('cid' => $this->_cid, 'id' => $id))->find();
                     $action = $dataBase->save();
+                    if($action){
+                        if(!empty($spec)&&!empty($info['spec'])){
+				$dishSkuModel->updateSku($id, $opts, I("post.sku"), $spec, $info["spec"]);
+                        }elseif(!empty($spec)&&empty($info['spec'])){
+                            $dishSkuModel->addSku($id,$opts,I('post.sku'));
+                        }elseif(!empty($info['spec'])&&empty($spec)){
+                            $dishSkuModel->delSku($id);
+                        }
+                    }
                     if ($action != false) {
                         if ($temp['sid'] != $_POST['sid']) {
                             $dish_sort->where(array('id' => $_POST['sid'], 'cid' => $this->_cid))->setInc('num', 1);
@@ -567,10 +596,12 @@ class RepastAction extends UserAction {
             } else {//add
                 if ($dataBase->create() !== false) {
                     $action = $dataBase->add();
+                    if($action&&!empty($spec)){
+                        $dishSkuModel->addSku($action,$opts,I('post.sku'));
+                    }
                     if ($action != false) {
                         $dish_sort->where(array('id' => $_POST['sid'], 'cid' => $this->_cid))->setInc('num', 1);
                         if ($action > 0) {
-                            
                         }
                         $this->success('添加成功', U('Repast/dish', array('token' => $this->token, 'cid' => $this->_cid)));
                     } else {
@@ -581,20 +612,29 @@ class RepastAction extends UserAction {
                 }
             }
         } else {
+            $db_dotime = M('dishout_manage');
             $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
             $dishSort = M('Dish_sort')->where(array('cid' => $this->_cid))->select();
             if (empty($dishSort)) {
                 $this->success('您还没有建立菜品分类哦,<br/>请先去建立个菜品分类吧！',U('Repast/sortadd', array('token' => $this->token, 'cid' => $this->_cid)));
                 /*$this->redirect(U('Repast/sortadd', array('token' => $this->token, 'cid' => $this->_cid)));*/
             }
-            
+            $spec=M('dish_spec');
+            $where['_string']="token='' OR token='{$this->token}'";
+            $list=$spec->where($where)->order('create_time desc')->select();
+            $this->assign('spec_list',$list);
             $kitchens = M('Dish_kitchen')->where(array('cid' => $this->_cid))->select();
-            
             $findData = $dataBase->where(array('id' => $id, 'cid' => $this->_cid))->find();
             $this->assign('tableData', $findData);
             $this->assign('dishSort', $dishSort);
-			$this->assign('pa', $p); //自行增加 记录当前页码的
-			$this->assign("kitchens", $kitchens);
+	    $this->assign('pa', $p); //自行增加 记录当前页码的
+            $this->assign('kitchens', $kitchens);
+            $manage=$db_dotime->where(array('cid' => $this->_cid, 'token' => $this->token))->find();
+            $this->assign('manage',$manage);
+            if(!empty($findData)&&!empty($findData['spec'])){
+                $sku=$dishSkuModel->getSku($id,$findData['spec']);
+                $this->assign('sku_json',json_encode($sku));
+            }
             $this->display();
         }
     }
@@ -609,9 +649,34 @@ class RepastAction extends UserAction {
         if ($this->token == $token) {
             $tmp = M('Dish_company')->where(array('cid' => $this->_cid))->find();
             if (!empty($tmp) && ($tmp['kconoff'] == 1)) {
-                $sqlstr = "update " . C('DB_PREFIX') . "dish set instock=refreshstock where cid=" . $this->_cid . " and instock ='0' and refreshstock > 0";
-                $Model = new Model();
-                $Model->query($sqlstr);
+                $dishModel=M('dish');
+                $specModel=M('DishSpec');
+                $skuModel=D('DishSku');
+                $list=$dishModel->where(array('cid'=>$this->_cid))->field('id,spec,refreshstock,instock')->select();
+                foreach ($list as $item){
+                    if(empty($item['spec'])){
+                        if(($item["instock"] <= 0) && ($item['refreshstock']>0)){
+                            $dishModel->where(array('id'=>$item['id']))->save(array('instock'=>$item['refreshstock']));
+                        }
+                    }else{
+                        $opts=$specModel->where(array('id'=>$item['spec']))->getField('opts');
+                        $opts=explode(',',$opts);
+                        $total=0;
+                        foreach ($opts as $opt){
+                            $skuInfo=$skuModel->where(array('product_id'=>$item['id'],'sku'=>sha1($opt)))->field('id,refresh_inve,inventory')->find();
+                            if(($skuInfo["inventory"] <= 0) && ($skuInfo['refresh_inve']>0)){
+                                $skuModel->where(array('id'=>$skuInfo['id']))->save(array('inventory'=>$skuInfo['refresh_inve']));
+                                $total+=$skuInfo['refresh_inve'];
+                            }else {
+								$total += $skuInfo["inventory"];
+							}
+						}
+
+						if ($total != $item["instock"]) {
+                            $dishModel->where(array('id'=>$item['id']))->save(array('instock'=>$total));
+                        }
+                    }
+                }
                 $msg = '刷新成功！';
             } else {
                 $msg = '您尚未开启菜品库存管理！';
@@ -625,21 +690,17 @@ class RepastAction extends UserAction {
      * 删除菜
      */
     public function dishdel() {
-        $dish = M('Dish');
-        if (IS_GET) {
-            $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-            $where = array('id' => $id, 'cid' => $this->_cid);
-            $check = $dish->where($where)->find();
-            if ($check == false)
-                $this->error('非法操作');
-            $back = $dish->where($where)->delete();
-            if ($back == true) {
-                M('Dish_sort')->where(array('id' => $check['sid'], 'cid' => $this->_cid))->setDec('num', 1);
-                $this->success('操作成功', U('Repast/dish', array('token' => $this->token, 'cid' => $this->_cid)));
-            } else {
-                $this->error('服务器繁忙,请稍后再试', U('Repast/dish', array('token' => $this->token, 'cid' => $this->_cid)));
-            }
-        }
+		if (IS_GET) {
+			$id = (isset($_GET["id"]) ? intval($_GET["id"]) : 0);
+			$model = XD("User/Dish");
+			$res = $model->delDish($this->_cid, $id);
+
+			if (!$res) {
+				$this->error("删除失败");
+			}
+
+			$this->success("删除成功");
+		}
     }
 
     /**
@@ -764,8 +825,8 @@ class RepastAction extends UserAction {
                     $newk = $flag . 'jc' . $did;
                     if (!($data['paycount'] > 0) || ($kk == $newk)) {
 
-			$dishofcid = $data['cid'];
-			if (($mDishSet['cid'] != $data['cid']) && ($mDishSet['dishsame'] == 1)) {
+                        $dishofcid = $data['cid'];
+                        if (($mDishSet['cid'] != $data['cid']) && ($mDishSet['dishsame'] == 1)) {
                             $dishofcid = $mDishSet['cid'];
                             $kconoff = $mDishSet['kconoff'];
                         }
@@ -834,6 +895,13 @@ class RepastAction extends UserAction {
                     }
                     $msg = ArrayToStr::array_to_str($msg, 1);
                     $op->printit($this->token, $this->_cid, 'Repast', $msg, 1);
+                }
+                if(in_array($thisOrder['paytype'],array('daofu','dianfu'))&&$thisOrder['paid']!='1'){
+                    $dishOrderModel=XD('User/DishOrder');
+                    $infoList=unserialize($thisOrder['info']);
+                    if(!empty($infoList)){
+                        $dishOrderModel->payConsume($thisOrder['id'],$infoList);
+                    }
                 }
                 Sms::sendSms($this->token, "你好！{$company['name']}欢迎您，本店对您的订单号为：{$thisOrder['orderid']}的订单状态进行了修改，如有任何疑意，请您及时联系本店！", $thisOrder['tel']);
                 $this->success('修改成功', U('Repast/orderInfo', array('token' => session('token'), 'id' => $thisOrder['id'])));
@@ -976,7 +1044,7 @@ class RepastAction extends UserAction {
             $db_dish_reply = M('Dish_reply');
             $jointable = C('DB_PREFIX') . 'recognition';
             $db_dish_reply->join('as d_r LEFT JOIN ' . $jointable . ' as rg on d_r.reg_id=rg.id');
-	    $tmps = $db_dish_reply->where('d_r.cid=' . $this->_cid . ' AND d_r.token="' . $this->token . '" AND d_r.cf="dish" AND d_r.type=0 AND tableid=' . $tableid)->field('d_r.*,rg.code_url,rg.status,rg.ticket')->find();
+            $tmps = $db_dish_reply->where('d_r.cid=' . $this->_cid . ' AND d_r.token="' . $this->token . '" AND d_r.cf="dish" AND d_r.type=0 AND tableid=' . $tableid)->field('d_r.*,rg.code_url,rg.status,rg.ticket')->find();
             if (empty($tmps)) {
                 $keyword = $this->_cid . '餐台' . $tableid;
                 $tmps = array('cid' => $this->_cid, 'token' => $this->token, 'tableid' => $tableid, 'keyword' => $keyword, 'cf' => 'dish', 'addtime' => time());
@@ -989,7 +1057,7 @@ class RepastAction extends UserAction {
                     $this->handleKeyword($inser_id, 'MicroRepast', $keyword);
                 }
             }
-	    $tmps['code_url'] = $tmps['ticket'] ? $tmps['ticket'] : $tmps['code_url'];
+            $tmps['code_url']=$tmps['ticket']?$tmps['ticket']:$tmps['code_url'];//兼容
             $this->assign('erweima', $tmps);
         }
         $this->assign('tid', $tableid);
@@ -1118,6 +1186,222 @@ class RepastAction extends UserAction {
             }
         }
     }
+
+    public function spec()
+    {
+        $spec=M('dish_spec');
+        $where['_string']="token='' OR token='{$this->token}'";
+        $where['cid']=$this->_cid;
+        $list=$spec->where($where)->order('create_time desc')->select();
+        $this->assign('_list',$list);
+        $this->display();
+    }
+
+    public function specAdd()
+    {
+        if(IS_POST){
+            if(empty($_POST['name'])){
+                $this->error('名称不能为空');
+            }
+            if(empty($_POST['opts'])){
+                $this->error('选项不能为空');
+            }
+            $data['token']=$this->token;
+            $data['cid']=$this->_cid;
+            $data['name']=I('post.name');
+            $opts=explode(',',I('post.opts'));
+            $tmp=array();
+            foreach ($opts as $opt){
+                if(!empty($opt)&&!in_array($opt,$tmp)){
+                    $tmp[]=$opt;
+                }
+            }
+            $data['opts']=$tmp?implode(',',$tmp):'';
+            $data['create_time']=time();
+            $spec=M('dish_spec');
+            $id=$spec->add($data);
+            if(!$id)
+                $this->error('添加规格失败');
+            $this->success('添加规格成功',U('spec'));
+        }else{
+            $this->display();
+        }
+    }
+
+    public function specEdit()
+    {
+        $spec=M('dish_spec');
+        if(IS_POST){
+            if(empty($_POST['name'])){
+                $this->error('名称不能为空');
+            }
+            if(empty($_POST['opts'])){
+                $this->error('选项不能为空');
+            }
+            $res=M('dish')->where(array('cid'=>$this->_cid,'spec'=>array('eq',I('post.id'))))->find();
+            if($res)
+                $this->error('请先删除关联的菜品');
+            $data['name']=I('post.name');
+            $opts=explode(',',I('post.opts'));
+            $tmp=array();
+            foreach ($opts as $opt){
+                if(!empty($opt)&&!in_array($opt,$tmp)){
+                    $tmp[]=$opt;
+                }
+            }
+            $data['opts']=$tmp?implode(',',$tmp):'';
+            $num=$spec->where(array('id'=>I('post.id'),'cid'=>$this->_cid))->save($data);
+            if(!$num)
+                $this->error('编辑规格失败');
+            $this->success('编辑规格成功',U('spec'));
+        }else{
+            $info=$spec->where(array('id'=>I('get.id')))->find();
+            if(empty($info))
+                $this->error('规格不存在');
+            $this->assign('_info',$info);
+            $this->display('specAdd');
+        }
+    }
+
+    //删除
+    public function specDel()
+    {
+        $ids=get_request_ids();
+        if(empty($ids)){
+            $this->error('请选择要删除的规格');
+        }
+        $res=M('dish')->where(array('spec'=>array('in',$ids)))->find();
+        if($res)
+            $this->error('请先删除关联的菜品');
+        $spec=M('dish_spec');
+        $num=$spec->where(array('id'=>array('in',$ids),'cid'=>$this->_cid))->delete();
+        if($num!=count($ids))
+            $this->error('删除失败');
+        $this->success('删除成功');
+    }
+
+    public function bind()
+    {
+        $bindModel=XD('User/DishBind');
+        $where=array('cid'=>$this->_cid);
+        $count = $bindModel->where($where)->count();
+        $Page = new Page($count, 20);
+        $show = $Page->show();
+        $list=$bindModel->where($where)->order('bind_time desc')->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $companyModel=D('Company');
+        $groupList=D('WechatGroupList');
+        foreach ($list as &$item){
+            $info=$companyModel->where(array('id'=>$item['cid']))->field('name')->find();
+            $item['name']=$info['name'];
+            $wx=$groupList->where(array('openid'=>$item['wecha_id']))->field('id,nickname,openid,headimgurl')->find();
+            $item['nickname']=$wx['nickname'];
+            $item['headimgurl']=$wx['headimgurl'];
+        }
+        $this->assign('_list',$list);
+        $this->assign('page',$show);
+        $this->display();
+    }
+
+    public function bindAdd()
+    {
+        $companyModel=D('Company');
+        if(IS_POST){
+            if(empty($_POST['cid'])){
+                $this->error('请选择门店');
+            }
+            if(empty($_POST['wecha_id'])){
+                $this->error('请选择粉丝');
+            }
+            if($this->company['isbranch']=='1'){
+                $_POST['cid']=$this->_cid;
+            }else{
+                $num=$companyModel->where(array('token'=>$this->token,'cid'=>I('post.cid')))->count();
+                if(!$num) $this->error('门店不存在');
+            }
+            $bindModel=D('DishBind');
+            $has=$bindModel->where(array('cid'=>I('post.cid'),'wecha_id'=>I('post.wecha_id'),'token'=>$this->token))->count();
+            if($has) $this->error('不能重复绑定');
+            $id=$bindModel->add(array('cid'=>I('post.cid'),'wecha_id'=>I('post.wecha_id'),'bind_time'=>time(),'token'=>$this->token));
+            if(!$id)
+                $this->error('绑定失败');
+            $this->success('绑定成功',U('bind'));
+        }else{
+            $list=$companyModel->where(array('token'=>$this->token))->field('id,name,isbranch')->select();
+            $tmp=array();
+            foreach ($list as $key=>$value){
+                if($value['isbranch']!='1'){
+                    $tmp=$value;
+                    unset($list[$key]);
+                    break;
+                }
+            }
+            $this->assign('company_main',$tmp);
+            $this->assign('company_list',$list);
+            $this->display();
+        }
+    }
+
+    public function bindEdit()
+    {
+        $companyModel=D('Company');
+        if(IS_POST){
+            if(empty($_POST['cid'])){
+                $this->error('请选择门店');
+            }
+            if(empty($_POST['wecha_id'])){
+                $this->error('请选择粉丝');
+            }
+            $num=$companyModel->where(array('token'=>$this->token,'cid'=>I('post.cid')))->count();
+            if(!$num) $this->error('门店不存在');
+            $bindModel=D('DishBind');
+            $has=$bindModel->where(array('cid'=>I('post.cid'),'wecha_id'=>I('post.wecha_id'),'token'=>$this->token,'id'=>array('neq',I('post.id'))))->count();
+            if($has) $this->error('不能重复绑定');
+            $res=$bindModel->where(array('id'=>I('post.id'),'cid'=>$this->_cid))->save(array('cid'=>I('post.cid'),'wecha_id'=>I('post.wecha_id')));
+            if(!$res)
+                $this->error('编辑失败');
+            $this->success('编辑成功',U('bind'));
+        }else{
+            if(empty($_GET['id'])){
+                $this->error('管理员不存在');
+            }
+            $bindModel=D('DishBind');
+            $info=$bindModel->where(array('id'=>I('get.id'),'cid'=>$this->_cid))->find();
+            if(empty($info)){
+                $this->error('管理员不存在');
+            }
+            $this->assign('_info',$info);
+            $list=$companyModel->where(array('token'=>$this->token))->field('id,name,isbranch')->select();
+            $tmp=array();
+            foreach ($list as $key=>$value){
+                if($value['isbranch']!='1'){
+                    $tmp=$value;
+                    unset($list[$key]);
+                    break;
+                }
+            }
+            $this->assign('company_main',$tmp);
+            $this->assign('company_list',$list);
+            $this->display('bindAdd');
+        }
+    }
+
+    public function bindDel()
+    {
+        $ids=get_request_ids();
+        if(empty($ids)){
+            $this->error('请选择要删除的管理员');
+        }
+        $bindModel=D('DishBind');
+        $num=$bindModel->where(array('id'=>array('in',$ids),'cid'=>$this->_cid))->delete();
+        if($num!=count($ids))
+            $this->error('删除失败');
+        $this->success('删除成功');
+    }
+
+
+
+
+
     
 }
 

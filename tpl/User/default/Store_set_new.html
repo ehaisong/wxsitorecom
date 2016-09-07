@@ -151,8 +151,8 @@ afterBlur: function(){this.sync();}
         <td><input type="text" id="vprice" name="vprice" value="{vifnn:$set.vprice}" class="px" style="width:100px;" /> 元 (大于0的数值)</td> 
        </tr>
        <tr> 
-        <th><span class="red">*</span>原价：</th> 
-        <td><input type="text" id="oprice" name="oprice" value="{vifnn:$set.oprice}" class="px" style="width:100px;" /> 元 (大于0的数值)</td> 
+        <th>原价：</th> 
+        <td><input type="text" id="oprice" name="oprice" value="{vifnn:$set.oprice}" class="px" style="width:100px;" /> 元 (选填，如果填写请填大于0的数值)</td> 
        </tr>
        <tr> 
         <th>库存：</th> 
@@ -183,32 +183,32 @@ afterBlur: function(){this.sync();}
        </tr>
 
 	   <th>温馨提示：</th>
-        <td><span style="color:green">为了手机端轮播展示样式美观，请您上传的展示图片尺寸比例保持一致（我们建议700X300）</span></td> 
+        <td><span style="color:green">为了手机端轮播展示样式美观，请您上传的展示图片尺寸比例保持一致（我们建议800X400）</span></td> 
        </tr>
 
        <tr> 
         <th>展示图片一：</th>
-        <td><input type="text" name="image1" value="{vifnn:$imageList[0].image}" imageid="{vifnn:$imageList[0].id}" class="px" id="image1" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image1',700,300,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image1')">预览</a></td> 
+        <td><input type="text" name="image1" value="{vifnn:$imageList[0].image}" imageid="{vifnn:$imageList[0].id}" class="px" id="image1" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image1',800,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image1')">预览</a></td> 
        </tr>
        <tr> 
         <th>展示图片二：</th>
-        <td><input type="text" name="image2" value="{vifnn:$imageList[1].image}" imageid="{vifnn:$imageList[1].id}" class="px" id="image2" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image2',700,300,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image2')">预览</a></td> 
+        <td><input type="text" name="image2" value="{vifnn:$imageList[1].image}" imageid="{vifnn:$imageList[1].id}" class="px" id="image2" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image2',800,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image2')">预览</a></td> 
        </tr>
        <tr> 
         <th>展示图片三：</th>
-        <td><input type="text" name="image3" value="{vifnn:$imageList[2].image}" imageid="{vifnn:$imageList[2].id}" class="px" id="image3" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image3',700,300,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image3')">预览</a></td> 
+        <td><input type="text" name="image3" value="{vifnn:$imageList[2].image}" imageid="{vifnn:$imageList[2].id}" class="px" id="image3" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image3',800,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image3')">预览</a></td> 
        </tr>
        <tr> 
         <th>展示图片四：</th>
-        <td><input type="text" name="image4" value="{vifnn:$imageList[3].image}" imageid="{vifnn:$imageList[3].id}" class="px" id="image4" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image4',700,300,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image4')">预览</a></td> 
+        <td><input type="text" name="image4" value="{vifnn:$imageList[3].image}" imageid="{vifnn:$imageList[3].id}" class="px" id="image4" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image4',800,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image4')">预览</a></td> 
        </tr>
        <tr> 
         <th>展示图片五：</th>
-        <td><input type="text" name="image5" value="{vifnn:$imageList[4].image}" imageid="{vifnn:$imageList[4].id}" class="px" id="image5" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image5',700,300,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image5')">预览</a></td> 
+        <td><input type="text" name="image5" value="{vifnn:$imageList[4].image}" imageid="{vifnn:$imageList[4].id}" class="px" id="image5" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image5',800,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image5')">预览</a></td> 
        </tr>
        <tr> 
         <th>展示图片六：</th>
-        <td><input type="text" name="image6" value="{vifnn:$imageList[5].image}" imageid="{vifnn:$imageList[5].id}" class="px" id="image6" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image6',700,300,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image6')">预览</a></td> 
+        <td><input type="text" name="image6" value="{vifnn:$imageList[5].image}" imageid="{vifnn:$imageList[5].id}" class="px" id="image6" style="width:400px;" />  <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('image6',800,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('image6')">预览</a></td> 
        </tr>
        <tr> 
         <th>排序：</th> 
@@ -255,7 +255,6 @@ $(document).ready(function(){
 		var header = '<tr><th width="130">产品外观</th><th width="130">产品规格</th><th width="130">价格</th><th width="130">会员价</th><th width="130">数量</th></tr>';
 		
 		if ($(".norms").html() == null) {
-			alert(1)
 			$(".color").each(function(){
 				if ($(this).is(':checked')) {
 					var color = $(this).attr('atr');
@@ -264,7 +263,6 @@ $(document).ready(function(){
 				}
 			});
 		} else {
-			alert(2)
 			$(".color").each(function(){
 				if ($(this).is(':checked')) {
 					var color = $(this).attr('atr');

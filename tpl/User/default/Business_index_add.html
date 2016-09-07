@@ -64,7 +64,7 @@ items : [
     function checkPhone(field,rules,i,options){
         var regex = /^0\d{2,3}-?\d{6,8}\d$/;
         if(field.val() == null || !regex.test(field.val())){
-            return "电话格式不对!正确格式:025-88888888";
+            return "电话格式不对!正确格式:0551-65371998";
         }
     }
     </script>
@@ -73,7 +73,7 @@ items : [
 
 
   <div class="msgWrap">
-    <form class="form" method="post" action="" id="formID" target="" enctype="multipart/form-data">
+    <form class="form" method="post" action="" id="formID" target=" " enctype="multipart/form-data">
       <table class="userinfoArea" style=" margin:20px 0 0 0;" border="0" cellspacing="0" cellpadding="0" width="100%">
         <tbody>
           <tr>
@@ -156,7 +156,7 @@ KTV :
   <TD>
 
 
-    <input type="text" id="selecttpl" class="px" value="已选择模板 {vifnn:$busines['tpid']|default=36}" disabled size="40"  />
+    <input type="text" id="selecttpl" class="px" value="已选择模板 {vifnn:$busines['tpid']|default=1}" disabled size="40"  />
     <a class="a_upload" onclick="chooseTpl('tpid','selecttpl',1)">选择模板</a>
     <a class="a_upload" onclick="viewTpl()">预览</a> <font color="red">[注意]仅仅支持(模板管理)栏目首页模板风格下的<a href="{vifnn::U('Tmpls/index',array('token'=>$token))}">[支持自定义背景]</a>模板,如果没有就默认.</font>
     <script>
@@ -165,7 +165,7 @@ KTV :
             chooseTpl(tid,'',2);
         }
     </script>
-    <input type="hidden" class="px" id="tpid" value="{vifnn:$busines['tpid']|default=36}" name="tpid" style="width:250px">
+    <input type="hidden" class="px" id="tpid" value="{vifnn:$busines['tpid']|default=1}" name="tpid" style="width:250px">
   </TD>
   <TD>
     &nbsp;
@@ -175,12 +175,17 @@ KTV :
 
           <tr>
             <th valign="top"><label for="keyword">相册名称：</label></th>
-            <td><select name="album_id" id="album_id"  data-validation-engine="validate[required]" data-errormessage-value-missing="必填项">
-                <option value="">请选择展示相册</option>
-                <volist name="photo" id="vo">
-                <option value="{vifnn:$vo.id}" <if condition="$vo.id eq $busines['album_id']">selected="selected"</if>>{vifnn:$vo.title}</option>
-                </volist>
-            </select></td>
+            <td>
+			
+			<if condition="!empty($businesxc) AND isset($businesxc['xctitle'])">
+			  <input  type="input" class="px" value="{vifnn:$businesxc.xctitle}" readonly="readonly">
+			  <input  type="hidden" name="album_id" value="{vifnn:$businesxc.ablum_id}">
+			<else />
+				<input  type="input" class="px" value="保存后请去添加相册！" readonly="readonly" style="width:240px">
+			    <input  type="hidden" name="album_id" value="0">
+				&nbsp;&nbsp;<span style="color:red">保存数据后请到 宣传海报/相册 添加相册吧</span>
+			</if>
+			</td>
             <td></td>
           </tr>
           <tr>
@@ -219,7 +224,7 @@ KTV :
 </if>
             </label></th>
             <td><input type="input" class="px" id="compyphone" value="{vifnn:$busines['compyphone']}" name="compyphone" style="width:200px" >
-              正确格式:025-88888888 </td>
+              正确格式:0351-65373998 </td>
             <td></td>
           </tr>
 <script>

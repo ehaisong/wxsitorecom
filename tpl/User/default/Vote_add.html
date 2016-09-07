@@ -42,7 +42,7 @@ items : [
 </div>
 
          <div class="msgWrap bgfc">
-<form class="form" method="post" action="" target="" enctype="multipart/form-data">
+<form class="form" method="post" action="" target=" " enctype="multipart/form-data">
 <if condition="$vo['id'] neq ''">
   <input type="hidden" name="id" value="{vifnn:$vo['id']}">
 </if>
@@ -97,18 +97,20 @@ items : [
 <volist name="items" id="ivo" key="key">
 <tbody class="item{vifnn:$ivo.id} edit" name="div_add_del">
 <tr>
-    <td><input type="text" name="item" value="{vifnn:$ivo.item}" class="px" style="width:120px;"></td>
-    <td><input type="text" name="rank" value="{vifnn:$ivo.rank}" style="width:20px;" class="px"></td>
-    <td><input type="text" name="vcount" value="{vifnn:$ivo.vcount}" style="width:20px;" class="px"></td>
+    <td>
+        <input type="hidden" name="item[{vifnn:$key-1}][id]" value="{vifnn:$ivo.id}">
+        <input type="text" name="item[{vifnn:$key-1}][item]" value="{vifnn:$ivo.item}" class="px" style="width:120px;">
+    </td>
+    <td><input type="text" name="item[{vifnn:$key-1}][rank]" value="{vifnn:$ivo.rank}" style="width:20px;" class="px"></td>
+    <td><input type="text" name="item[{vifnn:$key-1}][vcount]" value="{vifnn:$ivo.vcount}" style="width:20px;" class="px"></td>
     <if condition="$vo['type'] eq 'img' OR $type eq 'img' OR ($vo['type'] eq 'scene') OR ($type eq 'scene')">
     <td>
-      <input type="text" name="startpicurl" value="{vifnn:$ivo.startpicurl}" class="px" id="startpicurl_{vifnn:$key}" style="width:130px;">
+      <input type="text" name="item[{vifnn:$key-1}][startpicurl]" value="{vifnn:$ivo.startpicurl}" class="px" id="startpicurl_{vifnn:$key}" style="width:130px;">
 <a href="###" onclick="upyunPicUpload('startpicurl_{vifnn:$key}',700,400,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('startpicurl_{vifnn:$key}')">预览</a>
 </td>
-    <td><input type="text" name="tourl" value="{vifnn:$ivo.tourl}" style="width:100px;" class="px"></td>
+    <td><input type="text" name="item[{vifnn:$key-1}][tourl]" value="{vifnn:$ivo.tourl}" style="width:100px;" class="px"></td>
     </if>
     <td class="norightborder">
-      <a href="javascript:void(0);" vid="{vifnn:$ivo.id}" class="save">修改</a>
       <a href="javascript:void(0);" vid="{vifnn:$ivo.id}" class="del">删除</a>    
     </td>
 </tr>
@@ -170,7 +172,7 @@ items : [
         <tr>
             <td></td>
             <td colspan="<if condition="$vo['type'] eq 'img' OR $type eq 'img' OR ($vo['type'] eq 'scene') OR ($type eq 'scene')">6<else/>4</if>" class="norightborder">
-              排序默认为1，票数默认为0，如果是图片投票必须添加图片,图片跳转地址没有可以不填写。
+              排序默认为1，票数默认为0<if condition="$type neq 'text'">，如果是图片投票必须添加图片,图片跳转地址没有可以不填写。</if>
               <a href="javascript:void(0);" class="btnGray right" types="<if condition="$vo['type'] eq 'img' OR $type eq 'img' OR ($vo['type'] eq 'scene') OR ($type eq 'scene')">1<else/>0</if>" id="addItem">添加选项</a>
             </td>
         </tr>
@@ -181,15 +183,16 @@ items : [
 
 </td>
 </tr>
-
+<if condition="$vo['type'] neq 'scene' and ($type neq 'scene')">
 <tr>
 <th> 参与人数：</th>
 <td>
-  <input type="text" name="count" value="{vifnn:$vo.count}"  class="px">人
+  <input type="text" name="count" value="{vifnn:$vo.count}"  class="px">
+  &nbsp;人
 </p>
 </td>
 </tr>
-
+</if>
 <tr>
 <th>单选/多选：</th>
 <td>
@@ -204,10 +207,17 @@ items : [
 </tr>
 
 <tr>
-<th>截至时间：</th>
-<td><input type="input" class="px" id="statdate" value="<if condition="$vo['statdate'] neq ''">{vifnn:$vo.statdate|date="Y-m-d",###}</if>" onClick="WdatePicker()" name="statdate">
+<th>活动时间：</th>
+<td>
+<?php if($type == 'scene'){?>
+<input type="input" class="px" id="scene_time" value="<if condition="$vo['scene_time'] neq ''">{vifnn:$vo.scene_time}</if>" name="scene_time">
+&nbsp;秒
+<?php }else{?>
+<input type="input" class="px" id="statdate" value="<if condition="$vo['statdate'] neq ''">{vifnn:$vo.statdate|date="Y-m-d",###}</if>" onClick="WdatePicker()" name="statdate">
 到
-<input type="input" class="px" id="enddate" value="<if condition="$vo['enddate'] neq ''">{vifnn:$vo.enddate|date="Y-m-d",###}</if>" name="enddate" onClick="WdatePicker()"></td>
+<input type="input" class="px" id="enddate" value="<if condition="$vo['enddate'] neq ''">{vifnn:$vo.enddate|date="Y-m-d",###}</if>" name="enddate" onClick="WdatePicker()">
+<?php }?>
+</td>
 </tr>
 
 <tr>
@@ -282,17 +292,16 @@ items : [
     });
 
     $(".ListProduct").on('click','.del',function(e){
+        var $that=$(this);
       var vid = $(this).attr('vid');
       if(vid == 0){
         $(this).parents('.item').remove();
       }else{
-        if(confirm('确定要删除吗？')){   
+        if(confirm('确定要删除吗？')){
             var obj = {id:vid}
-            $.post("{vifnn::U('Vote/del_tab')}", obj,
-                function(data) {
-                  $('.del').parents('.item'+vid).remove();
-                },
-            "json");
+            $.post("{vifnn::U('Vote/del_tab')}", obj, function(data) {
+                    $that.parents('.item'+vid).remove();
+                });
         }
       }
     });
@@ -323,12 +332,12 @@ items : [
     });
   
   $('.sub').click(function(){
-    $('.edit').each(function(){
+/*    $('.edit').each(function(){
       $(this).children().find('input').attr('disabled',true);
-    });
+    });*/
     $('.form').submit();
   });
 });
 </script>
-
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
 <include file="Public:footer"/>

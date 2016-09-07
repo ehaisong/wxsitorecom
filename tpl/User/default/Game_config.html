@@ -7,13 +7,14 @@
       <div class="alert alert-success alert-dismissable" style="margin-top:20px;">
         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
       <else />
- <div class="ftip" style="margin:25px auto 5px auto;"></if>请先设置如下信息</div>
+ <div class="ftip" style="margin:25px auto 5px auto;"></if>
+	<if condition="C('IS_MEIHUA')">请先设置如下信息(可以不更改,直接点击"保存"按钮提交)<else />请先设置如下信息</if></div>
 <div class="msgWrap">
 <form class="form" method="post" enctype="multipart/form-data" >
 <TABLE class="userinfoArea" style=" margin:20px 0 0 0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
   <THEAD>
 				<tr>
-					<th width="120">微信号名称：</th>
+					<th width="120">公众号名称：</th>
 					<td><input type="text" name="wxname" value="{vifnn:$info.wxname}" class="px" style="width:550px;"></td>
 				</tr>
 				<tr>
@@ -21,16 +22,18 @@
 					<td><input type="text" name="wxid" value="{vifnn:$info.wxid}" class="px" style="width:550px;"></td>
 				</tr>
 				<tr>
-					<th>微信号logo：</th>
+					<th>公众号LOGO：</th>
 					<td><input type="text" name="wxlogo" id="wxlogo" value="{vifnn:$info.wxlogo}" class="px" style="width:550px;">   <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('wxlogo',120,120,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('wxlogo')">预览</a> 长360 宽200</td>
 				</tr>
-				<tr>
+				<tr <if condition="C('IS_MEIHUA')">style="display: none;" </if> >
 					<th width="120">链接：</th>
 					<td><input type="text" name="link" value="{vifnn:$info.link}" id="link" class="px" style="width:550px;"> <a href="###" onclick="addLink('link',0)" class="a_choose">从功能库添加</a></td>
 				</tr>
-				<tr>
+				<tr <if condition="C('IS_MEIHUA')">style="display: none;" </if> >
 					<th width="120">引导关注语：</th>
-					<td><input type="text" name="attentionText" value="{vifnn:$info.attentionText}" id="attentionText" class="px" style="width:550px;"><br/>一键关注（或者其他带有关注的词）被微信定为诱导关注，此项可以填写你想要的引导关注语句来指引用户关注</td>
+					<td><input type="text" name="attentionText" value="{vifnn:$info.attentionText}" id="attentionText" class="px" style="width:550px;"><br/>一键关注（或者其他带有关注的词）被微信定为诱导关注，此项可以填写你想要的引导关注语句来指引用户关注<br/>10个字以内
+					<br/><p class="errorMsg" style="color: red;"></p>
+					</td>
 				</tr>
 <TR>
   <TH></TH>
@@ -42,9 +45,19 @@
   </form>
 
 
-
   </div> 
-
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".form").bind("submit", function (event) {
+	    if (($("#attentionText").val()).length >10) {
+				hasError = true;
+				var htmlText = '关注语的字数不能超过10个字！';
+				$(".errorMsg").html(htmlText).show();
+				return false;
+	   }
+	});
+});
+</script>
         </div>
         
         <div class="clr"></div>

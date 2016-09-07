@@ -135,7 +135,7 @@ class apiOauth
 	
 	public function get_refresh_web_access_token($info){
 		
-		if($info['type'] == 1 && $info['winxintype'] == 3 && $info['oauth'] == 1){
+		if (($info["type"] == 1) && (($info["winxintype"] == 3) || (($info["winxintype"] == 4) && ($info["type_of_media_or_gov"] == 1))) && ($info["oauth"] == 1)) {
 			
 			$component_access_token 	= $this->get_component_access_token();
 
@@ -155,7 +155,7 @@ class apiOauth
 	
 	public function get_web_access_token($info,$code){
 
-		if($info['type'] == 1 && $info['winxintype'] == 3 && $info['oauth'] == 1){
+		if (($info["type"] == 1) && (($info["winxintype"] == 3) || (($info["winxintype"] == 4) && ($info["type_of_media_or_gov"] == 1))) && ($info["oauth"] == 1)) {
 			
 			$component_access_token 	= $this->get_component_access_token();
 			
@@ -188,9 +188,7 @@ class apiOauth
 		$url 	= '';
 		
 		$url 	=  "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$info['appid']}&redirect_uri={$redirect_uri}&response_type=code&scope={$scope}&state={$state}";
-		
-		if($info['type'] == 1 && $info['winxintype'] == 3 && $info['oauth'] == 1){
-			
+		if (($info["type"] == 1) && (($info["winxintype"] == 3) || (($info["winxintype"] == 4) && ($info["type_of_media_or_gov"] == 1))) && ($info["oauth"] == 1)) {
 			$url 	.= '&component_appid='.$this->appId;
 			
 		}
@@ -274,7 +272,7 @@ class apiOauth
 
 		if(!$cache_token['authorizer_access_token']){
 			
-			if($info['type'] == 1 && $info['winxintype'] == 3  && empty($info['is_domain']) && false){
+			if (($info["type"] == 1) && (($info["winxintype"] == 3) || (($info["winxintype"] == 4) && ($info["type_of_media_or_gov"] == 1))) && empty($info["is_domain"]) && false) {
 			
 				$access_token 	= $this->get_component_access_token();
 

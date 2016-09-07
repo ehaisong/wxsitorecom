@@ -64,6 +64,7 @@ class CarAction extends WapAction{
                 $af['url']='javascript:void(0)';
             }
             if ($af['tip']==1){
+		$af["img"] = preg_replace("/default\/\.\.\//i", "", $af["img"]);
                 array_push($flash,$af);
             }elseif ($af['tip']==2) {
                 array_push($flashbg,$af);
@@ -147,7 +148,7 @@ class CarAction extends WapAction{
         $addtype = $this->_get('addtype');
         $token   = $this->_get('token');
         $wecha_id = $this->wecha_id;
-        $this->assign('addtype',$addtype);
+
         if($addtype == 'drive'){//预约试驾
             $where = array('token'=>$token,'addtype'=>'drive');
             $this->assign('addtype','drive');
@@ -175,8 +176,9 @@ class CarAction extends WapAction{
              $reser = array_merge($reser,$user);
         }
         $this->assign('reser',$reser);
-        $where4 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>$addtype);
+        $where4 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>$reser["addtype"]);
         $count = M('Reservebook')->where($where4)->count();
+		$this->assign("addtype", $reser["addtype"]);
         $this->assign('count',$count);
         $this->display();
     }
@@ -205,7 +207,7 @@ class CarAction extends WapAction{
         $book   =   M('Reservebook');
          $token = strval($this->_get('token'));
          $wecha_id = strval($this->wecha_id);
-         $addtype  = strval($this->_get('addtype'));
+		$addtype = strval($this->_post("type"));
          $url ='http://'.$_SERVER['HTTP_HOST'];
          $url .= U('Car/ReserveBooking',array('token'=>$token,'wecha_id'=>$wecha_id,'addtype'=>$addtype));
 
@@ -519,3 +521,4 @@ class CarAction extends WapAction{
 
 }
 
+?>

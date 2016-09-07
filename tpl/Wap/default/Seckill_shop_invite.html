@@ -30,7 +30,11 @@
 		<img src="{vifnn:$staticPath}/tpl/static/seckill/images/share-guide.png" style="width: 100%;">
 	</div>
 </div>
-
+<?php if($user_wechaid == $wecha_id){?>
+<div class="btn" style="width:26%;margin-left:5%;" onclick="window.location.href='/index.php?g=Wap&m=Seckill&a=index&id={vifnn:$action_id}&token={vifnn:$token}'">返回首页</div>
+<?php }else{ ?>
+<div class="btn" style="width:26%;margin-left:5%;" onclick="window.location.href='/index.php?g=Wap&m=Seckill&a=index&id={vifnn:$action_id}&token={vifnn:$token}'">我也参与</div>
+<?php }?>
 <if condition="$share eq ''">
 <a href="{vifnn::U('shop_invite', array('id'=>$action_id,'share_code'=>$share_code,'token'=>$token))}"><div class="text">暂无好友帮忙，快去邀请吧！</div><a>
 <else />

@@ -370,12 +370,15 @@ class EstateAction extends WapAction{
         $data   = array();
 
         if($type == 'text'){
-            $data   = M('Photo_list')->where($where)->order('sort desc')->limit(0,$flag)->field('title as name,picurl as img')->select();
+            $data   = M('Photo_list')->where($where)->order('sort desc,id asc')->limit(0,$flag)->field('title as name,picurl as img')->select();
             $arr  = array('title'=>$photo_info['title'],'type'=>"title",'subTitle'=>$photo_info['title']);
             array_splice($data, 0, 0, array($arr));
         }else if($type == 'info'){
         	/*'color'=>$color[array_rand($color)],*/
-            $data   = M('Photo_list')->where($where)->order('sort desc')->limit($flag,$count)->field('title as name,picurl as img')->select();
+            $data   = M('Photo_list')->where($where)->order('sort desc,id asc')->limit($flag,$count)->field('title as name,picurl as img')->select();
+			if(empty($data)){
+				$data = M('Photo_list')->where($where)->order('sort desc,id asc')->limit(0,$flag)->field('title as name,picurl as img')->select();
+			}
             $arr   = array('content'=>$photo_info['info'],'type'=>'text');
             array_splice($data, 1, 0, array($arr));
         }
@@ -505,6 +508,14 @@ class EstateAction extends WapAction{
         $id      = $this->es_data['id'];
         $company = M('Company');
         $about = $company->where(array('token'=>$this->token,'shortname'=>'loupan'.$id,'isbranch'=>1))->find();
+		$longitude=$this->es_data['lng'];
+		$latitude=$this->es_data['lat'];
+		if(!empty($about) && !empty($about['longitude']) && !empty($about['latitude'])){
+		  $longitude=$about['longitude'];
+		  $latitude=$about['latitude'];
+		}
+		$this->assign('longitude',$longitude);
+		$this->assign('latitude',$latitude);
         $this->assign('about',$about);
 
         $this->assign('isamap',$this->isamap);

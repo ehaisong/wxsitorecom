@@ -41,10 +41,13 @@
 
 </style>
 <script src="{vifnn:$staticPath}/tpl/static/dashang/js/jquery-1.7.2.js" type="text/javascript" charset="utf-8"></script>
-<script src="./tpl/Wap/default/common/js/touch.min.js" type="text/javascript" charset="utf-8"></script>
+ 
+<script src="./tpl/Wap/default/common/js/fastclick.js" type="text/javascript" charset="utf-8"></script>
+ 
 <script>
     $(function(){
-        //window.location.reload();
+    
+    FastClick.attach(document.body);        //window.location.reload();
         $(".userHd a").click(function(){
             var e = $(this);
             var thisValue=parseFloat($(this).text());
@@ -114,31 +117,35 @@
     </div>
 	</if>
 	<if condition="!empty($wecha_id) && ($wecha_id neq '0')">
-    <div class="commentBtn">
-        <a href="{vifnn::U('Index/content_comment_add',array('imgid'=>$res['id']))}">评论</a>
+    <div class="commentBtn" id="rect" style="position: absolute;right: 10px;top: initial;z-index: 9999;width:50px;height:50px">
+        <a  class="touchcommentBtn" href="{vifnn::U('Index/content_comment_add',array('imgid'=>$res['id']))}" >评论</a>
     </div>
     <script type="text/javascript">
-        $(function() {
-            touch.on('.commentBtn', 'touchstart', function(ev){
-                ev.preventDefault();
-            });
-            var dx, dy;
-            touch.on('.commentBtn', 'drag', function(ev){
-                dx = dx || 0;
-                dy = dy || 0;
-                var offx = dx + ev.x + "px";
-                var offy = dy + ev.y + "px";
-                this.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
-            });
-            touch.on('.commentBtn', 'dragend', function(ev){
-                dx += ev.x;
-                dy += ev.y;
-            });
+   var rect = document.getElementById('rect');
+       var w=parseInt(rect.style.width);
+       var h=parseInt(rect.style.width);
+       var sreenw=document.body.clientWidth;
+       var sreenh=document.body.clientHeight;
+      rect.addEventListener('touchmove', function(event) {
+      event.preventDefault();
+      if (event.targetTouches.length == 1) {//手指为1
+       var touch = event.targetTouches[0];  
+       //console.log(touch.pageX);
+      // console.log(touch.pageX);
+       if(touch.pageX>sreenw-w || touch.pageX<0 || touch.pageY<0 ){//超出屏幕宽高，将不作处理
+       return;
+       }else{
+      rect.style.left = touch.pageX + 'px';
+      rect.style.top = touch.pageY + 'px';
+       }
+       }
+      }, false);
+  
 
-            touch.on('.commentBtn', 'tap', function(ev){
-                location.href="{vifnn::U('Index/content_comment_add',array('imgid'=>$res['id']))}";
-            });
-        });
+              function jumpToComment() {
+              
+                location.href = "{vifnn::U('Index/content_comment_add',array('imgid'=>$res['id']))}";
+              }
     </script>
 	</if>
 </section>

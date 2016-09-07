@@ -87,6 +87,8 @@ class ThirdPayStore
 				$params['content'] = '您的商城里有新的订单，请注意查看。订单号：'.$order['orderid'].'。';
 				$params['site'] = array('content'=>$params['content'].'　　　　<a href="'.$messageUrl.'">点我击查看订单详情</a>', 'from'=>'商城消息');				
 				$return = MessageFactory::method($params, array('SiteMessage'));
+				$codeurl = $siteurl . "/index.php?g=Wap&m=Store&a=admin_login&token=" . $order["token"] . "&openid=" . $order["wecha_id"];
+				self::urltoqrcode($codeurl);
 			}
 			header('Location:/index.php?g=Wap&m=Store&a=my&token='.$order['token'].'&wecha_id='.$order['wecha_id'] . '&twid='.$order['twid']);
 		}else{
@@ -218,6 +220,87 @@ class ThirdPayStore
 			} else {
 				D("Twitter_count")->add(array('twid' => $twid, 'token' => $token, 'cid' => $cid, 'total' => $price, 'remove' => 0));
 			}
+		}
+	}
+
+	public function urltoqrcode($url)
+	{
+		if ($url == "") {
+			return false;
+		}
+
+		$parse_url = parse_url($url);
+		parse_str($parse_url["query"], $query);
+		if (($query["openid"] == "") || ($query["token"] == "")) {
+			return false;
+		}
+
+		$filename = RUNTIME_PATH . $query["token"] . "_" . $query["openid"] . ".png";
+		$real_filename = realpath($filename);
+
+		if (file_exists($real_filename)) {
+			$apiOauth = new apiOauth();
+			$wxuser = D("Wxuser")->where(array("token" => $query["token"]))->find();
+			$access_token = $apiOauth->update_authorizer_access_token($wxuser["appid"]);
+
+			if (S($query["token"] . "_" . $query["openid"] . "_verificationorder")) {
+				$result["media_id"] = S($query["token"] . "_" . $query["openid"] . "_verificationorder");
+			}
+			else {
+				$requestUrl = "http://file.api.weixin.qq.com/cgi-bin/media/upload?access_token=" . $access_token . "&type=image";
+				$response_josn = $this->postCurl($requestUrl, array("media" => "@" . $real_filename), "POST");
+				$result = json_decode($response_josn, true);
+
+				if ($result["media_id"] != "") {
+					S($query["token"] . "_" . $query["openid"] . "_verificationorder", $result["media_id"], 259200);
+				}
+			}
+
+			if ($result["media_id"] != "") {
+				$postData = "{\"touser\":\"" . $query["openid"] . "\",\"msgtype\":\"image\",\"image\":{\"media_id\":\"" . $result["media_id"] . "\"}}";
+				$extraUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" . $access_token;
+				$response_josn = $this->postCurl($extraUrl, $postData, "POST");
+				$result_array = json_decode($result_json, true);
+
+				if ($result_array["errcode"] == 0) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	public function postCurl($url, $data, $method)
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+		curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$exec = curl_exec($ch);
+
+		if ($exec) {
+			curl_close($ch);
+			return $exec;
+		}
+		else {
+			$errno = curl_errno($ch);
+			$error = curl_error($ch);
+			curl_close($ch);
+			return json_encode(array("errcode" => $errno, "errmsg" => $error));
 		}
 	}
 }

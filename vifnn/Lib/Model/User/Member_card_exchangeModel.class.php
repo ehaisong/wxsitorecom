@@ -1,7 +1,7 @@
 <?php
 class Member_card_exchangeModel extends Model{
 	protected $_validate = array(
-			array('reward','require','消费1元奖励积分必须填写',1),
+			array('reward','require','消费奖励积分必须填写',1),
 			array('cardinfo2','require','积分规则说明必须填写',1),
 			array('id','checkid','非法操作',2,'callback',2),
 	 );

@@ -27,7 +27,7 @@
 		</span>
 		<span class="con">
 			<a class="t" href="{vifnn::U('Store/product',array('token' => $_GET['token'], 'id' => $hostlist['id'], 'twid' => $twid))}">{vifnn:$hostlist.name}</a>
-			<b>￥{vifnn:$hostlist.price}</b><del>￥{vifnn:$hostlist.oprice}</del>
+			<b>￥{vifnn:$hostlist.price}</b><if condition="$hostlist['oprice'] gt 0"><del>￥{vifnn:$hostlist.oprice}</del></if>
 			<span style="color:#999;font-size:8px;margin-top:15px;">{vifnn:$hostlist['salecount'] + $hostlist['fakemembercount']}人付款</span>
 		</span>
 	</li>

@@ -30,7 +30,7 @@ $(document).ready(function(){
 			swfu = new SWFUpload({
 				upload_url: "<if condition='C("upload_type") == "upyun"'>http://v0.api.upyun.com/{vifnn:$bucket}/<else />{vifnn::U('Upyun/upload',array('imgfrom'=>'photo_list'))}</if>",
 				post_params: {"PHPSESSID": "<?php echo session_id();?>"<if condition="C('upload_type') == 'upyun'">,"policy":"{vifnn:$policy}","signature":"{vifnn:$sign}"</if>},
-				file_size_limit : "2 MB",
+				file_size_limit : "20 MB",
 				file_types : "*.jpg;*.png;*.gif;*.bmp",
 				file_types_description : "JPG Images",
 				file_upload_limit : "100",
@@ -158,12 +158,13 @@ $(document).ready(function(){
 </tr>
 </form>
 </volist>
+
 </tbody>
   </table>
 </div>
 </div>
-<div class="footactions" style="padding-left:10px">
-  <div class="pages"></div>
+<div class="footactions" style="float: right;">
+  <div class="pages">{vifnn:$page}</div>
 </div>
 
 

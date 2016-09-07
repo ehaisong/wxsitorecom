@@ -72,7 +72,7 @@
                 <if condition="$i lt 5"> 
                 <li>
                     <a href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>">
-                    <div><span ><img src="{vifnn:$vo.img}" class="icon-smile" style="width:60px;height:42px;"></span></div>
+                    <div><span ><img src="{vifnn:$vo.img}" class="icon-smile" style="width:36px;height:36px"></span></div>
                         <div>{vifnn:$vo.name}</div>
                     </a>
                 </li>
@@ -89,7 +89,7 @@
                 <li class="tbox" <if condition="$i%2 neq 1"> style="direction:rtl;" </if> >
                     <div>
                         <a href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>">
-                            <img src="{vifnn:$vo.img}"></a>
+                            <img src="{vifnn:$vo.img}" style="height:100px"></a>
                     </div>
                     <div>
                         <dl>
@@ -125,7 +125,10 @@
 </div>
 </div>
 
-<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/> 
+<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>
+<if condition="$state eq 1">
+<include file="Index:fudong"/>
+</if>
 <!-- share -->
 <include file="Index:share" />
 </body></html>

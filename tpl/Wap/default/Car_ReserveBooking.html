@@ -94,11 +94,21 @@
                                 <div><label>提交时间：</label></div>
                                 <div><label>{vifnn:$vo['booktime']|date='Y年m月d日',###}</label></div>
                             </dd>
+							<if condition="$vo['remate'] neq 0">
+							<dd class="tbox">
+                                <div><label>客服回复：</label></div>
+                                <div><font color="#2c2a24">{vifnn:$vo['kfinfo']}</font></div>
+                            </dd>
+							</if>
                             <div>
                                 <li class="box group_btn">
-                                    <div>
-
-                                    </div>
+								<?php if($vo['remate'] == 0){?>
+									<div><a href="javascript:;" class="gray">待回复</a></div>
+								<?php }elseif($vo['remate'] == 1){ ?>
+									<div><a href="javascript:;" style="background:green;">已确认</a></div>
+								<?php }else{?>
+									<div><a href="javascript:;" class="red">已拒绝</a></div>
+								<?php } ?>
                                     <div><a href="{vifnn::U('Car/delOrder',array('token'=>$vo['token'],'wecha_id'=>$vo['wecha_id'],'id'=>$vo['id'],'addtype'=>$vo['type']))}" onclick="return(confirm('您确定要删除吗?'));return false;" id="showcard2" class="gray">删除订单</a></div>
                                 </li>
                             </div>

@@ -89,18 +89,18 @@ input[type="checkbox"]{width:18px;height:18px;margin-left:10px;}
 input[type="checkbox"]:nth-child(1){width:18px;height:18px;margin-left:0px;}
 
 @media(min-width: 750px) {
-	.nob th{ font-size:36px;}
+	.nob th{ font-size:18px;}
 } 
 
 @media(min-width: 400px) {
-	.nob th{ font-size:23px;}
+	.nob th{ font-size:15px;}
 }
 
 @media(min-width: 360px) { 
-	.nob th{ font-size:22px;}
+	.nob th{ font-size:14px;}
 }
  @media (min-width:310px) { 
-	.nob th{ font-size:21px;}
+	.nob th{ font-size:13px;}
 }
 </style>
 <div class="banner">
@@ -135,12 +135,15 @@ $(function() {
 </if>
 
 <ul class="round">
-
+<if condition="$thisForm['fixphone'] neq '' || $thisForm['tel'] neq ''">
 <li class="tel">
-<a href="tel:{vifnn:$thisForm.tel}">
-<span>{vifnn:$thisForm.tel}</span>
-</a>
+<if condition="$thisForm['fixphone'] neq ''">
+<a href="tel:{vifnn:$thisForm.fixphone}"><span>{vifnn:$thisForm.fixphone}</span></a>
+<else />
+<a href="tel:{vifnn:$thisForm.tel}"><span>{vifnn:$thisForm.tel}</span></a>
+</if>
 </li>
+</if>
 <li class="address">
 <a href="{vifnn::U('Custom/maps',array('token'=>$token,'id'=>$thisForm['set_id'],'id'=>$thisForm['set_id']))}">
 <span>{vifnn:$thisForm.address}</span>
@@ -256,4 +259,5 @@ window.shareData = {
 </script>
 </body>
 {vifnn:$shareScript}
+<include file="Public:tongji" />
 </html>

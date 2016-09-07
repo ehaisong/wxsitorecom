@@ -139,6 +139,12 @@
 <input type="input" class="px" id="end_time" value="{vifnn:$voteimg.end_time|default=strtotime('+2 month')|date="Y-m-d H:i",###}" name="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"></td>
 </tr>
 <tr>
+<th>投票时段：</th>
+<td><input type="input" class="px" id="start_time_spell" value="{vifnn:$voteimg.start_time_spell}" onClick="WdatePicker({dateFmt:'HH:mm'})" name="start_time_spell">
+到
+<input type="input" class="px" id="end_time_spell" value="{vifnn:$voteimg.end_time_spell}" name="end_time_spell" onClick="WdatePicker({dateFmt:'HH:mm'})">&nbsp;&nbsp;&nbsp;&nbsp;(开始时段若不填则从00:00开始，结束时段若不填则从23:59结束，<span style="color:red;">都不填则不限制时段</span>)</td>
+</tr>
+<tr>
 <th> <span class="red">*</span>限制投票数：</th>
 <td>
   <input type="text" name="limit_vote" value="<if condition="$voteimg.limit_vote eq ''">0<else />{vifnn:$voteimg.limit_vote}</if>"  class="px">&nbsp;&nbsp;&nbsp;&nbsp;(限制每个用户每个活动总的投票数，超过不让投票,<span style="color:red;">0表示不限制</span>,默认为0,请输入整数)&nbsp;&nbsp;&nbsp;<span id="limit_vote_msg"></span>

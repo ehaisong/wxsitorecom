@@ -11,17 +11,26 @@
 </style>
 <aside>
 <div class="asideLayer"></div>
-<div class="asideLayerCenter">
+<div class="asideLayerCenter"><span style="float:right;margin-top:0px;margin-right:0px;" class="closeButton"><img src="{vifnn:$staticPath}/tpl/static/voteimg/img/close.png"></span>
 <div class="asideImg"><img src="{vifnn:$staticPath}/tpl/static/voteimg/img/tc_03.png"></div>
 <h2>投票成功</h2>
 <p>您已获得抽奖机会，是否立即去抽奖？</p>
 <button class="goButton"><a href="{vifnn:$lottery_link}">去抽奖</a></button>
-<button class="closeButton">取消</button>
+<div style="margin-top: 10px;"><input type="checkbox" name="remind" value="1" id="remind" />&nbsp;<span style="color:#000">今日不再提醒</span></div>
 </div>
 </aside>
 <script>
 $(function(){
 	$(".asideLayer,.closeButton").click(function(){
+		if($('input[name=remind]').attr('checked') == true || $('input[name=remind]').attr('checked') == 'checked'){
+			$.ajax({
+				type : 'POST',
+				url  : "/index.php?g=Wap&m=Voteimg&a=no_remind",
+				data : "remind=1&vote_id={vifnn:$vote_id}",
+				success:function(data){
+				}
+			})
+		}
 		$(".asideLayer").fadeOut('500');
 		$(".asideLayerCenter").fadeOut('300');
 	});

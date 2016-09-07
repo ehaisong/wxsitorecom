@@ -125,6 +125,11 @@ class ShakeLotteryAction extends LotteryPrizeBaseAction
 			die;
 		}
 		$todaytime = strtotime(date('Y-m-d 00:00:00', $_SERVER['REQUEST_TIME']));
+		$lastshaketime = M("shakelottery_record")->where(array("aid" => $id, "user_id" => $player["id"]))->order("shaketime desc")->getField("shaketime");
+		if (($_SERVER["REQUEST_TIME"] - $lastshaketime) < 1) {
+		        echo '{"status":"timelimit","msg":""}';
+			exit();
+		}
 		if (0 < $actioninfo['is_limitwin']) {
 			$totay_lottery_count = M('shakelottery_record')->where(array('user_id' => $player['id'], 'iswin' => 1, 'shaketime' => array('gt', $todaytime)))->count();
 			if ($actioninfo['is_limitwin'] <= $totay_lottery_count) {
@@ -141,8 +146,8 @@ class ShakeLotteryAction extends LotteryPrizeBaseAction
 			die;
 		}
 		if (0 < $actioninfo['timespan']) {
-			$lottery_record = M('shakelottery_record')->where(array('user_id' => $player['id'], 'iswin' => 1, 'shaketime' => array('gt', $todaytime)))->order('shaketime desc')->find();
-			if (time() - $lottery_record['shaketime'] < $actioninfo['timespan'] * 60) {
+			$lottery_record = M('shakelottery_record')->where(array('user_id' => $player['id'], 'iswin' => 1))->order('shaketime desc')->find();
+			if (!empty($lottery_record) && (time() - $lottery_record['shaketime'] < $actioninfo['timespan'] * 60)) {
 				$prize = $this->LotteryPrize(true);
 			} else {
 				$prize = $this->LotteryPrize(false);
@@ -355,3 +360,4 @@ class ShakeLotteryAction extends LotteryPrizeBaseAction
 		return $cache['type'] == 'red_packet';
 	}
 }
+?>

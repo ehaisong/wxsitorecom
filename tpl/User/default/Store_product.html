@@ -50,12 +50,15 @@
 <div class="pageNavigator right">
 	<a href="{vifnn::U('Store/index',array('token'=>$token,'catid'=>$catid))}" class="btnGrayS vm bigbtn">返回</a>
 </div>
+<div class="searchbar right" style="margin-right:20px;margin-top:10px;">
+<form method="post" action="{vifnn::U('Store/product',array('token'=>$token))}">
+<input type="text" id="msgSearchInput" class="txt left" placeholder="输入商品名称或关键词搜索" name="searchkey" value="{vifnn:$searchkey}" style="padding:6px;width:155px;">
+<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+</form>
+</div>
 <div class="clr"></div>
 </div>
 <div class="msgWrap">
-<form method="post" action="" id="info">
-<input name="delall" type="hidden" value="">
-<input name="wxid" type="hidden" value="">
 <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
 <thead>
 <tr>
@@ -81,15 +84,14 @@
 <td>{vifnn:$hostlist.keyword}</td>
 <td>{vifnn:$hostlist.time|date="Y-m-d H:i:s",###}</td> 
 <td class="norightborder" align="center">
-	<a href="{vifnn::U('Store/addNew',array('id' => $hostlist['id'], 'token' => $token,'catid' => $catid, 'p' => $_GET['p']))}">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Store/del',array('id'=>$hostlist['id'],'token'=>$token,'catid'=>$catid))}');">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href="{vifnn::U('Store/comment', array('pid'=>$hostlist['id'],'token'=>$token,'catid'=>$catid))}">用户评论</a>
+	<a href="{vifnn::U('Store/addNew',array('id' => $hostlist['id'], 'token' => $token,'catid' => $hostlist['catid'], 'p' => $_GET['p']))}">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Store/del',array('id'=>$hostlist['id'],'token'=>$token,'catid'=>$hostlist['catid']))}');">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="{vifnn::U('Store/comment', array('pid'=>$hostlist['id'],'token'=>$token,'catid'=>$hostlist['catid']))}">用户评论</a>
 </td>
 </tr>
 </volist>
 </tbody>
 </table>
-</form>
 </div>
 <div class="cLine">
 <div class="pageNavigator right">

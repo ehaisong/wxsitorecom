@@ -1,0 +1,272 @@
+<include file="Public:head"/>
+<style>
+	.pages a{
+		height: 35px !important;
+		padding: 0 15px !important;
+		float: left !important;
+		margin-right: 15px !important;
+		line-height: 35px !important;
+		font-size: 14px !important;
+		border: #1abd6c 1px solid !important;
+		color: #1abd6c !important;
+	}
+	.current{
+		background: #1abd6c !important;
+		height: 35px !important;
+		padding: 0 15px !important;
+		float: left !important;
+		margin-right: 15px !important;
+		line-height: 35px !important;
+		font-size: 14px !important;
+		border: #1abd6c 1px solid !important;
+	}
+	.game_page li,.up,.down,.tiao,.tiao_input,.aiya{
+		height: 35px;
+		padding: 0 15px;
+		float: left;
+		margin-right: 15px;
+		line-height: 35px;
+		font-size: 14px;
+		border: #1abd6c 1px solid;
+		color: #1abd6c;
+		line-height:2.5 !important;
+	}
+	.yourclass{
+		top:30%;
+	}
+	.active{color: #fff !important; }
+	.game_page li:hover,.up:hover,.down:hover,.tiao:hover{background:#44b549;color: #fff !important;}
+	.pages a:hover{background:#44b549;color: #fff !important;}
+	.feature_list .feature_table .feat_txt a:hover{color:#44b549;}
+	.popup_pro p{line-height: 30px}
+	.feat_txt h5 span:hover{color:#44b549;}
+	.feature_list .search .search_input i{cursor:pointer; }
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button{
+		-webkit-appearance: none !important;
+		margin: 0;
+	}
+	input[type="number"]{-moz-appearance:textfield;}
+</style>
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
+<script src="{vifnn::$staticPath}/tpl/static/jquery.qrcode.min.js" type="text/javascript"></script>
+<script src="{vifnn::$staticPath}/tpl/static/layer/layer.js" type="text/javascript"></script>
+
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">兑换管理</h4>
+		<a href="/index.php?g=User&m=Boost&a=index&token={vifnn:$token}" class="right btnGrayS vm">返回我的活动</a>
+
+		<div class="clr"></div>
+	</div>
+
+
+	<div class="cLineB">
+		<ul id="tags">
+			<li <if condition="$convertType eq 0">class="selectTag"</if>>
+				<a href="{vifnn::U('Boost/convert',array('token'=>$token,'id'=>$id))}" data-show-id="paiming">排名获奖</a>
+			</li>
+		</ul>
+		<div class="clr"></div>
+	</div>
+
+	<div class="prize_box" id="paiming" <if condition="$convertType neq 0">style="display: none; "</if>>
+		<div class="msgWrap">
+			<div class="convert_info ztebSpan">
+
+				<volist id="awards" name="awardsValue">
+					<if condition="$key lt $awardsCount">
+						<if condition="isset($codeData[$key+1])">
+							<span><strong>{vifnn:$awards.awards_type}</strong>&nbsp;&nbsp;已兑：<em>{vifnn:$codeData[$key+1]['use']}</em>份&nbsp;剩余：<em>{vifnn:$awards['awards_num']-$codeData[$key+1]['use']}</em>份；</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						<else />
+							<span><strong>{vifnn:$awards.awards_type}</strong>&nbsp;&nbsp;已兑：<em>0</em>份&nbsp;剩余：<em>{vifnn:$awards.awards_num}</em>份；</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						</if>
+					</if>
+				</volist>
+			</div>
+
+			<div class="covert_search">
+				<form method="post" action="">
+					<select name="type">
+						<option value="0" <if condition="$type eq 0">selected</if>>兑换码</option>
+						<option value="1" <if condition="$type eq 1">selected</if>>昵称</option>
+					</select>
+					<input type="text" id="msgSearchInput" class="px" placeholder="输入搜索内容" name="keyword" value="{vifnn:$keyword}">
+
+					<span style="margin-left: 100px; ">奖项等级：</span>
+					<select name="awards_type">
+						<option value="0" <if condition="$awardsType eq 0">selected</if>>全部</option>
+						<volist id="awards" name="awardsValue">
+							<if condition="$key lt $awardsCount">
+								<option value="{vifnn:$key+1}" <if condition="$awardsType eq $key+1">selected</if>>{vifnn:$awards.awards_type}</option>
+							</if>
+						</volist>
+					</select>
+
+					<span style="margin-left: 100px; ">兑换状态：</span>
+					<select name="use_type">
+						<option value="2" <if condition="$useType eq 0">selected</if>>全部</option>
+						<option value="0" <if condition="$useType eq 0">selected</if>>未兑换</option>
+						<option value="1" <if condition="$useType eq 1">selected</if>>已兑换</option>
+					</select>
+
+					<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+				</form>
+
+				<a href="?g=User&m=Boost&a=exportConvert&id={vifnn:$id}&uid={vifnn:$uid}&boost_id={vifnn:$boostId}&key={vifnn:$userKey}&type={vifnn:$type}&keyword={vifnn:$keyword}&awards_type={vifnn:$awardsType}&use_type={vifnn:$useType}" class=" right btnGrayS vm" <if condition="$empty eq 1">style="display: none !important;"</if> >导出数据</a>
+			</div>
+
+
+			<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+				<THEAD>
+					<TR>
+						<TH>参与者信息</TH>
+						<TH>电话号码</TH>
+						<TH>获奖信息</TH>
+						<TH>兑换码</TH>
+						<TH>兑换状态</TH>
+						<TH>兑换时间</TH>
+						<TH class="norightborder">操作</TH>
+					</TR>
+				</THEAD>
+				<TBODY>
+				<TR></TR>
+				<volist id="list" name="converts">
+					<TR>
+						<TD>
+							#{vifnn:$key+1+($ps-1)*$num}
+							<img class="ztUserAvatar" src="{vifnn:$fans[$list['fans_id']]['portrait']|default='/tpl/User/default/common/images/portrait.jpg'}" width="50" height="50" alt="" style="border: 1px solid #F3F3F3; border-radius: 25px; ">
+							<div class="ztShit">
+								<span>{vifnn:$fans[$list['fans_id']]['wechaname']}</span><br>
+								<span class="f60">被助力<em>{vifnn:$scores[$list['fans_id']]['people']}</em>次，<em>{vifnn:$scores[$list['fans_id']]['score']}</em>分</span>
+							</div>
+						</TD>
+						<TD>
+							{vifnn:$fans[$list['fans_id']]['phone']}
+						</TD>
+						<TD>
+							{vifnn:$awardsValue[$list['awards_level']-1]['awards_type']}：{vifnn:$awardsValue[$list['awards_level']-1]['awards_name']}
+						</TD>
+						<TD>NO. {vifnn:$list.convert_code}</TD>
+						<TD><if condition="$list['is_use'] eq 0">未兑换<else />已兑换</if></TD>
+						<TD><if condition="$list['is_use'] eq 0">——<else />{vifnn:$list.convert_time}</if></TD>
+						<TD class="norightborder">
+							<if condition="$list['is_use'] eq 0">
+								<if condition="$awardsValue[$list['awards_level']-1]['awards_cate'] eq 1">
+									<a href="index.php?g=User&m=Boost&a=useConvert&id={vifnn:$id}&convert_id={vifnn:$list.id}&convert_cate=1&convert_counts={vifnn:$awardsValue[$list['awards_level']-1]['awards_counts']}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+								<elseif condition="$awardsValue[$list['awards_level']-1]['awards_cate'] eq 2" />
+									<a href="index.php?g=User&m=Boost&a=useConvert&id={vifnn:$id}&convert_id={vifnn:$list.id}&convert_cate=2&card_id={vifnn:$awardsValue[$list['awards_level']-1]['awards_counts']}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+								<elseif condition="$awardsValue[$list['awards_level']-1]['awards_cate'] eq 3" />
+									<a href="index.php?g=User&m=Boost&a=useConvert&id={vifnn:$id}&convert_id={vifnn:$list.id}&convert_cate=3&points={vifnn:$awardsValue[$list['awards_level']-1]['awards_counts']}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+								<else />
+									<a href="index.php?g=User&m=Boost&a=useConvert&id={vifnn:$id}&convert_id={vifnn:$list.id}&convert_cate={vifnn:$awardsValue[$list['awards_level']-1]['awards_cate']|default=6}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+								</if>
+							</if>
+						</TD>
+					</TR>
+				</volist>
+				</TBODY>
+			</TABLE>
+
+			<if condition="$empty neq 0">
+				<h3 style="text-align: center; margin-top: 25px; font-size: 25px; ">没有找到任何数据！</h3>
+			<elseif condition="$finish eq 1" />
+				<div class="paging clearfix">
+					<div style="margin: 20px auto; display: table;  ">
+						<div style="<if condition="$ps eq 0">display:none;<else/>display:block;</if>float:left;">
+							<a href="{vifnn::U('Boost/convert',array('token'=>$token, 'id'=>$id, 'p'=>($ps-1)))}">
+								<li class="up">上一页</li>
+							</a>
+						</div>
+						<div style="width:auto;float:left;">
+							<ul class="active_list clearfix game_page">
+								<?php
+					                for ($i=$pageStar; $i <= $pageEnd; $i++) {
+					                    echo '<a href="/index.php?g=User&m=Boost&a=convert&id='.$id.'&token='.$token.'&p='.$i.'"><li class="page_'.$i.'">'.$i.'</li></a>';
+								}
+								?>
+							</ul>
+						</div>
+						<div style="float:left;">
+							<a href="{vifnn::U('Boost/convert',array('token'=>$token, 'id'=>$id, 'p'=>($ps+1)))}">
+								<li class="down">下一页</li>
+							</a>
+						</div>
+
+						<div style="<if condition="$boostPage eq 1">display:none; </if>float:left;" class="and_p">
+							<div style="float:left;width:76px;height:37px;margin-right: 15px;text-align: center;line-height: 35px;font-size: 15px;">
+								共<b>{vifnn:$boostPage}</b>页
+							</div>
+							<div style="float:left;">
+								<li>
+									<span style="float:left;font-size: 15px;line-height: 34px;">到第&nbsp;</span>
+									<input type="number" min="1" max="{vifnn:$boostPage}" class="tiao_input" style="width:25px;padding: 0px 6px;margin-right:0px;color:#000;text-align:center;" value="{vifnn:$tiao_input}">
+									<span style="float:left;margin-right:10px;font-size: 15px;line-height: 34px;">&nbsp;页</span>
+								</li>
+							</div>
+							<div style="float:left;">
+								<a href="{vifnn::U('Boost/convert',array('token'=>$token,'id'=>$id))}" class="tiaoba">
+									<li class="tiao">跳</li>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</if>
+		</div>
+
+		<div class="msgWrap" <if condition="$finish eq 0">style="display: block; "<else />style="display: none; "</if>>
+			<h3 style="text-align: center; margin-top: 25px; font-size: 25px; ">活动尚未结束，暂无记录！</h3>
+		</div>
+	</div>
+</div>
+
+<div class="cLine">
+	<div class="pageNavigator right">
+		<div class="pages">{vifnn:$page}</div>
+	</div>
+	<div class="clr"></div>
+</div>
+</div>
+
+<div class="clr"></div>
+</div>
+</div>
+</div>
+<!--底部-->
+
+<script>
+	$(function () {
+		var ps = {vifnn:$ps|default=1};
+
+		if (ps < 1) {
+			var ps = 1;
+		}
+
+		$(".page_" + ps).css({"background": "#44b549", "color": "#FFF"});
+		if (ps <= 1) {
+			$('.up').css('display', 'none');
+		}
+
+		if (ps >= {vifnn:$boostPage|default=1}) {
+			$('.down').css('display', 'none');
+		}
+
+	});
+
+	$(".tiao_input").keyup(function () {
+		var $this = $(this);
+		var value = $this.val();
+
+		if (value > {vifnn:$boostPage|default=1}) {
+			value = {vifnn:$boostPage|default=1};
+
+			$this.val(value);
+		}
+
+		$(".tiaoba").attr('href', $(".tiaoba").attr('href') + '&p=' + value);
+	});
+</script>
+</div>
+<include file="Public:footer"/>

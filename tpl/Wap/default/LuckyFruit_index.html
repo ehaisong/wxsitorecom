@@ -129,6 +129,9 @@ background:rgba(0,0,0,0);
 .peplo_content div a{
     text-shadow: 0px 0px 0px;
 }
+<?php if(!empty($lottery['bg'])){?>
+.tigerslot{background: none;}
+<?php }?>
 </style>
 </head>
 <?php if($lottery['bg'] == ''){?>
@@ -781,8 +784,9 @@ window.shareData = {
             "moduleID":"{vifnn:$lottery.id}",
             "imgUrl": "{vifnn:$lottery.starpicurl}", 
             "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('LuckyFruit/index',array('token'=>$token,'id'=>$lottery['id'],'type'=>5))}",
-            "tTitle": "{vifnn:$lottery.title}",
-            "tContent": "",
+            "tTitle": "{vifnn:$lottery['title']|shareFilter}",
+            "tContent": "{vifnn:$lottery['info']|shareFilter}",
+			"fTitle": "{vifnn:$lottery['title']|shareFilter}",
 			"isShareNum":1,
 			"ShareNumData":"lottery_record,wecha_id;lid,{vifnn:$wecha_id};{vifnn:$lottery.id},sharecount"
 };

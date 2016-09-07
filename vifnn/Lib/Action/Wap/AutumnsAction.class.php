@@ -48,18 +48,17 @@ class AutumnsAction extends LotteryBaseAction{
 		$this->assign('focus',$focus);
 		$this->assign('url',$url);
 		$this->assign('activity',$data);
-                $this->assign('displayjpnums',$displayjpnums);
-                $this->assign('nums',$nums);
-                $this->assign('lucknums',$lucknums);
+        $this->assign('displayjpnums',$displayjpnums);
+        $this->assign('nums',$nums);
+        $this->assign('lucknums',$lucknums);
 		$this->assign('linfo',$Activity);
 		$this->assign('count',$count);
 		$this->assign('list',$list);
 		$this->assign('prize',$prize);
-
-		if($Activity['focus'] == 1 && !$this->isSubscribe()){
-			$this->memberNotice('请关注后再参加活动。',0);
-		}elseif(($Activity['needreg'] == 1 && empty($this->fans)) || ($Activity['focus'] == 0 && empty($this->wecha_id))){
-			$this->memberNotice('请注册后再参加活动。',1);
+		if($Activity['focus'] == 1 && $this->isSubscribe() == false){
+			$this->memberNotice('',1);
+		}elseif(($Activity['needreg'] == 0 && empty($this->fans['tel']))){
+			$this->memberNotice();
 		}
 		$this->display();
 	}
@@ -179,6 +178,7 @@ class AutumnsAction extends LotteryBaseAction{
 		}
 
 		echo json_encode($result);
+		exit;
 	}
 
 	//中奖概率
@@ -218,6 +218,9 @@ class AutumnsAction extends LotteryBaseAction{
 			$fifthNum=intval($lottery['fivenums'])-intval($lottery['fivelucknums']);
 			$sixthNum=intval($lottery['sixnums'])-intval($lottery['sixlucknums']);
 			$multi=intval($lottery['canrqnums']);
+			if($lottery['awarding'] == 0){
+				$lottery['awarding'] = 30;
+			}
 			$isopen = M('Autumns_open')->where(array('token'=>$token,'bid'=>$info))->getField('isopen');
 			if($isopen != 0){
 				$this->error('这个礼盒已经打开过了！请重新进入我的礼盒查看。',U('Autumns/index',array('token'=>$token,'wecha_id'=>$wecha_id,'id'=>$bid)));
@@ -263,7 +266,7 @@ class AutumnsAction extends LotteryBaseAction{
 						$data['lvprize']='一等奖';
 						$now = time();
 						$data['prizedate']=date('Y-m-d H:i:s',$now);
-						$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+						$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 						$data['sn']=uniqid();
 						$mybox->where(array('id'=>$info,'token'=>$token))->save($data);
 						$data['isopen']=1;
@@ -299,7 +302,7 @@ class AutumnsAction extends LotteryBaseAction{
 						$data['lvprize']='一等奖';
 						$now = time();
 						$data['prizedate']=date('Y-m-d H:i:s',$now);
-						$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+						$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 						$data['sn']=uniqid();
 						$mybox->where(array('id'=>$info))->save($data);
 						$data['isopen']=1;
@@ -334,7 +337,7 @@ class AutumnsAction extends LotteryBaseAction{
 							$data['lvprize']='二等奖';
 							$now = time();
 							$data['prizedate']=date('Y-m-d H:i:s',$now);
-							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 							$data['sn']=uniqid();
 							$mybox->where(array('id'=>$info))->save($data);
 							$data['isopen']=1;
@@ -370,7 +373,7 @@ class AutumnsAction extends LotteryBaseAction{
 							$data['lvprize']='三等奖';
 							$now = time();
 							$data['prizedate']=date('Y-m-d H:i:s',$now);
-							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 							$data['sn']=uniqid();
 							$mybox->where(array('id'=>$info))->save($data);
 							$data['isopen']=1;
@@ -406,7 +409,7 @@ class AutumnsAction extends LotteryBaseAction{
 							$data['lvprize']='四等奖';
 							$now = time();
 							$data['prizedate']=date('Y-m-d H:i:s',$now);
-							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 							$data['sn']=uniqid();
 							$mybox->where(array('id'=>$info))->save($data);
 							$data['isopen']=1;
@@ -441,7 +444,7 @@ class AutumnsAction extends LotteryBaseAction{
 							$data['lvprize']='五等奖';
 							$now = time();
 							$data['prizedate']=date('Y-m-d H:i:s',$now);
-							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 							$data['sn']=uniqid();
 							$mybox->where(array('id'=>$info))->save($data);
 							$data['isopen']=1;
@@ -474,7 +477,7 @@ class AutumnsAction extends LotteryBaseAction{
 							$data['lvprize']='六等奖';
 							$now = time();
 							$data['prizedate']=date('Y-m-d H:i:s',$now);
-							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*30);
+							$data['prizedates']=date('Y-m-d H:i:s',$now+3600*24*$lottery['awarding']);
 							$data['sn']=uniqid();
 							$mybox->where(array('id'=>$info))->save($data);
 							$data['isopen']=1;
@@ -560,11 +563,19 @@ class AutumnsAction extends LotteryBaseAction{
 		$id = $this->_GET('id','intval');
 		$token=$this->token;
 		$cid =M('Lottery')->where(array('id'=>$id,'token'=>$token))->getField('zjpic');
-		$time = M('Autumns_open')->where(array('token'=>$token,'lid'=>$id,'bid'=>$bid))->getField('time');
+		$boxinfo = M('Autumns_open')->where(array('token'=>$token,'lid'=>$id,'bid'=>$bid))->find();
+		$time = $boxinfo['time'];
 		$optime = M('Activity')->where(array('token'=>$token,'id'=>$cid,'type'=>1))->getField('optime');
 		if($time == $optime || $time > $optime){
 			$result['err'] = 1;
 			$result['info'] = '帮忙失败，这只盒子已经被打开了！';
+			exit(json_encode($result));
+		}
+		if($this->wecha_id != "" && $boxinfo['wecha_id'] != "" && ($this->wecha_id == $boxinfo['wecha_id'])){
+			$result['err'] = 1;
+			$result['info'] = '帮忙失败，自己不能给自己拆礼盒！';
+			exit(json_encode($result));
+
 		}
 		//忙帮打开
 		$wecha_id=$this->wecha_id;
@@ -580,8 +591,6 @@ class AutumnsAction extends LotteryBaseAction{
 				$this->error('您已经帮忙拆过这个礼盒了哦！',U('Autumns/open',array('token'=>$token,'id'=>$id,'bid'=>$bid,'wecha_id'=>$wecha_id)));
 			}
 		}
-			
-		
 		if($time<$optime){
 			$time++;
 		}
@@ -591,7 +600,8 @@ class AutumnsAction extends LotteryBaseAction{
 			$result['info'] = '';
 		}else{
 			$result['err'] = 1;
-			$result['info'] = '操作失败！';
+			$result['info'] = '帮TA拆礼盒失败。';
+			exit(json_encode($result));
 		}
 		//存入帮忙用户的信息。
 		$data['wecha_id']=$wecha_id;
@@ -601,7 +611,10 @@ class AutumnsAction extends LotteryBaseAction{
 		$data['token']=$token;
 		if(M('Autumns_ip')->add($data)){
 			$result['err'] = 0;
-			$result['info'] = '你已经帮忙开启过这个礼盒了。';
+			$result['info'] = '帮TA拆礼盒成功。';
+		}else{
+			$result['err'] = 1;
+			$result['info'] = '帮TA拆礼盒失败。';
 		}
 		exit(json_encode($result));
 	}
@@ -680,3 +693,4 @@ class AutumnsAction extends LotteryBaseAction{
 	}
 
 }
+?>

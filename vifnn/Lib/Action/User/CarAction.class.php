@@ -727,15 +727,10 @@ class CarAction extends UserAction{
         if(IS_POST){
             $_id    =filter_var($this->_post('id'),FILTER_VALIDATE_INT);
             $status = filter_var($this->_post('status'),FILTER_SANITIZE_STRING);
-
+	    $this->handleKeyword($_id, "Carset", $this->_post("keyword", "trim"));
             if($status == 'editstatus' && $_id != ''){
                  $wh = array('token'=>session('token'),'id'=>$_id);
                  if($data->where($wh)->save($_POST)){
-                        $data1['pid']=$_id;
-                        $data1['module']='Carset';
-                        $data1['token']=session('token');
-                        $da['keyword']=trim($this->_post('keyword'));
-                        M('Keyword')->where($data1)->save($da);
                         $this->success('修改成功',U('Car/carset',array('token'=>session('token'))));
                     }else{
                         $this->error('修改操作失败,请检查是否有空项');exit;
@@ -744,11 +739,6 @@ class CarAction extends UserAction{
             }else{
                     if($data->create()!=false){
                         if($id=$data->data($_POST)->add()){
-                                $data1['pid']=$id;
-                                $data1['module']='Carset';
-                                $data1['token']=session('token');
-                                $data1['keyword']=trim($_POST['keyword']);
-                                M('Keyword')->add($data1);
                                 $this->success('添加成功',U('Car/carset',array('token'=>session('token'))));
                                  exit;
                         }else{
@@ -768,11 +758,30 @@ class CarAction extends UserAction{
     }
 
     public function cat(){
-        $list   = M('Carcat')->where(array('token'=>$this->token))->order('sort desc,id desc')->select();
-        $is_cat = M('Carcat')->where(array('token'=>$this->token,'system'=>'1'))->find();
+	$is_cat = M("Carcat")->where(array("token" => $this->token, "system" => "1"))->order("sort desc")->find();
+
         if(empty($is_cat)){
             $this->default_cat();
         }
+		if (!M("Carcat")->where(array("token" => $this->token, "url" => "{siteUrl}/index.php?g=Wap&m=Car&a=news&token=" . $this->token . "&wecha_id={wechat_id}&type=pre"))->find()) {
+			$datainfo[0]["token"] = $this->token;
+			$datainfo[0]["is_show"] = "1";
+			$datainfo[0]["system"] = "1";
+			$datainfo[0]["sort"] = $is_cat["sort"] + 1;
+			$datainfo[0]["url"] = "{siteUrl}/index.php?g=Wap&m=Car&a=news&token=" . $this->token . "&wecha_id={wechat_id}&type=";
+			$datainfo[0]["img"] = "/tpl/static/attachment/icon/white/15.png";
+			$datainfo[0]["name"] = "最新车讯";
+			$datainfo[1]["token"] = $this->token;
+			$datainfo[1]["is_show"] = "1";
+			$datainfo[1]["system"] = "1";
+			$datainfo[1]["sort"] = $is_cat["sort"] + 2;
+			$datainfo[1]["url"] = "{siteUrl}/index.php?g=Wap&m=Car&a=news&token=" . $this->token . "&wecha_id={wechat_id}&type=pre";
+			$datainfo[1]["img"] = "/tpl/static/attachment/icon/white/15.png";
+			$datainfo[1]["name"] = "最新优惠";
+			M("Carcat")->addAll($datainfo);
+		}
+
+		$list = M("Carcat")->where(array("token" => $this->token))->order("sort desc,id desc")->select();
         $this->assign('list',$list);
         $this->display();
     }
@@ -814,6 +823,12 @@ class CarAction extends UserAction{
         $info[8]['url']  = '{siteUrl}/index.php?g=Wap&m=Car&a=news&token='.$this->token.'&wecha_id={wechat_id}&type=oldcar';
         $info[8]['img'] = '/tpl/static/attachment/icon/white/15.png';
         $info[8]['name'] = '尊选二手车';
+		$info[9]["url"] = "{siteUrl}/index.php?g=Wap&m=Car&a=news&token=" . $this->token . "&wecha_id={wechat_id}&type=";
+		$info[9]["img"] = "/tpl/static/attachment/icon/white/15.png";
+		$info[9]["name"] = "最新车讯";
+		$info[10]["url"] = "{siteUrl}/index.php?g=Wap&m=Car&a=news&token=" . $this->token . "&wecha_id={wechat_id}&type=pre";
+		$info[10]["img"] = "/tpl/static/attachment/icon/white/15.png";
+		$info[10]["name"] = "最新优惠";
         
         foreach ($info as $key=>$value){
             $info[$key]['token']    = $this->token;
@@ -859,3 +874,4 @@ class CarAction extends UserAction{
     }
 }
 
+?>

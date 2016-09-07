@@ -91,7 +91,7 @@ class MemberAction extends UserAction{
 		 $data['wecha_id'] = $wecha_id;
 		 $data['sign_time'] = strtotime($add_expend_time);
 		 $data['score_type'] = 2;
-		 $data['expense']  = ceil($add_expend * $getset['reward']);
+		$data["expense"] = ($getset["expense"] <= $add_expend ? floor(($add_expend * $getset["reward"]) / $getset["expense"]) : 0);
 		 $data['sell_expense'] = $add_expend; //消费金额
 		 //var_dump($data);exit;
 		 $back = M('Member_card_sign')->data($data)->add();

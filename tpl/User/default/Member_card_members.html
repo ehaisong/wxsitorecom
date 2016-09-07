@@ -1,4 +1,4 @@
-<include file="Public:head1"/>
+<include file="Public:head"/>
 <script src="{vifnn::RES}/js/date/WdatePicker.js"></script>  
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
@@ -32,6 +32,7 @@
 		<button type="submit" name="appidsubmit" value="true" class="btnGreen vm finder" >查询</button>
 	</div>
 	<a class="right btnGrayS vm" href="{vifnn::U('Member_card/index',array('token'=>$token))}">返回</a>
+	<a class="right btnGrayS vm" href="{vifnn::U('Member_card/exportmembers', array('token' => $token,'id'=>$thisCard['id'],'type' => 1))}">导出会员信息</a>
 <span class="clr"></span>
 </div>
           <div class="msgWrap">
@@ -39,7 +40,11 @@
 <div class="alert alert-success alert-dismissable" style="margin-top:20px;">
 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
 <else />
-           <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;"></if>注意:在每行的输入框里可以通过输入消费金额（可以填写负数）来增减会员消费金额，积分会根据“积分设置”中的消费积分比例变化</div>
+           <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;"></if>
+		   <p>1、在每行的输入框里可以通过输入消费金额（可以填写负数）来增减会员消费金额，积分会根据“积分设置”中的消费积分比例变化</p>
+		   <p>2、例如积分设置中设置消费2元奖励50个积分，那么输入-1元时就会扣除25个积分，消费奖励有金额限制，扣除时没有金额限制，所得结果会去掉小数部分取整</p>
+              <p>3、会员卡充值成功通知模板：TM00009，会员卡退款成功通知模板：TM00004</p>
+		   </div>
 
           <input name="delall"  type="hidden" value="del" />
            <input name="wxid"  type="hidden" value="gh_423dwjkewad" />

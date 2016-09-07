@@ -4,88 +4,104 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>权限管理</title>
 <include file="common:public" />
+<style>
+	#system td{border-top: 1px solid #E7E7E7;}
+	.ksearch{border-bottom: 1px solid #E7E7E7;}
+	.kserico{margin-left:-25px}
+	.kser{margin-left:20px;}
+	.sels{height:25px;width:120px}
+	.ipt{margin-left:50px;}
+	.ipt:focus{border-color: #1ab394 !important;}
+	.layui-layer div
+	{
+		margin: 0px;
+	}
+
+</style>
+	<script src="{vifnn::STATICS}/layer/layer.js" type="text/javascript"></script>
 <div class="cr"></div>
 <div id="artlist">
-
-	 <div class="ksearch">
+<div id="btl">
+	 <div class="ksearch" style="width:100%;margin:0px">
     	<div class="fl">
-			<form action="{vifnn::U('Users/search')}" method="post">
+			<form action="{vifnn::U('Users/search')}" method="post"  id="myform">
 	
-			<b class="kserico">快速搜索：</b>搜索类型：
-			<select name="type">
+			<b class="kserico">快速搜索：</b><span class="kser">搜索类型：</span>
+			<select name="type" class="sels" style="width:100px">
 				<option value="1">用户名</option>
 				<option value="2">用户ID</option>
 				<option value="3">用户邮箱</option>
 				<option value="4">手机号</option>
 			</select> 
 			<input name="name" class="ipt" type="text" value=""> 
-			<input type="submit" class="ksub" value="">
+			<input type="submit" value="搜    索" class="shel" style="color: #FFFFFF;text-align:center;"/>
 			</form>
         </div>
         <div class="fl">
 			<b>排序方式：</b>
-			<select>
+			<select class="sels" >
 				<option value="">注册时间（降序）</option>
 				<option value="">登陆时间（降序）</option>
 			</select>
 		</div>
         <div class="fl">
 			<b>查看方式：</b>
-			<select>
+			<select class="sels" >
 				<option value="">按分类查看</option>
 			</select>
 		</div>
     </div>
- 	
-</div>
-<form name="form1" method="post">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0" id="alist">
+<form name="form1" method="post" id="myform">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" id="alist" class="fonts">
 		<tr>
 			<td align='center'><input type="checkbox" id="checkAll" value="1" style="vertical-align:middle;"/>&nbsp;全选</td>
-			<td align='center'><input type="submit" value="设为系统用户" onclick="send();"/></td>
-			<td align='center'><input type="submit" value="取消系统用户" onclick="save();"/>&nbsp;&nbsp;<nobr>系统用户可以看到视频帮助</nobr></td>
+			<td align='center'><input type="submit" value="设为系统用户" onclick="send();" class="subs" style="width:100px"/></td>
+			<td align='center' style="width:400px"><input type="submit" value="取消系统用户" onclick="save();" class="subs1" style="width:100px"/>&nbsp;&nbsp;<nobr>系统用户可以看到视频帮助</nobr></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
 			<td align='center'><input type="hidden" name="pid" value="{vifnn:$pid}"/></td>
 		</tr>
-		  <tr>
+		  <tr id="system">
 		  	<td width="40">选中</td>
 			<td width="20">ID</td>
 			<td width="150">用户名称</td>
 			<td width="50">系统用户</td>
 			<td width="150">角色组</td>
-		    <td width="100">用户邮箱</td>		
-		    <td width="100">用户电话</td>		
 			<td width="100">最后登录IP</td>
 			<td width="150">最后登录时间</td>
-		    <td width="100">到期时间</td>		
 			<td width="70">状态</td>
 			<td width="100">管理操作</td>
 		  </tr>
 		    <volist name="info" id="vo">
-				<tr>
+				<tr id="nsv">
 					<td align='center'><input type="checkbox" name='test[]' value="{vifnn:$vo.id}"/></td>
 					<td align='center'>{vifnn:$vo.id}</td>
 					<td >{vifnn:$vo.username}</td>
 					<td ><eq name="vo.sysuser" value="1">是<else/>否</eq></td>
 					<td >{vifnn:$group[$vo['gid']]}</td>
-				    <td >{vifnn:$vo.email}</td>				
-				    <td >{vifnn:$vo.mp}</td>
 					<td align='center'>{vifnn:$vo.lastip}</td>
 					<td align='center'><php>echo date('Y-m-d H:i:s', $vo['lasttime'])</php></td>
-				    <td align='center'><php>echo date('Y-m-d', $vo['viptime'])</php></td>
 					<td align='center'><eq name="vo.status" value="1"><font color="red">√</font><else/><font color="blue">×</font></eq> 
 					</td>
 					<td align='center'>
 						<a href="{vifnn::U('Users/edit/',array('id'=>$vo['id']))}">修改</a>
-						| <eq name="vo.username" value="admin"><font color="#cccccc">删除</font><else/><a href="javascript:void(0)" onclick="if(confirm('确定删除吗')){location.href='{vifnn::U('Users/del/',array('id'=>$vo['id']))}'}">删除</a></eq>
+						<if condition="$isjiameng">
+						| <a data-uid="{vifnn:$vo.id}" data-url="{vifnn::U('assignAgent',array('id'=>$vo['id']))}" class="assign_btn" href="javascript:;">分配</a>
+						</if>
+						| <a href="javascript:void(0)" onclick="if(confirm('确定删除吗')){location.href='{vifnn::U('Users/del/',array('id'=>$vo['id']))}'}">删除</a>
 					</td>
 				</tr>
 		    </volist>
 	    <tr bgcolor="#FFFFFF"> 
-	      	<td colspan="12"><div class="listpage">{vifnn:$page}</div></td>
+	      	<td colspan="9"><div class="listpage">{vifnn:$page}</div></td>
 	    </tr>
 	   
 	</table>
 </form>
+</div>
 <script type="text/javascript">
 	$(function(){
 		$('#checkAll').click(function(){
@@ -107,5 +123,25 @@
 		document.form1.submit();
 	}
 </script>
+
+	<script>
+		$('.assign_btn').click(function()
+		{
+			var uid=$(this).attr('data-uid');
+			var url=$(this).attr('data-url');
+			layer.open({
+				type: 2,
+				title:'[ID:'+uid+'] 分配给代理商',
+				shadeClose: true,
+				shade: 0.5,
+				area: ['500px', '350px'],
+				content: url
+			});
+		});
+	</script>
+
+
+
+
 </body>
 </html>

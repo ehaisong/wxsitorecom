@@ -8,19 +8,21 @@ class BusinessAction extends UserAction{
         $type = filter_var($this->_get('type'),FILTER_SANITIZE_STRING);
         $this->assign('type',$type);
         $arrAllow = array('fitness','gover','food','travel','flower','property','ktv','bar','fitment','wedding','affections','housekeeper','lease','beauty');
-        if(!empty($_GET['p'])){
-               $this->assign('p',$_GET['p']);
-        }else{
-             if(!in_array($type,$arrAllow)){
-            $this->error('抱歉,您的参数不合法!',U('Function/index',array('token'=>$this->token)));
-            }
-        }
+		if (!empty($_GET["p"])) {
+			$this->assign("p", $_GET["p"]);
+		}
+		else if (!in_array($type, $arrAllow)) {
+			$this->error("抱歉,您的参数不合法!", U("Function/index", array("token" => $this->token)));
+		}
 
-        $_POST['token'] = session('token');
-		if( $type == 'wedding') $type = 'buswedd';
-		$this->canUseFunction( $type );
+		$_POST["token"] = session("token");
 
-    }
+		if ($type == "wedding") {
+			$type = "buswedd";
+		}
+
+		$this->canUseFunction($type);
+	}
 
     public function index(){
         $data       = D('busines');
@@ -52,7 +54,18 @@ class BusinessAction extends UserAction{
         $bid  = filter_var($this->_get('bid'),FILTER_VALIDATE_INT);
         $where_2 = array('token'=>session('token'),'type'=>$type,'bid'=>$bid);
         $busines = $t_busines->where($where_2)->find();
+		$where_3 = array("token" => session("token"), "type" => $type, "bid_id" => $bid);
+		$businesxc = D("busines_pic")->where($where_3)->find();
 
+		if (!empty($businesxc)) {
+			foreach ($photo as $ppv ) {
+				if ($ppv["id"] == $businesxc["ablum_id"]) {
+					$businesxc["xctitle"] = $ppv["title"];
+				}
+			}
+		}
+
+		$this->assign("businesxc", $businesxc);
         if(IS_POST){
 
             $filters = array(
@@ -378,6 +391,24 @@ class BusinessAction extends UserAction{
         $pid  = filter_var($this->_get('pid'),FILTER_VALIDATE_INT);
         $where_2 = array('token'=>session('token'),'type'=>$type,'pid'=>$pid);
         $busines_second = $t_busines_second->where($where_2)->find();
+		$thiswygs = array();
+
+		if (!empty($busines_second)) {
+			foreach ($busines_list as $bbv ) {
+				if ($bbv["bid"] == $busines_second["bid_id"]) {
+					$thiswygs = $busines_second;
+					$thiswygs["wytitle"] = $bbv["mtitle"];
+				}
+			}
+
+			foreach ($photo as $ppv ) {
+				if ($ppv["id"] == $busines_second["ablum_id"]) {
+					$thiswygs["xctitle"] = $ppv["title"];
+				}
+			}
+		}
+
+		$this->assign("thiswygs", $thiswygs);
         if(IS_POST){
             $filters = array(
                 'picurl_1'=>array(
@@ -632,3 +663,4 @@ class BusinessAction extends UserAction{
 
 
 }
+?>

@@ -3,10 +3,26 @@
 <else />
 <include file="Repast:head" />
 </if>
-<script src="./tpl/User/default/common/js/date/WdatePicker.js"></script>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/timepicki/timepicki.css" />
+<style>
+    .time_pick{
+        display: inline-block;
+        position: relative;
+        margin: 0px 5px;
+        vertical-align: middle;
+    }
+    .timepicker_wrap{
+        width: 160px;
+    }
+    .timepicker_wrap input{
+        padding: 2px;
+    }
+</style>
 <script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
 <script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/timepicki/timepicki.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/dish_user/common.js"></script>
 <link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
 <div class="content"> 
 	<div class="cLineB"> 
@@ -20,7 +36,7 @@
 	<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;"></if>
 	<span>温馨提示：</span>
 	<p>1、此处只显示总店信息，连锁店订单及菜品请进入相应平台进行管理，连锁店登录账号密码及登录地址请在LBS里设置查看<br/>微外卖的菜品添加请到微餐饮的菜品管理里添加修改</p>
-	<p>2、本功能使用了模板消息中的“订单完成通”知模板消息，模板编号OPENTM202521011。
+	<p>2、本功能使用了模板消息中的“订单完成通知”模板消息，模板编号OPENTM202521011。
           开通微信支付功能的公众号在使用此功能的时候可以在”基本设置——微信模板消息“中配置对应的模板消息</p>
 	</div>
 <!--tab start-->
@@ -44,26 +60,14 @@
       <tbody>
        <tr> 
         <th>送餐时间：</th> 
-		<td style="width:480px"><div>时间段一从 <input type="input" class="px" name="zc_sdate" id="zc_sdate" value="<if condition="$mtime['zc_sdate'] gt 0">{vifnn:$mtime['zc_sdate']|date="H:i",###}</if>" onClick="WdatePicker({dateFmt:'H:mm'})"> 开始
-		&nbsp;到&nbsp; 
-		<input type="input" class="px" name="zc_edate" id="zc_edate" value="<if condition="$mtime['zc_edate'] gt 0">{vifnn:$mtime['zc_edate']|date="H:i",###}</if>"  onClick="WdatePicker({dateFmt:'H:mm'})"> 结束</div>
-		<br/>
-		<div>
-		时间段二从 <input type="input" class="px" name="wc_sdate" id="wc_sdate" value="<if condition="$mtime['wc_sdate'] gt 0">{vifnn:$mtime['wc_sdate']|date="H:i",###}</if>" onClick="WdatePicker({dateFmt:'H:mm',minDate:'5:00'})"> 开始
-		&nbsp;到&nbsp; 
-		<input type="input" class="px" name="wc_edate" id="wc_edate" value="<if condition="$mtime['wc_edate'] gt 0">{vifnn:$mtime['wc_edate']|date="H:i",###}</if>"  onClick="WdatePicker({dateFmt:'H:mm',minDate:'5:00'})"> 结束</div>
+		<td>
+            <div class="my_times" style="width: 600px;">
+                <div class="times_list"></div>
+                <a style="margin-top: 5px;display: inline-block;" class="times_add" href="javascript:;">增加一个时段</a>
+                <input type="hidden" name="open_times" class="times_json" value="{vifnn:$mtime['open_times']|htmlspecialchars}" />
+            </div>
 		</td>
-		<td rowspan="2"><span class="red">如果您的经营时间是19:00-凌晨02:00，你可以第一段开始时间留空不填 结束时间02:00,第二段开始时间19:00 结束时间留空不填。全不填默认为全天24小时营业</span></td>
        </tr>
-	   <!---
-       <tr> 
-        <th>晚餐送餐时间段：</th> 
-		<td style="width:480px"><input type="input" class="px" name="wc_sdate" id="wc_sdate" value="<if condition="$mtime['wc_sdate'] gt 0">{vifnn:$mtime['wc_sdate']|date="H:i",###}</if>" onClick="WdatePicker({dateFmt:'H:mm',minDate:'5:00'})">
-		到
-		<input type="input" class="px" name="wc_edate" id="wc_edate" value="<if condition="$mtime['wc_edate'] gt 0">{vifnn:$mtime['wc_edate']|date="H:i",###}</if>" onClick="WdatePicker({dateFmt:'H:mm',minDate:'5:00'})"> 结束</td>
-		<td></td>
-       </tr>
-	   --->
        <tr> 
         <th>供客户选择时间：</th> 
         <td style="width:370px">当前时间每隔&nbsp;
@@ -103,6 +107,14 @@
 <input type="text" class="px" name="delivery_fee" id="delivery_fee" value="<?php echo $mtime['delivery_fee']/100;?>" />&nbsp;单位元
 </td>
 </tr>
+
+       <tr>
+           <th>餐盒费(单价)：</th>
+           <td>
+               <input type="text" class="px" name="meal_fee" id="meal_fee" value="<?php echo $mtime['meal_fee']/100;?>" />&nbsp;单位元
+           </td>
+       </tr>
+
 <tr>
 <th>开启菜品会员折扣：</th>
 <td colspan="2">
@@ -144,6 +156,13 @@ $(function(){
         </td>
        </tr>
 
+       <tr>
+           <th>外卖公告：</th>
+           <td colspan="2">
+               <textarea style="width:560px;height:75px" name="announcement" id="announcement" class="px">{vifnn:$mtime.announcement}</textarea>
+           </td>
+       </tr>
+
 	    <tr> 
         <th>门店幻灯图片1：</th>
         <td colspan="2"><input type="text" name="simage[]" value="{vifnn:$simage['img']['0']}" class="px" id="img0shop" style="width:380px;" /> <a href="###" onclick="upyunPicUpload('img0shop',640,270,'{vifnn:$token}')" class="a_upload">上传</a> <a href="###" onclick="viewImg('img0shop')"> &nbsp;预览&nbsp;</a>图片建议尺寸[640*270]<br/><input type="text" name="tourl[]"  value="{vifnn:$simage['tourl']['0']}" placeholder="跳转地址" class="px" style="width:130px;" id="tourl_0"><a href="###" onclick="addLink('tourl_0',0)" class="a_choose" >从功能库添加</a></td>
@@ -170,6 +189,9 @@ $(function(){
      </table> 
      </div>
 </form>
-</div> 
+</div>
+<script>
+    new OpenTimes('.my_times');
+</script>
 
 <include file="Public:footer" />

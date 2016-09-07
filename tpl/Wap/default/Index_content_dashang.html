@@ -52,7 +52,7 @@
 					alert('至少输入0.01元');return;
 				}
 			}
-			location.href='<?php echo U('Wap/Index/dashang',array('token'=>$token,'imgid'=>$_GET['id']));?>&price='+price;
+			location.href='<?php echo U('Wap/Index/dashang',array('token'=>$token,'imgid'=>$imgid));?>&price='+price;
 		});
 		var ac_len=$(".layer_active li").length;
  
@@ -84,9 +84,9 @@
                     <?php if($res['dashang_price_6'] > 0){?><li><?php echo $res['dashang_price_6']/100;?>元</li><?php }?>
                 </ul>
 				<?php }; ?>
-                <div class="layer_input">
+               <!-- <div class="layer_input">
                     <input name="myprice" type="text" value="请输入其他金额" onFocus="if (value =='请输入其他金额'){value =''}" onBlur="if (value ==''){value='请输入其他金额'}" style="color:#fff7c4"><i style="font-style: normal;">元</i></input>
-                </div>
+                </div>-->
             </div>
             <div class="layer_button">赏</div>
         </div>
@@ -96,9 +96,9 @@
             <div class="layer_head"><img src="{vifnn:$wxuser['qr']}"></div>
             <div class="layer_txt">
                 <p><?php echo (rand($res['dashang_price_min'],$res['dashang_price_max']))/100;?>元</p>
-                <div class="layer_input">
+                <!--<div class="layer_input">
                     <input name="myprice" type="text" value="请输入其他金额" onFocus="if (value =='请输入其他金额'){value =''}" onBlur="if (value ==''){value='请输入其他金额'}" style="color:#fff7c4"><i style="font-style: normal;">元</i></input>
-                </div>
+                </div>-->
             </div>
             <div class="layer_button">赏</div>
         </div>

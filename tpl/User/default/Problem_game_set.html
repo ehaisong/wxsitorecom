@@ -106,6 +106,11 @@ items : [
         <th><span class="red">*</span>持续时间：</th>
         <td><input type="text" id="end_day" name="end_day" value="<if condition="$set.end_day eq ''">7<else/>{vifnn:$set.end_day}</if>" class="px" style="width:100px;" /> (天) 设置活动持续时间</td> 
       </tr>
+	  
+	 <tr> 
+        <th>手机端排名显示条数：</th>
+        <td><input type="text" id="rank_num" name="rank_num" value="<if condition="$set.rank_num eq ''">10<else/>{vifnn:$set.rank_num}</if>" class="px" style="width:100px;" /> (条) 请输入正确的条数否则以10条为准</td> 
+      </tr>
       
        <tr> 
         <th><span class="red"></span>结束提示：</th> 
@@ -123,6 +128,13 @@ items : [
             <p>3、活动持续7天，结束后积分最高者获得胜利，同积分会自动按照答题时间进行排名</p>
           </TD>
         </TR>  
+		<tr>
+			<th>未关注是否可以参与：</th>
+			<td>
+			<input type="radio" name="is_follow" value="1" <if condition="$set.is_follow eq '1' or $set.is_follow eq 0">checked</if>>
+			是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="is_follow" value="2" <if condition="$set.is_follow eq '2'">checked</if>>否<span style="width:318px;">&nbsp;&nbsp;&nbsp;{vifnn:$__access_remind__}</span>
+			</td>
+		</tr>
       <tr>
         <th>是否开启：</th>
         <td>
@@ -137,7 +149,7 @@ items : [
        <td>
        <if condition="$isDining neq 1"><input type="hidden" value="0" name="dining" /><else/><input type="hidden" value="1" name="dining" /></if>
        <input type="hidden" value="{vifnn:$set.id}" name="id" />
-       <button type="submit" name="button" class="btnGreen">保存</button> &nbsp; <a href="{vifnn::U('Product/index',array('token'=>$token))}" class="btnGray vm">取消</a></td> 
+       <button type="submit" name="button" class="btnGreen">保存</button> &nbsp; <a href="{vifnn::U('Problem/index',array('token'=>$token))}" class="btnGray vm">取消</a></td> 
       </tr> 
       </tbody> 
      </table> 

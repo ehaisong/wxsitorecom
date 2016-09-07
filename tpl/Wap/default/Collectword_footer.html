@@ -13,7 +13,7 @@
 		            	已结束        
 		            </a>  
 		        <?php else: ?>
-			        <?php if(empty($share_key) && $my['is_join']): ?>
+			        <?php if(empty($share_key) && $my['is_join'] && empty($my['is_prize']) ): ?>
 		            <a href="javascript:;" onclick="showWindow('.w4')">
 			            	帮{vifnn:$TA}增加集字机会          
 		            </a>  
@@ -181,3 +181,4 @@ if ('' == html.trim()) {
 });
 </script>
 {vifnn:$shareScript}
+	<include file="Public:tongji"/>

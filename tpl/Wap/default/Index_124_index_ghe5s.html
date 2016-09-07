@@ -93,13 +93,14 @@
             <volist name="info" id="vo">
             <div class="Category">
                 <div class="cname">
-                    {vifnn:$vo.name}                <a href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>" class="more">查看更多</a>
+                    {vifnn:$vo.name}                <a href="{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token'],'lvs'=>1))}" class="more">查看更多</a>
                 </div>
                 <div class="clist clist1 swiper-container">
                     <div class="swiper-wrapper" style="width: 100%">
                         <div class="swiper-slide swiper-slide-visible swiper-slide-active" style="width: 100%;">
                     <ul>
                     <volist name="vo['sub']" id="res">
+                        <if condition="$i lt 9">
                         <li>
                             
                             <a href="<if condition="$res['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$res['id'],'token'=>$res['token']))}<else/>{vifnn:$res.url|htmlspecialchars_decode}</if>">
@@ -110,6 +111,7 @@
                             </a>
                             
                         </li>
+                        </if>
                     </volist>
                     </ul>
                         </div>

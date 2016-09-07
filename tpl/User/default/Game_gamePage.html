@@ -1,18 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
 	<meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
 	<meta content="no-cache" http-equiv="pragma">
 	<meta content="0" http-equiv="expires">
 	<meta content="telephone=no, address=no" name="format-detection">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
-	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<!-- apple devices fullscreen -->
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/User/default/common/css/style_2_common.css?BPm">
-	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/User/default/common/css/style-1.css?id=103">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<link rel="stylesheet" href="http://demo.vifnn.cn/tpl/User/default/common/css/style_2_common.css?BPm">
+	<link rel="stylesheet" href="http://demo.vifnn.cn/tpl/User/default/common/css/style-1.css?id=103">
 	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/jquery-ui-1.9.1.custom.min.css">
 	<link type="text/css" href="{vifnn:$staticPath}/tpl/static/game/css/phoneGame.css" rel="stylesheet"/>
 </head>
@@ -122,7 +122,7 @@
 
 			<div id="audio_btn" class="play_yinfu" style="display: <if condition="$bgMusicV eq 1">block<else />none</if>; left: {vifnn:$bgMusicX}px; top: {vifnn:$bgMusicY}px; ">
 				<div id="yinfu" class="rotate"></div>
-				<audio loop src="{vifnn:$bgMusic}"
+				<audio loop="" src="{vifnn:$bgMusic}"
 				       id="gameMusic" <if condition="$bgMusicV eq 1">autoplay</if> preload="" name="'numsic"></audio>
 			</div>
 			<div class="homeBgBox">
@@ -184,6 +184,7 @@
 			<div class="rightTime slaveDiv" style="left: {vifnn:$timeX|default='170'}px; top: {vifnn:$timeY|default='25'}px">
 				<p><i>24</i>天<i>03</i>时<i>35</i>分<i>50</i>秒</p>
 			</div>
+			<p class="gameCopyRight" style="<if condition="!C('IS_MEIHUA')">display: none; </if>">游戏技术由<span class=""><em>{vifnn:$f_siteName}</em></span>提供。</p>
 		</div>
 		<div class="row playing">
 			<php>
@@ -201,7 +202,7 @@
 				<div class="playTopText">
 					<span class="f-r grade" style="color: {vifnn:$scoreFontColor}; font-size: {vifnn:$scoreFontSize}; ">34</span>
 
-					<div class="time" style="color: {vifnn:$timeFontColor}; font-size: {vifnn:$timeFontSize}; ">倒计时：30</div>
+					<div class="time" style="color: {vifnn:$timeFontColor}; font-size: {vifnn:$timeFontSize}; <if condition="$info['time_set']['type'] eq 0">display: none; </if>">倒计时：<em>{vifnn:$info.time_set.default_time}</em></div>
 				</div>
 			</div>
 			<div class="actImgList">
@@ -223,112 +224,384 @@
 						<li>邀请有礼</li>
 					</ul>
 				</div>
-				<div class="bd">
+				<div class="bd scrollBar">
 					<div class="divCell priceCell">
 						<div class="listCell">
 							<div class="hdTit">
 								<span>活动规则</span>
 							</div>
-							<p class="editText" id="actRuleText" style="font-size: 14px;">
-								<em>{vifnn:$info.rule}</em></p>
+							<if condition="$hasGameRank">
+							<div id="rankRule" class="ruleCell" <if condition="$info['game_rank'] neq 1">style="display: none; "</if>>
+								<h2>排名派奖</h2>
+
+								<p class="editText" id="actRuleText" style="font-size: 14px;">
+									<em>{vifnn:$info.rule}</em>
+								</p>
+							</div>
+							</if>
+							<if condition="$hasGamePlaying">
+							<div id="playingRule" class="ruleCell" <if condition="$info['game_playing'] neq 1">style="display: none; "</if>>
+								<h2>过程夺宝派奖</h2>
+
+								<p class="editText" id="actProcessText" style="font-size: 14px;">
+									游戏过程中，
+									<tg <if condition="$gamePlayingSet['prize_total_limit'] eq 0 && $gamePlayingSet['prize_total_limit'] neq ''">style="display: none; "</if>>每人总共有<span class="processTime-1"><em>{vifnn:$gamePlayingSet.prize_total_limit|default=100}</em>次</span>中奖机会，其中，</tg>每人每天最多<span
+										class="processTime-2"><em>{vifnn:$gamePlayingSet.prize_limit|default=5}</em>次</span>，有机会获得相应的奖品。
+								</p>
+							</div>
+							</if>
+							<if condition="$hasGameOver">
+							<div id="overRule" class="ruleCell" <if condition="$info['game_over'] neq 1">style="display: none; "</if>>
+								<h2>随机抽奖派奖</h2>
+
+								<p class="editText" id="actResultsText" style="font-size: 14px;">
+									每次玩游戏时，所获得的成绩满足<span>{vifnn:$gameOverSet.prize_min_score|default=100}</span>分，每人即可抽奖一次，
+									<tg <if condition="$gameOverSet['prize_total_limit'] eq 0 && $gameOverSet['prize_total_limit'] neq ''">style="display: none; "</if>>每人总共可抽奖<span
+										class="resultsTime-1">{vifnn:$gameOverSet.prize_total_limit|default=100}</span>次，</tg>每天可抽奖<span class="resultsTime-2">{vifnn:$gameOverSet.prize_limit|default=5}</span>次。
+								</p>
+							</div>
+							</if>
 						</div>
 						<div class="listCell">
 							<div class="hdTit">
 								<span>主办单位</span>
 							</div>
-							<p style="font-size: 14px;">本次活动主办单位 <span class="editText" id="actCompanyText"><em>{vifnn:$info.office_value.name|default=$wecha['wxname']}</em></span>，并对本次活动享有最终解释权。
+							<p style="font-size: 14px;">
+								本次活动主办单位 <span class="editText" id="actCompanyText"><em>{vifnn:$info.office_value.name|default=$wecha['wxname']}</em></span>。
 							</p>
 						</div>
 					</div>
-					<div class="divCell priceCell" style="height: 360px;overflow: auto;overflow-x: hidden">
-						<div class="listCell">
-							<div class="hdTit">
-								<span>我的奖品</span>
-							</div>
-							<div class="myPrice">
-								<div class="f-r" style="display: none; ">
-									<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/qrcode.png" width="37" height="37"
-									     alt=""/>
-								</div>
-
-								<div class="myPriceInfo">
-									<p><tg class="awards_type">{vifnn:$awardsValues[0]['awards_type']}</tg>：<tg class="awards_name">{vifnn:$awardsValues[0]['awards_name']}</tg></p>
-
-									<p>兑奖码：1233 3333 3333 <em>未兑奖</em></p>
-								</div>
-							</div>
+					<div class="divCell priceCell">
+						<div class="priceHd">
+							<ul>
+								<li class="on"><i></i>活动奖品</li>
+								<li><i></i>我的奖品</li>
+							</ul>
 						</div>
-						<div class="listCell">
-							<div class="hdTit">
-								<span>活动奖品</span>
-							</div>
-							<div class="priceList editText clearfix" id="priceList">
-								<div class="cellRow style1" <if condition="$info['awards_value']['show_pic'] eq 0">style="display: none; "</if>>
-									<ul>
-										<php>
-											$end = 0;
-										</php>
-										<volist name="awardsValues" id="awards">
-											<li>
-												<div class="priceImgBox">
-													<img src="{vifnn:$awards.awards_pic|default='/tpl/User/default/common/phoneimage/homebg.png'}" alt=""/>
 
-													<php>
-														$start = $end + 1;
-														$end = $end + $awards['awards_num'];
+						<div class="editText newAddStyle" id="exchange">
+							<p class="exchangeText"><i></i><em>{vifnn:$info.awards_value.awards_content}</em></p>
+							<p class="exchangeTime">兑奖时间：<span><em class="start">{vifnn:$info.awards_value.awards_start_time|default=strtotime('+1 month')|date='Y-m-d H:i',###}</em>~<em class="end">{vifnn:$info.awards_value.awards_end_time|default=strtotime('+2 month')|date='Y-m-d H:i',###}</em></span></p>
+						</div>
 
-														if ($start == $end) {
-															$awardsShow = "<tg>" . $end . "</tg>";
-														} else {
-															$awardsShow = "<tg>" . $start . "</tg>-<tg>" . $end . "</tg>";
-														}
-													</php>
-													<p class="awardNumber" data="{vifnn:$awards.awards_num}">TOP {vifnn:$awardsShow}</p>
-												</div>
-												<h3 class="awardType">{vifnn:$awards.awards_type}</h3>
-
-												<p class="awardName">{vifnn:$awards.awards_name}</p>
-											</li>
-										</volist>
+						<div class="priceListBox">
+							<div class="priceListSection">
+								<div class="priceSectionHd">
+									<ul class="flex">
+										<li class="on <if condition="$info['game_rank'] neq 1">hide</if>" data="ranking">
+											<a href="javascript:void(0);" class="">排名中奖</a>
+										</li>
+										<li class="<if condition="$info['game_playing'] neq 1">hide</if>" data="process">
+											<a href="javascript:void(0);">过程夺宝</a>
+										</li>
+										<li class="<if condition="$info['game_over'] neq 1">hide</if>" data="results">
+											<a href="javascript:void(0);">随机抽奖</a>
+										</li>
 									</ul>
 								</div>
-								<div class="cellRow editText style2" <if condition="$info['awards_value']['show_pic'] eq 0">style="display: block; "</if>>
-									<ul>
-										<php>
-											$end = 0;
-										</php>
-										<volist name="awardsValues" id="awards">
-											<li>
-												<php>
-													$start = $end + 1;
-													$end = $end + $awards['awards_num'];
+								<div class="priceSectionBd">
+									<div class="priceSectionBdCell">
+										<div class="priceList editText clearfix" id="ranking" style="<if condition="$info['game_rank'] neq 1">display: none; </if>">
+											<div class="cellRow style1">
+												<ul>
+													<php>
+														$end = 0;
+													</php>
+													<volist name="awardsValues" id="awards">
+														<php>
+															$awardsCate = $awards['awards_cate'];
+															if ($awardsCate == 1) {
+																$awardsClass = "wxhb";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/hb.png";
+															} elseif ($awardsCate == 2) {
+																$awardsClass = "wxkq";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/kq.png";
+															} elseif ($awardsCate == 3) {
+																$awardsClass = "wxjf";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jf.png";
+															} elseif ($awardsCate == 5) {
+																$awardsClass = "xjhb";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/hb.png";
+															} elseif ($awardsCate == 6) {
+																$awardsClass = "xxkq";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/kq.png";
+															} elseif ($awardsCate == 7) {
+																$awardsClass = "xxjf";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jf.png";
+															} elseif ($awardsCate == 8) {
+																$awardsClass = "swlp";
+																$awardsPicSrc = isset($awards['awards_pic']) ? $awards['awards_pic'] : $staticPath."/tpl/User/default/common/phoneimage/homebg.png";
+															} else {
+																$awardsClass = "swlp";
+																$awardsPicSrc = isset($awards['awards_pic']) ? $awards['awards_pic'] : $staticPath."/tpl/User/default/common/phoneimage/homebg.png";
+															}
+														</php>
+														<li>
+															<div class="{vifnn:$awardsClass}">
+																<php>
+																	$start = $end + 1;
+																	$end = $end + $awards['awards_num'];
 
-													if ($start == $end) {
-														$awardsShow = $end;
+																	if ($start == $end) {
+																		$awardsShow = "<tg>" . $end . "</tg>";
+																	} else {
+																		$awardsShow = "<tg>" . $start . "</tg>-<tg>" . $end . "</tg>";
+																	}
+																</php>
+																<div class="priceImgBox">
+																	<img src="{vifnn:$awardsPicSrc}" alt=""/>
+																	<h3 class="awardType">{vifnn:$awards.awards_type}</h3>
+																	<i class="typeIcon"></i>
+																</div>
+																<div class="priceDesc">
+																	<div class="disTable">
+																		<div class="disTableCell">
+																			<p class="awardName"><i></i><em>{vifnn:$awards.awards_name}</em></p>
+																			<p class="awardNumber" data="{vifnn:$awards.awards_num}">TOP {vifnn:$awardsShow}</p>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</li>
+													</volist>
+												</ul>
+											</div>
+										</div>
+
+										<div class="priceList editText clearfix" id="process" style="<if condition="$info['game_playing'] neq 1">display: none; </if>">
+											<div class="cellRow style2">
+												<ul>
+													<volist name="playingAwardsValues" id="awards">
+														<php>
+															$awardsCate = $awards['awards_cate'];
+															$awardsNum = "数量：<em>".$awards['awards_num']."</em>";
+															if ($awardsCate == 1) {
+																$awardsClass = "wxhb";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/hb.png";
+															} elseif ($awardsCate == 2) {
+																$awardsClass = "wxkq";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/kq.png";
+															} elseif ($awardsCate == 3) {
+																$awardsClass = "wxjf";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jf.png";
+															} elseif ($awardsCate == 4) {
+																$awardsClass = "kwjh";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jh.png";
+															} elseif ($awardsCate == 5) {
+																$awardsClass = "xjhb";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/hb.png";
+															} elseif ($awardsCate == 6) {
+																$awardsClass = "xxkq";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/kq.png";
+															} elseif ($awardsCate == 7) {
+																$awardsClass = "xxjf";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jf.png";
+															} elseif ($awardsCate == 8) {
+																$awardsClass = "swlp";
+																$awardsPicSrc = isset($awards['awards_pic']) ? $awards['awards_pic'] : $staticPath."/tpl/User/default/common/phoneimage/homebg.png";
+															} else {
+																$awardsClass = "swlp";
+																$awardsPicSrc = isset($awards['awards_pic']) ? $awards['awards_pic'] : $staticPath."/tpl/User/default/common/phoneimage/homebg.png";
+															}
+														</php>
+														<li>
+															<div class="{vifnn:$awardsClass}">
+																<div class="priceImgBox">
+																	<img src="{vifnn:$awardsPicSrc}" alt=""/>
+																	<i class="typeIcon"></i>
+																</div>
+																<div class="priceDesc">
+																	<div class="disTable">
+																		<div class="disTableCell">
+																			<p class="awardName"><i></i><em>{vifnn:$awards.awards_name}</em></p>
+																			<p class="prizeNo">{vifnn:$awardsNum}</p>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</li>
+													</volist>
+												</ul>
+											</div>
+										</div>
+
+										<div class="priceList editText clearfix" id="results" style="<if condition="$info['game_over'] neq 1">display: none; </if>">
+											<div class="cellRow style2">
+												<ul>
+													<volist name="overAwardsValues" id="awards">
+														<php>
+															$awardsCate = $awards['awards_cate'];
+															$awardsNum = "数量：<em>".$awards['awards_num']."</em>";
+															if ($awardsCate == 1) {
+																$awardsClass = "wxhb";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/hb.png";
+															} elseif ($awardsCate == 2) {
+																$awardsClass = "wxkq";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/kq.png";
+															} elseif ($awardsCate == 3) {
+																$awardsClass = "wxjf";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jf.png";
+															} elseif ($awardsCate == 4) {
+																$awardsClass = "kwjh";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jh.png";
+															} elseif ($awardsCate == 5) {
+																$awardsClass = "xjhb";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/hb.png";
+															} elseif ($awardsCate == 6) {
+																$awardsClass = "xxkq";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/kq.png";
+															} elseif ($awardsCate == 7) {
+																$awardsClass = "xxjf";
+																$awardsPicSrc = $staticPath."/tpl/static/game/phoneimage/jf.png";
+															} elseif ($awardsCate == 8) {
+																$awardsClass = "swlp";
+																$awardsPicSrc = isset($awards['awards_pic']) ? $awards['awards_pic'] : $staticPath."/tpl/User/default/common/phoneimage/homebg.png";
+															} else {
+																$awardsClass = "swlp";
+																$awardsPicSrc = isset($awards['awards_pic']) ? $awards['awards_pic'] : $staticPath."/tpl/User/default/common/phoneimage/homebg.png";
+															}
+														</php>
+														<li>
+															<div class="{vifnn:$awardsClass}">
+																<div class="priceImgBox">
+																	<img src="{vifnn:$awardsPicSrc}" alt=""/>
+																	<i class="typeIcon"></i>
+																</div>
+																<div class="priceDesc">
+																	<div class="disTable">
+																		<div class="disTableCell">
+																			<p class="awardName"><i></i><em>{vifnn:$awards.awards_name}</em></p>
+																			<p class="prizeNo">{vifnn:$awardsNum}</p>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</li>
+													</volist>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="priceListSection">
+								<if condition="$hasGameRank">
+								<div id="prizeMo1" class="myPrizeMod prizeMo1" <if condition="$info['game_rank'] neq 1">style="display: none; "</if>>
+									<div class="myPrizeWrap">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<tr>
+												<td class="myPrizeDesc myPriceInfo">
+													<h3><tg class="awards_type">{vifnn:$awardsValues[0]['awards_type']}</tg>：<tg class="awards_name">{vifnn:$awardsValues[0]['awards_name']}</tg></h3>
+													<p>兑换码：1939 3299 2302</p>
+												</td>
+												<td class="myPrizeBtn">
+													<a href="javascript:void(0);" class="no">未兑换</a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<i class="typeIcon"></i>
+								</div>
+								</if>
+								<if condition="$hasGamePlaying">
+								<div id="prizeMo2" class="myPrizeMod prizeMo2" <if condition="$info['game_playing'] neq 1">style="display: none; "</if>>
+									<div class="myPrizeWrap">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<volist name="playingAwardsValues" id="awards">
+												<php>
+													$awardsCate = $awards['awards_cate'];
+													$awardsNum = "数量：<em>".$awards['awards_num']."</em>";
+													if ($awardsCate == 1) {
+														$awardsTypeName = "微信红包";
+													} elseif ($awardsCate == 2) {
+														$awardsTypeName = "微信卡券";
+													} elseif ($awardsCate == 3) {
+														$awardsTypeName = "微信积分";
+													} elseif ($awardsCate == 4) {
+														$awardsTypeName = "可玩机会";
+													} elseif ($awardsCate == 5) {
+														$awardsTypeName = "现金红包";
+													} elseif ($awardsCate == 6) {
+														$awardsTypeName = "线下卡券";
+													} elseif ($awardsCate == 7) {
+														$awardsTypeName = "线下积分";
+													} elseif ($awardsCate == 8) {
+														$awardsTypeName = "实物礼品";
 													} else {
-														$awardsShow = $start . "-" . $end;
+														$awardsTypeName = "实物礼品";
 													}
 												</php>
 
-												<span class="awardType">{vifnn:$awards.awards_type}</span>：
-												<span class="awardName">{vifnn:$awards.awards_name}</span>
-												(<em class="awardNumber" data="{vifnn:$awards.awards_num}">TOP {vifnn:$awardsShow}</em>)
-											</li>
-										</volist>
-									</ul>
+												<tr>
+													<td class="myPrizeDesc">
+														<h3><ng>{vifnn:$awards['awards_name']}</ng><tg>（{vifnn:$awardsTypeName}）</tg></h3>
+													</td>
+													<td class="myPrizeBtn">
+														<a href="javascript:void(0); " class="ok">已兑换</a>
+													</td>
+												</tr>
+											</volist>
+										</table>
+									</div>
+									<i class="typeIcon"></i>
 								</div>
-							</div>
-						</div>
+								</if>
+								<if condition="$hasGameOver">
+								<div id="prizeMo3" class="myPrizeMod prizeMo3" <if condition="$info['game_over'] neq 1">style="display: none; "</if>>
+									<div class="myPrizeWrap">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<volist name="overAwardsValues" id="awards">
+												<php>
+													$awardsCate = $awards['awards_cate'];
+													$awardsNum = "数量：<em>".$awards['awards_num']."</em>";
+													if ($awardsCate == 1) {
+														$awardsTypeName = "微信红包";
+													} elseif ($awardsCate == 2) {
+														$awardsTypeName = "微信卡券";
+													} elseif ($awardsCate == 3) {
+														$awardsTypeName = "微信积分";
+													} elseif ($awardsCate == 4) {
+														$awardsTypeName = "可玩机会";
+													} elseif ($awardsCate == 5) {
+														$awardsTypeName = "现金红包";
+													} elseif ($awardsCate == 6) {
+														$awardsTypeName = "线下卡券";
+													} elseif ($awardsCate == 7) {
+														$awardsTypeName = "线下积分";
+													} elseif ($awardsCate == 8) {
+														$awardsTypeName = "实物礼品";
+													} else {
+														$awardsTypeName = "实物礼品";
+													}
+												</php>
 
-						<div class="listCell">
-							<div class="hdTit">
-								<span>兑奖说明</span>
-							</div>
-							<div class="editText" id="exchange" style="font-size: 14px;">
-								<p class="exchangeTime">兑奖时间：<br><span><em class="start">{vifnn:$info.awards_value.awards_start_time|default=strtotime('+1 month')|date='Y-m-d H:i',###}</em>~<em class="end">{vifnn:$info.awards_value.awards_end_time|default=strtotime('+2 month')|date='Y-m-d H:i',###}</em></span>
-								</p>
+												<tr>
+													<td class="myPrizeDesc">
+														<h3><ng>{vifnn:$awards['awards_name']}</ng><tg>（{vifnn:$awardsTypeName}）</tg></h3>
+													</td>
+													<td class="myPrizeBtn">
+														<a href="javascript:void(0); " class="ok">已兑换</a>
+													</td>
+												</tr>
+											</volist>
+										</table>
+									</div>
+									<i class="typeIcon"></i>
+								</div>
+								</if>
 
-								<p class="exchangeText">{vifnn:$info.awards_value.awards_content}</p>
+								<div class="myPrizeMod prizeCode">
+									<div class="prizeCodeImg f-l">
+										<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/prizeCode.png" alt="code"/>
+									</div>
+									<div class="codeDescInfo">
+										<div class="disTable">
+											<div class="disTableCell">
+												<p>亲，快将此二维码拿给主办方扫一扫，奖品就到手啦！</p>
+											</div>
+										</div>
+									</div>
+								</div>
 
 							</div>
 						</div>
@@ -456,16 +729,17 @@
 			<div class="window">
 				<div class="hd">
 					<ul class="clearfix">
-						<li class="on"><img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rankList.png" width="11"
-						                    height="14" alt=""/>排行榜
+						<li class="on">
+							<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rankList.png" width="11"height="14" alt=""/>排行榜<span style="display: none;">（<tg class="rankLimit">{vifnn:$info.rank_limit|default=200}</tg>）</span>
 						</li>
-						<li><img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rankPk.png" width="15" height="14" alt=""/>好友排行
+						<li>
+							<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/rankPk.png" width="15" height="14" alt=""/>好友排行
 						</li>
 					</ul>
 				</div>
 				<div class="bd">
-					<div class="divCell rankCell">
-						<h2>您最高成绩200分，全国排名NO.5</h2>
+					<div class="divCell rankCell animate">
+						<h2>您最高成绩200{vifnn:$rankUnit}，全国排名NO.5</h2>
 
 						<div class="listCell">
 							<ul>
@@ -477,7 +751,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘01</h3>
 
-										<p>玩了<em>5</em>次，最高记录<em>200</em>分</p>
+										<p>玩了<em>5</em>次，最高记录<em>200</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -488,7 +762,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘02</h3>
 
-										<p>玩了<em>1</em>次，最高记录<em>160</em>分</p>
+										<p>玩了<em>1</em>次，最高记录<em>160</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -499,7 +773,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘03</h3>
 
-										<p>玩了<em>4</em>次，最高记录<em>152</em>分</p>
+										<p>玩了<em>4</em>次，最高记录<em>152</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -510,7 +784,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘04</h3>
 
-										<p>玩了<em>3</em>次，最高记录<em>150</em>分</p>
+										<p>玩了<em>3</em>次，最高记录<em>150</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -521,7 +795,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘05</h3>
 
-										<p>玩了<em>8</em>次，最高记录<em>130</em>分</p>
+										<p>玩了<em>8</em>次，最高记录<em>130</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -532,7 +806,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘06</h3>
 
-										<p>玩了<em>10</em>次，最高记录<em>120</em>分</p>
+										<p>玩了<em>10</em>次，最高记录<em>120</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -543,14 +817,14 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘07</h3>
 
-										<p>玩了<em>6</em>次，最高记录<em>100</em>分</p>
+										<p>玩了<em>6</em>次，最高记录<em>100</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 							</ul>
 						</div>
 					</div>
-					<div class="divCell rankCell">
-						<h2>您最高成绩200分，好友圈排名NO.5</h2>
+					<div class="divCell rankCell" style="display: none;">
+						<h2>您最高成绩200{vifnn:$rankUnit}，好友圈排名NO.5</h2>
 
 						<div class="listCell">
 							<ul>
@@ -562,7 +836,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘01</h3>
 
-										<p>玩了<em>5</em>次，最高记录<em>200</em>分</p>
+										<p>玩了<em>5</em>次，最高记录<em>200</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -573,7 +847,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘02</h3>
 
-										<p>玩了<em>1</em>次，最高记录<em>160</em>分</p>
+										<p>玩了<em>1</em>次，最高记录<em>160</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -584,7 +858,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘03</h3>
 
-										<p>玩了<em>4</em>次，最高记录<em>152</em>分</p>
+										<p>玩了<em>4</em>次，最高记录<em>152</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -595,7 +869,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘04</h3>
 
-										<p>玩了<em>3</em>次，最高记录<em>150</em>分</p>
+										<p>玩了<em>3</em>次，最高记录<em>150</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -606,7 +880,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘05</h3>
 
-										<p>玩了<em>8</em>次，最高记录<em>130</em>分</p>
+										<p>玩了<em>8</em>次，最高记录<em>130</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -617,7 +891,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘06</h3>
 
-										<p>玩了<em>10</em>次，最高记录<em>120</em>分</p>
+										<p>玩了<em>10</em>次，最高记录<em>120</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 								<li>
@@ -628,7 +902,7 @@
 									<div class="userInfo">
 										<h3>大眼睛的姑娘07</h3>
 
-										<p>玩了<em>6</em>次，最高记录<em>100</em>分</p>
+										<p>玩了<em>6</em>次，最高记录<em>100</em>{vifnn:$rankUnit}</p>
 									</div>
 								</li>
 							</ul>
@@ -640,7 +914,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="row failAndSucced  windowDiv">
+
+		<div class="row failAndSucced  windowDiv <if condition="$gameCate eq 4">hidden</if>">
 			<img class="fs3" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/suc3.png" width="320" alt=""/>
 
 			<div class="window succed">
@@ -649,27 +924,34 @@
 				<img class="fs2" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/suc2.png" width="147" alt=""/>
 
 				<div class="redBox">
-					<img class="fsText" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/failtext.png" height="28.5" alt=""/>
+					<img class="fsText" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/sucessText.png" height="32.5" alt=""/>
 
 					<div class="grade">
 						<ul>
 
-							<li>本次成绩：100分</li>
+							<li>本次成绩：300{vifnn:$rankUnit}</li>
 							<li>击败30%的对手</li>
-							<li>最高成绩：200分</li>
+							<li class="boxLi">本次获得宝箱数：3</li>
+							<li>最高成绩：200{vifnn:$rankUnit}</li>
 							<li>全国排名：第30名</li>
 						</ul>
 					</div>
 					<p class="tipText">（每成功邀请3位好友来玩，即可获得一份红包，送完为止。）</p>
 
+					<div class="userBtn">
+						<li><i></i><em>活动奖品</em></li>
+						<li><i></i><em>我的奖品</em></li>
+					</div>
+
 					<div class="fsBtn">
-						<div class="btn1"><a href="javascript:;">再玩一次（剩3次）</a></div>
-						<div class="btn2"><a href="javascript:;">排行榜</a><a href="javascript:;">找朋友比赛</a></div>
+						<div class="btn1"><a href="javascript:void(0);">再玩一次（剩3次）</a></div>
+						<div class="btn2"><a href="javascript:void(0);">排行榜</a><a href="javascript:void(0);">找朋友比赛</a></div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row failAndSucced  windowDiv">
+
+		<div class="row failAndSucced  windowDiv <if condition="$gameCate eq 4">hidden</if>">
 			<div class="window fail">
 				<img class="fs0" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/fail0.png" width="265" alt=""/>
 				<img class="fs1" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/fail1.png" width="235" alt=""/>
@@ -680,36 +962,44 @@
 
 					<div class="grade">
 						<ul>
-							<li>本次成绩：100分</li>
+							<li>本次成绩：100{vifnn:$rankUnit}</li>
 							<li>击败30%的对手</li>
-							<li>最高成绩：200分</li>
+							<li class="boxLi">本次获得宝箱数：3</li>
+							<li>最高成绩：200{vifnn:$rankUnit}</li>
 							<li>全国排名：第30名</li>
 						</ul>
 					</div>
 					<p class="tipText">（每成功邀请3位好友来玩，即可获得一份红包，送完为止。）</p>
 
+					<div class="userBtn">
+						<li><i></i><em>活动奖品</em></li>
+						<li><i></i><em>我的奖品</em></li>
+					</div>
+
 					<div class="fsBtn">
-						<div class="btn1"><a href="javascript:;">再玩一次（剩3次）</a></div>
-						<div class="btn2"><a href="javascript:;">排行榜</a><a href="javascript:;">找朋友比赛</a></div>
+						<div class="btn1"><a href="javascript:void(0);">再玩一次（剩3次）</a></div>
+						<div class="btn2"><a href="javascript:void(0);">排行榜</a><a href="javascript:void(0);">找朋友比赛</a></div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row winPrice  windowDiv">
-			<div class="window succed">
+		<div class="row winPrice  windowDiv <if condition="$info['game_rank'] neq 1">hidden</if>">
+			<div class="window succed addCtrlBtn">
+				<img class="prizeLight" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/prizeLight.png" alt="">
 				<img class="winTit" width="208" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/wintit.png" alt=""/>
 				<img class="winPrice" width="147.5" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/winprice.png" alt=""/>
-				<img class="failsuccedclosed" width="25" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/failsuccedclosed.png"
-				     alt=""/>
-
-				<h3>二等奖：100元优惠券</h3>
+				<img class="failsuccedclosed" width="25" src="{vifnn:$staticPath}/tpl/static/game/phoneimage/failsuccedclosed.png"alt=""/>
+				<h3 class="WinPrizeInfo">
+					<em class="winPrizeType">二等奖</em>：<em class="winPrizeQuota">100</em><em class="winPrizeName hide"></em><em class="unit">元优惠券</em>
+				</h3>
 
 				<p>兑换码：<em>888888</em></p>
 
 				<p class="t4">获奖后凭兑换码联系活动主办单位即可获奖</p>
 			</div>
 		</div>
+
 		<div class="row friends windowDiv">
 			<div class="window ">
 				<img src="{vifnn:$staticPath}/tpl/static/game/phoneimage/friends.png" width="287" alt=""/>
@@ -718,16 +1008,11 @@
 	</div>
 </div>
 </div>
-<script src="{vifnn:$staticPath}/tpl/static/newswelcome/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery-ui-1.9.1.custom.min.js"></script>
 
-<!-- 游戏过程list -->
 <script>
-	/**
-	 * Created by Administrator on 2016/1/21.
-	 */
+	logoVisible = '{vifnn:$logoV}';
 
-	var playingData = ([
+	phonePagePlayingData = ([
 	<volist name="selfs" id="item">
 		<if condition="$item['property'] eq 'ordinary' && $item['element_attribute']['show'] eq 1">
 			{
@@ -750,432 +1035,14 @@
 	</volist>
 	]);
 
-	$(function () {
-		var temp = '';
-		var i = 0;
-		var directionv;
-		var draggablev;
-		var resizablev;
-
-		function directionValue () {
-			directionv = playingData[i].draggable.direction;
-			if (directionv == 'x') {
-				directionv = 'direction-x';
-			} else if (directionv == 'y') {
-				directionv = 'direction-y';
-			} else if (directionv == 'all') {
-				directionv = 'direction-all'
-			} else {
-				directionv = '';
-			}
-		}
-
-		function draggableValue () {
-			draggablev = playingData[i].draggable.drag;
-			if (draggablev == true) {
-				draggablev = 'draggableTrue';
-			} else {
-				draggablev = '';
-			}
-		}
-
-		function resizableValue () {
-			resizablev = playingData[i].resizable;
-			if (resizablev == true) {
-				resizablev = ' resizableTrue';
-			} else {
-				resizablev = '';
-			}
-		}
-
-		for (i = 0; i < playingData.length; i++) {
-			directionValue();
-			draggableValue();
-			resizableValue();
-			if (resizablev == '') {
-				temp += '<div class="ui-wrapper layerImg ' + directionv + ' ' + draggablev + '" style="width:' + playingData[i].style.width / 2 + 'px;height:' + playingData[i].style.height / 2 + 'px;top: ' + playingData[i].style.top + 'px;left:' + playingData[i].style.left + 'px"><img id="selfImgShow'+ playingData[i].id +'" src="' + playingData[i].image + '" style="width:' + playingData[i].style.width / 2 + 'px;height:' + playingData[i].style.height / 2 + 'px" alt="' + playingData[i].imgName + '"/></div>';
-			} else {
-				temp += '<img id="selfImgShow'+ playingData[i].id +'" class="layerImg ' + directionv + ' ' + draggablev + ' ' + resizablev + '" src="' + playingData[i].image + '" style="width:' + playingData[i].style.width / 2 + 'px;height:' + playingData[i].style.height / 2 + 'px;top: ' + playingData[i].style.top + 'px;left:' + playingData[i].style.left + 'px" alt="' + playingData[i].imgName + '"/>';
-			}
-		}
-
-		$(".actImgList").html(temp);
-	});
+	timeSet = <if condition="$timeSet eq 0">false<else />true</if>;
+	isRealese = <if condition="$info['is_release'] eq 1">true<else />false</if>;
 </script>
+<script src="http://demo.vifnn.cn/tpl/static/newswelcome/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/jquery-ui-1.9.1.custom.min.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/playingApi.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/game/js/phoneGame.js"></script>
 
-<!-- 游戏展示js -->
-<script>
-	/**
-	 * Created by tanytree on 2016/1/16.
-	 */
 
-	//设置cookie
-	function setCookie (cname, cvalue, exdays) {
-		var d = new Date();
-		d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-		var expires = "expires=" + d.toUTCString();
-		var path = "path=/";
-		document.cookie = cname + "=" + cvalue + "; " + expires + "; " + path;
-	}
-
-	//获取cookie
-	function getCookie (cname) {
-		var name = cname + "=";
-		var ca = document.cookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ')
-				c = c.substring(1);
-			if (c.indexOf(name) != -1)
-				return c.substring(name.length, c.length);
-		}
-		return "";
-	}
-
-	//清除cookie
-	function clearCookie (name) {
-		setCookie(name, "", -1);
-	}
-
-	//检查cookie
-	function checkCookie () {
-		var user = getCookie("username");
-		if (user != "") {
-			alert("Welcome again " + user);
-		} else {
-			user = prompt("Please enter your name:", "");
-			if (user != "" && user != null) {
-				setCookie("username", user, 365);
-			}
-		}
-	}
-
-	//拖拽缩放设置
-	$(function () {
-		$("#titleImg").each(function () {
-			var w = $(this).css('width');
-			var h = $(this).css('height');
-			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
-			$(this).resizable({
-				stop: function () {
-					$(this).append(recover);
-
-					$("#titleImgW").val($(this).css('width').replace('px', ''));
-					$("#titleImgH").val($(this).css('height').replace('px', ''));
-				}
-			});
-			$(this).parent().on('click', '.recover', function () {
-				$(this).parent().css({'width': w, 'height': h});
-				$(this).parent().find('.ui-resizable').css({'width': w, 'height': h});
-				$(this).remove();
-			});
-
-		});
-
-		$("#coLogo").each(function () {
-			var w = $(this).css('width');
-			var h = $(this).css('height');
-			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
-			$(this).resizable({
-				create: function(event, ui) {
-					if ({vifnn:$logoV} != 1) {
-						$(this).hide();
-					}
-				},
-				stop: function () {
-					$(this).append(recover);
-
-					$("#logoImgW").val($(this).css('width').replace('px', ''));
-					$("#logoImgH").val($(this).css('height').replace('px', ''));
-				}
-			});
-			$(this).parent().on('click', '.recover', function () {
-				$(this).parent().css({'width': w, 'height': h});
-				$(this).parent().find('.ui-resizable').css({'width': w, 'height': h});
-				$(this).remove();
-			});
-		});
-		$("#startBtnImg").each(function () {
-			var w = $(this).css('width');
-			var h = $(this).css('height');
-			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
-			$(this).resizable({
-				stop: function () {
-					$(this).append(recover);
-				}
-			});
-			$(this).parent().on('click', '.recover', function () {
-				$(this).parent().css({'width': w, 'height': h});
-				$(this).parent().find('.ui-resizable').css({'width': w, 'height': h});
-				$(this).remove();
-			});
-
-		});
-
-		$("#titleImg").parent().draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#titleImgX").val($this.css('left').replace('px', ''));
-				$("#titleImgY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$("#coLogo").parent().draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#logoImgX").val($this.css('left').replace('px', ''));
-				$("#logoImgY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$("#startBtnImg").parent().draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#startBtnImgX").val($this.css('left').replace('px', ''));
-				$("#startBtnImgY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$("#joinNumLine").draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#joinX").val($this.css('left').replace('px', ''));
-				$("#joinY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$("#someTip").draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#tipX").val($this.css('left').replace('px', ''));
-				$("#tipY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$(".rightTime").draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#timeX").val($this.css('left').replace('px', ''));
-				$("#timeY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$("#audio_btn").draggable({
-			containment: ".pageRowBox",
-			scroll:      false,
-			stop:        function () {
-				var $this = $(this);
-
-				$("#bgMusicImgX").val($this.css('left').replace('px', ''));
-				$("#bgMusicImgY").val($this.css('top').replace('px', ''));
-			}
-		});
-
-		$(".resizableTrue").each(function () {
-			var w = $(this).css('width');
-			var h = $(this).css('height');
-			var recover = $("<a class='recover' href='javascript:;'>恢复</a>");
-			$(this).resizable({
-				stop: function () {
-					$(this).append(recover);
-				}
-			});
-			//开始按钮控制
-			$(this).parent().on('click', '.recover', function () {
-				$(this).parent().css({'width': w, 'height': h});
-				$(this).parent().find('.resizableTrue').css({'width': w, 'height': h});
-				$(this).remove();
-			});
-		});
-
-		$("img.direction-x").each(function(){
-			$(this).parent(".ui-wrapper").draggable({  containment: ".actImgList", scroll: false,axis: "x" });
-		});
-		$("img.direction-y").each(function(){
-			$(this).parent(".ui-wrapper").draggable({  containment: ".actImgList", scroll: false,axis: "y" });
-		});
-		$("img.direction-all").each(function(){
-			$(this).parent(".ui-wrapper").draggable({  containment: ".actImgList", scroll: false});
-		});
-		$("div.direction-x").each(function(){
-			$(this).draggable({  containment: ".actImgList", scroll: false,axis: "x"});
-		});
-		$("div.direction-y").each(function(){
-			$(this).draggable({   containment: ".actImgList", scroll: false,axis: "y"});
-		});
-		$("div.direction-all").each(function(){
-			$(this).draggable({  containment: ".actImgList", scroll: false});
-		});
-
-	});
-
-	//首屏图标位置居中设置
-	$(function () {
-//		function absCenter (target) {
-//			$(".absCenter").find(target).each(function () {
-//				var thisW = 320;
-//				var thisSlave = $(this);
-//				var slaveW = thisSlave.width();
-//				var left = (thisW - slaveW) / 2;
-//				if (target == '.absText') {
-//					thisSlave.css('left', left);
-//				} else {
-//					thisSlave.parent('.ui-wrapper').css('left', left);
-//				}
-//			});
-//		}
-//
-//		absCenter(".absImg");//图标元素居中
-//		absCenter(".absText");//文字说明div居中
-//		absCenter(".coLogo");//居中企业logo
-		$(".ui-wrapper").css('overflow', 'initial');//取消图标层的溢出隐藏
-	});
-
-	//添加编辑按钮
-	$(function () {
-		tabForPhone('.window .hd li', '.window .bd .divCell ', 'on');
-		$('.home,.playing').mouseover(function () {
-			$(window.parent.document).find("#moduleLayerBox").show();
-		});
-		var editBtn = $('<a href="javascript:;" class="doBtn imgUpLoadBtn">编辑</a>');//创建弹窗编辑按钮标签
-		var ctrlBtn = $('<a href="javascript:;" class="doBtn ctrlBtn">编辑</a>');//创建表单控制按钮标签
-		var coLogoctrlBtn = $('<a href="javascript:;" class="doBtn coLogoctrlBtn">编辑</a>');//企业logo控制按钮标签
-		var startBtn = $('<a href="javascript:;" class="doBtn startBtn">样式</a>');//开始控制按钮标签
-		var playTopBtn = $('<a href="javascript:;" class="doBtn playTopBtn">样式</a>');//样式控制按钮标签
-		var styleAndCrtl = $('<span class="styleAndCrtl"> <a class="ctrlFromBtn" href="javascript:;">编辑</a> <a  class="styleBtn" href="javascript:;">样式</a> </span>');
-
-		//通用按钮
-		$(".slaveDiv").hover(function () {
-			$(this).append(ctrlBtn);
-			$(this).css({'z-index': '1002', 'overflow': '/'});
-			$(this).find('.ctrlBtn').show();
-		}, function () {
-			$(this).find('.ctrlBtn').remove();
-		});
-
-		//参与人数文字
-		$(".home .joinNumLine").hover(function () {
-			$(this).append(styleAndCrtl);
-			$(this).css({'z-index': '1002', 'overflow': '/'});
-			$(this).find('.styleAndCrtl').show();
-		}, function () {
-			$(this).css({'z-index': '999'});
-			$(this).find('.styleAndCrtl').remove();
-		});
-
-		//底部提示
-		$(".home .someTip").hover(function () {
-			$(this).append(ctrlBtn);
-			$(this).css({'z-index': '1002', 'overflow': '/'});
-			$(this).find('.ctrlBtn').show();
-		}, function () {
-			$(this).css({'z-index': '999'});
-			$(this).find('.ctrlBtn').remove();
-		});
-
-		//开始大按钮
-		$(".home .startBtnImg").hover(function () {
-			$(this).parent().append(startBtn);
-			$(this).parent().css({'z-index': '1002', 'overflow': '/'});
-			$(this).parent().find('.startBtn').show();
-		});
-
-		//企业logo
-		$(".home .coLogo").hover(function () {
-			$(this).parent().append(coLogoctrlBtn);
-			$(this).parent().css({'z-index': '1002', 'overflow': '/'});
-			$(this).parent().find('.coLogoctrlBtn').show();
-		});
-
-		$(".slaveImg,.homeBtnBox img,.actImgList .ui-wrapper img").hover(function () {
-			$(this).parent().append(editBtn);
-			$(this).parent().css({'z-index': '1002', 'overflow': '/'});
-			$(this).parent().find('.imgUpLoadBtn').show();
-			//alert( $(this).parent().find('.imgUpLoadBtn').html());
-		});
-
-		$(".slaveImg,.homeBtnBox img,.ui-wrapper img").parent().mouseleave(function () {
-			$(this).parent().css({'z-index': '999', 'overflow': '/'});
-			$(this).find('.imgUpLoadBtn').remove();
-			$(this).find('.ctrlBtn').remove();
-			$(this).find('.coLogoctrlBtn').remove();
-			$(this).find('.startBtn').remove();
-			$(this).css('z-index', 'initial');
-		});
-
-		$(".editText").hover(function () {
-			$(this).append(ctrlBtn);
-			$(this).find('.ctrlBtn').show();
-		}, function () {
-			$(this).find('.ctrlBtn').remove();
-
-		});
-
-		//恢复原来大小
-		$(".ui-wrapper").hover(function () {
-			$(this).find(".recover").show();
-		}, function () {
-			$(this).find(".recover").hide();
-		});
-
-		//游戏进行顶部
-		$(".playTop").hover(function () {
-			$(this).append(playTopBtn);
-			$(this).find('.playTopBtn').show();
-
-		}, function () {
-			$(this).find('.playTopBtn').remove();
-		});
-	});
-
-	//音乐图标操作
-	$(function () {
-		$("#audio_btn").on('click', function () {
-
-			if ($(this).hasClass('off')) {
-				$(this).removeClass('off');
-				$("#yinfu").addClass("rotate");
-				document.getElementById('gameMusic').play();
-				return false;
-			} else {
-				$(this).addClass('off');
-				$("#yinfu").removeClass("rotate");
-				document.getElementById('gameMusic').pause();
-				return false;
-			}
-			//$("#gameMusic").pause();
-		});
-	});
-
-	//tab切换三个参数
-	function tabForPhone (a, b, c) {
-		var len = $(a);
-		len.bind("click", function () {
-			var index = 0;
-			$(this).addClass(c).siblings().removeClass(c);
-			index = len.index(this);
-			$(b).eq(index).addClass("animate").show().siblings().removeClass("animate").hide();
-			return false;
-		}).eq(1).trigger("click");
-	}
-</script>
 </body>
 </html>

@@ -63,7 +63,7 @@ class Red_packetAction extends WapAction{
 			echo json_encode($result);
 			exit;
 		}
-
+		$lsum	= M('Red_packet_log')->where(array('token'=>$this->token,'packet_id'=>$id))->sum('worth');
 
 		if(!$this->check_packet_type()){
 				$result['err'] 	= 4;
@@ -71,10 +71,9 @@ class Red_packetAction extends WapAction{
 				echo json_encode($result);
 				exit;
 		}
-
-
 		if($this->packet_info['packet_type'] == '1'){	
 			$max 	= $this->packet_info['item_max'];//单个上限	
+
 			if($this->packet_info['deci'] == 0){
 				$prize 		= mt_rand(1,$max);
 			}else if($this->packet_info['deci'] == 1){
@@ -84,7 +83,12 @@ class Red_packetAction extends WapAction{
 				$prize 		= sprintf("%.2f", mt_rand(1,$max*100)/100);
 
 			}
-					
+			if($prize > ($this->packet_info['item_sum'] - $lsum)){
+				$result['err'] 	= 6;
+				$result['msg'] 	= '红包余额不足！';
+				echo json_encode($result);
+				exit;
+			}
 			$prize_name = $prize.'元';
 		
 		}else if($this->packet_info['packet_type'] == '2'){
@@ -92,7 +96,6 @@ class Red_packetAction extends WapAction{
 			$prize 		= $this->packet_info['item_unit'];
 			$prize_name = $prize.'元';
 		}
-
 			$result['err'] 	= 0;
 			$result['msg'] 	= '恭喜您抽中了'.$prize_name.',快去我的红包查看吧！';
 			
@@ -204,7 +207,8 @@ class Red_packetAction extends WapAction{
 		$rid 		= $this->_get('rid','intval');
 		$where 		= array('token'=>$this->token,'packet_id'=>$id,'id'=>$rid);
 		$reward_info= M('Red_packet_log')->where($where)->find();
-
+		$is_syn = M('Wxuser')->where(array('token'=>$this->_get('token')))->getField('is_syn');
+		$this->assign('is_syn',$is_syn);
 		$this->assign('reward_info',$reward_info);
 		$this->display();
 	}
@@ -241,8 +245,7 @@ class Red_packetAction extends WapAction{
 		}
 
 		if($ptype == 2){
-			$cardid 	= $this->_get('cardid','intval');
-			
+			$cardid = $this->_get("card", "intval");
 			$single_orderid = date('YmdHis',time()).mt_rand(1000,9999);				
 			$record['orderid'] 		= $single_orderid;
 			$record['ordername'] 	= '红包兑换';
@@ -254,7 +257,7 @@ class Red_packetAction extends WapAction{
 			$record['wecha_id'] 	= $this->wecha_id;
 			$record['type'] 		= 1;
 			$record['module'] 		= 'Red_packet';
-			
+			$record["cardid"] = $cardid;
 			M('Member_card_pay_record')->add($record);	
 			M('Userinfo')->where("wecha_id = '$this->wecha_id' AND token = '$this->token'")->setInc('balance',$price);
 		}
@@ -265,8 +268,6 @@ class Red_packetAction extends WapAction{
 		$data['price'] 		= $price;
 		$data['packet_id']  = $this->_get('id','intval');
 		$data['status']  	= 1;
-		/*$data['sncode'] 	= $this->_get('sncode','trim');
-		$data['wxname'] 	= $this->_get('wxname','trim'); */
 		$data['type']  		= $ptype;
 		$data['time'] 		= time();
 		$data['log_id']		= join(',', $log_id);
@@ -342,3 +343,4 @@ class Red_packetAction extends WapAction{
 	
 	
 }
+?>

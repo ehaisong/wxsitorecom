@@ -4,7 +4,7 @@
 <div class="container">
 	<header class="nav">
 		<div>
-			<a href="{vifnn::U('DishOut/dishMenu',array('token' => $token,'cid'=>$cid,'wecha_id' => $wecha_id))}">菜单</a>
+			<a href="{vifnn::U('DishOut/dishMenu',array('token' => $token,'cid'=>$cid))}">菜单</a>
 			<a href="javascript:;" class="on">门店详情</a>
 		</div>
 	</header>
@@ -36,13 +36,7 @@
 		</style>
 		<div class="store_info">
 			<span style="width:24%"><strong>{vifnn:$shopinfo['sendtime']}</strong>送达/分钟</span>
-			<if condition="$shopinfo['stype'] eq 2">
-			<span style="width:24%"><strong>{vifnn:$shopinfo['pricing']}</strong>起步价/元</span>
-			<span style="width:50%;font-size:14px;">订单金额若未达到起步价将按照起步价收取</span>
-			<else/>
 			<span style="width:24%"><strong>{vifnn:$shopinfo['pricing']}</strong>起送价/元</span>
-			<span style="width:50%;font-size:14px;">订单金额达到起送价方生成外送订单</span>
-			</if>
 		</div>
 		<ul class="box">
 			<li>
@@ -53,7 +47,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="{vifnn::U('DishOut/companyMap', array('token'=>$token, 'cid'=>$cid, 'wecha_id'=>$wecha_id))}">
+				<a href="{vifnn::U('DishOut/companyMap', array('token'=>$token, 'cid'=>$cid))}">
 					<span><i class="ico_addres1"></i></span>
 					<strong>{vifnn:$shopinfo['address']}</strong>
 					<span><i class="ico_arrow"></i></span>
@@ -61,15 +55,19 @@
 			</li>
 		</ul>
 		<ul class="box">
-			<li>营业时间：{vifnn:$shopinfo['timestr']}</li>
+			<li>营业时间：
+			<volist name="open_times" id="times">
+				{vifnn:$times.start}至{vifnn:$times.end};&nbsp;
+			</volist>
+			</li>
 			<li>服务半径：{vifnn:$shopinfo['removing']}公里</li>
 			<li>配送区域：{vifnn:$shopinfo['area']}</li>
 		</ul>
 	</section>
 	<footer class="go_menu">
 		<div class="fixed">
-			<a href="{vifnn::U('DishOut/dishMenu',array('token' => $token,'cid'=>$cid,'wecha_id' => $wecha_id))}">立即点餐</a>
-			<a style="margin-top: 10px;" href="{vifnn::U('DishOut/myOrder',array('token' => $token,'cid'=>$cid,'wecha_id' => $wecha_id))}">我的订单</a>
+			<a href="{vifnn::U('DishOut/dishMenu',array('token' => $token,'cid'=>$cid))}">立即点餐</a>
+			<a style="margin-top: 10px;" href="{vifnn::U('DishOut/myOrder',array('token' => $token,'cid'=>$cid))}">我的订单</a>
 		</div>
 	</footer>
 </div>

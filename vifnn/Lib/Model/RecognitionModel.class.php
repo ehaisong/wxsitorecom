@@ -7,6 +7,7 @@ class RecognitionModel extends Model
      * @param string $data
      * @param int $expire 有效期单位s $expire<=0||$expire>2592000则使用永久二维码
      * @param null $token
+     * 注意：未过期的情况下将不会请求微信服务器重新生成新的二维码，过期后将自动重新生成并更新，所以开发者可以不用考虑过期问题
      */
     public function createQrcode($type='keyword',$type_id='',$data='',$expire=0,$token=null)
     {
@@ -80,11 +81,11 @@ class RecognitionModel extends Model
         $tmp['ticket']=$result['ticket'];
         $tmp['url']=$result['url'];
         //已经过期了
-        if($result['action_name']==WxAccountModel::QR_SCENE&&$time>=$result['expiration'])
+        if(($result['action_name']==WxAccountModel::QR_SCENE&&$time>=$result['expiration']) || empty($tmp['ticket']))
         {
             $wxAccount=new WxAccountModel();
             $res=$wxAccount->localToWeixin($token)->createQrcode($action_name,$expire_seconds,$result['id'],$scene_str);
-            if(!$res)
+            if(!$res || empty($res['url']))
             {
                 $this->error='渠道二维码创建失败！'.$wxAccount->getError();
                 return false;

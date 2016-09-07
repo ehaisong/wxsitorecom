@@ -11,7 +11,8 @@ class BargainOrderModel extends Model
         $fields='user.portrait,user.wechaname,user.wecha_id,order.bargain_nowprice';
         $order['order.bargain_nowprice']='asc';
         $order['order.changetime']='asc';
-        $result=$this->table($tabs)->where($where)->field($fields)->order($order)->limit(0,$length)->select();
+		$result = $this->table($tabs)->where($where)->field($fields)->order($order)->group("user.wecha_id")->limit(0, $length)->select();
         return $result;
     }
 }
+?>

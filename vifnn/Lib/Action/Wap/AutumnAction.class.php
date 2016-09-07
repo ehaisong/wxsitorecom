@@ -7,7 +7,7 @@ class AutumnAction extends LotteryBaseAction{
 		if(!$id) $this->error('不存在的活动');
 		$wecha_id	= $this->wecha_id;
 		$token		= $this->_get('token');
-		$Lottery 	= M('Lottery')->field('statdate,enddate,canrqnums,aginfo,title')->where(array('id'=>$id,'token'=>$token,'type'=>9))->find();
+		$Lottery 	= M('Lottery')->field('statdate,enddate,canrqnums,aginfo,title,status')->where(array('id'=>$id,'token'=>$token,'type'=>9))->find();
 		if(!$Lottery) $this->error('不存在的活动');
 		$record 	= M('Lottery_record')->field('usenums')->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id))->find();
 
@@ -16,6 +16,9 @@ class AutumnAction extends LotteryBaseAction{
 			$this->error('活动未开始，请在'.date('Y-m-d H:i:s',$Lottery['statdate']).'后再来参加活动!');
 		}
 		
+		if (($Lottery["enddate"] < time()) || ($Lottery["status"] == 0)) {
+			$this->error("活动已结束");
+		}
 		$mpName = M('Wxuser')->where(array('token'=>$token))->getField('weixin');
 		$keyword = M('Keyword')->where(array('token'=>$token,'module'=>'Lottery','pid'=>$id))->getField('keyword');
 		$this->assign('mpName',$mpName);
@@ -34,7 +37,12 @@ class AutumnAction extends LotteryBaseAction{
 		$Lottery_record = M('Lottery_record');
 		$Lottery 	= M('Lottery')->where(array('id'=>$id,'token'=>$token,'type'=>9))->find();
 
-		$record = $Lottery_record->where(array('token'=>$token,'lid'=>$id))->order('time DESC')->limit(10)->select();
+		$record = $Lottery_record->where(array('token'=>$token,'lid'=>$id))->order('time DESC,id DESC')->limit(10)->select();
+		
+		$record_all = $Lottery_record->where(array('token'=>$token,'lid'=>$id))->order('time DESC,id DESC')->select();
+		foreach($record_all as $ak=>$av){
+			$paiming[$av['id']] = $ak+1;
+		}
 		foreach($record as $k=>$v){
 			
 			$p = M('Userinfo')->where(array('token'=>$token,'wecha_id'=>$v['wecha_id']))->getField('portrait');
@@ -54,9 +62,7 @@ class AutumnAction extends LotteryBaseAction{
 			if($myinfo){
 				$myinfo['portrait'] = M('Userinfo')->where(array('token'=>$token,'wecha_id'=>$wecha_id))->getField('portrait');
 				if(!$myinfo['portrait']) $myinfo['portrait'] = '/tpl/User/default/common/images/portrait.jpg';
-				$rank = 1;
-				$rank += $Lottery_record->where("token = '$token' AND lid = $id AND time > ".$myinfo['time'])->count();
-				$myinfo['rank'] = $rank;
+				$myinfo['rank'] = $paiming[$myinfo['id']];
 			}
 			$this->assign('myinfo',$myinfo);
 		}
@@ -119,10 +125,8 @@ class AutumnAction extends LotteryBaseAction{
 		$where 		= array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id);
 		$record 	= $redata->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id))->find();
 		$Lottery 	= M('Lottery')->where(array('id'=>$id,'token'=>$token,'type'=>9))->find();
-		
 		if(!empty($wecha_id)){
-			if ( $Lottery['needreg'] && !$_SESSION['checkInfo'] ){
-				session('checkInfo','1');
+			if ( $Lottery['needreg'] && M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id))->getField('tel') == ""){
 				$this->success('请先核实您的个人资料再参加活动',U('Userinfo/index',array('token'=>$this->token,'wecha_id'=>$this->wecha_id,'redirect'=>MODULE_NAME.'/index|id:'.intval($id))));
 				die;
 			}

@@ -439,6 +439,9 @@ class UpyunAction extends UserAction{
 						
 						if(!$db_exist){
 							$db->add($info);	
+						}else{
+							$savedata = array('token'=>$this->token,'truename'=>htmlspecialchars($r[2]),'tel'=>htmlspecialchars($r[3]),'total_score'=>(int)$r[4],'wechaname'=>htmlspecialchars($r[5]),'sex'=>$r[6],'bornyear'=>(int)$r[7],'bornmonth'=>$r[8],'bornday'=>$r[9],'portrait'=>$r[10],'qq'=>htmlspecialchars($r[11]),'getcardtime'=>strtotime($r[12]),'expensetotal'=>$r[13],'balance'=>$r[14]);
+							$db->where($where)->save($savedata);
 						}
 						
 						if(!$create_db_exist && !$number_exist){
@@ -503,8 +506,20 @@ class UpyunAction extends UserAction{
 				die('回调的签名错误,请检查总后台上传配置信息。。。');
 			}
 		}else{
-			header('HTTP/1.1 403 Not Access');
-			die('回调的签名错误,请检查总后台上传配置信息...');
+			if (($_GET["message"] != "") && ($_GET["message"] == "file too large")) {
+				header("HTTP/1.1 403 Not Access");
+				exit("上传的文件大小超过限制...");
+			}
+			else {
+				header("HTTP/1.1 403 Not Access");
+
+				if ($_GET["message"] != "") {
+					exit($_GET["message"]);
+				}
+				else {
+					exit("上传失败");
+				}
+			}
 		}
 		$this->assign('result',1);
 		if ($handled){

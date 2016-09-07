@@ -17,13 +17,13 @@ class BargainAction extends UserAction{
 		$this->m_userinfo = M("userinfo");
 
 		if(updateSync::getIfWeidian()){
-			$Micrstore_URL = C('weidian_domain') ? C('weidian_domain') : 'http://vd.vifnn.com';
+			$Micrstore_URL = C('weidian_domain') ? C('weidian_domain') : 'http://v.meihua.com';
 		}else{
-			$Micrstore_URL = 'http://vd.vifnn.com';
+			$Micrstore_URL = 'http://v.meihua.com';
 		}
 
 		$this->Micrstore_URL = $_SESSION['source_domain']?$_SESSION['source_domain']:$Micrstore_URL;
-		$this->SALT = C('encryption') ? C('encryption') : 'vifnn.com';
+		$this->SALT = C('encryption') ? C('encryption') : 'vifnn';
 
 		$this->store_id = $this->wxuser['routerid'];
 		
@@ -199,7 +199,7 @@ class BargainAction extends UserAction{
 		import('ORG.Util.Page');
 		$count = $this->m_order->where($where_order)->count();
 		$page = new Page($count,8);
-		foreach($where_page as $key=>$val){
+		foreach ($_GET as $key => $val ) {
 			$page->parameter.="$key=".urlencode($val).'&';
 		}
 		$show = $page->show();
@@ -275,13 +275,15 @@ class BargainAction extends UserAction{
 	public function operate(){
 		switch($_GET['type']){
 			case 'del':
-				$where['token'] = $this->token;
-				$where['vifnn_id'] = (int)($_GET['id']);
-				$del = $this->m_bargain->where($where)->delete();
-				$this->m_order->where(array('bargain_id'=>(int)($_GET['id'])))->delete();
-				$this->m_kanuser->where(array('bargain_id'=>(int)($_GET['id'])))->delete();
-				S((int)($_GET['id']).'bargain'.$this->token,null);
-				$this->success("删除成功",U("Bargain/index",array("token"=>$this->token)));
+			$idd = (int) $_GET["id"];
+			$where["token"] = $this->token;
+			$where["vifnn_id"] = $idd;
+			$del = $this->m_bargain->where($where)->delete();
+			$this->m_order->where(array("bargain_id" => $idd))->delete();
+			$this->m_kanuser->where(array("bargain_id" => $idd))->delete();
+			S($idd . "bargain" . $this->token, NULL);
+			$this->handleKeyword($idd, "Bargain", 0, 0, 1);
+			$this->success("删除成功",U("Bargain/index",array("token"=>$this->token)));
 			break;
 			case 'fahuo':
 				$where_order['token'] = $this->token;

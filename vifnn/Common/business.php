@@ -29,20 +29,15 @@ function selectList($list,$val=null,$default=null,$markName=null)
     for($i=0;$i<count($list);$i++)
     {
         $tmp=$list[$i]['value'];
-        if((is_array($default)&&in_array($tmp,$default))||$default===$tmp)
-        {
+        if((is_array($default)&&in_array($tmp,$default))||$default===$tmp) {
             $list[$i]['mark']=!isset($val)?$markName:'';
             $list[$i]['default']='1';
-        }
-        else
-        {
+        } else {
             $list[$i]['mark']='';
         }
     }
-    if(isset($val))
-    {
-        for($i=0;$i<count($list);$i++)
-        {
+    if(isset($val)) {
+        for($i=0;$i<count($list);$i++) {
             $tmp=$list[$i]['value'];
             $list[$i]['mark']=((is_array($val)&&in_array($tmp,$val))||$val===$tmp)?$markName:'';
         }
@@ -185,25 +180,19 @@ function validate_regex($value,$param)
 //验证范围
 function validate_range($value,$range,$not=false)
 {
-    if(is_array($range)||strpos($range,',')!==false)
-    {
+    if(is_array($range)||strpos($range,',')!==false) {
         //取值范围
         list($min,$max)=is_array($range)?$range:explode(',',$range);
-        if($not)
-        {
+        if($not) {
             $result=false;
             if($min!==''&&!is_null($min)&&$value<$min)$result=true;
             if($max!==''&&!is_null($max)&&$value>$max)$result=true;
-        }
-        else
-        {
+        } else {
             $result=true;
             if($min!==''&&!is_null($min)&&$value<$min)$result=false;
             if($max!==''&&!is_null($max)&&$value>$max)$result=false;
         }
-    }
-    else
-    {
+    } else {
         $result=$not?$value!=$range:$value == $range;
     }
     return $result;
@@ -229,8 +218,7 @@ function del_dir($dir,&$tmp=array())
     $file = readdir($dh);
     while( $file)
     {
-        if ( $file != "." && $file != ".." )
-        {
+        if ( $file != "." && $file != ".." ) {
             $fullpath = $dir . "/" . $file;
             is_dir($fullpath)?del_dir($fullpath,$tmp):array_push($tmp,array('result'=>unlink($fullpath),'type'=>'file','path'=>$fullpath));
         }
@@ -243,27 +231,22 @@ function del_dir($dir,&$tmp=array())
 function img_url($path,$version='',$default='',$absolute='')
 {
     //为空则取默认图片
-    if(empty($path))
-    {
+    if(empty($path)) {
         $defaults=C('IMAGE_DEFAULTS');
-        if(!empty($defaults)&&!empty($defaults[$default]))
-        {
+        if(!empty($defaults)&&!empty($defaults[$default])) {
             $path=$defaults[$default];
         }
     }
     if(empty($path))
         return $path;
     //按照版本修改路径
-    if(!empty($version))
-    {
+    if(!empty($version)) {
         $dirName=dirname($path);
         $imgName=basename($path);
         return $dirName.'/'.$version.'/'.$imgName;
     }
-    if(!empty($absolute))
-    {
-        if(strpos($path,$absolute)!==0&&!preg_match('/^http|https/',$path))
-        {
+    if(!empty($absolute)) {
+        if(strpos($path,$absolute)!==0&&!preg_match('/^http|https/',$path)) {
             $path=rtrim($absolute,'/').'/'.preg_replace('/^((\/)|(\.\/))/','',$path,1);
         }
     }
@@ -434,12 +417,10 @@ function array_map_recursive($filter, $data)
 function get_request_ids()
 {
     $arr=array();
-    if(isset($_REQUEST["ids"]))
-    {
+    if(isset($_REQUEST["ids"])) {
         $arr=is_string($_REQUEST['ids'])?array_merge($arr,explode(",", $_REQUEST['ids'])):array_merge($arr,$_REQUEST['ids']);
     }
-    if(isset($_REQUEST['id']))
-    {
+    if(isset($_REQUEST['id'])) {
         array_push($arr, $_REQUEST['id']);
     }
     return $arr;
@@ -466,14 +447,186 @@ function get_tpl_ids()
     $path=TMPL_PATH.'User/default/Index_switchTpl.html';
     $contents=file_get_contents($path);
     preg_match_all('/<input.+name\=\"usertpl\".+\/\>/Ui',$contents,$matches);
-    foreach ($matches[0] as $match)
-    {
+    foreach ($matches[0] as $match) {
         preg_match('/value\=\"(\d+)\"/',$match,$tmp);
         $id=(int)$tmp[1];
-        if(!in_array($id,$ids))
-        {
+        if(!in_array($id,$ids)) {
             $ids[]=$id;
         }
     }
     return $ids;
+}
+
+//生成签名
+function generate_sign($data,$token)
+{
+    $token=isset($token)?$token:C('DATA_TOKEN');
+    $data['token']=$token;
+    $keys=array();
+    foreach ($data as $key=>$value) {
+        if($key!='sign') {
+            $keys[]=$key;
+        }
+    }
+    sort($keys,SORT_STRING);
+    $str='';
+    for($i=0;$i<count($keys);$i++) {
+        $str.=$keys[$i].$data[$keys[$i]];
+    }
+    return sha1($str);
+}
+
+function isSign($sign,$data,$token)
+{
+    return $sign==generate_sign($data,$token);
+}
+
+/**
+ * 系统加密方法
+ * @param string $data 要加密的字符串
+ * @param string $key  加密密钥
+ * @param int $expire  过期时间 单位 秒
+ * @return string
+ */
+function sys_encrypt($data, $key = '', $expire = 0) {
+    $key  = md5(empty($key) ? C('DATA_AUTH_KEY') : $key);
+    $data = base64_encode($data);
+    $x    = 0;
+    $len  = strlen($data);
+    $l    = strlen($key);
+    $char = '';
+
+    for ($i = 0; $i < $len; $i++) {
+        if ($x == $l) $x = 0;
+        $char .= substr($key, $x, 1);
+        $x++;
+    }
+
+    $str = sprintf('%010d', $expire ? $expire + time():0);
+
+    for ($i = 0; $i < $len; $i++) {
+        $str .= chr(ord(substr($data, $i, 1)) + (ord(substr($char, $i, 1)))%256);
+    }
+    return str_replace(array('+','/','='),array('-','_',''),base64_encode($str));
+}
+
+/**
+ * 系统解密方法
+ * @param  string $data 要解密的字符串 （必须是sys_encrypt方法加密的字符串）
+ * @param  string $key  加密密钥
+ * @return string
+ */
+function sys_decrypt($data, $key = ''){
+    $key    = md5(empty($key) ? C('DATA_AUTH_KEY') : $key);
+    $data   = str_replace(array('-','_'),array('+','/'),$data);
+    $mod4   = strlen($data) % 4;
+    if ($mod4) {
+        $data .= substr('====', $mod4);
+    }
+    $data   = base64_decode($data);
+    $expire = substr($data,0,10);
+    $data   = substr($data,10);
+
+    if($expire > 0 && $expire < time()) {
+        return '';
+    }
+    $x      = 0;
+    $len    = strlen($data);
+    $l      = strlen($key);
+    $char   = $str = '';
+
+    for ($i = 0; $i < $len; $i++) {
+        if ($x == $l) $x = 0;
+        $char .= substr($key, $x, 1);
+        $x++;
+    }
+
+    for ($i = 0; $i < $len; $i++) {
+        if (ord(substr($data, $i, 1))<ord(substr($char, $i, 1))) {
+            $str .= chr((ord(substr($data, $i, 1)) + 256) - ord(substr($char, $i, 1)));
+        }else{
+            $str .= chr(ord(substr($data, $i, 1)) - ord(substr($char, $i, 1)));
+        }
+    }
+    return base64_decode($str);
+}
+
+function get_ucode($count=6,$type='1')
+{
+    $code=$tmp='';
+    $abc='abcdefghijklmnopqrstuvwxyz';
+    $ABC='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $num='0123456789';
+    if(strstr($type, 'a')){$code.=$abc;}
+    if(strstr($type, 'A')){$code.=$ABC;}
+    if(strstr($type, '1')){$code.=$num;}
+    for ($i=0;$i<$count;$i++)
+    {
+        $index=mt_rand(0, strlen($code)-1);
+        $tmp.=$code[$index];
+    }
+    return $tmp;
+}
+
+//移除URL中的参数
+function remove_url_param($url,$param)
+{
+    foreach ($param as $key=>$value)
+    {
+        if(is_int($key)){
+            $url=preg_replace('/(\&?'.$value.'\=[^&]*)|(\/?'.$value.'\/[^\/]*)/','',$url);
+        }else{
+            $url=preg_replace('/(\&?'.$key.'\='.$value.')|(\/?'.$key.'\/'.$value.')/','',$url);
+        }
+    }
+    $url=preg_replace('/\?\&/','?',$url);
+    $url=preg_replace('/\?$/','',$url);
+    return $url;
+}
+
+//按照某个键转为关联数组
+function index_ass_arr($arr,$byName)
+{
+    $tmp=array();
+    foreach ($arr as $item){
+        $tmp[$item[$byName]]=$item;
+    }
+    return $tmp;
+}
+
+//枚举
+function enum_list($key,$value,$default='',$name='text')
+{
+    $all=C("ENUM_LIST");
+    $list=$all[$key]?$all[$key]:array();
+    foreach ($list as $item){
+        if($item['value']==$value)
+            return $item[$name];
+    }
+    return $default;
+}
+
+
+//解决没有命名空间的恶心之处 加载XModel下的模型
+function XD($name=null,$onlyRead=false) {
+    if(!$onlyRead&&empty($name)) return new Model;
+    static $_model  =   array();
+    $groupName=GROUP_NAME;
+    $modelName=ucfirst($name);
+    if(strpos($name,'/')) {
+        list($groupName,$modelName)=explode('/',$name);
+    }
+    $className=ucfirst(strtolower($groupName)).$modelName.'Model';
+    if(isset($_model[$className]))   return $_model[$className];
+    $filename=APP_PATH.'/Lib/XModel/'.ucfirst(strtolower($groupName)).'/'.ucfirst(strtolower($groupName)).$modelName.'Model.class.php';
+    $content=require_cache($filename);
+    if($onlyRead)
+        return $content;
+    if(class_exists($className)) {
+        $model      =   new $className();
+        $_model[$name]  =  $model;
+    }else {
+        $model      =   D($name);
+    }
+    return $model;
 }

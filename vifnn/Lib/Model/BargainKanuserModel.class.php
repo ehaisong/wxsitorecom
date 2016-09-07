@@ -11,7 +11,10 @@ class BargainKanuserModel extends Model
         $where['_string']='user.wecha_id=kan.friend AND kan.token=user.token';
         $fields='user.portrait,user.wechaname,user.wecha_id,kan.addtime,kan.dao';
         $order='kan.addtime desc';
-        $list=$this->table($tabs)->where($where)->field($fields)->order($order)->limit($offset,$length)->select();
+		$list = $this->table($tabs)->where($where)->field($fields)->order($order)->group("user.wecha_id")->limit($offset, $length)->select();
         return $list;
     }
 }
+
+
+?>

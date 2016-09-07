@@ -15,7 +15,7 @@
 <script src="{vifnn:$staticPath}/tpl/static/cointree/js/indexnew.js"></script> 
 <script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/cointree/js/alert.js"></script>
 <script src="{vifnn:$staticPath}/tpl/static/cointree/js/common.js"></script> 
-<style type="text/css">.table_content_list p{text-align:left;}.joined{background-color: #00c17b; margin-left: 5%;}</style>
+<style type="text/css">.table_content_list p{text-align:left;}.joined{background-color: #00c17b; margin-left: 5%;}.desc{width:100%;overflow:hidden;} .desc img {width:100%;}</style>
 </head>
 <body>
 <if condition="$memberNotice neq ''">{vifnn:$memberNotice}</if>
@@ -156,7 +156,7 @@
         <div  class="table_content_list">
             <ul>
                 <li class="table_List1" style="padding:5% 5%;min-height:50px;">
-                    {vifnn:$cointree['action_desc']|html_entity_decode}
+                   <div class="desc">{vifnn:$cointree['action_desc']|html_entity_decode}</div>
                 </li>
                 <li class="table_List2" style="padding:5% 5%;min-height:50px;" style="display:none;">
                     <div class="product">
@@ -542,3 +542,4 @@ window.shareData = {
 };
 </script>
 {vifnn:$shareScript}
+<include file="Public:tongji" />

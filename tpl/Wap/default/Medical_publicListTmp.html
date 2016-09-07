@@ -37,7 +37,8 @@
         <li><img src="{vifnn:$classify['img']}" alt="">{vifnn:$classify['info']}</li>
         <volist name="imgtxt" id="vo">
          <li data-role="list-divider" data-theme="a"></li>
-        <li><a style="text" href="{vifnn::U('Medical/newread',array('token'=>$token,'wecha_id'=>$wecha_id,'id'=>$vo['id']))}">
+        <li>
+		<a style="text"<if condition="$vo['url'] eq ''">href="{vifnn::U('Medical/newread',array('token'=>$token,'wecha_id'=>$wecha_id,'id'=>$vo['id']))}" <else /> href="{vifnn:$vo.url}"</if>>
           <span color="#2c2c2c">{vifnn:$vo['title']} </span>
           </a></li>
 

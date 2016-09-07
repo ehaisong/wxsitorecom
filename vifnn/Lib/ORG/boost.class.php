@@ -191,6 +191,14 @@ class boost
 		$rt = $this->api_notice_increment($url, $data);
 		return json_decode($rt, 1);
 	}
+
+	public function getUserPrizeList($data)
+	{
+		$url = $this->serverUrl . "index.php?m=Boost&c=api&a=getUserPrizeList";
+		$rt = $this->api_notice_increment($url, $data);
+		return json_decode($rt, 1);
+	}
+
 	public function getLastTime($data)
 	{
 		$url = $this->serverUrl . 'index.php?m=Boost&c=api&a=getLastTime';

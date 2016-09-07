@@ -4,6 +4,11 @@
 <include file="Repast:head" />
 </if>
 <link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
 <div class="content">
 	<div class="cLineB">
 	<h4 class="left">送餐员设置</h4>
@@ -17,7 +22,7 @@
 	<div>
 		<span>温馨提示：</span><p>1、此处只显示总店信息，连锁店订单及菜品请进入相应平台进行管理，连锁店登录账号密码及登录地址请在LBS里设置查看<br/>
 		微外卖的菜品添加请到微餐饮的菜品管理里添加修改</p>
-		<p>2、本功能使用了模板消息中的“订单完成通”知模板消息，模板编号OPENTM202521011。
+		<p>2、本功能使用了模板消息中的“订单完成通知”模板消息，模板编号OPENTM202521011。
 			  开通微信支付功能的公众号在使用此功能的时候可以在”基本设置——微信模板消息“中配置对应的模板消息</p>
 		
 	</div>
@@ -40,10 +45,25 @@
 		<input type="text" name="tel" id="tel" value="{vifnn:$tableData.tel}" class="px" style="width:200px;" />
 		</td>
 		</tr>
+	<tr>
+		<th><span class="red">*</span>绑定微信：</th>
+		<td>
+			<input name="openid" id="fans_id" class="px" style="width:200px;" value="{vifnn:$tableData.openid}">
+			<a href="javascript:void(0);" class="a_choose" id="add_fans">选择粉丝</a>
+			<a href="javascript:void(0);" id="clear_fans">清空</a>
+		</td>
+	</tr>
+		<tr>
+			<th>头像：</th>
+			<td>
+				<input placeholder="默认为绑定的微信账号头像" type="input" class="px" id="avatar"  name="avatar" value="{vifnn:$tableData.avatar}"  style="width:200px"/>
+				<a href="javascript:;" onclick="upyunPicUpload('avatar',114,114,'{vifnn:$token}')" class="a_upload">上传</a> <a href="javascript:;" onclick="viewImg('avatar')">预览</a>&nbsp;<span class="red">*</span>最佳尺寸114×114
+			</td>
+		</tr>
 		<tr>
 		<th></th>
 		<td>
-		<a type="submit" name="submit" class="btnGreen" id="toSaveThis">保 存</a> &nbsp; <a href="{vifnn::U('DishOut/deliveryman',array('token' => $token, 'cid' => $cid))}" class="btnGray vm">取消</a></td>
+		<a ajax="post" type="button" name="submit" class="btnGreen" id="toSaveThis">保 存</a> &nbsp; <a href="{vifnn::U('DishOut/deliveryman',array('token' => $token, 'cid' => $cid))}" class="btnGray vm">取消</a></td>
 		</td>
 		</tr>
 	</tbody>
@@ -53,20 +73,16 @@
 	
 	
 </div>
-<script type="text/javascript">
-$('#toSaveThis').click(function(){
-	var name = $('#name').val();
-	var tel = $('#tel').val();
-	var tel_length = tel.length;
-	if(name == ''){
-		alert('请填写送餐员姓名');
-	}else if(tel == ''){
-		alert('请填写送餐员手机号码');
-	}else if(tel_length != 11){
-		alert('请填写正确的手机号码');
-	}else{
-		document.mydishform.submit();
-	}
-});
+<script>
+	$(document).ready(function(){
+		$('#add_fans').click(function(){
+			var token 	= '{vifnn:$token}';
+			var group 	= $('#group').val();
+			art.dialog.open('?g=User&m=Service&a=service_fans&token='+token+'&group='+group,{lock:true,title:'选择粉丝',width:600,height:400,yesText:'关闭',background: '#000',opacity: 0.45});
+		});
+		$('#clear_fans').click(function(){
+			$('#fans_id').val('');
+		});
+	});
 </script>
 <include file="Public:footer"/>

@@ -42,13 +42,7 @@ class EstateReply {
 								$Estate ['estate_desc'],
 								$Estate ['slide2'],
 								$this->siteUrl . '/index.php?g=Wap&m=Estate&a=impress&&token=' . $this->token . '&wecha_id=' . $this->wechat_id . '&id=' . $this->id . '' 
-						),
-						array (
-								'楼盘动态',
-								$Estate ['estate_desc'],
-								$Estate ['slide3'],
-								$this->siteUrl . '/index.php?g=Wap&m=Index&a=lists&classid=' . $Estate ['classify_id'] . '&token=' . $this->token . '&wecha_id=' . $this->wechat_id . '&id=' . $this->id . '' 
-						) 
+						)
 				),
 				'news' 
 		);

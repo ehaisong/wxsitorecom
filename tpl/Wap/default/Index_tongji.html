@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{vifnn:$thisForm.title}</title>
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body>
+<eq name="tongji_status" value="1">
+    <a href="javascript:;" class="share_btn" type="friend" >模拟分享(发送给朋友)</a>
+    <a href="javascript:;" class="share_btn" type="timeline" >模拟分享(朋友圈)</a>
+    <a href="javascript:;" class="share_btn" type="qq">模拟分享(QQ)</a>
+    <a target="_blank" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'dev','act_id'=>'1','act_token'=>$_GET['token']))}">点击查看</a>
+    <script src="http://tongji.test/Public/Static/tongji/tongji.js" app-key="{vifnn:$tongji_config.app_key}"></script>
+    <script>
+        var MY_ACT={act_name:'dev',act_id:'1',act_token:'{vifnn::$_GET["token"]}'};
+        tongji.view({
+            'page_param':(typeof MY_ACT=='undefined'?{}:MY_ACT),
+            'source_mark':'{vifnn:$tongji_source.mark}',
+            'source_channel':'{vifnn:$tongji_source.channel}',
+            'self_mark':'{vifnn:$self_mark}',
+            'source_share':'{vifnn:$tongji_source.share}',
+        });
+
+        window.shareData = {
+            "moduleName":"Vote",
+            "moduleID":"{vifnn:$vote.id}",
+            "imgUrl": "{vifnn:$vote.picurl}",
+            "timeLineLink":"{vifnn:$f_siteUrl}{vifnn::U('Vote/index',array('token'=>$token,'id'=>$id))}",
+            "sendFriendLink":"{vifnn:$f_siteUrl}{vifnn::U('Vote/index',array('token'=>$token,'id'=>$id))}",
+            "weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('Vote/index',array('token'=>$token,'id'=>$id))}",
+            "tTitle": "{vifnn:$vote.title}",
+            "tContent": "{vifnn:$vote.title}",
+        };
+
+        $('.share_btn').click(function()
+        {
+            var type=$(this).attr("type");
+            var link=getShareLink('{vifnn::U("tongji",array("token"=>$_GET["token"],"rget"=>"1"))}',type);
+            console.log('http://'+location.host+link);
+            shareTongji(type,link);
+        });
+
+    </script>
+</eq>
+
+{vifnn:$shareScript}
+</body>
+</html>

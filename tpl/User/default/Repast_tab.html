@@ -1,0 +1,27 @@
+<div class="tab tab_nav">
+    <ul>
+        <li class="tabli" ><a href="{vifnn::U('Repast/company', array('token' => $token,'cid' => $cid))}">餐厅管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/kitchen', array('token' => $token,'cid' => $cid))}">厨房管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/index', array('token' => $token,'cid' => $cid))}">餐台管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/detail', array('token' => $token,'cid' => $cid))}">餐台预定情况</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/sort', array('token' => $token,'cid' => $cid))}">分类管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/dish', array('token' => $token,'cid' => $cid))}">菜品管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/orders', array('token' => $token,'cid' => $cid))}">订单管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/Statistics', array('token' => $token,'cid' => $cid))}">菜品统计</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/spec', array('token' => $token,'cid' => $cid))}">规格管理</a></li>
+        <li class="tabli" ><a href="{vifnn::U('Repast/bind', array('token' => $token,'cid' => $cid))}">移动端管理员</a></li>
+        <if condition="$ischild neq 1" >
+            <li class="tabli" ><a href="{vifnn::U('Reply_info/set', array('token'=>$token,'infotype'=>'Dining'))}">订餐回复配置</a></li>
+        </if>
+    </ul>
+</div>
+<script>
+    var currentArr=location.href.match(/m\=([a-zA-Z0-9_\-]+)\&a\=([a-zA-Z0-9_\-]+)/);
+    $('.tab_nav li').each(function(index,element){
+        var href=$(element).find('a').prop('href');
+        var matches=href.match(/m\=([a-zA-Z0-9_\-]+)\&a\=([a-zA-Z0-9_\-]+)/);
+        if(matches[1]==currentArr[1]&&matches[2]==currentArr[2]){
+            $(element).addClass('current');
+        }
+    });
+</script>

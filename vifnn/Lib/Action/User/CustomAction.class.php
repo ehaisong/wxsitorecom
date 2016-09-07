@@ -30,8 +30,14 @@ class CustomAction extends UserAction{
 		
 
 		foreach($list as $key=>$value){
-			$list[$key]['count']	= $this->info_db->where(array('token'=>$this->token,'set_id'=>$value['set_id']))->count();
-
+			if ($value["is_pay"] == 1) {
+				$sql = "SELECT COUNT(*) AS tp_count FROM " . C("DB_PREFIX") . "custom_info i," . C("DB_PREFIX") . "custom_order o WHERE i.info_id=o.state AND i.token = o.token AND i.set_id = " . $value["set_id"] . " LIMIT 1";
+				$total = $this->info_db->query($sql);
+				$list[$key]["count"] = $total[0]["tp_count"];
+			}
+			else {
+		  	        $list[$key]['count']	= $this->info_db->where(array('token'=>$this->token,'set_id'=>$value['set_id']))->count();
+			}
 		}
 
 		$this->assign('count',$count);
@@ -76,11 +82,15 @@ class CustomAction extends UserAction{
 			}else{
 				$limit['sub_total']		= 0;
 			}
-			
-			$_POST['price'] = $_POST['price']*100;
+
+			$_POST['price'] = (string)($_POST['price']*100);
 
 			/*修改添加判断*/
 			if($set_info){
+				//修改时不能再次修改支付相关设置
+				unset($_POST['is_pay']);
+				unset($_POST['pay_name']);
+				unset($_POST['price']);
 				if($this->set_db->create()){
 					$_POST['detail']	= $this->_post('detail','trim');
 					$this->set_db->where($where)->save($_POST);//更新设置表
@@ -106,7 +116,7 @@ class CustomAction extends UserAction{
 				$_POST['limit_id']		= $limit_id;
 
 				if($this->set_db->create()){
-					$_POST['detail']	= $this->_post('detail','trim');	
+					$_POST['detail']	= $this->_post('detail','trim');
 					$id 				= $this->set_db->add($_POST);
 /*					$keyword['pid']		= $id;
                 	$keyword['module']	= 'Custom';
@@ -187,7 +197,7 @@ class CustomAction extends UserAction{
 		$count		=$this->info_db->table($tabs)->where($where)->count();
 		$Page       = new Page($count,15);
 		$list		= $this->info_db->table($tabs)->where($where)->order('info.add_time desc')->limit($Page->firstRow.','.$Page->listRows)->select();
-		//解决前端表格显示不一致bug @xulinyang
+		//解决前端表格显示不一致bug @VIFNNcms
 		$fields = $this->field_db->where(array('token'=>$this->token,'set_id'=>$set_id))->order('sort desc')->limit('5')->field('field_name,field_type')->select();
 		foreach($list as $key=>$value){
 			$list[$key]['ex_info'] = unserialize($value['sub_info']);
@@ -195,14 +205,7 @@ class CustomAction extends UserAction{
 			foreach($fields as $key2=>$value2)
 			{
 				$tmp=array('type'=>$value2['field_type'],'value'=>'未填写','name'=>$value2['field_name']);
-				foreach($list[$key]['ex_info'] as $key3=>$value3)
-				{
-					if($value3['name']==$value2['field_name'])
-					{
-						$tmp['value']=$value3['value'];
-						break;
-					}
-				}
+				$tmp["value"] = $list[$key]["ex_info"][$key2]["value"];
 				$tmp['value']=$tmp['type']=='image'?((empty($tmp['value'])||$tmp['value']=='未填写')?'未上传':explode(',',$tmp['value'])):$tmp['value'];
 				$list[$key]['valueList'][]=$tmp;
 			}
@@ -211,16 +214,20 @@ class CustomAction extends UserAction{
 		if($setInfo['is_pay']=='1')
 		{
 			$where2=array('_string'=>'info.info_id=order.state');
+			$where2['info.set_id']=$set_id;
 			$total=$this->info_db->table($tabs)->where($where2)->count();
 			$where2['order.paid']='0';
 			$notPayNum=$this->info_db->table($tabs)->where($where2)->count();
 			$where2['order.paid']='1';
 			$payNum=$this->info_db->table($tabs)->where($where2)->count();
+			if ($setInfo["set_id"] == 118) {
+				echo $this->info_db->getLastSql();
+			}
 			$totalAmount=$this->info_db->table($tabs)->where($where2)->sum('order.price');
 			$this->assign('total',$total);
 			$this->assign('notPayNum',$notPayNum);
 			$this->assign('payNum',$payNum);
-			$this->assign('totalAmount',$totalAmount);
+			$this->assign('totalAmount',$totalAmount?$totalAmount:0);
 		}
 		$this->assign('thisForm',$setInfo);
 		$this->assign('fields',$fields);
@@ -411,14 +418,7 @@ class CustomAction extends UserAction{
 			foreach($fields as $key2=>$value2)
 			{
 				$tmp=array('type'=>$value2['field_type'],'value'=>'未填写','name'=>$value2['field_name']);
-				foreach($list[$key]['ex_info'] as $key3=>$value3)
-				{
-					if($value3['name']==$value2['field_name'])
-					{
-						$tmp['value']=$value3['value'];
-						break;
-					}
-				}
+				$tmp["value"] = $list[$key]["ex_info"][$key2]["value"];
 				$tmp['value']=$tmp['type']=='image'?((empty($tmp['value'])||$tmp['value']=='未填写')?'未上传':count(explode(',',$tmp['value'])).'张图片'):$tmp['value'];
 				$list[$key]['valueList'][]=$tmp;
 			}
@@ -479,7 +479,7 @@ class CustomAction extends UserAction{
                 $title[$k]=iconv("UTF-8", "GBK",$v);
             }
             $title= implode("\t", $title);
-            echo "$title\n";
+	    echo "{$title}\n";
         }
         if (!empty($data)){
             foreach($data as $key=>$val){
@@ -647,10 +647,12 @@ class CustomAction extends UserAction{
 			'field_match'	=> array(
 				array('value'=>'','text'=>'请选择验证方式'),
 				array('value'=>'^[\u4e00-\u9fa5\a-zA-Z0-9]+$','text'=>'英文数字汉字'),
+				array("value" => "^[\u4e00-\u9fa5\a-zA-Z]+\$", "text" => "英文汉字"),
 				array('value'=>'^[A-Za-z]+$','text'=>'英文大小写字符'),			
 				array('value'=>'^[1-9]\d*|0$','text'=>'0或正整数'),
 				array('value'=>'^[0-9]{1,30}$','text'=>'正整数'),
 				array('value'=>'^[-\+]?\d+(\.\d+)?$','text'=>'小数'),
+				array("value" => "^((https?|ftp|news):\/\/)?([a-z]([a-z0-9\-]*[\.。])+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&]*)?)?(#[a-z][a-z0-9_]*)?\$", "text" => "网址"),
 				array('value'=>'\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*','text'=>'邮箱'),
 				array('value'=>'^13[0-9]{9}$|^14[0-9]{9}$|^15[0-9]{9}$|^17[0-9]{9}$|^18[0-9]{9}$','text'=>'手机'),
 			),

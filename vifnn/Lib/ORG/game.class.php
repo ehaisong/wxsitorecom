@@ -7,6 +7,7 @@ class game
 	public $key;
 	public $topdomain;
 	public $token;
+	public $verifyCode;
 
 	public function __construct()
 	{
@@ -37,6 +38,12 @@ class game
 		return $link;
 	}
 
+	public function getTotalUse()
+	{
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=totalUse";
+		$rt = $this->api_notice_increment($url);
+		return $rt;
+	}
 	public function config($token, $wxname, $wxid, $wxlogo, $link, $attentionText, $userType = 0)
 	{
 		$data = array('username' => $this->topdomain . '_' . $token, 'wxname' => $wxname, 'domain' => $_SERVER['HTTP_HOST'], 'wxid' => $wxid, 'wxlogo' => urlencode($wxlogo), 'link' => urlencode($link), 'attentionText' => $attentionText, 'type' => $userType);
@@ -59,6 +66,13 @@ class game
 		return json_decode($rt, 1);
 	}
 
+	public function gameIndustyCatInfo()
+	{
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=gameIndustyCatInfo";
+		$rt = $this->api_notice_increment($url);
+		return json_decode($rt, 1);
+	}
+
 	public function scoredel($data)
 	{
 		$url = $this->serverUrl . 'index.php?m=Game&c=api&a=delrecord';
@@ -68,7 +82,7 @@ class game
 
 	public function gameList($catid, $what_game, $type = '1', $gameType = '0')
 	{
-		$url = $this->serverUrl . 'index.php?m=Game&c=api&a=gameList&catid=' . $catid . '&what_game=' . $what_game . '&domain=' . $this->topdomain . '&type=' . $type;
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=gameList&industy_cat_id=" . $catid . "&what_game=" . $what_game . "&type=" . $type . "&game_type=" . $gameType;
 		$rt = $this->api_notice_increment($url);
 		return json_decode($rt, 1);
 	}
@@ -150,6 +164,27 @@ class game
 		return json_decode($rt, 1);
 	}
 
+	public function blackList($data)
+	{
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=blackList";
+		$rt = $this->api_notice_increment($url, $data);
+		return json_decode($rt, 1);
+	}
+
+	public function addToBlacklist($data)
+	{
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=addToBlacklist";
+		$rt = $this->api_notice_increment($url, $data);
+		return $rt;
+	}
+
+	public function deleteFromBlacklist($data)
+	{
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=deleteFromBlacklist";
+		$rt = $this->api_notice_increment($url, $data);
+		return $rt;
+	}
+
 	public function release($uid, $gameId, $uGameId)
 	{
 		$data = array('uid' => $uid, 'game_id' => $gameId, 'u_game_id' => $uGameId);
@@ -160,6 +195,8 @@ class game
 
 	public function api_notice_increment($url, $data = '', $method = 'POST')
 	{
+		$verifyCode = D("Domain_verify_code")->getVerifyCode($this->topdomain, $_SERVER["SERVER_NAME"]);
+		$url .= "&domain=" . $this->topdomain . "&host_name=" . $_SERVER["SERVER_NAME"] . "&verify_code=" . $verifyCode;
 		$ch = curl_init();
 		$header = 'Accept-Charset: utf-8';
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -231,6 +268,13 @@ class game
 	public function getUserInfo($data)
 	{
 		$url = $this->serverUrl . 'index.php?m=Game&c=api&a=getUserInfo';
+		$rt = $this->api_notice_increment($url, $data);
+		return json_decode($rt, 1);
+	}
+
+	public function getConvertDataFromCms($data)
+	{
+		$url = $this->serverUrl . "index.php?m=Game&c=api&a=getConvertDataFromCms";
 		$rt = $this->api_notice_increment($url, $data);
 		return json_decode($rt, 1);
 	}

@@ -1,0 +1,46 @@
+<eq name="tongji_status" value="1">
+    <script src="{vifnn::C('TONGJI_SCRIPT')}" app-key="{vifnn:$tongji_config.app_key}"></script>
+    <notempty name="tongji_data">
+        <script>
+            var MY_ACT={act_name:'{vifnn:$tongji_data.act_name}',act_id:'{vifnn:$tongji_data.act_id}',act_token:'{vifnn:$tongji_data.act_token}'};
+        </script>
+    </notempty>
+    <script>
+        var ENV_NET_STATUS='';
+        var ENV_ASYNC_TIMER;
+        var ENV_ASYNC=function(next){
+            ENV_ASYNC_TIMER=setTimeout(function(){
+                clearAndNext();
+            },2000);
+            if(typeof wx!='undefined'){
+                wx.ready(function(){
+                    wx.getNetworkType({
+                        success: function (res) {
+                            ENV_NET_STATUS = res.networkType;
+                            clearAndNext();
+                        },
+                        error:function () {
+                            clearAndNext();
+                        }
+                    });
+                });
+            }else{
+                clearAndNext();
+            }
+            function clearAndNext()
+            {
+                if(ENV_ASYNC_TIMER){
+                    clearTimeout(ENV_ASYNC_TIMER);
+                    ENV_ASYNC_TIMER=null;
+                    next();
+                }
+            }
+        }
+        tongji.view({
+            'page_param':(typeof MY_ACT=='undefined'?{}:MY_ACT),
+            'source_mark':'{vifnn:$tongji_source.mark}',
+            'self_mark':'{vifnn:$self_mark}',
+            'source_share':'{vifnn:$tongji_source.share}',
+        });
+    </script>
+</eq>

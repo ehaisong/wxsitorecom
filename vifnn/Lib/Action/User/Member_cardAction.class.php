@@ -3,6 +3,9 @@ class Member_cardAction extends UserAction{
 	public $member_card_set_db;
 	public $thisCard;
 	public $wxuser;
+	public $wxuser_db;
+	public $cashierCrad;
+	public $iscashierCrad = false;
 	public function _initialize() {
 		parent::_initialize();
 		$this->assign('token',$this->token);
@@ -13,7 +16,11 @@ class Member_cardAction extends UserAction{
 			//$this->error('非法操作');
 		}
 		$this->wxuser_db=M("Wxuser");
-		//获取所在组的开卡数量
+		$this->member_card_set_db = M("Member_card_set");
+		$cardByToken = $this->member_card_set_db->where(array("token" => $this->token))->order("id ASC")->find();
+		if (empty($cardByToken)) {
+			$this->checkCashierCard($this->wxuser);
+		}
 		$thisWxUser=$this->wxuser_db->where(array('token'=>$this->token))->find();
 		$thisUser=$this->user;
 		$thisGroup=$this->userGroup;
@@ -38,8 +45,6 @@ class Member_cardAction extends UserAction{
 		}
 		$this->wxuser_db->where(array('uid'=>session('uid'),'token'=>session('token')))->save($data);
 		//
-		$this->member_card_set_db=M('Member_card_set');
-		//
 		if($_GET['cardid']){
 			$id=intval($_GET['cardid']);
 		}else{
@@ -55,7 +60,7 @@ class Member_cardAction extends UserAction{
 		
 		//transfer start
 		$data=M('Member_card_create');
-		$cardByToken=$this->member_card_set_db->where(array('token'=>$this->token))->order('id ASC')->find();
+
 		if ($cardByToken){
 			$data->where('token=\''.$this->token.'\' AND cardid=0')->save(array('cardid'=>$cardByToken['id']));
 			M('Member_card_exchange')->where('token=\''.$this->token.'\' AND cardid=0')->save(array('cardid'=>$cardByToken['id']));
@@ -69,18 +74,122 @@ class Member_cardAction extends UserAction{
 		$type 	= $this->_get('type','intval');
 		$this->assign('type',$type?$type:1);
 	}
-	public function index(){
-		$cards=$this->member_card_set_db->where(array('token'=>$this->token))->order('id ASC')->select();
-		if ($cards){
-			$card_create_data=M('Member_card_create');
-			$i=0;
-			foreach ($cards as $card){
-				$cards[$i]['usercount']=$card_create_data->where('cardid='.intval($card['id']).' AND token="'.$this->token.'" AND wecha_id!=""')->count();
-				$cards[$i]['cardcount']=$card_create_data->where('cardid='.intval($card['id']).' AND token="'.$this->token.'"')->count();
+
+	public function CashierCardSet()
+	{
+		$iscashiercard = $this->_post("iscashiercard", "intval");
+		if (($iscashiercard == 1) || ($iscashiercard == 2)) {
+			if ($this->wxuser_db->where(array("id" => $this->wxuser["id"], "token" => $this->token))->save(array("iscashiercard" => $iscashiercard))) {
+				$this->success("设置成功！", U("Member_card/index", array("token" => $this->token)));
+			}
+			else {
+				$this->error("设置失败，请重新保存设置！");
+			}
+		}
+	}
+
+	public function checkCashierCard($wxuserinfo)
+	{
+		if (ACTION_NAME == "CashierCardSet") {
+			return true;
+		}
+
+		if (empty($wxuserinfo) || ($wxuserinfo["iscashiercard"] == 2)) {
+			return true;
+		}
+
+		$CmscashierkeyDb = D("Cmscashierkey");
+		$cashierCf = $CmscashierkeyDb->getConfig();
+		if (empty($cashierCf) || !isset($cashierCf["cashierkey"])) {
+			return true;
+		}
+
+		$coupontmp = M("Member_card_coupon")->where(array("token" => $this->token))->find();
+		if (!empty($coupontmp) && isset($coupontmp["token"])) {
+			unset($coupontmp);
+			return true;
+		}
+
+		if (!empty($wxuserinfo)) {
+			switch ($wxuserinfo["iscashiercard"]) {
+			case "0":
+				$this->display("checkCashierCard");
+				exit();
+				break;
+
+			case "1":
+				$TomemberCardIndex = array("index", "Index", "design", "grade", "setgrade", "privilege", "privilege_add", "gifts", "edit_gifts", "exportmembers", "recharge", "notice", "noticeSet", "exchange", "donate", "donate_set", "jfdhhb", "jfdhhb_set", "jfdhhb_record", "create", "exportCard", "custom", "focus", "focusAdd", "focusEdit");
+				$LocmemberList = array("center", "Center", "center_all", "member", "members", "exportCardUseRecord");
+				$wxCouponIndex = array("coupons", "Coupons", "coupons_set", "coupons_record");
+				$wxCouponConsumeCard = array("consume_record", "Consume_record", "consume_use");
+				$cashierAction = "";
+
+				if (in_array(ACTION_NAME, $TomemberCardIndex)) {
+					$cashierAction = "c=memberCard&a=index";
+				}
+				else if (in_array(ACTION_NAME, $LocmemberList)) {
+					$cashierAction = "c=memberLoc&a=memberList";
+				}
+				else if (in_array(ACTION_NAME, $wxCouponIndex)) {
+					$cashierAction = "c=wxCoupon&a=index";
+				}
+				else if (in_array(ACTION_NAME, $wxCouponConsumeCard)) {
+					$cashierAction = "c=wxCoupon&a=consumeCard";
+				}
+
+				$this->iscashierCrad = true;
+
+				if (ACTION_NAME != "replyInfoSet") {
+					A("User/Cashierpf")->index($cashierAction);
+				}
+				else {
+					$this->cashierCrad = $CmscashierkeyDb->getCardList($this->token);
+				}
+
+				break;
+
+			case "2":
+				return true;
+				break;
+
+			default:
+				return true;
+				break;
+			}
+		}
+	}
+
+	public function index()
+	{
+		$cards = $this->member_card_set_db->where(array("token" => $this->token))->order("id ASC")->select();
+
+		if ($cards) {
+			$card_create_data = M("Member_card_create");
+			$i = 0;
+
+			foreach ($cards as $card ) {
+				$cards[$i]["usercount"] = $card_create_data->where("cardid=" . intval($card["id"]) . " AND token=\"" . $this->token . "\" AND wecha_id!=\"\"")->count();
+				$cards[$i]["cardcount"] = $card_create_data->where("cardid=" . intval($card["id"]) . " AND token=\"" . $this->token . "\"")->count();
+				$cards[$i]["grade_name"] = D("Member_card_grade")->findGrade("id=" . intval($card["gradeid"]), "grade_name");
 				$i++;
 			}
 		}
-		$this->assign('cards',$cards);
+
+		$exists = D("Member_card_grade")->selectGrade(array("token" => $this->token));
+
+		if (!$exists) {
+			$first = array(
+				array("grade_name" => "普通会员", "status" => 1),
+				array("grade_name" => "银卡会员", "status" => 1),
+				array("grade_name" => "金卡会员", "status" => 1),
+				array("grade_name" => "铂金卡会员", "status" => 1),
+				array("grade_name" => "钻石会员", "status" => 1),
+				array("grade_name" => "至尊会员", "status" => 1)
+				);
+			D("member_card_grade")->allinsertGrade($first, $this->token);
+		}
+
+		$this->assign("cards", $cards);
 		$this->display();
 	}
 	public function replyInfoSet(){
@@ -96,14 +205,14 @@ class Member_cardAction extends UserAction{
 			$memberArr['info']=$this->_post('info');
 			$memberArr['picurl']=$this->_post('picurl');
 			$memberArr['token']=$this->token;
-			$memberArr['apiurl']=$this->_post('apiurl');
+			$memberArr['apiurl']=$this->_post('apiurl', "trim");
 			$memberArr['infotype']='membercard';
 			
 			$nomemberArr['title']=$this->_post('title1');
 			$nomemberArr['info']=$this->_post('info1');
 			$nomemberArr['picurl']=$this->_post('picurl1');
 			$nomemberArr['token']=$this->token;
-			$nomemberArr['apiurl']=$this->_post('apiurl');
+			$nomemberArr['apiurl']=$this->_post('apiurl', "trim");
 			$nomemberArr['infotype']='membercard_nouse';
 			//
 			$where=array('token'=>$this->token);
@@ -131,6 +240,9 @@ class Member_cardAction extends UserAction{
 				$unmemberConfig['title']='申请成为会员';
 				$unmemberConfig['info']='申请成为会员，享受更多优惠';
 			}
+			$this->assign("cashierCrad", $this->cashierCrad[0]);
+			$this->assign("iscashierCrad", $this->iscashierCrad);
+			$this->assign("cashierCradChannel", $this->cashierCrad[0] ? $this->cashierCrad[0]["channel_list"] : array());
 			$this->assign('set',$memberConfig);
 			$this->assign('set2',$unmemberConfig);
 			$this->display();
@@ -139,6 +251,7 @@ class Member_cardAction extends UserAction{
 	//会员卡配置
 	public function design(){
 		$data=$this->thisCard;
+		$grades = D("Member_card_grade")->selectGrade(array("token" => $this->token, "status" => 1));
 		if(IS_POST){
 			$_POST['token']=$this->token;			
 			if($data==false){				
@@ -169,6 +282,7 @@ class Member_cardAction extends UserAction{
 				'payrecord' => '/tpl/User/default/common/images/cart_info/payrecord.jpg',
 				);
 			}
+			$this->assign("grades", $grades);
 			$this->assign('card',$data);
 			$this->display();
 		}
@@ -525,8 +639,6 @@ class Member_cardAction extends UserAction{
 		}else{
 			if (isset($_GET['itemid'])){
 				$thisItem=$member_card_vip->where(array('id'=>intval($_GET['itemid'])))->find();
-			}else {
-				//$thisNotice['endtime']=time()+10*24*3600;
 			}
 			$this->assign('vip',$thisItem);
 			$this->display('privilege_add');
@@ -926,9 +1038,9 @@ class Member_cardAction extends UserAction{
 	}
 	public function staff(){
 		$company_staff_db=M('Company_staff');
-		$data=$company_staff_db->where(array('token'=>$this->token))->order('id desc')->select();
+		$data = $company_staff_db->where(array('token' => $this->token, 'comefrom' => '0'))->order('id desc')->select();
 		$company_db=M('Company');
-		$companys=$company_db->where(array('token'=>$this->token))->order('id ASC')->select();
+		$companys = $company_db->where(array('token' => $this->token, 'comefrom' => '0'))->order('id ASC')->select();
 		//
 		$companysByID=array();
 		if ($companys){
@@ -940,6 +1052,9 @@ class Member_cardAction extends UserAction{
 		if ($data){
 			$i=0;
 			foreach ($data as $d){
+				if ((strlen($d['password']) < 32) || (0 < $d['comefrom'])) {
+					continue;
+				}
 				$data[$i]['companyName']=$companysByID[$d['companyid']]['name'];
 				$data[$i]['companyID']=$companysByID[$d['companyid']]['id'];
 				$i++;
@@ -1113,10 +1228,11 @@ class Member_cardAction extends UserAction{
 		),I('get.'));
 		$get['token']=$this->token;
 		$cardCreateModel=D('MemberCardCreate');
-		$count		= $cardCreateModel->getTotal($get);
+		$isSearch = ($_GET["searchkey"] != "") || ($_GET["total_score"] != "") || ($_GET["expensetotal"] != "") || ($_GET["balance"] != "");
+		$count = ($isSearch ? $cardCreateModel->getTotal($get) : $cardCreateModel->getTotalNoSearch($get));
 		$Page       = new Page($count,30);
 		$show       = $Page->show();
-		$members 		= $cardCreateModel->getList($get,$Page->firstRow,$Page->listRows);
+		$members = ($isSearch ? $cardCreateModel->getList($get, $Page->firstRow, $Page->listRows) : $cardCreateModel->getListNoSearch($get, $Page->firstRow, $Page->listRows));
 		$this->assign('members',$members);
 		$this->assign('page',$show);
 		$this->display();
@@ -1207,18 +1323,9 @@ class Member_cardAction extends UserAction{
 
                 /*模板消息*/
 				 $model      = new templateNews();
-                 $dataKey    = 'OPENTM201231580';
-                 $dataArr    = array(
-                 	'wecha_id'		=> $uinfo['wecha_id'],
-                     'first'         => '您好，你已经成功充值。',
-                     'keyword1'      => $cardinfo['cardname'],
-                     'keyword2'      => $mycard['number'],
-                     'keyword3'      => $_POST['price'],
-                     'keyword4'      => time(),
-                     'keyword5'      => $uinfo['balance'],
-                     'remark'        => '后台手动充值'
-                 );
-
+				$href = $this->siteUrl . "/index.php?" . http_build_query(array("g" => "Wap", "m" => "Card", "a" => "card", "token" => $this->token, "wecha_id" => $uinfo["wecha_id"], "cardid" => $cardid));
+				$dataKey = "TM00009";
+				$dataArr = array("href" => $href, "wecha_id" => $uinfo["wecha_id"], "first" => "您好，你已经成功充值。", "accountType" => $cardinfo["cardname"], "account" => $cardinfo["number"], "amount" => $_POST["price"] . "元", "result" => "充值成功", "remark" => "后台管理员手动充值");
                  $model->sendTempMsg($dataKey,$dataArr);
 				
 				$this->success('充值成功');
@@ -1277,11 +1384,13 @@ class Member_cardAction extends UserAction{
 			$arr['usecount']= 0;
 			$arr['cardid']	= $this->_get('id');
 			$set_exchange = M('Member_card_exchange')->where(array('cardid'=>$this->_get('id')))->find();
-			
-			if($set_exchange['reward'] > 0){
-			$arr['score'] = intval($arr['expense']*$set_exchange['reward']);
-			M('Member_card_use_record')->add($arr);
+			if (0 < $arr["expense"]) {
+			$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor($arr["expense"] * ($set_exchange["reward"] / $set_exchange["expense"])) : 0);
 			}
+			else {
+				$arr["score"] = ceil($arr["expense"] * ($set_exchange["reward"] / $set_exchange["expense"]));
+			}
+			M("Member_card_use_record")->add($arr);
 			$userArr=array();
 			$thisUser=M('Userinfo')->where(array('token'=>$this->token,'wecha_id'=>$arr['wecha_id']))->order('id ASC')->find();
 			$userArr['total_score']=$thisUser['total_score']+$arr['score'];
@@ -1300,7 +1409,7 @@ class Member_cardAction extends UserAction{
 		M('Member_card_sign')->where($where)->delete();
 		M('Member_card_use_record')->where($where)->delete();
 		M('Member_card_coupon_record')->where($where)->delete(); //删除优惠券记录
-		//M('Userinfo')->where($where)->delete();
+		M('Userinfo')->where(array('token' => $this->token, 'wecha_id' => $thisMember['wecha_id']))->setField('getcardtime', 0);
 		S('fans_'.$this->token.'_'.$thisUser['wecha_id'], null);
 		$card_create_db->where(array('id'=>intval($_GET['itemid'])))->save(array('wecha_id'=>''));
 		$this->success('操作成功');
@@ -1656,7 +1765,9 @@ class Member_cardAction extends UserAction{
 								break;
 								
 							case 'paid':
-								if($fieldValue == 1){
+							        if ($sn["paytype"] == "donate") {
+								        $fieldValue = iconv("utf-8", "gbk", "充值赠送");
+							        }else if ($fieldValue == 1) {
 									$fieldValue = iconv('utf-8','gbk','交易成功');
 								}else{
 									$fieldValue = iconv('utf-8','gbk','未付款');
@@ -2206,6 +2317,9 @@ class Member_cardAction extends UserAction{
 
 		$list 		= M('Member_card_donate')->where(array('token'=>$this->token,'cardid'=>$cardid))->select();
 
+		foreach ($list as $key => $value ) {
+			$list[$key]["grade_name"] = D("Member_card_grade")->findGrade(array("id" => $value["gradeid"]), "grade_name");
+		}
 		$this->assign('list',$list);
 		$this->assign('cardid',$cardid);
 		$this->display();
@@ -2217,7 +2331,12 @@ class Member_cardAction extends UserAction{
 
 		$info 		= M('Member_card_donate')->where(array('token'=>$this->token,'cardid'=>$cardid,'id'=>$id))->find();
 
-		$donate_intro 	= M('Member_card_set')->where(array('token'=>$this->token,'id'=>$cardid))->getField('donate_intro');
+		$gradeid = M("Member_card_set")->where(array("id" => $cardid))->getField("gradeid");
+		$grades = D("Member_card_grade")->selectGrade(array(
+	"token"  => $this->token,
+	"status" => 1,
+	"id"     => array("gt", $gradeid)
+	));
 		
 		if(IS_POST){
 			$min_price 		= $this->_post('min_price','floatval');
@@ -2225,7 +2344,7 @@ class Member_cardAction extends UserAction{
 			$donate_price 	= $this->_post('donate_price','floatval');
 			$is_open 		= $this->_post('is_open','intval');
 			$intro 			= $this->_post('donate_intro','trim');
-
+			$gradeid = $this->_post("gradeid", "intval");
 			if($min_price == 0 && $max_price == 0){
 				$this->error('最小冲值和最大冲值不能同时不设限制');
 			}elseif($min_price >= $max_price && $max_price != 0){
@@ -2236,26 +2355,20 @@ class Member_cardAction extends UserAction{
 				$this->error('赠送金额不能为空');
 			}
 			
-			$data 	= array(
-				'cardid' 		=> $this->_post('cardid','intval'),
-				'token' 		=> $this->token,
-				'min_price' 	=> $min_price,
-				'max_price' 	=> $max_price,
-				'donate_price' 	=> $donate_price,
-				'is_open' 		=> $is_open
-			);
-			
+			$if_has_set = M("Member_card_donate")->where(array("token" => $this->token, "cardid" => $cardid, "gradeid" => $gradeid, "is_open" => 1))->find();
+			if (!empty($if_has_set) && ($gradeid != 0) && ($_POST["id"] != $if_has_set["id"])) {
+				$this->error("该升级级别已被设置,您可以选择【级别无改动】");
+			}
+
+			$data = array("cardid" => $this->_post("cardid", "intval"), "token" => $this->token, "min_price" => $min_price, "max_price" => $max_price, "donate_price" => $donate_price, "is_open" => $is_open, "donate_intro" => $intro, "gradeid" => $gradeid);
+
 			if($info){
 				M('Member_card_donate')->where(array('token'=>$this->token,'cardid'=>$cardid,'id'=>$id))->save($data);
 				$this->success('修改成功',U('Member_card/donate',array('token'=>$this->token,'id'=>$data['cardid'])));
-			}else{
-				if(M('Member_card_donate')->add($data)){
-					$this->success('添加成功',U('Member_card/donate',array('token'=>$this->token,'id'=>$data['cardid'])));
-				}
 			}
-			
-			M('Member_card_set')->where(array('token'=>$this->token,'id'=>$data['cardid']))->save(array('donate_intro'=>$intro));
-			
+			else if (M("Member_card_donate")->add($data)) {
+				$this->success("添加成功", U("Member_card/donate", array("token" => $this->token, "id" => $data["cardid"])));
+			}
 		}else{
 		
 			$this->assign('set',$info);
@@ -2263,7 +2376,8 @@ class Member_cardAction extends UserAction{
 			$now 	= time();
 			$this->assign('startdate',date('Y-m-d',$now));
 			$this->assign('enddate',date('Y-m-d',strtotime('+1 month',$now)));
-			$this->assign('donate_intro',$donate_intro);
+			$this->assign('donate_intro',$info['donate_intro']);
+			$this->assign("grades", $grades);
 			$this->display();
 		}
 	
@@ -2811,54 +2925,89 @@ class Member_cardAction extends UserAction{
     		echo implode("\n",$data);
     	}
     }
-	
-	//商户主动更换卡  jm73com
-	public function cardChange(){
-		if(IS_POST){
-			//查询卡种是否存在
-			$cardid=$this->_post('cardid','intval');
-			$cardset=$this->member_card_set_db->where(array(
-				'id'=>$cardid,
-				'token'=>$this->token
-			))->field('id')->find();
-			if(!$cardset){
-				$this->error('您选择的会员卡类型不存在!');
+	public function grade()
+	{
+		$exists = D("Member_card_grade")->selectGrade(array("token" => $this->token));
+		$this->assign("list", $exists);
+		$this->display();
+	}
+
+	public function setgrade()
+	{
+		if (IS_POST) {
+			$data = array();
+			$data["grade_name"] = trim($_POST["grade_name"]);
+			$data["status"] = intval($_POST["status"]);
+
+			if (intval($_POST["id"])) {
+				if (D("Member_card_grade")->saveGrade($data, array("id" => intval($_POST["id"])))) {
+					$this->success("修改成功", U("Member_card/grade", array("token" => $this->token)));
+					exit();
+				}
+				else {
+					$this->error("修改失败");
+				}
 			}
-			//查询当前指定用户是否领卡
-			$wecha_id=$this->_post('wecha_id','trim');
-			if(!$wecha_id){
-				$this->error('会员信息不存在!');
+			else if (D("Member_card_grade")->insertGrade($data, $this->token)) {
+				$this->success("添加成功", U("Member_card/grade", array("token" => $this->token)));
+				exit();
 			}
-			//删除旧卡，添加新卡
-			$card = M('Member_card_create')->field('id,number')->where("token='".$this->token."' and cardid=".$cardid." and wecha_id = ''")->order('id ASC')->find();
-			if(!$card){
-				$this->error('您选择的会员卡数量不足!');
+			else {
+				$this->error("添加失败");
 			}
-			M('Member_card_create')->where(array('token' => $this->token,'wecha_id' => $wecha_id))->delete();
-			M('Member_card_create')->where(array('id' => $card['id']))->save(array('wecha_id' => $wecha_id));
-			S('fans_'.$this->token.'_'.$wecha_id, NULL);
-			$this->success('成功更换会员卡类型!');
-		}else{
-			//查询用户信息
-			$uid = $this->_get('uid','intval');
-			$userinfo=M('Userinfo')->where(array('token'=>$this->token,'id'=>$uid))->field('wechaname,wecha_id,truename,id')->find();
-			if(!$userinfo){
-				$this->error('未查询到指定用户信息!');
+		}
+		else if ($_GET["gradeid"]) {
+			$set = D("Member_card_grade")->findGrade("id = " . intval($_GET["gradeid"]));
+
+			if (!$set) {
+				$this->error("非法操作");
 			}
-			$this->assign('uinfo',$userinfo);
-			//查询卡种
-			$cardset=$this->member_card_set_db->where(array(
-				'token'=>$this->token
-			))->field('id,cardname')->select();
-			$this->assign('cardset',$cardset);
-			//查询当前会员卡使用卡种
-			$card = M('Member_card_create')->field('cardid')->where(array(
-				'token'=>$this->token,
-				'wecha_id'=>$userinfo['wecha_id']
-			))->order('id ASC')->find();
-			$this->assign('card',$card);
-			$this->display();
-		}	
+
+			$this->assign("set", $set);
+		}
+
+		$this->display();
+	}
+
+	public function del()
+	{
+		$id = (int) $_GET["gradeid"];
+
+		if (D("Member_card_grade")->delGrade(array("id" => $id))) {
+			$this->success("删除成功", U("Member_card/grade", array("token" => $this->token)));
+			exit();
+		}
+		else {
+			$this->error("删除失败");
+		}
+	}
+
+	public function exportmembers()
+	{
+		$get = array_merge(array(), I("get."));
+		$get["token"] = $this->token;
+		$cardCreateModel = D("MemberCardCreate");
+		$members = $cardCreateModel->getListNoSearch($get);
+
+		if (!empty($members)) {
+			$export = array();
+
+			foreach ($members as $key => $value ) {
+				$export[$key]["number"] = $value["number"];
+				$export[$key]["truename"] = $value["truename"];
+				$export[$key]["tel"] = ($value["tel"] != "" ? "tel:" . $value["tel"] : "");
+				$export[$key]["getcardtime"] = (0 < $value["getcardtime"] ? date("Y-m-d H:i:s", $value["getcardtime"]) : "无时间记录");
+				$export[$key]["total_score"] = $value["total_score"];
+				$export[$key]["expensetotal"] = $value["expensetotal"];
+				$export[$key]["balance"] = $value["balance"];
+			}
+
+			$title = array("卡号", "姓名", "联系电话", "领卡时间", "积分", "消费总额(元)", "余额(元)");
+			$this->exportexcel($export, $title, "会员记录统计数据_" . date("YmdHis"));
+		}
+		else {
+			$this->error("没有需要导出的记录");
+		}
 	}
 }
 ?>

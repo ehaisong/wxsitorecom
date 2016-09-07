@@ -127,15 +127,19 @@ $this->assign('catemenu',$catemenu);
 
 			$tplData 	= array(); 	//模板
 			$arr 		= array();  
-			//获取模板信息
+		$arrTmp = array();
 			include('./vifnn/Lib/ORG/index.Tpl.php');
 
 			foreach($tpl as $k=>$v){
 				if($v['tpltypeid'] == $this->thisMarket['tenant_index_tpl']){
 					$arr = $v;
 				}
+				if (($v["tpltypeid"] == $this->thisMarket["tenant_list_tpl"]) && (strpos($v["attr"], "sub") !== false)) {
+				      $arr = $v;
+			        }
 			}
 
+		empty($arr) && ($arr = $arrTmp);
 			$tplData['color_id'] 	= 0;
 			$tplData['tpltypeid'] 	= $arr['tpltypeid'];
 			$tplData['tpltypename'] = $arr['tpltypename'];
@@ -165,15 +169,18 @@ $this->assign('catemenu',$catemenu);
 						'sub'	=>$this->_getArea()
 					),
 				
-				'sub'=>$sub,
+				//'sub'=>$sub,
 			);  
 
-
+			if (empty($tplData['tpltypename'])) {
+				$tplData['tpltypename'] = '1116_index_cv4y';
+			}
+			
 			$this->assign('info',$info);
 			$this->assign('flash',$this->_getFlash());
 			$this->assign('tpl',$tplData);
-			//$this->display('Index:'.$tplData['tpltypename']);
-			$this->display('tenant_index');
+			$this->display('Index:'.$tplData['tpltypename']);
+			//$this->display('tenant_index');
 		}
 
 		public function tenant_list(){
@@ -270,7 +277,7 @@ $this->assign('catemenu',$catemenu);
 		public function _getCate($num){
 
 			$where	= array('token'=>$this->token,'market_id'=>$this->thisMarket['market_id'],'is_show'=>'1');
-			$cate 	= M('market_cate')->where($where)->limit($num)->select(); 
+			$cate 	= M('market_cate')->where($where)->limit($num)->order('sort desc')->select(); 
 			$sub = array();
 			foreach($cate as $key=>$value){
 				$sub[$key]['img'] 	= $value['cate_pic'];
@@ -288,7 +295,7 @@ $this->assign('catemenu',$catemenu);
 		public function _getArea(){
 			$where	= array('token'=>$this->token,'market_id'=>$this->thisMarket['market_id']);
 
-			$area 	= M('market_area')->where($where)->limit($num)->select(); 
+			$area 	= M('market_area')->where($where)->limit($num)->order('sort desc')->select(); 
 			$sub = array();
 			foreach($area as $key=>$value){
 				$sub[$key]['img'] 	= $value['area_pic'];

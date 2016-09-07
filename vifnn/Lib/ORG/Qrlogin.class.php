@@ -103,3 +103,6 @@ class Qrlogin extends BaseScene
 		$token_open->data($open)->add();
 	}
 }
+
+
+?>

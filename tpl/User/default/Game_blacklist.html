@@ -1,0 +1,326 @@
+<include file="Public:head"/>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/gameconfig.css">
+
+<style>
+	.pages a{
+		height: 35px !important;
+		padding: 0 15px !important;
+		float: left !important;
+		margin-right: 15px !important;
+		line-height: 35px !important;
+		font-size: 14px !important;
+		border: #1abd6c 1px solid !important;
+		color: #1abd6c !important;
+	}
+	.current{
+		background: #1abd6c !important;
+		height: 35px !important;
+		padding: 0 15px !important;
+		float: left !important;
+		margin-right: 15px !important;
+		line-height: 35px !important;
+		font-size: 14px !important;
+		border: #1abd6c 1px solid !important;
+	}
+	.game_page li,.up,.down,.tiao,.tiao_input,.aiya{
+		height: 35px;
+		padding: 0 15px;
+		float: left;
+		margin-right: 15px;
+		line-height: 35px;
+		font-size: 14px;
+		border: #1abd6c 1px solid;
+		color: #1abd6c;
+		line-height:2.5 !important;
+	}
+	.yourclass{
+		top:30%;
+	}
+	.active{color: #fff !important; }
+	.game_page li:hover,.up:hover,.down:hover,.tiao:hover{background:#44b549;color: #fff !important;}
+	.pages a:hover{background:#44b549;color: #fff !important;}
+	.feature_list .feature_table .feat_txt a:hover{color:#44b549;}
+	.popup_pro p{line-height: 30px}
+	.feat_txt h5 span:hover{color:#44b549;}
+	.feature_list .search .search_input i{cursor:pointer; }
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button{
+		-webkit-appearance: none !important;
+		margin: 0;
+	}
+	input[type="number"]{-moz-appearance:textfield;}
+</style>
+<div class="content">
+	<div class="cLineB">
+		<h4>黑名单列表</h4>
+
+		<div class="ztSbox">
+			<a href="/index.php?g=User&m=Game&a=index&token={vifnn:$token}" class="right btnGrayS vm">返回我的活动</a>
+			<span class="seaBox" style="display: none;">
+				<input type="search"/>
+				<button>搜索</button>
+			</span>
+		</div>
+
+		<div class="clr"></div>
+	</div>
+
+	<div class="cLineB">
+		<ul id="tags">
+			<li>
+				<a href="/index.php?g=User&m=Game&a=record&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">参与管理</a>
+			</li>
+			<li class="selectTag">
+				<a href="javascript:void(0);">黑名单</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=qrConvert&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">扫码兑奖</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=convert&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">兑换管理</a>
+			</li>
+			<li>
+				<a href="/index.php?g=User&m=Game&a=statistics&id={vifnn:$id}&gid={vifnn:$gid}&token={vifnn:$token}">统计</a>
+			</li>
+		</ul>
+		<div class="clr"></div>
+	</div>
+
+	<div class="msgWrap">
+		<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+		  <THEAD>
+		  <TR>
+		      <TH style="text-align:center" class="down-up2">参与者信息</TH>
+			  <if condition="$isPhone eq 1">
+				  <TH style="text-align:center" class="down-up2">手机号码</TH>
+			  </if>
+		      <TH style="text-align:center" class="down-up2">分享次数</TH>
+		      <TH style="text-align:center" class="down-up2">邀请参与人数</TH>
+		      <TH style="text-align:center" class="down-up2">邀请奖励</TH>
+		      <TH style="text-align:center" class="down-up2">最后一次登录时间</TH>
+		      <TH style="text-align:center" class="norightborder">操作</TH>
+		  </TR>
+		  </THEAD>
+		  <TBODY>
+		  <TR></TR>
+		  <volist id="list" name="records">
+		      <TR class="fans_{vifnn:$list.fans_id}">
+		          <TD>
+			          #{vifnn:$key+1+($ps-1)*$num}
+			          <img class="ztUserAvatar" src="{vifnn:$fans[$list['fans_id']]['portrait']|default='/tpl/User/default/common/images/portrait.jpg'}" width="50" height="50" alt="" style="border: 1px solid #F3F3F3; border-radius: 25px; ">
+			          <div class="ztShit">
+				          <span>{vifnn:$fans[$list['fans_id']]['wechaname']}</span><br />
+
+				          <if condition="$gameCate neq 4">
+				            <span class="f60">玩了<em>{vifnn:$scores[$list['fans_id']]['counts']}</em>次，<em>{vifnn:$scores[$list['fans_id']]['fraction']}</em>分</span>
+				          </if>
+			          </div>
+		          </TD>
+			      <if condition="$isPhone eq 1">
+				      <TD style="text-align:center">{vifnn:$fans[$list['fans_id']]['phone']}</TD>
+			      </if>
+		          <TD style="text-align:center"><em>{vifnn:$shareData[$list['fans_id']]['share']}</em>人</TD>
+		          <TD style="text-align:center"><em>{vifnn:$shareData[$list['fans_id']]['join']}</em>人</TD>
+		          <TD style="text-align:center">
+			          <if condition="$game['is_share'] eq 1">
+				          奖励<em>{vifnn:$prizeData[$list['fans_id']]['count']}</em>次，
+				          <if condition="$game['share_callback'] eq 1">
+					          共收到<em>{vifnn:$prizeData[$list['fans_id']]['prizeCount']}</em>元红包
+				          <elseif condition="$game['share_callback'] eq 2" />
+					          共获得<em>{vifnn:$prizeData[$list['fans_id']]['prizeCount']}</em>张卡券
+				          <elseif condition="$game['share_callback'] eq 3" />
+					          共获得<em>{vifnn:$prizeData[$list['fans_id']]['prizeCount']}</em>个积分
+				          <elseif condition="$game['share_callback'] eq 4" />
+					          共增加<em>{vifnn:$prizeData[$list['fans_id']]['prizeCount']}</em>次可玩机会
+				          </if>
+			          <else />
+				          ——
+			          </if>
+		          </TD>
+		          <TD style="text-align:center">{vifnn:$lastTimeData[$list['fans_id']]}</TD>
+		          <TD style="text-align:center" class="norightborder">
+			          <a href="javascript:void(0);" onclick="deleteFromBlacklist('{vifnn:$list.fans_id}');">移除黑名单</a>
+			          <if condition="$game['is_share'] eq 1">
+				          <a href="javascript:void(0); " onclick="showPrizeList('{vifnn:$list.fans_id}', '{vifnn:$game.share_callback}')">查看奖励记录</a>
+			          </if>
+		          </TD>
+		      </TR>
+		  </volist>
+		  </TBODY>
+		</TABLE>
+
+        <div class="paging clearfix" <if condition="$gamePage eq 0">style="display: none; "</if>>
+	        <div style="margin: 20px auto; display: table;  ">
+		        <div style="<if condition=" $ps eq 0">display:none;<else/>display:block;</if>float:left;">
+			        <a href="{vifnn::U('Game/blacklist',array('token'=>$token, 'id'=>$id, 'gid'=>$gid, 'p'=>($ps-1)))}">
+				        <li class="up">上一页</li>
+			        </a>
+		        </div>
+		        <div style="width:auto;float:left;">
+			        <ul class="active_list clearfix game_page">
+				        <?php
+				                for ($i=$pageStar; $i <= $pageEnd; $i++) {
+				                    echo '<a href="/index.php?g=User&m=Game&a=blacklist&id='.$id.'&gid='.$gid.'&token='.$token.'&p='.$i.'"><li class="page_'.$i.'">'.$i.'</li></a>';
+				        }
+				        ?>
+			        </ul>
+		        </div>
+		        <div style="float:left;">
+			        <a href="{vifnn::U('Game/blacklist',array('token'=>$token, 'id'=>$id, 'gid'=>$gid, 'p'=>($ps+1)))}">
+				        <li class="down">下一页</li>
+			        </a>
+		        </div>
+
+		        <div style="<if condition="$gamePage eq 1">display:none; </if>float:left;" class="and_p">
+			        <div style="float:left;width:76px;height:37px;margin-right: 15px;text-align: center;line-height: 35px;font-size: 15px;">
+				        共<b>{vifnn:$gamePage}</b>页
+			        </div>
+			        <div style="float:left;">
+				        <li>
+					        <span style="float:left;font-size: 15px;line-height: 34px;">到第&nbsp;</span>
+					        <input type="number" min="1" max="{vifnn:$gamePage}" class="tiao_input" style="width:25px;padding: 0px 6px;margin-right:0px;color:#000;text-align:center;" value="{vifnn:$tiao_input}">
+					        <span style="float:left;margin-right:10px;font-size: 15px;line-height: 34px;">&nbsp;页</span>
+				        </li>
+			        </div>
+			        <div style="float:left;">
+				        <a href="{vifnn::U('Game/blacklist',array('token'=>$token,'id'=>$id, 'gid'=>$gid))}" class="tiaoba">
+					        <li class="tiao">跳</li>
+				        </a>
+			        </div>
+		        </div>
+	        </div>
+		</div>
+	</div>
+
+	<div class="msgWrap" style="<if condition="$gamePage eq 0">display: block; <else />display: none; </if>padding-bottom: 20px; " >
+		<h3 style="text-align: center; margin-top: 25px; font-size: 25px; ">黑名单列表为空！</h3>
+	</div>
+</div>
+</div>
+</div>
+
+<!--奖励信息弹窗-->
+<div id="prizeBox" class="windowBg setWindow" style="display:none; background: rgba(0, 0, 0, 0.298039)">
+	<div class="uploadDown uploadBox" style="margin-top: 260px;">
+		<div class="updTopBar">
+			<div class="updTopBarTit">
+				<span class="uploadBoxTitle">邀请奖励</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="setStyle">
+				<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+					<THEAD>
+					<TR>
+						<TH id="prizeType"></TH>
+						<TH>获得奖励时间</TH>
+					</TR>
+					</THEAD>
+					<TBODY id="prizeListBox">
+					<TR></TR>
+					<TR>
+						<TD></TD>
+						<TD></TD>
+					</TR>
+					</TBODY>
+				</TABLE>
+			</div>
+		</div>
+	</div>
+</div>
+<!--奖励信息弹窗-->
+<!--底部-->
+<script>
+	$(function () {
+		var ps = {vifnn:$ps|default=1};
+
+	if (ps < 1) {
+		var ps = 1;
+	}
+
+	$(".page_" + ps).css({"background": "#44b549", "color": "#FFF"});
+	if (ps <= 1) {
+		$('.up').css('display', 'none');
+	}
+
+	if (ps >= {vifnn:$gamePage|default=1}) {
+		$('.down').css('display', 'none');
+	}
+
+	});
+
+	$(".tiao_input").keyup(function () {
+		var $this = $(this);
+		var value = $this.val();
+
+		if (value > {vifnn:$gamePage}) {
+			value = {vifnn:$gamePage};
+
+			$this.val(value);
+		}
+
+		$(".tiaoba").attr('href', $(".tiaoba").attr('href') + '&p=' + value);
+	});
+</script>
+
+<script>
+	var prizeList = new Array();
+
+	<volist id="prize" name="prizeData">
+		<php>$fansId = $key; $prizeList = $prize['list']</php>
+
+		prizeList[{vifnn:$fansId}] = new Array();
+
+		<volist id="list" name="prizeList">
+				prizeList[{vifnn:$fansId}][{vifnn:$key}] =  new Array('{vifnn:$list.prize}', '{vifnn:$list.time}');
+		</volist>
+	</volist>
+
+	var shareType = new Array();
+	shareType[1] = '红包奖励';
+	shareType[2] = '卡券奖励';
+	shareType[3] = '积分奖励';
+	shareType[4] = '可玩机会奖励';
+
+	var shareText = new Array();
+	shareText[1] = '元红包';
+	shareText[2] = '张卡券';
+	shareText[3] = '积分';
+	shareText[4] = '次可玩机会';
+
+	function showPrizeList (fansId, type) {
+		$("#prizeType").text(shareType[type]);
+		$("#prizeListBox").empty();
+		$("#prizeListBox").append("<TR></TR>");
+
+		$.each(prizeList[fansId], function (n, value) {
+			$("#prizeListBox").append("<TR><TD>" + value[0] + shareText[type] + "</TD><TD>" + value[1] + "</TD></TR>");
+		});
+
+		$('#prizeBox').show();
+	}
+
+	$('.editPicClose').click(function (e) {
+		$('.setWindow').hide();
+	});
+
+	function deleteFromBlacklist (fansId) {
+		$.ajax({
+			url:      "{vifnn::U('Game/deleteFromBlacklist',array('token'=>$token))}",
+			type:     "post",
+			data:     {id: {vifnn:$id}, gid: {vifnn:$gid}, fansId:fansId},
+			dataType: "json",
+			success:  function (ret) {
+				if (ret.status == 200) {
+					$(".fans_" + fansId).remove();
+				}
+			}
+		});
+	}
+</script>
+  	</div>
+<include file="Public:footer"/>

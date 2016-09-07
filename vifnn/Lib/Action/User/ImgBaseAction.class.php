@@ -92,6 +92,7 @@ class ImgBaseAction extends UserAction{
 		$this->assign('group', $this->_getWechatGroupHtml());
 		$this->assign('info',$class);
 		$this->assign('fid',$fid);
+		$this->assign("grades", D("Member_card_grade")->selectGrade(array("token" => $this->token, "status" => 1)));
 	}
 	
 	public function edit(){
@@ -129,6 +130,7 @@ class ImgBaseAction extends UserAction{
 		$this->assign('info',$res);
 		$this->assign('class',$class);
 		$this->assign('res',$class);
+		$this->assign("grades", D("Member_card_grade")->selectGrade(array("token" => $this->token, "status" => 1)));
 	}
 	
 	

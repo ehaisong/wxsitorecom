@@ -50,7 +50,7 @@
             </div>
             <div class="play_bottom"><img src="{vifnn:$staticPath}/tpl/static/frontpage/images/bb_07.png" />本节目由"<span><if condition="$actioninfo['sponsors'] neq ''">{vifnn:$actioninfo.sponsors}<else />{vifnn:$news.frontpage_name}</if></span>"赞助播出</div>
         </div>
-	<audio id="myaudio" src='{vifnn:$news.voicepath}' oncanplay="playvoice()" onpause="pausevoice()"></audio>
+	<audio id="myaudio" src='{vifnn:$news.voicepath}' onpause="pausevoice()"></audio>
     </section>
     <section  class="remind_se">
 	<volist name="other_news" id="vo">

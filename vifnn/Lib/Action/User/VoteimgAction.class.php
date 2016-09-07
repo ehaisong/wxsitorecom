@@ -165,6 +165,8 @@ class VoteimgAction extends UserAction{
 			$action_data['territory_limit'] = $this->_post('territory_limit','intval');
 			$action_data['onoff_voice'] = $this->_post('onoff_voice','intval');
 			$action_data['onoff_video'] = $this->_post('onoff_video','intval');
+			$action_data["start_time_spell"] = $this->_post("start_time_spell", "trim");
+			$action_data["end_time_spell"] = $this->_post("end_time_spell", "trim");
 			if($action_data['territory_limit'] == 1){
 				$provinces = $_POST['province_name'];
 				$citys = $_POST['city_name'];
@@ -233,6 +235,7 @@ class VoteimgAction extends UserAction{
 			if($_POST['id'] != ""){ //修改
 				$update_action = M('voteimg')->where(array('id'=>(int)$_POST['id']))->save($action_data);
 				if($update_action !== false){
+					S($_POST["token"] . "_" . $_POST["id"] . "_higremind", NULL);
 					echo json_encode(array('status'=>'done','data'=>(int)$_POST['id']));exit;
 				}else{
 					echo json_encode(array('status'=>'fail','data'=>0));exit;
@@ -373,6 +376,7 @@ class VoteimgAction extends UserAction{
 				$updatestat = M('voteimg_stat')->where(array('vote_id'=>$_POST['id'],'token'=>$_POST['token']))->save($statarray);
 				if($updatestat !== false){
 					S($_POST['token'].'_'.$_POST['id'].'_stat',null);
+					S($_POST["token"] . "_" . $_POST["id"] . "_count_self", NULL);
 				}else{
 					$stat = false;
 				}
@@ -978,6 +982,7 @@ class VoteimgAction extends UserAction{
 			$update = M('voteimg_stat')->where(array('vote_id'=>$_POST['vote_id'],'token'=>$_POST['token']))->save($data);
 			if($update){
 				S($_POST['token'].'_'.$_POST['vote_id'].'_stat',null);
+				S($_POST["token"] . "_" . $_POST["vote_id"] . "_count_self", NULL);
 				$this->success('修改成功',U('Voteimg/stat_list',array('vote_id'=>$_POST['vote_id'],'token'=>$_POST['token'])));exit;
 			}else{
 				$this->error('修改失败');exit;
@@ -1013,6 +1018,7 @@ class VoteimgAction extends UserAction{
 					$update = M('voteimg_stat')->where(array('id'=>$_POST['id'],'token'=>$_POST['token']))->save($data);
 					if($update){
 						S($_POST['token'].'_'.$exists['vote_id'].'_stat',null);
+						S($_POST["token"] . "_" . $exists["vote_id"] . "_count_self", NULL);
 						$this->success('修改成功',U('Voteimg/stat_list',array('vote_id'=>$exists['vote_id'],'token'=>$_POST['token'])));exit;
 					}else{
 						$this->error('修改失败');exit;
@@ -1544,14 +1550,12 @@ class VoteimgAction extends UserAction{
 			$data[0] = array('昵称','手机号','已投票数','今日投票数','最后投票时间');
 			$i = 1;
 			foreach($vote_logs as $key=>$val){
-				if($val['nick_name'] != ""){
 					$data[$i]['nick_name'] = $val['nick_name'];
 					$data[$i]['phone'] = (!empty($val['phone'])) ? $val['phone'] : '---';
 					$data[$i]['votenum'] = $val['votenum'];
 					$data[$i]['votenum_day'] = $val['votenum_day'];
 					$data[$i]['vote_time'] = date('Y-m-d H:i:s',$val['vote_time']);
 					$i++;
-				}
 			}
 			if($total>$limit){
 			  $filename="voteimg_voter_".$this->token."_".$vote_id."_".date('Ymd')."_{$page}.csv";
@@ -1726,7 +1730,33 @@ class VoteimgAction extends UserAction{
 		$this->assign('get_voterecord',$get_voterecord);
 		$this->assign('firstRow',$page->firstRow);
 		$this->assign('page',$page->show());
+		$this->assign("item_id", $item_id);
+		$this->assign("vote_id", $vote_id);
 		$this->display();
+	}
+	public function export_vote_details()
+	{
+		$item_id = (int) $_GET["item_id"];
+		$vote_id = (int) $_GET["vote_id"];
+		$get_sql = "select count(*) as my_vote_count,client_ip,wecha_pic,nick_name," . C("DB_PREFIX") . "voteimg_record.user_id," . C("DB_PREFIX") . "voteimg_record.item_id from " . C("DB_PREFIX") . "voteimg_record left join " . C("DB_PREFIX") . "voteimg_users on " . C("DB_PREFIX") . "voteimg_record.user_id = " . C("DB_PREFIX") . "voteimg_users.user_id where " . C("DB_PREFIX") . "voteimg_record.item_id = $item_id and " . C("DB_PREFIX") . "voteimg_record.token = '$this->token' and " . C("DB_PREFIX") . "voteimg_record.vote_id = '$vote_id' group by " . C("DB_PREFIX") . "voteimg_record.user_id order by my_vote_count desc";
+		$get_voterecord = M("voteimg_record")->query($get_sql);
+		$title = array("投票者昵称", "微信头像", "投票者IP", "所投票数");
+
+		if (!empty($get_voterecord)) {
+			$export = array();
+
+			foreach ($get_voterecord as $key => $val ) {
+				$export[$key]["nick_name"] = $val["nick_name"];
+				$export[$key]["wecha_pic"] = $val["wecha_pic"];
+				$export[$key]["client_ip"] = $val["client_ip"];
+				$export[$key]["my_vote_count"] = $val["my_vote_count"];
+			}
+
+			$this->exportexcel($export, $title, "投票选项详细信息_" . date("YmdHis"));
+		}
+		else {
+			$this->error("导出错误,没有获取到要导出的数据");
+		}
 	}
 	public function select_lottery(){
 		$lottery_type = (int)$_GET['lottery_type'];

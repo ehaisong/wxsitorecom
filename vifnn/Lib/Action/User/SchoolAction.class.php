@@ -64,7 +64,12 @@ class SchoolAction extends UserAction {
                 $data['token'] = session('token');
                 $chang['sid'] = filter_var($v['sid'], FILTER_VALIDATE_INT) ? $v['sid'] : '';
                 if (isset($chang['sid']) && !empty($chang['sid'])) {
-                    $t_s_classify->where(array('token' => session('token'), 'sid' => $chang['sid'], 'type' => $type))->save($data);
+                    $update = $t_s_classify->where(array("token" => session("token"), "sid" => $chang["sid"], "type" => $type))->save($data);
+                    if ($update !== false) {
+          	         $ok = true;
+		    } else {
+			 $ok = false;
+		    }
                 } else {
                     $ok = $t_s_classify->add($data);
                 }
@@ -72,10 +77,10 @@ class SchoolAction extends UserAction {
             }
             unset($_REQUEST);
             if ($ok) {
-                $this->success('添加成功', U('School/index', array('token' => session('token'), 'type' => $type)));
+                $this->success('分类管理设置成功', U('School/index', array('token' => session('token'), 'type' => $type)));
                 exit;
             } else {
-                $this->error('添加失败', U('School/index', array('token' => session('token'), 'type' => $type)));
+                $this->error('分类管理设置失败', U('School/index', array('token' => session('token'), 'type' => $type)));
                 exit;
             }
         }
@@ -306,8 +311,7 @@ class SchoolAction extends UserAction {
         $token = trim(filter_var($this->_get('token'), FILTER_SANITIZE_STRING));
         $where = array('id' => $id, 'token' => $token);
         $t_reservebook = M('reservebook');
-        $userinfo = $t_reservebook->where($where)->find();
-        $this->assign('userinfo', $userinfo);
+
         if (IS_POST) {
             $id = $this->_post('id');
             $token = session('token');
@@ -320,6 +324,8 @@ class SchoolAction extends UserAction {
             }
 
         }
+		$userinfo = $t_reservebook->where($where)->find();
+		$this->assign("userinfo", $userinfo);
         $this->display();
     }
 
@@ -1046,3 +1052,4 @@ class SchoolAction extends UserAction {
     }
 
 }
+?>

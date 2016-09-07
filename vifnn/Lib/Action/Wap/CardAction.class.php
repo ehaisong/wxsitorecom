@@ -35,11 +35,24 @@ class CardAction extends WapAction
 			$this->amap = new amap();
 		}
 
-		D('Userinfo')->convertFake(M('MemberCardCreate'), array('token' => $this->token, 'fakeopenid' => $this->fakeopenid, 'wecha_id' => $this->wecha_id));
-		D('Userinfo')->convertFake(M('MemberCardCouponRecord'), array('token' => $this->token, 'fakeopenid' => $this->fakeopenid, 'wecha_id' => $this->wecha_id));
-		D('Userinfo')->convertFake(M('MemberCardPayRecord'), array('token' => $this->token, 'fakeopenid' => $this->fakeopenid, 'wecha_id' => $this->wecha_id));
-		D('Userinfo')->convertFake(M('MemberCardSign'), array('token' => $this->token, 'fakeopenid' => $this->fakeopenid, 'wecha_id' => $this->wecha_id));
-		D('Userinfo')->convertFake(M('MemberCardUseRecord'), array('token' => $this->token, 'fakeopenid' => $this->fakeopenid, 'wecha_id' => $this->wecha_id));
+		$memberConfig = M("Reply_info")->where(array("token" => $this->token, "infotype" => "membercard"))->find();
+
+		if (!empty($memberConfig)) {
+			empty($memberConfig["info"]) && ($memberConfig["info"] = $this->f_siteName . "-会员卡");
+			empty($memberConfig["picurl"]) && ($memberConfig["picurl"] = $this->staticPath . "/tpl/static/card/images/banner1_03.png");
+		}
+		else {
+			$memberConfig = array();
+			$memberConfig["info"] = $this->f_siteName . "-会员卡";
+			$memberConfig["picurl"] = $this->staticPath . "/tpl/static/card/images/banner1_03.png";
+		}
+
+		$this->assign("memberConfig", $memberConfig);
+		D("Userinfo")->convertFake(M("MemberCardCreate"), array("token" => $this->token, "fakeopenid" => $this->fakeopenid, "wecha_id" => $this->wecha_id));
+		D("Userinfo")->convertFake(M("MemberCardCouponRecord"), array("token" => $this->token, "fakeopenid" => $this->fakeopenid, "wecha_id" => $this->wecha_id));
+		D("Userinfo")->convertFake(M("MemberCardPayRecord"), array("token" => $this->token, "fakeopenid" => $this->fakeopenid, "wecha_id" => $this->wecha_id));
+		D("Userinfo")->convertFake(M("MemberCardSign"), array("token" => $this->token, "fakeopenid" => $this->fakeopenid, "wecha_id" => $this->wecha_id));
+		D("Userinfo")->convertFake(M("MemberCardUseRecord"), array("token" => $this->token, "fakeopenid" => $this->fakeopenid, "wecha_id" => $this->wecha_id));
 	}
 
 	public function index()
@@ -210,7 +223,11 @@ class CardAction extends WapAction
 		$cardsCount = $member_card_create_db->where(array('token' => $this->token, 'wecha_id' => $this->wecha_id))->count();
 		$this->assign('cardsCount', $cardsCount);
 		$company_model = M('Company');
-		$where = array('token' => $this->token, 'display' => 1);
+		$where = array(
+			"token"     => $this->token,
+			"display"   => 1,
+			"shortname" => array("neq", "Medical")
+			);
 		$companies = $company_model->where($where)->order('isbranch asc,taxis ASC')->select();
 		$this->assign('companies', $companies);
 		$infoType = 'companyDetail';
@@ -811,10 +828,10 @@ class CardAction extends WapAction
 
 		foreach ($data as $key => $value) {
 			$cwhere = array('token' => $this->token, 'cardid' => $value['cardid'], 'id' => $value['coupon_id']);
-			$cinfo = M('Member_card_coupon')->where($cwhere)->field('info, pic, statdate, enddate, title, price')->find();
+			$cinfo = M('Member_card_coupon')->where($cwhere)->field('info, pic, statdate, enddate, title, price,total')->find();
 			$cinfo['info'] = $cinfo['info'];
 			$value['company'] = $value['company_id'] ? M('Company')->where('id=' . $value['company_id'])->getField('name') : '所有门店';
-			if (($now < $cinfo['enddate']) && ($cinfo['statdate'] < $now)) {
+			if (($now < $cinfo['enddate']) && ($cinfo['statdate'] < $now) && (0 <= $cinfo["total"])) {
 				$list[] = array_merge($value, $cinfo);
 			}
 		}
@@ -914,7 +931,7 @@ class CardAction extends WapAction
 					$arr['cat'] = 4;
 					$arr['staffid'] = $thisStaff['id'];
 					$arr['notes'] = $this->_post('notes', 'trim');
-					$arr['score'] = intval($set_exchange['reward']) * $arr['expense'];
+					$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $arr["expense"]) : 0);
 					$arr['cardid'] = intval($thisCard['id']);
 					M('Member_card_use_record')->add($arr);
 					$userinfo_db = M('Userinfo');
@@ -938,7 +955,7 @@ class CardAction extends WapAction
 				$arr['staffid'] = 0;
 				$arr['usecount'] = 1;
 				$set_exchange = M('Member_card_exchange')->where(array('cardid' => intval($thisCard['id'])))->find();
-				$arr['score'] = intval($set_exchange['reward']) * $arr['expense'];
+				$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $arr["expense"]) : 0);
 
 				if ($arr['expense'] <= 0) {
 					$this->error('请输入有效的金额');
@@ -1101,7 +1118,7 @@ class CardAction extends WapAction
 					$arr['company_id'] = $company_id;
 					$arr['cardid'] = $thisCard['id'];
 					$set_exchange = M('Member_card_exchange')->where(array('cardid' => intval($thisCard['id'])))->find();
-					$arr['score'] = intval($set_exchange['reward']) * $arr['expense'];
+					$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $arr["expense"]) : 0);
 					M('Member_card_use_record')->add($arr);
 					$userArr = array();
 					$userArr['total_score'] = $thisUser['total_score'] + $arr['score'];
@@ -1123,7 +1140,7 @@ class CardAction extends WapAction
 				$arr['staffid'] = 0;
 				$arr['usecount'] = $useTime;
 				$set_exchange = M('Member_card_exchange')->where(array('cardid' => intval($thisCard['id'])))->find();
-				$arr['score'] = intval($set_exchange['reward']) * $arr['expense'];
+				$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $arr["expense"]) : 0);
 
 				if ($arr['expense'] <= 0) {
 					$this->error('请输入有效的金额');
@@ -1185,7 +1202,7 @@ class CardAction extends WapAction
 
 		$nowY = date('Y');
 		$start = strtotime($nowY . '-' . $month . '-01');
-		$last = strtotime(date('Y-m-d', $start) . ' +1 month -1 day');
+		$last = strtotime(date("Y-m-d", $start) . " +1 month -1 day") + ((24 * 3600) - 1);
 		$records = $db->where('token=\'' . $this->token . '\' AND wecha_id=\'' . $this->wecha_id . '\' AND time>' . $start . ' AND time<' . $last)->order('time DESC')->select();
 		$this->assign('records', $records);
 		$this->display();
@@ -1313,6 +1330,14 @@ class CardAction extends WapAction
 		$this->assign('cardsCount', $cardsCount);
 		$token = $this->token;
 		$thisCompany = $company_model->where('token = \'' . $token . '\'')->find();
+		$donate_intro = M("member_card_donate")->where(array("token" => $this->token, "cardid" => (int) $_GET["cardid"]))->field("donate_intro")->select();
+		$intro = "";
+
+		foreach ($donate_intro as $key => $value ) {
+			$intro .= $value["donate_intro"];
+		}
+
+		$thisCard["donate_intro"] = $intro;
 		$this->assign('thisCompany', $thisCompany);
 		$this->assign('info', $info);
 		$this->assign('card', $card);
@@ -1439,7 +1464,7 @@ class CardAction extends WapAction
 				$arr['staffid'] = 0;
 				$arr['usecount'] = 1;
 				$set_exchange = M('Member_card_exchange')->where(array('cardid' => $cardid))->find();
-				$arr['score'] = intval($set_exchange['reward']) * $arr['expense'];
+				$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $arr["expense"]) : 0);
 				$single_orderid = date('YmdHis', time()) . mt_rand(1000, 9999);
 				$record['orderid'] = $single_orderid;
 				$record['ordername'] = $consume_id == 0 ? '会员卡现金支付' : '现金支付除优惠劵外的款项';
@@ -1489,7 +1514,18 @@ class CardAction extends WapAction
 							$this->error('无效的卡券来源');
 						}
 					}
-
+                    //防止返回重复获取积分 jm73com
+					$ret['expense'] = $price;
+					$ret['wecha_id'] = $this->wecha_id;
+					$ret['company_id'] = $company_id;
+					$tm = $now - 60; //60秒内同一信息不能重复提交
+					$ret['time'] = array('egt',$tm); //大于等于
+                    $recoretwo = M('Member_card_use_record')->where($ret)->find();
+					if ($recoretwo){
+						$this->error('请不要重复恶意操作！');
+						exit();
+					}
+					//jm73com
 					$arr = array();
 					$arr['itemid'] = $r_record['coupon_id'];
 					$arr['wecha_id'] = $this->wecha_id;
@@ -1505,14 +1541,12 @@ class CardAction extends WapAction
 					$arr['record_id'] = $consume_id;
 					$arr['staff_id'] = $thisStaff['id'];
 					$set_exchange = M('Member_card_exchange')->where(array('cardid' => $cardid))->find();
-					$arr['score'] = intval($set_exchange['reward']) * $arr['expense'];
-
-					if (0 < $set_exchange['reward']) {
+					$arr["score"] = ($set_exchange["expense"] <= $arr["expense"] ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $arr["expense"]) : 0);
 						M('Member_card_use_record')->add($arr);
+					if (0 < $arr["score"]) {
 						M('Userinfo')->where(array('token' => $this->token, 'wecha_id' => $this->wecha_id))->setInc('total_score', $arr['score']);
-						M('Userinfo')->where(array('token' => $this->token, 'wecha_id' => $this->wecha_id))->setInc('expensetotal', $arr['expense']);
 					}
-
+						M('Userinfo')->where(array('token' => $this->token, 'wecha_id' => $this->wecha_id))->setInc('expensetotal', $arr['expense']);
 					M('Member_card_coupon')->where(array('id' => $r_record['coupon_id']))->setInc('usetime', 1);
 					M('Member_card_coupon_record')->where($rwhere)->save(array('use_time' => time(), 'is_use' => '1', 'staff_id' => -1, 'company_id' => $company_id));
 					$this->success('支付成功');

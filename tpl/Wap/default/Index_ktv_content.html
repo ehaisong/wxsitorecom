@@ -9,10 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
 <meta charset="utf-8">
-<link href="{vifnn::RES}/css/ktv/style.css" rel="stylesheet" type="text/css" />
-
+<link href="{vifnn::RES}/css/ktv/style.css?time()" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body id="news">
 	  <div class="ckeditor_content">
 <div class="content">
 	<span class="marginb">
@@ -32,7 +31,26 @@
 <include file="Index:content_comment" />
 <?php }?>
 <div style="display:none"><php>echo htmlspecialchars_decode($tpl['tongji'])</php></div>
+    <div class="list">
+<div id="olload1">
+<span>推荐阅读</span>
+</div>
 
+<div id="oldlist">
+<ul>
+  <volist name="lists" id="lo">
+	<li class="newsmore">
+	<!--在整合列表页和分类也的时候，这里修改过模板-->
+		<a href="{vifnn::U('Index/content',array('token'=>$lo['token'],'id'=>$lo['id'],'classid'=>intval($_GET['classid'])))}">
+		<div class="olditem">
+		<div class="title">{vifnn:$lo.title}</div> 
+		</div>
+		</a>
+	</li>
+	</volist>
+    </ul>
+   <a class="more" href="{vifnn::U('Index/lists',array('token'=>$res['token'],'classid'=>$res['classid']))}">更多精彩内容</a>	</div>
+</div>
   <div class="copyright">
 <if condition="$iscopyright eq 1">
 {vifnn:$homeInfo.copyright}

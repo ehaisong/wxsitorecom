@@ -21,7 +21,8 @@ uploadJson : '/index.php?g=User&m=Upyun&a=kindedtiropic',
 items : [
 'source','undo','clearhtml','hr',
 'removeformat', 'forecolor', '|', 'fontsize','justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-'insertunorderedlist', '|', 'emoticons', 'image','link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut']
+'insertunorderedlist', '|', 'emoticons', 'image','link', 'unlink','baidumap','lineheight','table','anchor','preview','print','template','code','cut'],
+ afterBlur: function () { this.sync(); }//离开焦点让textarea同步html内容
 });
 
 });
@@ -30,11 +31,12 @@ items : [
 
   <div class="content"> 
    <div class="cLineB"> 
-    <h4>自定义表单设置</h4> 
+    <h4><?php if(empty($set)){ echo '添加表单';}else{ echo '修改表单';}?></h4>
     <a href="{vifnn::U('Custom/index',array('token'=>$token))}" class="right  btnGreen" style="margin-top:-27px">返回</a> 
-   </div> 
-   
-
+   </div>
+      <div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin:5px 0px;">
+          注意：添加表单成功后不能再次修改是否需要支付、支付名称、支付价格选项。
+      </div>
    <form class="form" method="post" id="form" action=""> 
 <if condition="$isUpdate eq 1">
 <input type="hidden" name="id" value="{vifnn:$set.id}" />
@@ -54,8 +56,12 @@ items : [
        </tr>
        </if>
       <tr> 
-        <th><span class="red">*</span>联系电话：</th> 
-        <td><input id="mp" class="px require" type="text" style="width:400px;" value="{vifnn:$set.tel}" name="tel"></td> 
+        <th>联系电话：</th> 
+        <td><input id="mp" class="px" type="text" style="width:400px;" value="{vifnn:$set.tel}" name="tel"> 如此手机号与商家LBS手机号不一致时，微信通知功能将失效。</td>
+       </tr>
+	  <tr> 
+        <th>固话：</th> 
+        <td><input id="fixphone" class="px" type="text" style="width:400px;" value="{vifnn:$set.fixphone}" name="fixphone"></td> 
        </tr>
        <tr> 
         <th><span class="red">*</span>位置信息：</th> 
@@ -97,7 +103,7 @@ items : [
                    <label><input name="sms" type="radio" {vifnn:$sm.mark} value="{vifnn:$sm.value}" />{vifnn:$sm.text}</label>
                    &nbsp;&nbsp;
                </volist>
-               （需要购买短信。购买开启后，商户可收到每位提交者的短信通知）
+               （需要购买短信。购买开启后，商户可收到每位提交者的短信通知,如果此项开启，联系电话项请勿留空）
            </td>
        </tr>
        <tr>
@@ -144,29 +150,50 @@ items : [
         <TR>
                   <TH valign="top"><label for="info">图文详细页内容：</label></TH>
                   <TD><textarea name="detail" id="content"  rows="5" style="width:590px;height:360px">{vifnn:$set.detail}</textarea></TD>
-                </TR> 
-		<tr>
-			<th valign="top">是否需要支付：</th>
-			<td>
-				<input type="radio" name="is_pay" id="is_pay_0" value="0" <?php if($set['is_pay'] == 0){echo "checked";}?> ><label for="is_pay_0">否</label>
-				&nbsp;&nbsp;
-				<input type="radio" name="is_pay" id="is_pay_1" value="1" <?php if($set['is_pay'] == 1){echo "checked";}?> ><label for="is_pay_1">是</label>
-			</td>
-		</tr>
-		<style>.pay{display:}</style>
-		<tr class="pay">
-			<th valign="top">支付名称：</th>
-			<td><input type="text" class="px" name="pay_name" id="pay_name" value="{vifnn:$set.pay_name}" style="width:400px" />（例如：价格、费用等）</td>
-		</tr>
-		<tr class="pay">
-			<th valign="top">支付价格：</th>
-			<td><input type="text" class="px" name="price" id="price" value="{vifnn:$set.price}" style="width:100px" />（单位：元）</td>
-		</tr>
+                </TR>
+
+       <empty name="set['set_id']">
+           <tr>
+               <th valign="top">是否需要支付：</th>
+               <td>
+                   <input type="radio" name="is_pay" id="is_pay_0" value="0" <?php if($set['is_pay'] == 0){echo "checked";}?> ><label for="is_pay_0">否</label>
+                   &nbsp;&nbsp;
+                   <input type="radio" name="is_pay" id="is_pay_1" value="1" <?php if($set['is_pay'] == 1){echo "checked";}?> ><label for="is_pay_1">是</label>
+               </td>
+           </tr>
+           <style>.pay{display:}</style>
+           <tr class="pay">
+               <th valign="top">支付名称：</th>
+               <td><input type="text" class="px" name="pay_name" id="pay_name" value="{vifnn:$set.pay_name}" style="width:400px" />（例如：价格、费用等）</td>
+           </tr>
+           <tr class="pay">
+               <th valign="top">支付价格：</th>
+               <td><input type="text" class="px" name="price" id="price" value="{vifnn:$set.price}" style="width:100px" />（单位：元）</td>
+           </tr>
+           <else/>
+           <tr>
+               <th valign="top">是否需要支付：</th>
+               <td>
+                   <input type="radio" disabled id="is_pay_0" value="0" <?php if($set['is_pay'] == 0){echo "checked";}?> ><label for="is_pay_0">否</label>
+                   &nbsp;&nbsp;
+                   <input type="radio" disabled id="is_pay_1" value="1" <?php if($set['is_pay'] == 1){echo "checked";}?> ><label for="is_pay_1">是</label>
+               </td>
+           </tr>
+           <style>.pay{display:}</style>
+           <tr class="pay">
+               <th valign="top">支付名称：</th>
+               <td><input type="text" class="px" disabled id="pay_name" value="{vifnn:$set.pay_name}" style="width:400px" />（例如：价格、费用等）</td>
+           </tr>
+           <tr class="pay">
+               <th valign="top">支付价格：</th>
+               <td><input type="text" class="px" disabled id="price" value="{vifnn:$set.price}" style="width:100px" />（单位：元）</td>
+           </tr>
+       </empty>
        <tr>         
        <th>&nbsp;</th>
        <td>
       <input type="hidden" name="set_id" value="{vifnn:$set.set_id}" />
-       <button type="submit" name="button" class="btnGreen">保存</button> &nbsp; <a href="{vifnn::U('Groupon/products',array('token'=>$token))}" class="btnGray vm">取消</a></td> 
+       <button type="button" name="button" class="btnGreen" id="submitfrom">保存</button> &nbsp; <a href="{vifnn::U('index',array('token'=>$token))}" class="btnGray vm">取消</a></td>
        </tr> 
       </tbody> 
      </table> 
@@ -194,7 +221,6 @@ $(function(){
 	$("#form").valid([
 	{ name:"name",simple:"名称",require:true},
 	{ name:"keyword",simple:"关键词",require:true}
-		
 	],true,true);
   $("#times").click(function(){
       if($("#times:checked").val() == 1){
@@ -228,6 +254,21 @@ $(function(){
       }
   });
 
+  $("#submitfrom").click(function(){
+	var tel = $("#mp").val();
+	var fixphone = $("#fixphone").val();
+	var pattern = /^1\d{10}$/;
+	var pattern1 = /^\d{3,4}(-\d{3})?-\d{4,}$/;
+	if(!pattern.test(tel) && tel.length != 0){
+		alert('手机格式不正确');
+		return false;
+	}
+	if(!pattern1.test(fixphone) && fixphone.length != 0){
+		alert('固话格式不正确');
+		return false;
+	}
+	$("#form").submit();
+  })
 
 })
 function setlatlng(longitude,latitude){

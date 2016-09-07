@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></script>
+<html><head>
+<if condition="$zd['status'] eq 1">
+            {vifnn:$zd['code']}
+        </if>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></script>
 <title>{vifnn:$tpl.wxname}</title>
 
 <meta name="format-detection" content="telephone=no">
@@ -47,12 +51,16 @@
         </volist>
     </ul>
 </section><!--container end-->
-<div style="height: 34px;line-height: 34px;font-size: 12px;text-align: center;color: #999;">
-<if condition="$iscopyright eq 1">
-{vifnn:$homeInfo.copyright}
-<else/>
-{vifnn:$siteCopyright}
-</if>
+<div style="height: 34px;line-height: 34px;font-size: 12px;background: #e3e2dd;text-align: center;color: #999;">
+  <p>
+  <if condition="$iscopyright eq 1 && $homeInfo.copyright neq ''">
+  {vifnn:$homeInfo.copyright}
+  <elseif condition="$iscopyright eq 1 && $homeInfo.copyright eq ''"/>
+  技术支持：{vifnn:$tpl['wxname']}
+  <else/>
+  {vifnn:$siteCopyright}
+  </if>
+  </p>
 </div>
 <script type="text/javascript">
 var _initX = 0;
@@ -154,13 +162,10 @@ window.addEventListener("resize",function(){
   resetScrollEle();
 });
 </script>
-<div class="copyright" style="display:none;">
-<if condition="$iscopyright eq 1">
-{vifnn:$homeInfo.copyright}
-<else/>
-{vifnn:$siteCopyright}
+<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>
+<if condition="$state eq 1">
+<include file="Index:fudong"/>
 </if>
-</div>  <include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/> 
 <!-- share -->
 <include file="Index:share" />
 </body></html>

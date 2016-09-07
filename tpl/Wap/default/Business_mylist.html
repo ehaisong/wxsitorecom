@@ -182,7 +182,7 @@
                                             <a>预约成功</a>
                                         <else/>
                                             <if condition="$vo['payprice'] neq '0.00'">
-                                            <a>未付款 {vifnn:$vo['payprice']} RMB</a>
+                                            <a href="{vifnn::U('Alipay/pay',array('from'=>'Business','orderName'=>urlencode($vo['orderName']),'price'=>trim($vo['payprice']),'orderid'=>$vo['orderid'],'token'=>$vo['token'],'wecha_id'=>$vo['wecha_id'],'type'=>$vo['type']))}">未付款 {vifnn:$vo['payprice']} RMB</a>
                                          <else/>
                                             <a >已付款 {vifnn:$vo['payprice']} RMB</a>
                                              </if>

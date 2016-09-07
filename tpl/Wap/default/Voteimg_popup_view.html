@@ -352,22 +352,22 @@ $(function(){
 </volist>
 <if condition="$bottom[0]['hide'] eq 1">
 <div id="foot_bu">  
-<div><span><a href="tel:{vifnn:$action_info['phone']}"><button value='' id="btnclick2" class="btnclick2" ><img src="{vifnn:$staticPath}{vifnn:$bottom[0]['bottom_icon']}" width="20" height="20" /><br />
+<div><span><a href="tel:{vifnn:$action_info['phone']}"><button value='' id="btnclick2" class="btnclick2" ><img src="{vifnn:$bottom[0]['bottom_icon']}" width="20" height="20" /><br />
 {vifnn:$bottom[0]['bottom_name']|mb_substr=0,5,'utf-8'}</button></a></span></div></div>
 </if>
 <if condition="$bottom[1]['hide'] eq 1">
 <div id="foot_bu">  
-  <div><span><button value='' id="btnclick1" class="btnclick1" ><img src="{vifnn:$staticPath}{vifnn:$bottom[1]['bottom_icon']}" width="20" height="20" /><br />
+  <div><span><button value='' id="btnclick1" class="btnclick1" ><img src="{vifnn:$bottom[1]['bottom_icon']}" width="20" height="20" /><br />
 	{vifnn:$bottom[1]['bottom_name']|mb_substr=0,5,'utf-8'}</button></span></div>  </div>    
 </if>
 <if condition="$bottom[2]['hide'] eq 1">	
 <div id="foot_bu">  
-<div><span><button value='' id="btnclick" class="btnclick" onclick="btnclick()"><img src="{vifnn:$staticPath}{vifnn:$bottom[2]['bottom_icon']}" width="20" height="20"/><br />
+<div><span><button value='' id="btnclick" class="btnclick" onclick="btnclick()"><img src="{vifnn:$bottom[2]['bottom_icon']}" width="20" height="20"/><br />
 {vifnn:$bottom[2]['bottom_name']|mb_substr=0,5,'utf-8'}</button></span></div>  </div>  
 </if>
 <if condition="$bottom[3]['hide'] eq 1">
 <div id="foot_bu">   
-<div><span><button value='' id="btnclick4" class="btnclick4" ><img src="{vifnn:$staticPath}{vifnn:$bottom[3]['bottom_icon']}" width="20" height="20" /><br />
+<div><span><button value='' id="btnclick4" class="btnclick4" ><img src="{vifnn:$bottom[3]['bottom_icon']}" width="20" height="20" /><br />
 {vifnn:$bottom[3]['bottom_name']|mb_substr=0,5,'utf-8'}</button></span></div></div>
 </if>
 </div>
@@ -564,7 +564,6 @@ function votenotice(text,time){
 function vote(id,obj){
 	var stat = $("#stat").val();
 	var last_id = $("#last_id").val();
-	var allowlottery = '{vifnn:$allowlottery}';
 	if(last_id == id && stat == 'false'){
 		votenotice($("#last_notice").val());
 	}else{
@@ -588,7 +587,7 @@ function vote(id,obj){
 				$("#main_b").text((parseInt(total_count)+1));
 				var original_count = $("#vote_count").text();
 				$("#vote_count").text((parseInt(original_count)+1));
-				if(allowlottery == 'yes'){
+				if(data.data.allowlottery == 'yes'){
 					$(".asideLayer").fadeIn('500');
 					$(".asideLayerCenter").fadeIn('300');
 				}else{
@@ -799,3 +798,4 @@ window.shareData = {
 };
 </script>
 {vifnn:$shareScript}
+<include file="Public:tongji" />

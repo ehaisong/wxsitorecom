@@ -41,7 +41,7 @@
 			</if>
 		</ul>	
 		<div class="paybtn">
-		   <if condition="$orderS eq 1">
+		   <if condition="$orderS eq 1 AND $orderList['price'] gt 0">
 			<a href="{vifnn::U('Repast/OrderToPay', array('token'=>$token, 'cid'=>$orderList['cid'],'orid'=>$orderList['id'], 'wecha_id'=>$wecha_id))}" class="btn orange bigfont left">去付款</a>
 			</if>
 			<if condition="$orderList['jiaxcai']">
@@ -58,23 +58,31 @@
 				<if condition="!empty($orderList['info']) AND is_array($orderList['info'])">
 				<div class="list">
 					<ul>
-					<volist name="orderList['info']" id="dishs">
-						<if condition="$key eq 'table'">
-						<li>
+					<volist name="orderList['info']" id="dishs" key="keyName">
+						<eq name="keyName" value="table">
+								<li>
 							<span class="col1">餐桌预定费用</span>
 							<span class="col2">&nbsp;</span>
 							<span class="col3">￥{vifnn:$dishs['price']}</span>
 						</li>
-						<else/>
-						<li>
+							<else/>
+							<li>
 							<span class="col1">{vifnn:$dishs['name']}<if condition="isset($dishs['j_c'])"><sup><i style="color:green;margin-left:5px;"><strong>加菜</strong></i></sup></if></span>
 							<span class="col2">×{vifnn:$dishs['num']}</span>
 							<span class="col3">￥{vifnn:$dishs['price']}</span>
+							<div>
+								<notempty name="dishs['spec']">
+									{vifnn:$dishs['spec']}
+								</notempty>
+								<notempty name="dishs['attr']">
+									&nbsp;/&nbsp;{vifnn:$dishs['attr']}
+								</notempty>
+							</div>
 							<if condition="isset($dishs['omark']) && !empty($dishs['omark'])">
 							<div style="line-height: 18px;float: left;"><span style="color:#ef7f2c">备注：</span><span>{vifnn:$dishs['omark']|htmlspecialchars_decode=ENT_QUOTES}</span></div>
 							</if>
 						</li>
-						</if>
+						</eq>
 					  </volist>
 					<if condition="isset($orderList['allmark']) && !empty($orderList['allmark'])">
 					<li>

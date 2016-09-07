@@ -53,7 +53,7 @@
 						<volist name="cart_list" id="vo">
 						<li class="unitary_cart" unitaryid="{vifnn:$vo.unitary_id}" id="unitary_cart{vifnn:$vo.id}" style="position:relative;">
 							<a class="fl u-Cart-img">
-								<img src="<?php echo $unitary[$vo['id']]['logopic']?>" border="0" alt="">
+								<img src="<?php echo $unitary[$vo['id']]['logopic']?>" border="0" alt="" class='cart_img' unitaryid="{vifnn:$vo.unitary_id}"/>
 							</a>
 							<div class="u-Cart-r">
 								<a class="gray6"><?php echo $unitary[$vo['id']]['name']?></a>
@@ -115,7 +115,7 @@
 					$(".footer").show();
 					$("#divNone").show();
 				}
-				$(".unitary_cart").click(function(){
+				$(".cart_img").click(function(){
 					var id = $(this).attr("unitaryid");
 					window.location.href="{vifnn::U('Unitary/goodswhere',array('token'=>$token))}&unitaryid="+id;
 				});
@@ -162,6 +162,24 @@
 									setTimeout(function(){
 										location.reload();
 									},1000);
+								//输入0删除购物车
+								}else if(data.error == 3){
+									$("#btnMsgOK").click(function(){
+										$.ajax({
+											type:"POST",
+											url:"{vifnn::U('Unitary/cartajax',array('token'=>$token))}",
+											dataType:"json",
+											data:{
+												type:'cart_del',
+												token:"{vifnn:$token}",
+												wecha_id:"{vifnn:$wecha_id}",
+												cid:id
+											}
+										});
+									});
+									setTimeout(function(){
+										location.reload();
+									},500);
 								}else{
 									if(data.error == 1){
 										cerror(id,data.text);

@@ -35,7 +35,7 @@
 <div class="content" <if condition="session('isQcloud') eq true">style="float:center;"</if>>
 
     <div class="cLineB">
-        <h4>模板管理 <span class="FAQ">选择适合您的模版风格，手机输入“首页”测试效果。</span></h4>
+        <h4>模板管理 <span class="FAQ">选择适合您的模版风格，手机输入“首页”测试效果。</span>&nbsp;&nbsp;&nbsp;<span class="green">以下模板的预览图仅供参考，不同尺寸的手机屏幕显示可能会略有差异</span></h4>
     </div>
 
     <div class="msgWrap form">
@@ -70,6 +70,7 @@
 					<li class="filter" data-filter="bgs"><p>支持背景音乐</p><i></i></li>
                     <li class="filter" data-filter="slip"><p>支持横向滑动</p><i></i></li>
                   </ul>
+                  <if condition="$usertplid eq 2"><br></if>
                   <h1>按行业选择:</h1>
                   <ul class="filterBtn">
                     <li class="filter" data-filter="mix"><p>常用模板</p><i></i></li>
@@ -406,7 +407,7 @@ $('#grid').mixitup({layoutMode: 'grid'});
 
             });
 </script>
+<include file="Public:footer"/>
 
 <if condition="session('isQcloud') neq true">
-<include file="Public:footer"/>
 </if>

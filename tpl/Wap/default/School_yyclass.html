@@ -74,9 +74,9 @@
         <li class="addr"><span>地址： {vifnn:$reslist['address']}</span></li>
         <li class="tel"><a href="tel:{vifnn:$reslist['tel']}"><span>预约电话： {vifnn:$reslist['tel']}</span></a></li>
     </ul>
-<if condition="$reslist['longitude'] neq ''">
+<if condition="!empty($reslist['lng'])">
     <ul class="round roundyellow" >
-        <li class="userinfo"><a href="http://chabus.duapp.com/mapapi.php?lng={vifnn:$reslist['longitude']}&lat={vifnn:$reslist['latitude']}&title=预约&info={vifnn:$reslist['name']}"><span>点击查看地图</span></a></li>
+        <li class="userinfo"><a href="{vifnn::U('School/companyMap', array('token'=>$token,'shcid'=>$rid,'readtype'=>$readtype))}" style="font-size: 14px;color: #46A5F5;"><span>点击查看地图</span></a></li>
     </ul>
   </if>
 
@@ -269,3 +269,15 @@ function check3(obj){
     #plug-wrap{z-index: 0}
 </style>
 </body></html>
+<script type="text/javascript">
+window.shareData = {
+	"moduleName":"School",
+	"moduleID":"0",
+	"imgUrl": "{vifnn:$info['head_url']}",
+	"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('School/readview',array('id'=>$rid,'readtype'=>$readtype,'token'=>$token))}",
+	"tTitle": "{vifnn:$info['title']|shareFilter}",
+	"tContent": "{vifnn:$info['info']|shareFilter}",
+	"fTitle": "{vifnn:$info['title']|shareFilter}",
+};
+</script>
+{vifnn:$shareScript}

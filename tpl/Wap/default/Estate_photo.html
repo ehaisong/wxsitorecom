@@ -12,17 +12,21 @@
         <script type="text/javascript" src="{vifnn::STATICS}/estate/js/share.js"></script>
         <script type="text/javascript" src="{vifnn::STATICS}/estate/js/common.js"></script>
         <script type="text/javascript" src="{vifnn::STATICS}/estate/js/picshow.js"></script>
-    </head>
-    
-    <body onselectstart="return true;" ondragstart="return false;">
-        <style type="text/css">
+      <style type="text/css">
             #popFail .bk{background-color:rgba(194,194,194,0.5);} .pop_photo{height:100%;}
             .pop_photo .photo li{float:left;height:100%;} .photo_show img{background:#202020
             url("./tpl/static/estate/images/top_show.gif")
             no-repeat center center;} .pop_photo .photo li{background:url("./tpl/static/estate/images/top_show.gif")
             no-repeat center center;} .pop_photo .photo li.noLoading{opacity:0;*filter:alpha(opacity=0);}
             .pop_photo .photo li img{border-radius:5px;}
+			.photo_show li {
+				padding: 0px;
+			}  
         </style>
+    </head>
+    
+    <body onselectstart="return true;" ondragstart="return false;">
+
         <div class="wrapper" style="display:block;">
             <!-- start -->
             <div class="photo_area" id="scroller" style="opacity: 1.0000000000000002; overflow: hidden;"><!--  photo_wide -->

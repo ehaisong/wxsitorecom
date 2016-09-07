@@ -30,7 +30,7 @@ function selectall(name) {
 			<div class="pageNavigator left">
 				<if condition="$usertplid eq 2"><i class="fa fa-hand-o-right" style="color:#1ab394;"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 
 				<a  href="{vifnn::U('Member_card/create_add',array('token'=>$token,'id'=>$thisCard['id']))}" title="创建会员卡号" >创建会员卡号
-</a>&nbsp;&nbsp;<if condition="$usertplid eq 2"><i class="fa fa-times" style="color:#1ab394;"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> <a href="###" onclick="if(confirm('确定删除吗')){$('#info').submit()}">删除</a>&nbsp;&nbsp; <strong>已经领取 <span style="color:red">{vifnn:$usecount}</span> 张，剩余<span style="color:red">{vifnn:$ucount}</span>张未领取，一共 <span style="color:red">{vifnn:$count}</span>张</strong>
+</a>&nbsp;&nbsp;<if condition="$usertplid eq 2"><i class="fa fa-times" style="color:#1ab394;"></i><else /><img src="{vifnn::RES}/images/icons/group_delete.png" class="vm"></if> <a href="###" onclick="if(confirm('确定删除吗')){$('#info').submit()}">删除</a>&nbsp;&nbsp; <strong>已经领取 <span style="color:red">{vifnn:$usecount}</span> 张，剩余<span style="color:red">{vifnn:$ucount}</span>张未领取，一共 <span style="color:red">{vifnn:$count}</span>张</strong>
 			</div>	    
 			
 			<div class="right">

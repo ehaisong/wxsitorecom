@@ -183,7 +183,7 @@ class ServiceAction extends UserAction
 
 		foreach ($list as $key => $val) {
 			if ($val['g_id']) {
-				$list[$key]['group_name'] = M('Wechat_group')->where(array('id' => $val['g_id']))->getField('name');
+				$list[$key]["group_name"] = M("Wechat_group")->where(array("wechatgroupid" => $val["g_id"]))->getField("name");
 			}
 			else {
 				$list[$key]['group_name'] = '未分组';

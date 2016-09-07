@@ -45,9 +45,11 @@ class BoostAction extends WapAction
 		if (empty($data['ffans'])) {
 			$data['ffans'] = $this->_get('fans_id');
 		}
+		$data["mk"] = $this->_get("mk");
+		$data["sk"] = $this->_get("sk");
 		$jump_url = $this->jump_url . '&' . http_build_query($data);
 		header('Location:' . $jump_url);
-		die;
+		exit();
 	}
 	public final function clear_html($array)
 	{
@@ -79,7 +81,7 @@ class BoostAction extends WapAction
 	{
 		$card = M('Cards')->where(array('id' => $this->_get('id')))->find();
 		$url = 'http://www.meihua.com/index.php?m=Card&c=index&a=index&unique={unique}&crid={cardid}&usercardid={id}&token={token}';
-		$unique = base64_encode($_SERVER['SERVER_NAME'] . '_pigcms_' . $this->token);
+		$unique = base64_encode($_SERVER['SERVER_NAME'] . '_vifnn_' . $this->token);
 		$url = strtr($url, array('{token}' => $this->token, '{id}' => $card['id'], '{unique}' => $unique, '{cardid}' => $card['cardid']));
 		header('Location:' . $url);
 	}

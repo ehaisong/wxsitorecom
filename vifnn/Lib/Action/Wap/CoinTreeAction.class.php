@@ -8,6 +8,8 @@ class CoinTreeAction extends CoinBaseAction{
 		if($this->action_id == "" || $this->wecha_id == "" || $this->token == ""){
 			$this->error('非法参数');
 		}
+		$this->checkTongji($this->token, "cointree", $this->action_id);
+		$this->assign($this->token, "cointree", $this->action_id);
 		$cointree_db = M('cointree');
  		if(S($this->token.'_'.$this->action_id.'_cointree') != ""){
 			$cointree = S($this->token.'_'.$this->action_id.'_cointree');
@@ -41,7 +43,7 @@ class CoinTreeAction extends CoinBaseAction{
 			$cointree = M('cointree')->where(array('id'=>$this->action_id))->find();
 		}
 		$stat = $this->public_notice($cointree);
-		//分享者信息
+		$this->checkTongji($this->token, "cointree", $this->action_id);
 		$cointree_users = M('cointree_users')->where(array('cid'=>$this->action_id,'share_key'=>$share_key))->find();
 		if(empty($cointree)){
 			$this->error('该活动不存在');exit;

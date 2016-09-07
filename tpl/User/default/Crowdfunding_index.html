@@ -100,8 +100,8 @@
    });
  </script>
  <style type="text/css">
-   #brg{vifnn:$item.id}{ width:100%; height:182%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
-   #showdiv{vifnn:$item.id}{z-index:20; display:none;position:fixed; *position:absolute;top:30%; left:50%; margin:-50px 0 0 -50px;}
+   #brg{vifnn:$item.id}{ width:100%; height:100%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
+   #showdiv{vifnn:$item.id}{z-index:20; display:none;position:fixed; *position:absolute;top:20%; left:50%; margin:-50px 0 0 -50px;}
    #testdiv{vifnn:$item.id}{ width:300px; height:300px; margin:0 auto; border:1px solid #4d4d4d; background:#f2f2f2;}
    #close{vifnn:$item.id}{width:300px; height:27px; line-height:27px; font-size:14px; font-weight:bold; border:1px solid #4d4d4d; text-align:center; cursor:pointer; margin:0 auto; background:#333; color:#fff;margin-top: 15%;}
  </style>
@@ -115,6 +115,9 @@
 </if>
 	<a href="{vifnn::U('Crowdfunding/order',array('id'=>$item['id'],'token'=>$token))}">查看订单</a>&nbsp;
 	<a href="{vifnn::U('Crowdfunding/basis_set',array('token'=>$token,'id'=>$item['id']))}">修改</a>&nbsp;
+	<eq name="tj_status" value="1">
+		<a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'crowdfunding','act_id'=>$item['id'],'act_token'=>$_GET['token']))}" class="btnGreen">传播分析</a>&nbsp;
+	</eq>
 	<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Crowdfunding/del',array('token'=>$token,'id'=>$item['id']))}');">删除</a></td>
 </tr>
 </volist>

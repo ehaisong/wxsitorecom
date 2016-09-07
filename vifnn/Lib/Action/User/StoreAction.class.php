@@ -13,7 +13,7 @@ class StoreAction extends UserAction{
 		
 		$this->_cid = session('companyid');
 		if (empty($this->token)) {
-			$this->error('不合法的操作', U('Index/info'));
+			$this->error('不合法的操作', U('Index/index'));
 		}
 		if (empty($this->_cid))  {
 			$company = M('Company')->where(array('token' => $this->token, 'isbranch' => 0))->find();
@@ -73,6 +73,7 @@ class StoreAction extends UserAction{
 	 */
 	public function index() 
 	{
+		C("TOKEN_ON", false);
 		$parentid = isset($_GET['parentid']) ? intval($_GET['parentid']) : 0;
 		$data = M('Product_cat');
 		$where = array('token' => session('token'), 'cid' => $this->_cid, 'parentid' => $parentid);
@@ -409,6 +410,7 @@ class StoreAction extends UserAction{
 	 */
 	public function product() 
 	{		
+		C("TOKEN_ON", false);
 		$catid = intval($_GET['catid']);
 		$product_model = M('Product');
 		$product_cat_model = M('Product_cat');
@@ -416,29 +418,23 @@ class StoreAction extends UserAction{
 		if ($catid){
 			$where['catid'] = $catid;
 		}
-        if(IS_POST){
-            $key = $this->_post('searchkey');
-            if(empty($key)){
-                $this->error("关键词不能为空");
-            }
 
-            $map['token'] = $this->get('token'); 
-            $map['name|intro|keyword'] = array('like',"%$key%"); 
-            $list = $product_model->where($map)->select(); 
-            $count      = $product_model->where($map)->count();       
-            $Page       = new Page($count,20);
-        	$show       = $Page->show();
-        } else {
-        	$count      = $product_model->where($where)->count();
-        	$Page       = new Page($count,20);
-        	$show       = $Page->show();
-        	$list = $product_model->where($where)->order('sort asc, id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
-        }
-		$this->assign('page',$show);		
-		$this->assign('list',$list);
-		$this->assign('isProductPage',1);
-		$this->assign('catid', $catid);
-		$this->display();		
+		$keyword = trim($_REQUEST["searchkey"]);
+
+		if ($keyword != "") {
+			$where["name|keyword"] = array("like", "%$keyword%");
+		}
+
+		$count = $product_model->where($where)->count();
+		$Page = new Page($count, 20);
+		$show = $Page->show();
+		$list = $product_model->where($where)->order("sort asc, id desc")->limit($Page->firstRow . "," . $Page->listRows)->select();
+		$this->assign("page", $show);
+		$this->assign("list", $list);
+		$this->assign("isProductPage", 1);
+		$this->assign("catid", $catid);
+		$this->assign("searchkey", $keyword);
+		$this->display();
 	}
 	
 	/**
@@ -623,13 +619,13 @@ class StoreAction extends UserAction{
 		if (empty($name)) {
 			exit(json_encode(array('error_code' => true, 'msg' => '商品不能为空')));
 		}
-		if (empty($price)) {
+		if (empty($price) || ($price <= 0)) {
 			exit(json_encode(array('error_code' => true, 'msg' => '价格应该大于0')));
 		}
-		if (empty($vprice)) {
+		if (empty($vprice) || ($vprice <= 0)) {
 			exit(json_encode(array('error_code' => true, 'msg' => '会员价应该大于0')));
 		}
-		if (empty($oprice)) {
+		if (empty($oprice) && ($oprice <= 0)) {
 			exit(json_encode(array('error_code' => true, 'msg' => '原始价格应该大于0')));
 		}
 		if (empty($keyword)) {
@@ -648,7 +644,7 @@ class StoreAction extends UserAction{
 			exit(json_encode(array('error_code' => true, 'msg' => '商品分类不存在')));
 		}
 		$data = array('token' => $token, 'gid' => $gid, 'status' => $status, 'cid' => $this->_cid, 'num' => $num, 'fakemembercount' => $fakemembercount, 'sort' => $sort, 'catid' => $catid, 'name' => $name, 'price' => $price, 'mailprice' => $mailprice, 'vprice' => $vprice, 'oprice' => $oprice, 'intro' => $intro, 'logourl' => $pic, 'keyword' => $keyword, 'time' => time(), 'allow_distribution' => $allow_distribution, 'commission_type' => $commission_type, 'commission' => $commission);
-		$data['discount'] = number_format($price / $oprice, 2, '.', '') * 10;
+		$data["discount"] = (0 < $oprice ? number_format($price / $oprice, 2, ".", "") * 10 : 10);
 		$product = M('Product');
 		if ($pid && $obj = $product->where(array('id' => $pid, 'token' => $token, 'cid' => $this->_cid))->find()) {
 			$product->where(array('id' => $pid, 'token' => $token))->save($data);
@@ -817,7 +813,66 @@ class StoreAction extends UserAction{
 		$this->assign('page', $show);
 		$this->display();
 	}
-	
+
+	public function exportorders()
+	{
+		$filename = "微信商城订单_" . date("YmdHis");
+		header("Content-type:application/octet-stream");
+		header("Accept-Ranges:bytes");
+		header("Content-type:application/vnd.ms-excel");
+		header("Content-Disposition:attachment;filename=" . $filename . ".xls");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		$cid = $this->_cid;
+
+		if (C("zhongshuai")) {
+			$company = M("Company")->where("`token`='$this->token' AND `isbranch`=0")->find();
+			$cid = $company["id"];
+		}
+
+		$product_cart_model = M("product_cart");
+		$where = array("product.groupon" => 0, "product.dining" => 0, "product.cid" => $cid);
+		$orders = $product_cart_model->alias("product")->where($where)->join(C("DB_PREFIX") . "coupon_pay_record as c ON product.wecha_id = c.wechat_id AND product.orderid = c.orderid AND c.from = \"Store\" AND c.dateline >0")->order("time DESC")->field("c.reduce_cost,product.*")->select();
+		$export = array();
+
+		foreach ($orders as $key => $value ) {
+			$export[$key]["truename"] = $value["truename"];
+			$export[$key]["tel"] = "tel:" . $value["tel"];
+			$export[$key]["total"] = $value["total"];
+			$export[$key]["price"] = $value["price"];
+			$export[$key]["status"] = ($value["paid"] == 1 ? "已付款" : "未付款") . "/" . ($value["sent"] == 1 ? "已发货" : "未发货");
+			$export[$key]["handled"] = ($value["handled"] == 1 ? "已处理" : "未处理");
+			$export[$key]["paytype"] = getPayType($value["paytype"]);
+			$export[$key]["time"] = date("Y-m-d H:i:s", $value["time"]);
+			$export[$key]["reduce_cost"] = $value["reduce_cost"];
+			$export[$key]["discount_money"] = $value["discount_money"];
+			$export[$key]["orderid"] = "`" . $value["orderid"] . "`";
+		}
+
+		$title = array("姓名", "电话", "数量", "应付金额（元）", "付款状态/发货状态", "状态", "付款方式", "创建时间", "抵扣代金券", "抵扣会员折扣", "订单号");
+
+		if (!empty($title)) {
+			foreach ($title as $k => $v ) {
+				$title[$k] = iconv("UTF-8", "GBK//IGNORE", $v);
+			}
+
+			$title = implode("\t", $title);
+			echo "{$title}\n";
+		}
+
+		if (!empty($export)) {
+			foreach ($export as $key => $val ) {
+				foreach ($val as $ck => $cv ) {
+					$export[$key][$ck] = iconv("UTF-8", "GBK//IGNORE", $cv);
+				}
+
+				$export[$key] = implode("\t", $export[$key]);
+			}
+
+			echo implode("\n", $export);
+		}
+	}
+
 	public function orderInfo()
 	{
 		$this->product_model = M('Product');
@@ -1591,5 +1646,7 @@ class StoreAction extends UserAction{
 				$this->success('操作成功', U('Store/removesearch',array('token' => session('token'), 'cid' => $this->_cid)));
         	}
         }        
-	}}
+	}
+	
+}
 ?>

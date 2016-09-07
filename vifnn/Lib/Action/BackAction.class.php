@@ -1,47 +1,65 @@
 <?php
-class BackAction extends BaseAction{
-	protected $pid;
-	protected function _initialize(){
-	   $sql = "SHOW COLUMNS FROM `" . C("DB_PREFIX") . "user`";
-		$COLUMNS = M()->query($sql);
 
-		foreach ($COLUMNS as $vo ) {
-			$COLUMNS_array[] = $vo["Field"];
+class BackAction extends BaseAction
+{
+	protected $pid;
+
+	protected function _initialize()
+	{
+		$isjiamengcms = str_replace($_SERVER["SCRIPT_NAME"], "", dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . "cms" . DIRECTORY_SEPARATOR . "manage" . DIRECTORY_SEPARATOR . "base.php";
+		$isjiameng = false;
+
+		if (file_exists($isjiamengcms)) {
+			$isjiameng = true;
 		}
 
-		if (!in_array("is_admin", $COLUMNS_array)) {
-			$sql = "ALTER TABLE `" . C("DB_PREFIX") . "user` ADD `is_admin` INT NOT NULL DEFAULT '0'";
+		$this->assign("isjiameng", $isjiameng);
+		$sql = 'SHOW COLUMNS FROM `' . C('DB_PREFIX') . 'user`';
+		$COLUMNS = M()->query($sql);
+
+		foreach ($COLUMNS as $vo) {
+			$COLUMNS_array[] = $vo['Field'];
+		}
+
+		if (!in_array('is_admin', $COLUMNS_array)) {
+			$sql = 'ALTER TABLE `' . C('DB_PREFIX') . 'user` ADD `is_admin` INT NOT NULL DEFAULT \'0\'';
 			M()->query($sql);
-		}			
-        if (!isset($_SESSION['username'])) {
-            $this->error('非法操作', U('System/Admin/index'));
-        }
-        parent::_initialize();
+		}
+        if (C('safeadmin')<>'' && $_SESSION['safeadmin'] <> C('safeadmin')){
+				$this->error('非法操作!', U('System/Admin/index'));
+		}
+		
+		if (!isset($_SESSION['username'])) {
+			$this->error('非法操作', U('System/Admin/index'));
+		}
+
+		parent::_initialize();
 		C('NOT_AUTH_ACTION', '');
 		C('NOT_AUTH_MODULE', 'Admin');
-        if (C('USER_AUTH_ON') && !in_array(MODULE_NAME, explode(',', C('NOT_AUTH_MODULE')))) {
-            if (!RBAC::AccessDecision()) {
-                //检查认证识别号
-                if (!$_SESSION[C('USER_AUTH_KEY')]) {
-                    //跳转到认证网关
-                    redirect(PHP_FILE . C('USER_AUTH_GATEWAY'));
-                }
-                // 没有权限 抛出错误
-                if (C('RBAC_ERROR_PAGE')) {
-                    // 定义权限错误页面
-                    redirect(C('RBAC_ERROR_PAGE'));
-                }else {
-                    if (C('GUEST_AUTH_ON')) {
-                        $this->assign('jumpUrl', PHP_FILE . C('USER_AUTH_GATEWAY'));
-                    }
-                    // 提示错误信息
-                    $this->error(L('_VALID_ACCESS_'));
-                }
-             }
-          }
-           $this->show_menu();
-        }
-	private function show_menu(){
+		if (C('USER_AUTH_ON') && !in_array(MODULE_NAME, explode(',', C('NOT_AUTH_MODULE')))) {
+			if (!RBAC::AccessDecision()) {
+				if (!$_SESSION[C('USER_AUTH_KEY')]) {
+					redirect(PHP_FILE . C('USER_AUTH_GATEWAY'));
+				}
+
+				if (C('RBAC_ERROR_PAGE')) {
+					redirect(C('RBAC_ERROR_PAGE'));
+				}
+				else {
+					if (C('GUEST_AUTH_ON')) {
+						$this->assign('jumpUrl', PHP_FILE . C('USER_AUTH_GATEWAY'));
+					}
+
+					$this->error(L('_VALID_ACCESS_'));
+				}
+			}
+		}
+
+		$this->show_menu();
+	}
+
+	private function show_menu()
+	{
 		$thisPid = M('Node')->where(array('name' => MODULE_NAME, 'level' => 2, 'status' => 1, 'display' => 2))->getField('id');
 
 		if ($this->_get('pid', 'intval')) {

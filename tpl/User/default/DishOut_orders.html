@@ -4,13 +4,41 @@
 <include file="Repast:head" />
 </if>
 <link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css" />
+<style>
+	.assign_box{
+		padding: 10px;
+		display: none;
+		text-align: center;
+	}
+	.assign_box .assign_title
+	{
+		font-size: 16px;
+		font-weight: bold;
+		display: block;
+		margin: 0px;
+		padding: 0px;
+		line-height: 25px;
+		width: 100%;
+		height: 25px;
+	}
+	.assign_box .dman_list{
+		display: block;
+		margin-top: 10px;
+	}
+	.assign_box .assign_sub{
+		margin-top: 10px;
+	}
+
+</style>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/laydate/laydate.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
         <div class="content">
 <div class="cLineB">
 <h4 class="left">外卖订单管理({vifnn:$page}) </h4>
 <div class="searchbar right">
-
 </div>
 <div class="clr"></div>
 </div>
@@ -20,7 +48,7 @@
 <else />
 	<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;"></if>
 	<span>温馨提示：</span><p>1、此处只显示总店信息，连锁店订单及菜品请进入相应平台进行管理，连锁店登录账号密码及登录地址请在LBS里设置查看<br/>微外卖的菜品添加请到微餐饮的菜品管理里添加修改</p>
-	<p>2、本功能使用了模板消息中的“订单完成通”知模板消息，模板编号OPENTM202521011。
+	<p>2、本功能使用了模板消息中的“订单完成通知”模板消息，模板编号OPENTM202521011。
           开通微信支付功能的公众号在使用此功能的时候可以在”基本设置——微信模板消息“中配置对应的模板消息</p>
 	</div>
 <!--tab start-->
@@ -37,21 +65,33 @@
 </div>
 <!--tab end-->
 <div class="msgWrap">
-<form method="post" action="" id="info">
 <div class="cLine">
-选择订单状态：
-<select onchange="change(this,1);">
-	<option value="0" <php>if ($status == 0) {echo "selected";}</php>>全部状态</option>
-	<option value="1" <php>if ($status == 1) {echo "selected";}</php>>未付款</option>
-	<option value="2" <php>if ($status == 2) {echo "selected";}</php>>已付款</option>
-</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-选择发货：
-<select onchange="change(this,2);">
-	<option value="0" <php>if ($fstatus == 0) {echo "selected";}</php>>全部状态</option>
-	<option value="1" <php>if ($fstatus == 1) {echo "selected";}</php>>未发货</option>
-	<option value="2" <php>if ($fstatus == 2) {echo "selected";}</php>>已发货</option>
-</select>
-<if condition="$ischild neq 1"><a class="btnGrayS vm bigbtn" style="float:right;margin-right: 15px;" title="添加" href="{vifnn::U('DishOut/orders',array('token' => $token,'cid'=>$cid,'fd'=>'on'))}">查看分店订单</a></if>
+	门店：
+	<select class="finder" name="shop_id" selectedval="{vifnn:$Think.get.shop_id}">
+		<option value="">全部</option>
+		<volist name="company_list" id="com">
+			<option value="{vifnn:$com.id}">{vifnn::$cid==$com['id']&&$com['isbranch']!='1'?'[主店] ':''}{vifnn:$com.name|short=15}</option>
+		</volist>
+	</select>
+	&nbsp;&nbsp;&nbsp;日期：<input class="px finder" name="date" id="date" value="{vifnn:$Think.get.date}" />
+	&nbsp;&nbsp;&nbsp;订单状态：
+	<select class="finder" name="status" selectedval="{vifnn:$Think.get.status}">
+		<option value="">全部</option>
+		<option value="0">待接单</option>
+		<option value="1">待配送</option>
+		<option value="2">配送中</option>
+		<option value="3">已完成</option>
+		<option value="4">已取消</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;支付状态
+	<select class="finder" name="paid" selectedval="{vifnn:$Think.get.paid}">
+		<option value="">全部</option>
+		<option value="0">未支付</option>
+		<option value="1">已支付</option>
+		<option value="2">已退款</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;<input name="keyword" class="px finder" placeholder="订单号、姓名、电话" value="{vifnn:$Think.get.keyword}" />
+	<input type="button" class="btnGreen finder" value="搜索"/>
 <div class="clr"></div>
 </div>
 
@@ -59,61 +99,100 @@
 <thead>
 <tr>
 <!--<th class="select"><input type="checkbox" value="" id="check_box" onclick="selectall('id[]');"></th>-->
+	<empty name="shop_id">
+		<th width="75">门店</th>
+	</empty>
 <th width="75">姓名</th>
 <th width="90">电话</th>
 <th width="50">点菜数量</th>
-<th width="50">总价（元）</th>
-<th width="85">状态</th>
-<th width="127">订餐时间</th>
-<th width="127">送餐时间</th>
-<th width="235">送餐地址</th>
+<th width="70">总价（元）</th>
+	<th width="70">支付方式</th>
+<th width="50">状态</th>
+<th width="110">订餐时间</th>
+<th width="110">送餐时间</th>
+	<th width="60">送餐员</th>
+<th width="200">送餐地址</th>
 <th width="68">抵扣代金券</th>
-<th width="80" class="norightborder">操作</th>
+<th width="150" class="norightborder">操作</th>
 </tr>
 </thead>
 <tbody>
 <tr></tr>
-<volist name="orders" id="o"> 
-<php>
-$statustr='';
-if($o['paid']==1){
-  $statustr='<span style="color:green">已付款</span>';
-}else{
-  $statustr='<span style="color:red">未付款</span>';
-}
-if($o['isuse']==1){
-  $statustr.='<br><span style="color:green">已发货</span>';
-}else{
-  $statustr.='<br><span style="color:red">未发货</span>';
-}
-if($o['isyes']==1){
-  $statustr.='<br><span style="color:green">已确认收货</span>';
-}else{
-  $statustr.='<br><span style="color:red">未确认收货</span>';
-}
-</php>
+<volist name="orders" id="o">
 <tr>
 <!--<td><input type="checkbox" value="{vifnn:$o.id}" class="cbitem" name="id_{vifnn:$i}"></td>-->
+	<empty name="shop_id">
+		<td>{vifnn:$o.company.name|short=15}</td>
+	</empty>
 <td>{vifnn:$o.name|htmlspecialchars_decode=ENT_QUOTES}</td>
 <td>{vifnn:$o.tel|htmlspecialchars_decode=ENT_QUOTES}</td>
 <td>{vifnn:$o.total}/份</td>
-<td>{vifnn:$o.price}</td>
-<td>{vifnn:$statustr}</td>
-<td>{vifnn:$o.time|date="Y-m-d H:i:s",###}</td>
-<td><if condition="$o.reservetime gt 0">{vifnn:$o.reservetime|date="Y-m-d H:i:s",###}<else/>尽快送达</if></td>
-<td>{vifnn:$o.address|htmlspecialchars_decode=ENT_QUOTES}</td>
+<td>
+	<switch name="o['paid']">
+		<case value="0"><span style="color:red">{vifnn:$o.price} (未付款)</span></case>
+		<case value="1"><span style="color:green">{vifnn:$o.price}</span></case>
+		<case value="2"><span style="color:green;">{vifnn:$o.price} (已退款)</span></case>
+	</switch>
+</td>
+	<td><span style="color: orange;">{vifnn:$o.paytype|enum_list='pay_type',###,'-'}</span></td>
+<td>
+	<switch name="o['status']">
+		<case value="0"><span style="color:red">待接单</span></case>
+		<case value="1"><span style="color:#ff9000">待配送</span></case>
+		<case value="2"><span style="color: #b5d601;">配送中</span></case>
+		<case value="3"><span style="color:green">已完成</span></case>
+		<case value="4"><span style="color: #959595;">已取消</span></case>
+	</switch>
+</td>
+<td>{vifnn:$o.time|date="Y-m-d H:i",###}</td>
+<td><if condition="$o.reservetime gt 0">{vifnn:$o.reservetime|date="Y-m-d H:i",###}<else/>尽快送达</if></td>
+	<td>
+		<if condition="in_array($o['status'],array('2','3','4')) && !empty($o['deliverymanid'])">
+			{vifnn:$o.deliveryman.name}
+			<else/>
+			-
+		</if>
+	</td>
+<td>
+	{vifnn:$o.address|htmlspecialchars_decode=ENT_QUOTES}
+</td>
 <td><if condition="$o.reduce_cost gt 0">￥{vifnn:$o.reduce_cost}</if></td>
-<td class="norightborder"><a href="###" onclick="showIntroDetail({vifnn:$o.id})">详细</a> <a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('DishOut/deleteOrder',array('token'=>$token,'id'=>$o['id']))}');">删除</a></td>
+<td class="norightborder">
+	<switch name="o['status']">
+		<case value="0">
+			<a href="{vifnn::U('agree',array('id'=>$o['id'],'shop_id'=>$o['cid']))}" ajax="get">接单</a>
+			<a href="{vifnn::U('cancel',array('id'=>$o['id'],'shop_id'=>$o['cid']))}" confirm ajax="get" >取消</a>
+			<a href="javascript:;" onclick="showIntroDetail({vifnn:$o.id},{vifnn:$o['cid']})">详细</a>
+		</case>
+		<case value="1">
+			<a href="javascript:;" class="assign_btn" dman-url="{vifnn::U('getDman',array('shop_id'=>$o['cid']))}" data-id="{vifnn:$o['id']}" cid="{vifnn:$o['cid']}">配送</a>
+			<a href="{vifnn::U('cancel',array('id'=>$o['id'],'shop_id'=>$o['cid']))}" confirm ajax="get" >取消</a>
+			<a href="javascript:;" onclick="showIntroDetail({vifnn:$o.id},{vifnn:$o['cid']})">详细</a>
+		</case>
+		<case value="2">
+			<a href="{vifnn::U('complete',array('id'=>$o['id'],'shop_id'=>$o['cid']))}" ajax="get" >完成</a>
+			<a href="{vifnn::U('cancel',array('id'=>$o['id'],'shop_id'=>$o['cid']))}" confirm ajax="get" >取消</a>
+			<a href="javascript:;" onclick="showIntroDetail({vifnn:$o.id},{vifnn:$o['cid']})">详细</a>
+		</case>
+		<case value="3">
+			<a href="javascript:;" onclick="showIntroDetail({vifnn:$o.id},{vifnn:$o['cid']})">详细</a>
+			<a href="{vifnn::U('DishOut/deleteOrder',array('token'=>$token,'id'=>$o['id'],'shop_id'=>$o['cid']))}" ajax="get" confirm >关闭</a>
+		</case>
+		<case value="4">
+			<a href="javascript:;" onclick="showIntroDetail({vifnn:$o.id},{vifnn:$o['cid']})">详细</a>
+			<a href="{vifnn::U('DishOut/deleteOrder',array('token'=>$token,'id'=>$o['id'],'shop_id'=>$o['cid']))}" ajax="get" confirm >关闭</a>
+		</case>
+	</switch>
+</td>
 </tr>
 </volist>
 </tbody>
 </table>
 <input type="hidden" name="token" value="{vifnn:$_GET['token']}" />
-</form>
 
 <script>
-function showIntroDetail(id){
-	art.dialog.open('{vifnn::U('DishOut/orderInfo',array('token'=>$token))}&id='+id,{lock:false,title:'订单详情',width:1000,height:620,yesText:'关闭',background: '#000',opacity: 0.87, close: function(){location.reload();}});
+function showIntroDetail(id,cid){
+	art.dialog.open('{vifnn::U("DishOut/orderInfo",array("token"=>$token))}&id='+id+'&shop_id='+cid,{lock:false,title:"订单详情",width:1000,height:620,yesText:"关闭",background: "#000",opacity: 0.87, close: function(){location.reload();}});
 }
 </script>
 </div>
@@ -123,6 +202,20 @@ function showIntroDetail(id){
 </div>
 <div class="clr"></div>
 </div>
+</div>
+
+<div class="assign_box">
+	<div class="assign_title">请选择配送员</div>
+	<div class="dman_list">
+		<select>
+			<volist name="dman_list" id="dman">
+				<option value="{vifnn:$dman.id}">{vifnn:$dman.name}</option>
+			</volist>
+		</select>
+		<input class="assign_cid" type="hidden" value="" />
+		<input class="assign_id" type="hidden" value="" />
+	</div>
+	<div class="assign_sub btnGreen">确认配送</div>
 </div>
 
 <script>
@@ -139,8 +232,54 @@ function selectall(name) {
 		});
 	}
 }
-function change(obj,t) {
-	window.location.href = "{vifnn::U('DishOut/orders',array('token' => $token, 'cid' => $cid))}&t="+t+"&status=" + $(obj).val();
-}
+
+$('.assign_btn').click(function(){
+	var url=$(this).attr('dman-url');
+	$('.dman_list input.assign_cid').val($(this).attr('cid'));
+	$('.dman_list input.assign_id').val($(this).attr('data-id'));
+	$s.get(url,function(data){
+		if(data&&data['status']=='1'){
+			var $jq=$('.dman_list select');
+			$jq.empty();
+			for(var i=0;i<data['data'].length;i++){
+				$jq.append('<option value="'+data['data'][i]['id']+'">'+data['data'][i]['name']+'</option>');
+			}
+			layer.open({
+				title:'请选择配送员',
+				type: 1,
+				area: ['350px', '180px'], //宽高
+				content: $('.assign_box')
+			});
+		}
+	});
+});
+
+$('.assign_sub').click(function(){
+	var url='{vifnn::U("assignOrder",array("shop_id"=>"__SHOP_ID__","did"=>"__DID__","id"=>"__ID__"))}';
+	var cid=$('.dman_list input.assign_cid').val();
+	var id=$('.dman_list input.assign_id').val();
+	var did=$('.dman_list select option:selected').val();
+	if(!did||did==''){
+		$s.error('请选择配送员');
+		return false;
+	}
+	url=url.replace('__SHOP_ID__',cid);
+	url=url.replace('__DID__',did);
+	url=url.replace('__ID__',id);
+	$s.get(url);
+});
+
+$s.finderController('.finder','{vifnn::U("orders",array("token"=>$token))}');
+
+var dateOpts = {
+	elem: '#date',
+	format: 'YYYY-MM-DD',
+	max: laydate.now(),
+	istime: false,
+	istoday: true,
+};
+laydate(dateOpts);
+
+
 </script>
 <include file="Public:footer"/>

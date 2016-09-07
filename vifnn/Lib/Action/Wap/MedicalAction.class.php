@@ -68,9 +68,29 @@ class MedicalAction extends WapAction{
             $where = array('classid'=>$classify['id'],'token'=>$this->_get('token'));
             $imgtxt = $t_img->where($where)->field('id,title,pic,createtime')->select();
 
+			foreach ($imgtxt as $key => $value ) {
+				if ($value["url"] != "") {
+					if (strpos($value["url"], "mp.weixin.qq.com") !== false) {
+						$imgtxt[$key]["url"] = str_replace("#rd", "#wechat_redirect", $value["url"]);
+					}
+					else {
+						$imgtxt[$key]["url"] = $this->getLink($value["url"]);
+					}
+				}
+			}
             $where4 = array('classid'=>$classify2['id'],'token'=>$this->_get('token'));
             $imgtxt2 = $t_img->where($where4)->field('id,title,pic,createtime')->select();
 
+			foreach ($imgtxt2 as $k => $v ) {
+				if ($v["url"] != "") {
+					if (strpos($v["url"], "mp.weixin.qq.com") !== false) {
+						$imgtxt2[$k]["url"] = str_replace("#rd", "#wechat_redirect", $v["url"]);
+					}
+					else {
+						$imgtxt2[$k]["url"] = $this->getLink($v["url"]);
+					}
+				}
+			}
             $this->assign('imgtxt',$imgtxt);
             $this->assign('classify',$classify);
             $this->assign('imgtxt2',$imgtxt2);
@@ -190,6 +210,16 @@ $info[9]['name'] = $setIndex['menu10'];
         $where = array('classid'=>$classify['id'],'token'=>$this->_get('token'));
         $imgtxt = $t_img->where($where)->field('id,title,pic,createtime')->select();
 
+		foreach ($imgtxt as $key => $value ) {
+			if ($value["url"] != "") {
+				if (strpos($value["url"], "mp.weixin.qq.com") !== false) {
+					$imgtxt[$key]["url"] = str_replace("#rd", "#wechat_redirect", $value["url"]);
+				}
+				else {
+					$imgtxt[$key]["url"] = $this->getLink($value["url"]);
+				}
+			}
+		}
         $this->assign('imgtxt',$imgtxt);
         $this->assign('classify',$classify);
         $this->display();
@@ -438,10 +468,15 @@ Sms::sendSms($da['token'],
                 if(empty($duty)){
                     exit('none');
                 }
+                $today_start = strtotime(date('Y-m-d 00:00:00',time()));
                 $orderdate_start = strtotime(date('Y-m-d 00:00:00',strtotime($_GET['orderdate'])));
                 $orderdate_end_noon = strtotime(date('Y-m-d 11:59:59',strtotime($_GET['orderdate'])));
                 $orderdate_end = strtotime(date('Y-m-d 23:59:59',strtotime($_GET['orderdate'])));
-                $day_part = $_GET['day_part'] ? (int)$_GET['day_part'] : 1;//上午还是下午
+                $day_part = $_GET['day_part'] ? (int)$_GET['day_part'] : 1;//1 上午 2下午
+                $amorpm = date('a',time());
+                if($orderdate_start == $today_start && $amorpm == 'pm' && $day_part == 1){
+                    exit('none');
+                }
                 //选择的日期上午已经预约的人数
                 $alreadyorder_am = M('medical_user')->where(array('token'=>$_GET['token'],'addtype'=>'medical','yyzj'=>(int)$_GET['docter'],'reservation_time'=>array('between',array($orderdate_start,$orderdate_end_noon))))->count();
                 //选择的日期下午已经预约的人数
@@ -618,3 +653,4 @@ private function content_layout($order)
     }
 }
 
+?>

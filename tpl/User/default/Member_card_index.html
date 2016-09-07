@@ -18,7 +18,13 @@
 	<else />
 	<img class="vm" src="./tpl/User/default/common/images/product/add.png">
 	</if>
-	添加会员卡</a>
+	添加会员卡</a>	<a href='/index.php?g=User&m=Member_card&a=grade&token={vifnn:$token}' title='会员卡等级管理' class='btnGrayS vm bigbtn'>
+	<if condition="$usertplid eq 2">
+	<i class="fa fa-hand-o-right"></i>
+	<else />
+	<img class="vm" src="./tpl/User/default/common/images/product/add.png">
+	</if>
+	会员卡等级管理</a>
 </div>
 
 <div class="pageNavigator right"> 
@@ -47,6 +53,7 @@
 <th width="80">卡片总数</th>
 <th width="80">已开卡会员</th>
 <th width="100">领卡短信验证</th>
+<th width="100">会员卡等级</th>
 <th class="norightborder">操作</th>
 </tr>
 </THEAD>
@@ -65,6 +72,7 @@
 关闭
 </if>
 </TD>
+<TD><if condition="$item['grade_name'] neq ''">{vifnn:$item.grade_name}<else />无级别</if></TD>
 <TD class="norightborder">
 
 <a href="{vifnn::U('Member_card/members', array('token' => $token,'id'=>$item['id']))}">会员卡管理</a> 
@@ -74,7 +82,7 @@
 <a href="{vifnn::U('Member_card/exchange', array('token' => $token,'id'=>$item['id']))}">积分设置</a> 
 |
 <if condition="$item.is_donate eq 1">
-<a href="{vifnn::U('Member_card/donate', array('token' => $token,'id'=>$item['id']))}">充值赠送</a> 
+<a href="{vifnn::U('Member_card/donate', array('token' => $token,'id'=>$item['id']))}">充值设置</a> 
 |
 </if>
 <if condition="$item.is_jfdhhb eq 2">
@@ -85,7 +93,8 @@
 |
 <a href="{vifnn::U('Member_card/design', array('token' => $token,'id'=>$item['id']))}">修改</a> 
 |
-<a href="javascript:drop_confirm('您确定要删除吗?', '/index.php?g=User&m=Member_card&a=delete&token={vifnn:$token}&id={vifnn:$item.id}');">删除</a></TD>
+<a href="javascript:drop_confirm('您确定要删除吗?', '/index.php?g=User&m=Member_card&a=delete&token={vifnn:$token}&id={vifnn:$item.id}');">删除</a>
+</TD>
 </TR>
 </volist>
 </TBODY>

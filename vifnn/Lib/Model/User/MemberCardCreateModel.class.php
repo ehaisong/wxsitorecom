@@ -1,23 +1,24 @@
 <?php
 class MemberCardCreateModel extends XModel
 {
-    //鑾峰彇璁板綍鎬绘暟
+    //获取记录总数
     public function getTotal($get)
     {
-        $tabs[C('DB_PREFIX').'member_card_create']='create';
-        $tabs[C('DB_PREFIX').'userinfo']='user';
-        return $this->table($tabs)->setWhere($get)->count();
+        return $this->setJoin()->setWhere($get)->count();
     }
 
-    //鑾峰彇鍒楄〃
+    public function getTotalNoSearch($get)
+    {
+        return $this->setWhereNoSearch($get)->count();
+    }
+
+    //获取列表
     public function getList($get,$offset,$length)
     {
-        $tabs[C('DB_PREFIX').'member_card_create']='create';
-        $tabs[C('DB_PREFIX').'userinfo']='user';
         $fields='create.id,create.cardid,create.token,create.number,create.wecha_id,create.is_bind,create.old_number,
         user.id uid,user.portrait,user.total_score,user.expensetotal,user.wechaname,user.truename,user.tel,user.sex,user.address,user.getcardtime,user.fakeopenid,
         user.regtime,user.balance';
-        $result=$this->table($tabs)->field($fields)->limit($offset,$length)->setWhere($get)->setOrder($get)->select();
+        $result=$this->setJoin()->field($fields)->limit($offset,$length)->setWhere($get)->setOrder($get)->group("create.wecha_id")->select();
         foreach ($result as &$value)
         {
             $value['truename']=$value['truename']?$value['truename']:$value['wechaname'];
@@ -25,13 +26,26 @@ class MemberCardCreateModel extends XModel
         return $result;
     }
 
-    //璁剧疆鏌ヨ鏉′欢
+    public function getListNoSearch($get,$offset,$length)
+    {
+        $result=$this->limit($offset,$length)->setWhereNoSearch($get)->select();
+        $userinfoModel=M('userinfo');
+        $fields='id uid,portrait,total_score,expensetotal,wechaname,truename,tel,sex,address,getcardtime,fakeopenid,regtime,balance';
+        for ($i=0;$i<count($result);$i++)
+        {
+            $info=$userinfoModel->where(array('wecha_id'=>$result[$i]['wecha_id'],'token'=>$get['token']))->field($fields)->find();
+            $info['truename']=$info['truename']?$info['truename']:$info['wechaname'];
+            $result[$i]=array_merge($result[$i],$info);
+        }
+        return $result;
+    }
+
+    //设置查询条件
     private function setWhere($get)
     {
         $where=array();
         $where['create.token']=$get['token'];
         $where['user.token']=$get['token'];
-        $where['_string']='create.wecha_id=user.wecha_id';
         $where['create.wecha_id']=array('neq','');
         if($get['itemid']!='')
         {
@@ -55,7 +69,24 @@ class MemberCardCreateModel extends XModel
         return $this->where($where);
     }
 
-    //璁剧疆鎺掑簭瑙勫垯
+    //设置查询条件
+    private function setWhereNoSearch($get)
+    {
+        $where=array();
+        $where['token']=$get['token'];
+        $where['wecha_id']=array('neq','');
+        if($get['itemid']!='')
+        {
+            $where['id']=$get['itemid'];
+        }
+        if($get['id']!='')
+        {
+            $where['cardid']=$get['id'];
+        }
+        return $this->where($where);
+    }
+
+    //设置排序规则
     private function setOrder($get)
     {
         $order=array();
@@ -77,4 +108,10 @@ class MemberCardCreateModel extends XModel
         }
         return $this->order($order);
     }
+
+    private function setJoin()
+    {
+        return $this->alias('`create`')->join('LEFT JOIN '.C('DB_PREFIX').'userinfo user ON create.wecha_id=user.wecha_id');
+    }
 }
+?>

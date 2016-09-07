@@ -11,7 +11,7 @@ class ProductReply {
 		$like['keyword']=$data['keyword'];
 		$like['precisions']=1;
 		$like['token']=$this->token;
-		/* //暂时不使用模糊查询
+		/* 
 		$keywords=M('keyword')->where($like)->order('id desc')->find();
 		if (!$data){
 			$like['keyword']=array('like','%'.$data['keyword'].'%');

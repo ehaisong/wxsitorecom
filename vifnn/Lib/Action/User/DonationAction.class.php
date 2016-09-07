@@ -64,6 +64,8 @@ class DonationAction extends UserAction
 			$data['share_content2'] = isset($_POST['share_content2']) ? htmlspecialchars($_POST['share_content2']) : '';
 			$data['starttime'] = isset($_POST['starttime']) ? strtotime($_POST['starttime'] . ':00') : time();
 			$data['endtime'] = isset($_POST['endtime']) ? strtotime($_POST['endtime'] . ':00') : (time() + 30 * 86400);
+			$data["need_attention"] = (int) $_POST["need_attention"];
+			$data["need_phone"] = (int) $_POST["need_phone"];
 			
 			if (empty($data['keyword'])) $this->error('关键词不能为空');
 			if (dstrlen($data['keyword']) > 10) $this->error('关键词不超过10个字');
@@ -119,18 +121,27 @@ class DonationAction extends UserAction
 		$donation = $this->check_donation($did);
 		$this->assign('donation', $donation);
 		$donation_order_model = M('Donation_order');
-		$search_where = '';
-		//获取useinfo的信息
-		$userinfo = M('userinfo')->where(array('token'=>$this->token))->getField('wecha_id,tel,truename,wechaname,portrait');
+		$like = '';
+
 		if (IS_POST) {
 			$searchkey = isset($_POST['searchkey']) ? htmlspecialchars($_POST['searchkey']) : '';
-			if ($searchkey) {
-				$search_where .= " AND (o.orderid LIKE '%{$searchkey}%' OR u.tel LIKE '%{$searchkey}%' OR u.truename LIKE '%{$searchkey}%') ";
+			$_POST = NULL;
+			if ($searchkey != '') {
+				$search_where["token"] = $this->token;
+				$search_where["truename|tel"] = array("like", "%$searchkey%");
+				$info = M("userinfo")->where($search_where)->getField("wecha_id,tel,truename,wechaname,portrait");
+
+				if (!empty($info)) {
+					$userinfo = $info;
+				}
+				else {
+					$like = " AND orderid LIKE '%$searchkey%'";
+				}
 			}
 		}
 		$flag = 1; //两种不同的查询取出订单记录 的开关
 		if($flag){
-			$sql = "SELECT count(*) as total FROM " . C('DB_PREFIX') . "donation_order AS o WHERE o.paid=1 AND o.token='{$this->token}' AND o.did='{$did}' {$search_where}";
+			$sql = "SELECT count(*) as total FROM " . C("DB_PREFIX") . "donation_order AS o WHERE o.paid=1 AND o.token='$this->token' AND o.did='$did' $like";
 			$count = D()->query($sql);
 			$count = $count[0]['total'];
 		}else{
@@ -141,7 +152,7 @@ class DonationAction extends UserAction
 		$show = $Page->show();
 		
 		if ($flag) {
-			$sql = "SELECT o.* FROM " . C('DB_PREFIX') . "donation_order AS o WHERE o.paid=1 AND o.token='{$this->token}' AND o.did='{$did}' {$search_where} ORDER BY o.id DESC LIMIT {$Page->firstRow}, {$Page->listRows}";
+			$sql = "SELECT o.* FROM " . C("DB_PREFIX") . "donation_order AS o LEFT JOIN " . C("DB_PREFIX") . "userinfo as u on o.wecha_id=u.wecha_id WHERE o.paid=1 AND o.token='$this->token' AND o.did='$did' $search_where ORDER BY o.id DESC LIMIT $Page->firstRow, $Page->listRows";
 			$orders = D()->query($sql);
 		} else {
 			$orders = $donation_order_model->where($where)->order('id DESC')->limit($Page->firstRow . ',' . $Page->listRows)->select();
@@ -158,10 +169,11 @@ class DonationAction extends UserAction
 				}
 			}
 			foreach ($orders as &$orow) {
-				$tel = $userinfo[$orow['wecha_id']]['tel'] ? $userinfo[$orow['wecha_id']]['tel'] : 'null';
-				$truename = $userinfo[$orow['wecha_id']]['truename'] ? $userinfo[$orow['wecha_id']]['truename'] : 'null';
-				$wechaname = $userinfo[$orow['wecha_id']]['wechaname'] ? $userinfo[$orow['wecha_id']]['wechaname'] : 'null';
-				$portrait = $userinfo[$orow['wecha_id']]['portrait'] ? $userinfo[$orow['wecha_id']]['portrait'] : 'null';
+				$userinfo = $this->getuserinfo($orow["wecha_id"]);
+				$tel = $userinfo[$orow['wecha_id']]['tel'] ? $userinfo['tel'] : 'null';
+				$truename = $userinfo[$orow['wecha_id']]['truename'] ? $userinfo['truename'] : 'null';
+				$wechaname = $userinfo[$orow['wecha_id']]['wechaname'] ? $userinfo['wechaname'] : 'null';
+				$portrait = $userinfo[$orow['wecha_id']]['portrait'] ? $userinfo['portrait'] : 'null';
 				$orow['portrait'] = $portrait;
 				$orow['truename'] = $truename;
 				$orow['wechaname'] = $wechaname;
@@ -169,10 +181,11 @@ class DonationAction extends UserAction
 			}
 		}
 		foreach ($orders as &$orow) {
-			$tel = $userinfo[$orow['wecha_id']]['tel'] ? $userinfo[$orow['wecha_id']]['tel'] : '';
-			$truename = $userinfo[$orow['wecha_id']]['truename'] ? $userinfo[$orow['wecha_id']]['truename'] : '';
-			$wechaname = $userinfo[$orow['wecha_id']]['wechaname'] ? $userinfo[$orow['wecha_id']]['wechaname'] : '';
-			$portrait = $userinfo[$orow['wecha_id']]['portrait'] ? $userinfo[$orow['wecha_id']]['portrait'] : '';
+			$userinfo = $this->getuserinfo($orow["wecha_id"]);
+			$tel = ($userinfo["tel"] ? $userinfo["tel"] : "");
+			$truename = $userinfo['truename'] ? $userinfo['truename'] : '';
+			$wechaname = $userinfo['wechaname'] ? $userinfo['wechaname'] : '';
+			$portrait = $userinfo['portrait'] ? $userinfo['portrait'] : '';
 			$orow['portrait'] = $portrait;
 			$orow['truename'] = $truename;
 			$orow['wechaname'] = $wechaname;
@@ -180,9 +193,20 @@ class DonationAction extends UserAction
 		}
 		$this->assign('orders', $orders);
 		$this->assign('page', $show);
+		$this->assign("searchkey", $searchkey);
 		$this->display();
 	}
-	
+	public function getuserinfo($wecha_id)
+	{
+		$userinfoDb = M("userinfo");
+		$userinfo = $userinfoDb->where(array("token" => $this->token, "wecha_id" => $wecha_id))->field("tel,truename,wechaname,portrait")->find();
+
+		if (empty($userinfo)) {
+			$userinfo = $userinfoDb->where(array("token" => $this->token, "fakeopenid" => $wecha_id))->field("tel,truename,wechaname,portrait")->find();
+		}
+
+		return $userinfo ? $userinfo : array();
+	}
 	public function dynamic()
 	{
 		$did = isset($_GET['did']) ? intval($_GET['did']) : 0;
@@ -368,7 +392,7 @@ class DonationAction extends UserAction
 		$objActSheet->setCellValue('E1', '捐赠金额');
 		$objActSheet->setCellValue('F1', '捐赠时间');
 		//获取useinfo的tel信息
-		$userinfo = M('userinfo')->where(array('token'=>$this->token))->getField('wecha_id,tel,truename,wechaname');
+		//$userinfo = M('userinfo')->where(array('token'=>$this->token))->getField('wecha_id,tel,truename,wechaname');
 		
 		//$sql = "SELECT o.orderid, o.price, o.dateline, u.wechaname, u.truename, u.tel FROM " . C('DB_PREFIX') . "donation_order AS o INNER JOIN " . C('DB_PREFIX') . "userinfo AS u ON o.token=u.token AND o.wecha_id=u.wecha_id WHERE o.paid=1 AND o.token='{$this->token}' AND o.did='{$did}' ORDER BY o.id DESC";
 		$sql = "SELECT * FROM " . C('DB_PREFIX') . "donation_order AS o WHERE o.paid=1 AND o.token='{$this->token}' AND o.did='{$did}' ORDER BY o.id DESC";
@@ -377,9 +401,10 @@ class DonationAction extends UserAction
 		if ($orders) {
 			$i = 2;
 			foreach ($orders as $line) {
-				$tel = $userinfo[$line['wecha_id']]['tel'] ? $userinfo[$line['wecha_id']]['tel'] : '';
-				$truename = $userinfo[$line['wecha_id']]['truename'] ? $userinfo[$line['wecha_id']]['truename'] : '';
-				$wechaname = $userinfo[$line['wecha_id']]['wechaname'] ? $userinfo[$line['wecha_id']]['wechaname'] : '';
+				$userinfo = M("userinfo")->where(array("token" => $this->token, "wecha_id" => $line["wecha_id"]))->field("tel,truename,wechaname,portrait")->find();
+				$tel = ($userinfo["tel"] ? $userinfo["tel"] : "");
+				$truename = $userinfo['truename'] ? $userinfo['truename'] : '';
+				$wechaname = $userinfo['wechaname'] ? $userinfo['wechaname'] : '';
 				$objActSheet->setCellValue('A'.$i, $line['orderid']);
 				$objActSheet->setCellValue('B'.$i, $truename);
 				$objActSheet->setCellValue('C'.$i, $tel);

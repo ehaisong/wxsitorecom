@@ -135,10 +135,10 @@
           <volist id="rmb" name="list">
           <TR>
             <TD>{vifnn:$rmb.createtime|date='Y-m-d H:i',###}</TD>
-            <TD>{vifnn:$rmb.orderid}</TD>
+            <TD><if condition="$rmb['orderid'] neq ''">{vifnn:$rmb.orderid}<else />---</if></TD>
             <TD>{vifnn:$rmb.ordername}</TD>
             <TD>{vifnn:$rmb.price}</TD>
-            <TD><if condition="$rmb['paid'] eq 1">交易成功<else /><font color="red">未付款</font></if></TD>
+            <TD><?php if($rmb['paytype'] != 'donate'){?><if condition="$rmb['paid'] eq 1">交易成功<else /><font color="red">未付款</font></if><?php }else{ echo '充值赠送';} ?></TD>
             <TD><a href="javascript:drop_confirm('您确定要删除吗?', '/index.php?g=User&m=Member_card&a=payRecord_del&pid={vifnn:$rmb.id}');"><strong>删除</strong></a></TD> 
           </TR>
           </volist>

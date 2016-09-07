@@ -26,6 +26,7 @@ $(function(){
 .share {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.7);z-index: 9696969;}
 #img_mouth{vertical-align: middle;display: inline-block;}
 #img_mouth_playing{vertical-align: middle;display: inline-block;}
+#content_tab p img{border: 0;max-width: 100%;}
 </style>
 <body>
 <if condition="$memberNotice neq ''">
@@ -223,16 +224,16 @@ $(function(){
       <li class="ico_1" id="foot_bu"><a href="{vifnn:$bo.bottom_link}"><span class="ico"><img src="{vifnn:$bo.bottom_icon}" width="20" height="20" /></span><span class="txt">{vifnn:$bo.bottom_name|mb_substr=0,5,'utf-8'}</span></a></li>
   </volist>
   <if condition="$bottom[0]['hide'] eq 1">
-    <li class="ico_1" id="foot_bu"><a href="tel:{vifnn:$action_info['phone']}"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[0]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[0]['bottom_name']|mb_substr=0,5,'utf-8'}</span></a></li>
+    <li class="ico_1" id="foot_bu"><a href="tel:{vifnn:$action_info['phone']}"><span class="ico"><img src="{vifnn:$bottom[0]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[0]['bottom_name']|mb_substr=0,5,'utf-8'}</span></a></li>
 	</if>
 	<if condition="$bottom[1]['hide'] eq 1">
-    <li class="ico_2" id="foot_bu"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[1]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[1]['bottom_name']|mb_substr=0,5,'utf-8'}</li>
+    <li class="ico_2" id="foot_bu"><span class="ico"><img src="{vifnn:$bottom[1]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[1]['bottom_name']|mb_substr=0,5,'utf-8'}</li>
 	</if>
 	<if condition="$bottom[2]['hide'] eq 1">	
-    <li class="ico_3" id="foot_bu"><a href="javascript:;" onclick='window.location.href = "/index.php?g=Wap&m=Voteimg&a=vote_ranking&id={vifnn:$id}&token={vifnn:$token}";'><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[2]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[2]['bottom_name']|mb_substr=0,5,'utf-8'}</span></a></li>
+    <li class="ico_3" id="foot_bu"><a href="javascript:;" onclick='window.location.href = "/index.php?g=Wap&m=Voteimg&a=vote_ranking&id={vifnn:$id}&token={vifnn:$token}";'><span class="ico"><img src="{vifnn:$bottom[2]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[2]['bottom_name']|mb_substr=0,5,'utf-8'}</span></a></li>
 	</if>
 	<if condition="$bottom[3]['hide'] eq 1">
-    <li class="ico_4" id="foot_bu"><span class="ico"><img src="{vifnn:$staticPath}{vifnn:$bottom[3]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[3]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
+    <li class="ico_4" id="foot_bu"><span class="ico"><img src="{vifnn:$bottom[3]['bottom_icon']}" width="20" height="20" /></span><span class="txt">{vifnn:$bottom[3]['bottom_name']|mb_substr=0,5,'utf-8'}</span></li>
 	</if>
   </ul>
 </div>
@@ -349,7 +350,6 @@ function share(){
 function vote(id,obj){
 	var stat = $("#stat").val();
 	var last_id = $("#last_id").val();
-	var allowlottery = '{vifnn:$allowlottery}';
 	if(last_id == id && stat == 'false'){
 		votenotice($("#last_notice").val());
 	}else{
@@ -371,7 +371,7 @@ function vote(id,obj){
 				}
 				var original_count = $("#vote_count").text();
 				$("#vote_count").text((parseInt(original_count)+1));
-				if(allowlottery == 'yes'){
+				if(data.data.allowlottery == 'yes'){
 					$(".asideLayer").fadeIn('500');
 					$(".asideLayerCenter").fadeIn('300');
 				}else{
@@ -629,5 +629,6 @@ window.shareData = {
 };
 </script>
 {vifnn:$shareScript}
+<include file="Public:tongji" />
 </body>
 </html>

@@ -177,6 +177,7 @@ class StoreAction extends WapAction{
 		foreach ($cats as &$row) {
 			$row['info'] = $row['des'];
 			$row['img'] = $row['logourl'];
+			$row["status"] = 1;
 			if ($row['isfinal'] == 1) {
 				$row['url'] = U('Store/products', array('token' => $this->token, 'catid' => $row['id'], 'twid' => $this->_twid));
 			} else {
@@ -250,7 +251,7 @@ class StoreAction extends WapAction{
 			//$allflash=$this->convertLinks($allflash);
 		
 			$count = count($flash);
-			
+			$homeInfo = $this->homeInfo;
 			$homeInfo['switch'] = 0;
 			$this->assign('homeInfo', $homeInfo);
 			
@@ -594,9 +595,9 @@ class StoreAction extends WapAction{
 					$row['price'] = $row['vprice'] ? $row['vprice'] : $row['price'];
 				}
 				$productList[$row['pid']]['detail'][] = $row;
-				$data[$row['pid']]['total'] = isset($data[$row['pid']]['total']) ? ($data[$row['pid']]['total'] + $row['count']) : $row['count'];
-				$data[$row['pid']]['totalPrice'] = isset($data[$row['pid']]['totalPrice']) ? ($data[$row['pid']]['totalPrice'] + $row['count'] * $row['price']) : $row['count'] * $row['price'];//array('total' => $totalCount, 'totalPrice' => $totalFee);
-				$totalprice += $data[$row['pid']]['totalPrice'];
+				$data[$row["pid"]]["total"] += $row["count"];
+				$data[$row["pid"]]["totalPrice"] += $row["count"] * $row["price"];
+				$totalprice += $row["count"] * $row["price"];
 			}
 		}
 		//商品的详细列表
@@ -747,6 +748,16 @@ class StoreAction extends WapAction{
 				}
 			}
 			
+			$mycard = M("member_card_create")->where(array("token" => $this->token, "wecha_id" => $this->wecha_id))->getField("cardid");
+
+			if (!empty($mycard)) {
+				$card_set = M("member_card_set")->where(array("id" => $mycard))->find();
+
+				if (0 < $card_set["discount"]) {
+					$row["discount_money"] = $totalprice * (1 - ($card_set["discount"] / 10));
+					$totalprice = ($totalprice * $card_set["discount"]) / 10;
+				}
+			}
 			$row['total'] = $calCartInfo[0];
 			$row['price'] = $totalprice;
 			$row['diningtype'] = 0;
@@ -936,6 +947,14 @@ class StoreAction extends WapAction{
 
 			$model = new templateNews();
 			$model->sendTempMsg('TM00184', array('href' => U('Store/my',array('token' => $this->token, 'success' => 1, 'twid' => $this->_twid), true, false, true), 'wecha_id' => $this->wecha_id, 'first' => '购买商品提醒', 'ordertape' => date("Y年m月d日H时i分s秒"), 'ordeID' => $orderid, 'remark' => '下单成功，请尽快支付订单！'));
+			$codeurl = $this->siteUrl . "/index.php?g=Wap&m=Store&a=admin_login&token=" . $this->token . "&openid=" . $this->wecha_id;
+			$filename = RUNTIME_PATH . $this->token . "_" . $this->wecha_id . ".png";
+			$real_filename = realpath($filename);
+
+			if (!file_exists($real_filename)) {
+				include "./vifnn/Lib/ORG/phpqrcode.php";
+				QRcode::png($codeurl, $filename, 1, 11);
+			}
 			if ($totalprice) {
 				if ($this->fans['balance'] > 0 && $row['paymode'] == 4) {
 					$this->success('正在提交中...', U('CardPay/pay', array('token' => $this->token, 'success' => 1, 'from'=> 'Store', 'orderName' => $orderid, 'single_orderid' => $orderid, 'price' => $totalprice)));
@@ -1303,6 +1322,9 @@ class StoreAction extends WapAction{
 	   
 		if(isset($_GET['nohandle'])){
 			//执行跳转
+                        $order = M("Product_cart")->where(array("orderid" => $_GET["orderid"]))->find();
+			$codeurl = $this->siteUrl . "/index.php?g=Wap&m=Store&a=admin_login&token=" . $order["token"] . "&openid=" . $order["wecha_id"];
+			$this->urltoqrcode($codeurl);
 			$this->redirect(U('Store/my',array('token' => $this->token, 'twid' => $this->_twid)));
 		}else {
 			$out_trade_no=$_GET['orderid'];
@@ -1736,6 +1758,217 @@ class StoreAction extends WapAction{
         }
         exit;
     }
+	public function admin_login()
+	{
+		if (IS_POST) {
+			$token = trim($_POST["token"]);
+			$openid = trim($_POST["openid"]);
+			$username = trim($_POST["username"]);
+			$password = md5($_POST["password"]);
+			$is_staff = M("company_staff")->where(array("token" => $token, "username" => $username, "password" => $password, "pcorwap" => 0))->find();
+
+			if ($is_staff) {
+				M("company_staff")->where(array("token" => $token, "username" => $username, "password" => $password, "pcorwap" => 0))->save(array("wecha_id" => $this->wecha_id));
+				header("Location:/index.php?g=Wap&m=Store&a=verificationorder&openid=" . $openid . "&token=" . $token);
+			}
+			else {
+				$this->error("登陆失败");
+			}
+		}
+
+		if ($this->wecha_id) {
+			$is_staff = M("company_staff")->where(array("token" => trim($_GET["token"]), "wecha_id" => $this->wecha_id, "pcorwap" => 0))->find();
+
+			if ($is_staff) {
+				header("Location:/index.php?g=Wap&m=Store&a=verificationorder&openid=" . trim($_GET["openid"]) . "&token=" . trim($_GET["token"]));
+			}
+		}
+
+		$this->assign("token", trim($_GET["token"]));
+		$this->assign("openid", trim($_GET["openid"]));
+		$this->display();
+	}
+
+	public function verificationorder()
+	{
+		$token = trim($_GET["token"]);
+		$wecha_id = trim($_GET["openid"]);
+		$offset = 5;
+		$page = (isset($_GET["page"]) ? max(intval($_GET["page"]), 1) : 1);
+		$start = ($page - 1) * $offset;
+		$product_cart_model = M("product_cart");
+		$orders = $product_cart_model->where(array("token" => $token, "wecha_id" => $wecha_id, "groupon" => 0, "dining" => 0, "paid" => 1, "sent" => 0))->limit($start, $offset)->order("time DESC")->select();
+		$count = $product_cart_model->where(array("token" => $token, "wecha_id" => $wecha_id, "groupon" => 0, "dining" => 0, "paid" => 1, "sent" => 0))->count();
+		$list = array();
+
+		if ($orders) {
+			foreach ($orders as $o ) {
+				$products = unserialize($o["info"]);
+				$pids = array_keys($products);
+				$o["productInfo"] = array();
+
+				if ($pids) {
+					$o["productInfo"] = M("product")->where(array(
+	"id" => array("in", $pids)
+	))->select();
+				}
+
+				$list[] = $o;
+			}
+		}
+
+		$totalpage = ceil($count / $offset);
+		$this->assign("orders", $list);
+		$this->assign("ordersCount", $count);
+		$this->assign("totalpage", $totalpage);
+		$this->assign("page", $page);
+		$this->assign("attr", array("token" => $token, "openid" => $wecha_id));
+		$this->display();
+	}
+
+	public function verificationinfo()
+	{
+		$wecha_id = trim($_GET["openid"]);
+		$orderid = intval($_GET["orderid"]);
+		$token = trim($_GET["token"]);
+		$product_cart_model = M("product_cart");
+		$list = array();
+
+		if ($cartObj = $product_cart_model->where(array("token" => $token, "wecha_id" => $wecha_id, "id" => $orderid))->find()) {
+			$products = unserialize($cartObj["info"]);
+			$data = $this->getCat($products);
+			$pids = array_keys($products);
+			$cartObj["productInfo"] = array();
+
+			if ($pids) {
+				$cartObj["productInfo"] = M("product")->where(array(
+	"id" => array("in", $pids)
+	))->select();
+			}
+
+			$totalCount = $totalFee = 0;
+
+			if (isset($data[1])) {
+				foreach ($data[1] as $pid => $row ) {
+					$totalCount += $row["total"];
+					$totalFee += $row["totalPrice"];
+				}
+			}
+
+			$list = $data[0];
+			$this->assign("products", $list);
+			$this->assign("totalFee", $totalFee);
+			$this->assign("totalCount", $totalCount);
+			$this->assign("mailprice", $data[2]);
+			$this->assign("cartData", $cartObj);
+			$this->assign("attr", array("token" => $token, "orderid" => $orderid, "openid" => $wecha_id));
+		}
+
+		$this->display();
+	}
+
+	public function urltoqrcode($url)
+	{
+		if ($url == "") {
+			return false;
+		}
+
+		$parse_url = parse_url($url);
+		parse_str($parse_url["query"], $query);
+		if (($query["openid"] == "") || ($query["token"] == "")) {
+			return false;
+		}
+
+		$filename = RUNTIME_PATH . $query["token"] . "_" . $query["openid"] . ".png";
+		$real_filename = realpath($filename);
+
+		if (file_exists($real_filename)) {
+			$apiOauth = new apiOauth();
+			$wxuser = D("Wxuser")->where(array("token" => $query["token"]))->find();
+			$access_token = $apiOauth->update_authorizer_access_token($wxuser["appid"]);
+
+			if (S($query["token"] . "_" . $query["openid"] . "_verificationorder")) {
+				$result["media_id"] = S($query["token"] . "_" . $query["openid"] . "_verificationorder");
+			}
+			else {
+				$requestUrl = "http://file.api.weixin.qq.com/cgi-bin/media/upload?access_token=" . $access_token . "&type=image";
+				$response_josn = $this->postCurl($requestUrl, array("media" => "@" . $real_filename), "POST");
+				$result = json_decode($response_josn, true);
+
+				if ($result["media_id"] != "") {
+					S($query["token"] . "_" . $query["openid"] . "_verificationorder", $result["media_id"], 259200);
+				}
+			}
+
+			if ($result["media_id"] != "") {
+				$postData = "{\"touser\":\"" . $query["openid"] . "\",\"msgtype\":\"image\",\"image\":{\"media_id\":\"" . $result["media_id"] . "\"}}";
+				$extraUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" . $access_token;
+				$response_josn = $this->postCurl($extraUrl, $postData, "POST");
+				$result_array = json_decode($result_json, true);
+
+				if ($result_array["errcode"] == 0) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	public function ajax_verificationorder()
+	{
+		$orderid = (int) $_POST["id"];
+		$token = trim($_POST["token"]);
+		$product_cart_model = M("product_cart");
+		$destination_order = $product_cart_model->where(array("id" => $orderid))->find();
+
+		if (!empty($destination_order)) {
+			$update = $product_cart_model->where(array("id" => $destination_order["id"]))->save(array("sent" => 1, "handled" => 1));
+
+			if ($update) {
+				exit("done");
+			}
+			else {
+				exit("fail");
+			}
+		}
+		else {
+			exit("fail");
+		}
+	}
+
+	public function postCurl($url, $data, $method)
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+		curl_setopt($ch, CURLOPT_TIMEOUT, 40);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$exec = curl_exec($ch);
+
+		if ($exec) {
+			curl_close($ch);
+			return $exec;
+		}
+		else {
+			$errno = curl_errno($ch);
+			$error = curl_error($ch);
+			curl_close($ch);
+			return json_encode(array("errcode" => $errno, "errmsg" => $error));
+		}
+	}
 }
 
 ?>

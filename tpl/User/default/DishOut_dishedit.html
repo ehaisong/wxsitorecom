@@ -1,6 +1,76 @@
 <include file="Public:head" />
+<style>
+ .spec_price_tr
+ {
+  display: none;
+ }
+ .sku_list
+ {
+  margin: 0px;
+ }
+ .sku_list li{
+  margin-bottom: 5px;
+ }
+ .sku_list .spec_name
+ {
+  font-size: 14px;
+  font-weight: bold;
+  color: #282828;
+  margin-right:10px;
+ }
+ .sku_list label
+ {
+  margin-right: 5px;
+ }
+
+ .field_tip
+ {
+  font-size: 12px;
+  margin: 0px;
+  margin-top: 5px;
+  color: #888;
+ }
+ .opts_list
+ {
+  display: block;
+  width: 280px;
+  max-height: 600px;
+  overflow: auto;
+ }
+ .opts_list li
+ {
+  height: 32px;
+  width: 250px;
+  margin-bottom: 5px;
+ }
+ .opts_list li .remove_btn
+ {
+  height: 32px;
+  line-height: 32px;
+  display: inline-block;
+ }
+ .opts_input
+ {
+  border: solid 1px #dcdcdc;
+  height: 20px;
+  line-height: 20px;
+  width: 200px;
+  padding: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  margin-right: 10px;
+ }
+ .opts_input:focus
+ {
+  border: solid 1px #090;
+ }
+</style>
+
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/dish/dishadd.js"></script>
 <div class="content"> 
 	<div class="cLineB"> 
 		<h4>编辑菜品</h4> 
@@ -25,26 +95,69 @@
         </td> 
        </tr>
        <tr> 
-        <th><span class="red">*</span>价格：</th> 
-        <td>
-        <input type="text" name="price" id="price" value="{vifnn:$tableData.price}" class="px" style="width:100px;" /> 元
-        </td> 
-       </tr>
-       <tr> 
         <th><span class="red">*</span>计量单位：</th> 
         <td>
         <input type="text" name="unit" id="unit" value="{vifnn:$tableData.unit}" class="px" style="width:100px;" /> (如：份，例，碟)
         </td> 
        </tr>
-       <tr> 
-        <th><span class="red">*</span>分类：</th> 
+       <tr>
+        <th><span class="red">*</span>分类：</th>
         <td>
 	        <select name="sid">
 	        <volist name="dishSort" id="row">
 	        <option value="{vifnn:$row.id}"  <if condition="$row['id'] eq $tableData['sid']">selected</if> >{vifnn:$row.name}</option>
 	        </volist>
 	        </select>
-        </td> 
+        </td>
+       </tr>
+
+       <tr>
+        <th><span class="red">*</span>规格类型：</th>
+        <td>
+         <select name="spec" selectedval="{vifnn:$tableData.spec}">
+          <option value="">请选择</option>
+          <volist name="spec_list" id="spec">
+           <option value="{vifnn:$spec.id}" opts="{vifnn:$spec.opts}">{vifnn:$spec.name}</option>
+          </volist>
+         </select>
+        </td>
+       </tr>
+       <tr class="price_tr">
+        <th><span class="red">*</span>价格：</th>
+        <td>
+         <input type="text" name="price" id="price" value="{vifnn:$tableData.price}" class="px" style="width:100px;" /> 元
+        </td>
+       </tr>
+       <tr class="price_tr">
+        <th>在售库存值：</th>
+        <td>
+         <input type="text" name="instock" id="instock" class="px" value="{vifnn:$tableData.instock}"/>
+         <div class="red" style="margin-top: 5px;">在卖的真实库存（在餐厅管理里开启了菜品库存管理方有效可用）当开启了菜品库存管理后此值如果小于1，此菜品将不可被顾客点选</div>
+        </td>
+       </tr>
+       <tr class="price_tr">
+        <th>刷新库存值：</th>
+        <td>
+         <input type="text" name="refreshstock" id="refreshstock" class="px" value="{vifnn:$tableData.refreshstock}" />
+         <div class="red" style="margin-top: 5px;">当点击刷新库存按钮时系统会自动将在售库存值为零的修改为刷新库存的值（开启了菜品库存管理方有效可用）<p style="margin-left:152px;"></p></div>
+        </td>
+       </tr>
+       <tr class="spec_price_tr">
+        <td></td>
+        <td>
+         <ul class="sku_list"></ul>
+         <input type="hidden" class="sku_json" name="sku_json" value="{vifnn:$sku_json|htmlspecialchars}" />
+        </td>
+       </tr>
+       <tr>
+        <th>标签：</th>
+        <td>
+         <div class="opts_controller">
+          <ul class="opts_list"></ul>
+          <input type="hidden" class="opts_val" name="attr" value="{vifnn:$tableData.attr|default=''}" />
+          <p class="field_tip">如：微辣，中辣，重辣; 输入多个选项可以按回车键新增输入框,支持↑ ↓键移动哦</p>
+         </div>
+        </td>
        </tr>
        <tr> 
         <th>是否推荐：</th> 
@@ -91,7 +204,8 @@
        <tr>
        <th>&nbsp;</th>
        <td>
-       <button type="submit" name="submit" class="btnGreen" id="save">保存</button> &nbsp; <a href="{vifnn::U('DishOut/index',array('token' => $token, 'cid' => $cid))}" class="btnGray vm">取消</a></td> 
+        <a type="button" ajax-before="ajaxBefore" ajax="post" name="submit" class="btnGreen">保 存</a>
+       </td>
        </tr> 
       </tbody> 
      </table> 

@@ -35,3 +35,6 @@ class BaseScene
 		return $keywordModel->handler($keyword);
 	}
 }
+
+
+?>

@@ -121,9 +121,9 @@ class ActivityBaseAction extends UserAction{
 		$where=array('id'=>$bid,'token'=>$this->token);
 		$thisLottery=M('Activity')->where($where)->find();
 		$this->assign('thisLottery',$thisLottery);
-		$records=M('Lottery_cheat')->where(array('lid'=>$id))->order('prizetype asc')->select();
+		$records=M('Lottery_cheat')->where(array('lid'=>$bid))->order('prizetype asc')->select();
 		$this->assign('records',$records);
-		$this->assign('id',$id);
+		$this->assign('id',$lid);
 	}
 	public function deleteCheat(){
 		$id=intval($_GET['id']);

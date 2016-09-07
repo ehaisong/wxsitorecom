@@ -1,17 +1,18 @@
 <?php
 
-
 class BoostAction extends BaseAction
 {
 	public $token;
 	public $gameConfig;
 	public $uid;
+	public $cbuid;
 	public function _initialize()
 	{
 		parent::_initialize();
 		$this->uid = intval($_GET['uid']);
 		$this->gameConfig = M('Game_config')->where(array('uid' => $this->uid))->find();
 		$this->token = $this->gameConfig['token'];
+		$this->cbuid = M("wxuser")->where(array("token" => $this->token))->getField("uid");
 	}
 	public function boostarr()
 	{
@@ -176,6 +177,57 @@ class BoostAction extends BaseAction
 		}
 		echo json_encode($result);
 	}
+	
+	public function getTongJiSta()
+	{
+		$uboostid = $_POST["uboostid"];
+		$tongjiModel = M("tongji");
+		$result = $tongjiModel->where(array("act_token" => $this->token, "act_name" => "boost", "act_id" => $uboostid, "uid" => $this->cbuid))->find();
+		echo json_encode($result);
+	}
+
+	public function getTongJiConfig()
+	{
+		$result = array("config" => "", "mark" => "");
+		$wechatId = $_POST["wechatId"];
+		$config = M("users")->where(array("id" => $this->cbuid))->getField("tongji_config");
+
+		if (!empty($config)) {
+			$result["config"] = json_decode($config, 1);
+		}
+
+		$tongjiUser = D("TongjiUser");
+		$mark = $tongjiUser->getMark($this->token, $wechatId);
+
+		if (!empty($mark)) {
+			$result["mark"] = $mark;
+		}
+
+		echo json_encode($result);
+	}
+
+	public function getTongJiMark()
+	{
+		$result = array("mark" => "");
+		$wechatId = $_POST["wechatId"];
+		$tongjiUser = D("TongjiUser");
+		$mark = $tongjiUser->getMark($this->token, $wechatId);
+
+		if (!empty($mark)) {
+			$result["mark"] = $mark;
+		}
+
+		echo json_encode($result);
+	}
+
+
+	public function isAuthentication()
+	{
+		$wxUser = M("Wxuser")->field("`winxintype`")->where(array("token" => $this->token))->find();
+		$result = array("status" => $wxUser["winxintype"] == 3);
+		echo json_encode($result);
+	}
+
 	public function api_notice_increment($url, $data)
 	{
 		$ch = curl_init();

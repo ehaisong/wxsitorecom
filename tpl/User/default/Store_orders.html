@@ -67,7 +67,7 @@ function selectall(name) {
 <div class="msgWrap">
 <form method="post" action="" id="info">
 <div class="cLine">
-<div class="pageNavigator left"> <a href="###" onclick="$('#info').submit()" title="" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/arrow_switch.png" class="vm"></if> 处理订单</a></div>
+<div class="pageNavigator left"> <a href="###" onclick="$('#info').submit()" title="" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/arrow_switch.png" class="vm"></if> 处理订单</a> <a href="{vifnn::U('Store/exportorders')}" class="btnGrayS vm bigbtn">导出订单</a></div>
 <if condition="$isgroup eq 1 AND $ischild eq 1">
 <div class="pageNavigator right"> 
 <a href="{vifnn::U('Store/setting', array('token' => $token, 'cid' => $cid))}" title="商城设置" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/product/add.png" class="vm">商城设置</a>
@@ -89,8 +89,9 @@ function selectall(name) {
 <th class="60">付款方式</th>
 <th width="130">创建时间</th>
 <th width="110">订单号</th>
-<th width="110">抵扣代金券</th>
-<th width="60" class="norightborder">操作</th>
+<th width="80">抵扣代金券</th>
+<th width="80">抵扣会员折扣</th>
+<th class="norightborder">操作</th>
 </tr>
 </thead>
 <tbody>
@@ -128,6 +129,7 @@ function selectall(name) {
 <td>{vifnn:$o.time|date="Y-m-d H:i:s",###}</td>
 <td>{vifnn:$o.orderid}</td> 
 <td><if condition="$o.reduce_cost gt 0">￥{vifnn:$o.reduce_cost}</if></td>
+<td><if condition="$o.discount_money gt 0">￥{vifnn:$o.discount_money}</if></td>
 <td class="norightborder"><a href="###" onclick="showIntroDetail({vifnn:$o.id})">详细</a> <a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Store/deleteOrder',array('token'=>$token,'id'=>$o['id'],'dining'=>$isDining))}');">删除</a></td>
 </tr>
 </volist>

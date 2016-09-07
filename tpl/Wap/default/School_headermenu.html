@@ -1,15 +1,3 @@
-   <script type="text/javascript">
-window.shareData = {
-            "moduleName":"School",
-            "moduleID":"0",
-            "imgUrl": "{vifnn:$info['head_url']}",
-            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('School/index',array('token'=>$token))}",
-            "tTitle": "{vifnn:$info['title']}",
-            "tContent": "{vifnn:$info['info']|html_entity_decode|strip_tags|mb_substr=0,89,'utf-8'}..."
-        };
-</script>
-{vifnn:$shareScript}
-
     <div id="ui-header" >
         <div class="fixed">
             <a class="ui-title" id="popmenu">选择分类</a> <a class="ui-btn-left_pre" href="{vifnn::U('School/index',array('token'=>$token,'wecha_id'=>$wecha_id))}">

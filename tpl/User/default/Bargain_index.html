@@ -174,6 +174,9 @@
 							</if>
 
 							<a href="{vifnn::U('Bargain/update',array('token'=>$token,'id'=>$vo['vifnn_id']))}">修改</a>
+							<eq name="tj_status" value="1">
+								<a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'bargain','act_id'=>$vo['vifnn_id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>
+							</eq>
 							<a href="javascript:drop_confirm('删除【{vifnn:$vo.name}】，属于它的所有订单也会删除，确定删除吗?', '{vifnn::U('Bargain/operate',array('token'=>$token,'id'=>$vo['vifnn_id'],'type'=>'del'))}')">删除</a>
 							<a href="{vifnn::U('Bargain/order',array('token'=>$token,'id'=>$vo['vifnn_id']))}">查看此商品订单</a>
 							<!-- <a href="{vifnn::U('Bargain/rank',array('token'=>$token,'id'=>$vo['vifnn_id']))}">排行</a> -->

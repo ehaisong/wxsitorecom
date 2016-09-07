@@ -374,7 +374,8 @@ class FunctionAction extends UserAction
 		$this->assign('classlist', $classlist);
 		$funcdb = M('Funintro');
 		$functions = M('Funclass_holi')->select();
-		$cats = $this->game->gameCats();
+		$cats = $this->game->gameIndustyCats();
+		$catInfo = $this->game->gameIndustyCatInfo();
 
 		if ($this->_get('search')) {
 			$what_game = $this->_get('search');
@@ -389,7 +390,7 @@ class FunctionAction extends UserAction
 					}
 				}
 
-				$value['cat_id'] = $cats[$value['catid']]['name'];
+				$value["cat_id"] = $this->addCatInfoList($value, $cats, $catInfo, 6, $catid);
 				$value['game'] = '1';
 				$game_list[$key] = $value;
 			}
@@ -449,7 +450,7 @@ class FunctionAction extends UserAction
 					}
 				}
 
-				$value['cat_id'] = $cats[$value['catid']]['name'];
+				$value["cat_id"] = $this->addCatInfoList($value, $cats, $catInfo, 6, $catid);
 				$value['game'] = '1';
 				$game_list[$key] = $value;
 			}
@@ -504,7 +505,7 @@ class FunctionAction extends UserAction
 					}
 				}
 
-				$value['cat_id'] = $cats[$value['catid']]['name'];
+				$value["cat_id"] = $this->addCatInfoList($value, $cats, $catInfo, 6, $catid);
 				$list[$key] = $value;
 			}
 
@@ -579,6 +580,40 @@ class FunctionAction extends UserAction
 		$this->display();
 	}
 
+	private function addCatInfoList($value, $industryCats, $industryCatInfo, $dep, $industryType)
+	{
+		$industryCatInfo = $industryCatInfo["info"];
+		$temArr = explode(",", $value["industry_cate_info"]);
+		$iCatsArr = array();
+		$i = 0;
+
+		foreach ($temArr as $k => $v ) {
+			if ($v && ($i < $dep)) {
+				array_push($iCatsArr, $industryCatInfo[$v]["name"]);
+				$i++;
+			}
+		}
+
+		if (empty($iCatsArr)) {
+			if ($industryType == 0) {
+				$temArr = explode(",", $value["industry_cate"]);
+				$i = 0;
+
+				foreach ($temArr as $k => $v ) {
+					if ($v && ($i < $dep)) {
+						array_push($iCatsArr, $industryCats[$v]["name"]);
+						$i++;
+					}
+				}
+			}
+			else {
+				array_push($iCatsArr, $industryCats[$industryType]["name"]);
+			}
+		}
+
+		return $iCatsArr;
+	}
+
 	private function filterSiteName($list)
 	{
 		foreach ($list as $key => $value) {
@@ -595,7 +630,7 @@ class FunctionAction extends UserAction
 	{
 		if (!empty($str)) {
 			$siteName = C('site_name');
-			$str = preg_replace('/微风|VIFNN|微风\\s+cms|vf\\s+cms/i', $siteName, $str);
+			$str = preg_replace('/微风cms|vifnn|微风\\s+cms|vifnn\\s+cms/i', $siteName, $str);
 			$str = preg_replace('/微风/i', $siteName, $str);
 		}
 

@@ -67,6 +67,7 @@ class BargainAction extends WapAction{
 	public function index(){
 		$where['token'] = $this->token;
 		$where['vifnn_id'] = (int)($_GET['id']);
+		$this->checkTongji($this->token, "bargain", $where["vifnn_id"]);
 		$where['state'] = 1;
 		$bargain = S($_GET['id'].'bargain'.$this->token);
 		if($bargain == ''){
@@ -697,6 +698,7 @@ class BargainAction extends WapAction{
 	public function new_index()
 	{
 		$id = intval($_GET['id']);
+		$this->checkTongji($this->token, "bargain", $id);
 		$bargain = S($id.'bargain'.$this->token);
 		if($bargain == '')
 		{
@@ -860,6 +862,7 @@ class BargainAction extends WapAction{
 	//新版砍价-商品详情
 	public function new_goodsinfo(){
 		$id = intval($_GET['id']);
+		$this->checkTongji($this->token, "bargain", $id);
 		$bargain = S($id.'bargain'.$this->token);
 		if($bargain == ''){
 			$bargain = $this->m_bargain->where(array('token'=>$this->token,'vifnn_id'=>$id))->find();
@@ -882,6 +885,7 @@ class BargainAction extends WapAction{
 	public function new_fistblood()
 	{
 		$id = intval($_GET['id']);
+		$this->checkTongji($this->token, "bargain", $id);
 		$bargain = S($id.'bargain'.$this->token);
 		if($bargain == '')
 		{
@@ -941,6 +945,7 @@ class BargainAction extends WapAction{
 	public function new_kandao()
 	{
 		$id = intval($_GET['id']);
+		$this->checkTongji($this->token, "bargain", $id);
 		$orderid = intval($_GET['orderid']);
 		$bargain = S($id.'bargain'.$this->token);
 		if($bargain == ''){

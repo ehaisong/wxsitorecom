@@ -21,11 +21,11 @@ class ReservationAction extends WapAction{
             session_start();
         }
         
+		$this->amap = new amap();
         if (C('baidu_map')){
             $this->isamap=0;
         }else {
             $this->isamap=1;
-            $this->amap=new amap();
         }
 
     }
@@ -59,7 +59,7 @@ class ReservationAction extends WapAction{
                      $reser = array_merge($reser,$user);
                 }
                 $this->assign('reser',$reser);
-                $where4 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>$addtype);
+                $where4 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>'drive');
                 $count = M('Reservebook')->where($where4)->count();
                 $this->assign('count',$count);
                 $this->display("Car:CarReserveBook");
@@ -75,7 +75,7 @@ class ReservationAction extends WapAction{
                      $reser = array_merge($reser,$user);
                 }
                 $this->assign('reser',$reser);
-                $where4_1 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>$addtype);
+                $where4_1 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>'maintain');
                 $count = M('Reservebook')->where($where4_1)->count();
                 $this->assign('count',$count);
                 $this->display("Car:CarReserveBook");
@@ -83,12 +83,12 @@ class ReservationAction extends WapAction{
             }
             if($reslist['addtype'] =='house_book'){
                 $t_housetype = M('Estate_housetype');
-                $eid        = $this->_get('rid','intval');
+
                 if(empty($eid)){
                     $this->error('参数错误！');
                     exit;
                 }
-                $where      = array('token'=>$token);
+		$where = array("token" => $token, "pid" => $eid);
                 $housetype  = $t_housetype->where($where)->order('sort desc')->field('id as hid,name')->select();
 
                 $this->assign('housetype',$housetype);
@@ -104,7 +104,7 @@ class ReservationAction extends WapAction{
         $this->assign('reslist',$reslist);
 
         
-        $where4 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>'house_book','rid'=>$rid);
+        $where4 = array('token'=>$token,'wecha_id'=>$wecha_id,'type'=>$reslist["addtype"],'rid'=>$rid);
         $count = M('Reservebook')->where($where4)->count();
 
         $this->assign('count',$count);
@@ -118,7 +118,7 @@ class ReservationAction extends WapAction{
             //exit('此功能只能在微信浏览器中使用');
         }
         $da['token']      = strval($this->_get('token'));
-        $da['wecha_id']   = strval($this->_post('wecha_id'));
+        $da['wecha_id']   = strval($this->wecha_id);
         $da['rid']        = (int)$this->_post('rid');
         $da['truename']   = strval($this->_post("truename"));
         $da['dateline']   = strval($this->_post("dateline"));
@@ -164,16 +164,17 @@ class ReservationAction extends WapAction{
         if(!empty($ok)){
             $model = new templateNews();
             if($da['type'] == 'house_book'){
-                $estate     = M('Estate')->where(array('token'=>$token,'id'=>$this->_post('eid','intval')))->field('title,place')->find();
+                $estate      = M('Estate')->where(array('token'=>$token,'id'=>$this->_post('eid','intval')))->field('title,place')->find();
+                $Reservation = M("Reservation")->where(array('token'=>$token,'id'=>$this->_post('rid','intval')))->find();
                 $dataKey    = 'OPENTM203605740';
                 $dataArr    = array(
                     'href'      => $url,
                     'wecha_id'  => $wecha_id,
                     'first'     => '您好，您已成功预约看房。' ,
                     'keyword1'  => $da['dateline'].' '.$da['timepart'],
-                    'keyword2'  => $estate['place'],
+                    'keyword2'  => $estate['place']?$estate['place']:$Reservation['address'],
                     'keyword3'  => $da['housetype'],
-                    'keyword4'  => $da['tel'],
+                    'keyword4'  => $Reservation['tel']?$Reservation['tel']:$da['tel'],
                     'remark'    => '请您准时到达看房。'
                 );
             }
@@ -230,7 +231,7 @@ class ReservationAction extends WapAction{
         $wecha_id = $this->wecha_id;
         $where = array('id'=>$id,'token'=>$token,'wecha_id'=>$wecha_id);
         $reslist = $book->where($where)->field('id,rid,token,wecha_id,truename,tel as user_tel,housetype,dateline,timepart,info as userinfo,type,booktime')->find();
-        $reservation = M('Reservation')->where(array('token'=>$token,'id'=>$rid))->field('picurl,info,address,place,lng,lat,title,tel')->find();
+        $reservation = M('Reservation')->where(array('token'=>$token,'id'=>$rid))->field('picurl,info,address,place,lng,lat,title,tel,addtype')->find();
 
         if(!empty($reslist)){
             $reslist = array_merge($reservation,$reslist);
@@ -250,4 +251,5 @@ class ReservationAction extends WapAction{
     }
 
 
-}?>
+}
+?>

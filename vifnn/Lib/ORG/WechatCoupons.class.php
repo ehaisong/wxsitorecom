@@ -41,6 +41,19 @@ class WechatCoupons extends apiOauth
 	public function addpoi($company = array()){
 		if(empty($company)){ return false;}
 		$url 	= 'https://api.weixin.qq.com/card/location/batchadd?access_token='.$this->access_token;
+			if (in_array($company["province"], array("北京市", "天津市", "上海市", "重庆市"))) {
+			$company["city"] = $company["district"];
+			$company["district"] = "";
+		}
+
+		if (in_array($company["province"], array("香港特别行政区", "澳门特别行政区"))) {
+			$company["city"] = $company["district"];
+			$company["district"] = "";
+		}
+
+		if ($company["district"] == "市辖区") {
+			$company["district"] = "";
+		}
 		$json = '{
 			 "business_name":"'.$company['name'].'",
 			 "branch_name":"'.$company['shortname'].'",
@@ -72,6 +85,19 @@ class WechatCoupons extends apiOauth
 		}
 		$company['open_time'] = $company['opentime'].'-'.$company['closetime'];
 		if($photo_res['errcode'] == 0 && $photo_res['url'] != ''){
+		        if (in_array($company["province"], array("北京市", "天津市", "上海市", "重庆市"))) {
+				$company["city"] = $company["district"];
+				$company["district"] = "";
+			}
+
+			if (in_array($company["province"], array("香港特别行政区", "澳门特别行政区"))) {
+				$company["city"] = $company["district"];
+				$company["district"] = "";
+			}
+
+			if ($company["district"] == "市辖区") {
+				$company["district"] = "";
+			}
 			$json = '{
 			   "sid":"'.$company['sid'].'",
 			   "business_name":"'.$company['name'].'",

@@ -1,0 +1,256 @@
+<include file="Public:head"/>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/gameconfig.css">
+
+<script src="./tpl/User/default/common/js/jquery.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/game/js/application7.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/jquery.qrcode.min.js" type="text/javascript"></script>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js" type="text/javascript"></script>
+
+<script>
+	var clip1 = '';
+	function qrcode (url, id) {
+		url = url.replace('{changjingUrl}', 'http://' + window.location.host);
+		$("#minCode" + id).qrcode({
+			render: "canvas",
+			width:  22,
+			height: 22,
+			text:   url
+		});
+		$("#bigCode" + id).qrcode({
+			render: "canvas",
+			width:  145,
+			height: 145,
+			text:   url
+		});
+	}
+
+	$(function(){
+		clip1 = new ZeroClipboard( document.getElementById("basic-addon2"), {
+			moviePath: "{vifnn:$staticPath}/tpl/static/game/js/ZeroClipboard.swf"
+		});
+		clip1.on( "load", function(client) {
+			client.on( "complete", function(client, args) {
+				$('.setWindow').hide();
+
+				var $copysuc = $("<div class='copy-tips'><div class='copy-tips-wrap'>☺ 复制成功</div></div>");
+
+				$("body").find(".copy-tips").remove().end().append($copysuc);
+				$(".copy-tips").fadeOut(3000);
+			});
+		} );
+	});
+</script>
+<style>
+	#qrcode{
+		padding:3px;
+	}
+
+	/* 复制提示 */
+	.copy-tips{position:fixed;z-index:999;bottom:50%;left:50%;margin:0 0 -20px -80px;background-color:rgba(0, 0, 0, 0.2);filter:progid:DXImageTransform.Microsoft.Gradient(startColorstr=#30000000, endColorstr=#30000000);padding:6px;}
+	.copy-tips-wrap{padding:10px 20px;text-align:center;border:1px solid #F4D9A6;background-color:#FFFDEE;font-size:14px;}
+</style>
+
+<div class="content">
+	<div class="cLineB">
+		<h4 class="left">微助力</h4>
+
+		<div class="clr"></div>
+	</div>
+	<div class="cLine">
+		<div class="pageNavigator left">
+			<a href='{vifnn::U('Boost/boostLibrary',array('token'=>$token))}' class='btnGrayS vm bigbtn'>从活动库中添加活动</a>
+		</div>
+
+		<div class="clr"></div>
+	</div>
+	<div class="msgWrap">
+		<form method="post"  action="" id="info" >
+			<input name="delall"  type="hidden" value="" />
+			<input name="wxid"  type="hidden" value="" />
+
+			<div class="fiterDiv" style="display: none; ">
+				<span class="searchInput">
+	                <input type="search"/>
+	                <button>搜索</button>
+                </span>
+				<span>活动状态：
+	                <select>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+		                <option> 全部</option>
+	                </select>
+                </span>
+			</div>
+			<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+				<THEAD>
+				  <TR>
+				      <TH>活动名称</TH>
+				      <TH>关键字</TH>
+				      <TH>
+					      <!--<a href="##">活动时间<i class="rankBtn"></i></a>-->
+					      活动时间
+				      </TH>				     				     
+				      <TH>
+					      <!--<a href="##">参与人数<br />（真实）<i class="rank-up"></i></a>-->
+					      参与人数<br />（真实）
+				      </TH>
+					  <TH>
+					      <!--<a href="##">分享人数<i class="rank-down"></i></a>-->
+					      助力人数
+				      </TH>
+				      <TH>
+					      <!--<a href="##">分享人数<i class="rank-down"></i></a>-->
+					      分享次数
+				      </TH>
+				      <TH>发布状态</TH>				     
+				      <TH class="norightborder" width="140">操作</TH>
+				  </TR>
+				</THEAD>
+				<TBODY>
+					<TR></TR>
+					<volist id="list" name="list">
+						<TR>
+							<TD class="gameImgDiv">
+								<div class="minCode" id="minCode{vifnn:$list.id}" style="display: inline-block; "></div>
+								<img class="gameImg" src="{vifnn:$list.picurl}" <if condition="$list['picurl'] eq ''">style="display: none; "</if>/>
+								<em class="ganmeName">{vifnn:$list.title}</em>
+								<div class="bigCode" style="width: 145px; height: 145px; ">
+									<div class="minCode"  id="bigCode{vifnn:$list.id}" style="display: inline-block; "></div>
+								</div>
+								<img src="1" onerror="qrcode('{changjingUrl}/index.php?g=Wap&m=Boost&a=jump&id={vifnn:$list.boostid}&uid={vifnn:$wxUser.uid}&uboostid={vifnn:$list.id}&token={vifnn:$token}', '{vifnn:$list.id}')" style="display: none; ">
+							</TD>
+							<TD>
+								<em class="ganmeName">{vifnn:$list.keyword}</em>
+							</TD>
+							<TD>{vifnn:$list.start_time|date='Y-m-d H:i:s',###}<br/>{vifnn:$list.end_time|date='Y-m-d H:i:s',###}</TD>
+							<TD style="text-align: center;">{vifnn:$list['join']|default='——'}</TD>							
+							<TD style="text-align: center;">{vifnn:$list['people']|default='——'}</TD>
+							<TD style="text-align: center;">{vifnn:$list['share']|default='——'}</TD>
+							<TD style="text-align: center;">
+								<if condition="$list['end_time'] lt time()">
+									已结束
+								<else />								
+									<if condition="$list['is_release'] eq 0">
+										未发布
+									<else />
+										已发布
+									</if>
+								</if>
+							</TD>
+							<TD class="">
+								<if condition = "$list['is_release'] eq 0 && $list['end_time'] gt time()">
+									<a href="index.php?g=User&m=Boost&a=release&id={vifnn:$list.id}">发布</a>--
+								</if>
+								<if condition="$Think.session.is_syn eq 2">
+									<if condition="$usertplid neq 2">
+										<script type="text/javascript">
+											$(document).ready(function(){
+												var bheight=document.body.clientHeight;
+
+												$("#lay{vifnn:$list.id}").click(function(){
+													$("#brg{vifnn:$list.id}").css("display","block");
+													$("#showdiv{vifnn:$list.id}").css("display","block");
+													//$("#testdiv").load("test.html");
+												});
+
+												$("#close{vifnn:$list.id}").click(function(){
+													$("#brg{vifnn:$list.id}").css("display","none");
+													$("#showdiv{vifnn:$list.id}").css("display","none");
+												});
+											});
+										</script>
+
+										<style type="text/css">
+											#brg{vifnn:$list.id}{ width:100%; height:100%; background:#333; position:absolute; top:0; left:0; filter:alpha(opacity=60); -moz-opacity:0.6; opacity: 0.6; position:absolute; top:0; left:0; display:none;}
+											#showdiv{vifnn:$list.id}{z-index:20; display:none;position:fixed; *position:absolute;top:20%; left:50%; margin:-50px 0 0 -50px;}
+											#testdiv{vifnn:$list.id}{ width:300px; height:300px; margin:0 auto; border:1px solid #4d4d4d; background:#f2f2f2;}
+											#close{vifnn:$list.id}{width:300px; height:27px; line-height:27px; font-size:14px; font-weight:bold; border:1px solid #4d4d4d; text-align:center; cursor:pointer; margin:0 auto; background:#333; color:#fff;margin-top: 15%;}
+										</style>
+
+										<div id="brg{vifnn:$list.id}"></div>
+										<div id="showdiv{vifnn:$list.id}">
+											<div id="close{vifnn:$list.id}">您想关闭就点我吧</div>
+											<div id="testdiv{vifnn:{vifnn:$list.id}">
+												<img src="{vifnn:$Think.session.source_domain}/wap.php?c=Wxapp&a=qrcode&id={vifnn:$list.id}&modle=Boost" width="300" height="300" class="cateimg_small">
+											</div>
+										</div>
+										<a id="lay{vifnn:$list.id}" style="width:70px;">查看二维码</a>
+									</if>
+								</if>
+
+								<a href="index.php?g=User&m=Boost&a=boostSet&id={vifnn:$list.id}">编辑</a>--
+
+								<if condition="$list['is_release'] eq 0 || $list['end_time'] lt time()">
+									<a href="index.php?g=User&m=Boost&a=delBoost&id={vifnn:$list.id}" onclick="return confirm('你确定要删除该活动吗？删除后不会保留活动数据！');">删除</a>--
+								</if>
+								<a href="{vifnn::U('Boost/record',array('id'=>$list['id'],'token'=>$token))}">参与管理</a>--
+								<a href="{vifnn::U('Boost/qrConvert')}">扫码兑奖</a>--
+									<a href="{vifnn::U('Boost/convert',array('id'=>$list['id'],'token'=>$token))}">兑换管理</a>--
+									<a href="{vifnn::U('Boost/statistics',array('id'=>$list['id'],'token'=>$token))}">统计</a>--
+								<eq name="tj_status" value="1">
+								  <a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'boost','act_id'=>$list['id'],'act_token'=>$token))}">传播分析</a>--
+								</eq>
+								<a onclick="showTip('{changjingUrl}/index.php?g=Wap&m=Boost&a=jump&id={vifnn:$list.boostid}&uid={vifnn:$wxUser.uid}&uboostid={vifnn:$list.id}&token={vifnn:$token}')" href="javascript:void(0)">复制链接地址</a>
+							</TD>
+						</TR>
+					</volist>
+				</TBODY>
+			</TABLE>
+		</form>
+	</div>
+
+    <div class="cLine">
+        <div class="pageNavigator right">
+	        <div class="pages">{vifnn:$page}</div>
+        </div>
+        <div class="clr"></div>
+    </div>
+</div>
+<div class="clr"></div>
+
+<!--复制链接地址弹窗-->
+<div id="copyLink" class="windowBg setWindow" style="display:none; background: rgba(0, 0, 0, 0.298039)">
+	<div class="uploadDown uploadBox">
+		<div class="updTopBar">
+			<div class="updTopBarTit">
+				<span class="uploadBoxTitle">链接地址</span>
+
+				<div class="right editPicClose"></div>
+			</div>
+		</div>
+		<div class="uploadInfoBox">
+			<div class="setStyle">
+				<div class="input-group" style="width: 370px; ">
+					<input type="text" id="linkInput" class="form-control" placeholder="" aria-describedby="basic-addon2" style="width: 295px; ">
+					<span class="input-group-addon" id="basic-addon2" style="cursor: pointer; " data-clipboard-text="">复制</span>
+				</div>
+
+				<h3>可将链接复制到您的公众号菜单中</h3>
+				<p>未发布时，请勿将此链接分享到朋友圈或者朋友</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!--复制链接地址弹窗-->
+<script>
+	function showTip (url) {
+		url = url.replace('{changjingUrl}', 'http://' + window.location.host);
+
+		$("#linkInput").val(url);
+		clip1.setText(url);
+		$('#copyLink').show();
+	}
+
+	$('.editPicClose').click(function (e) {
+		$('.setWindow').hide();
+	});
+</script>
+</div>
+</div>
+</div>
+  <!--底部-->
+</div>
+
+<include file="Public:footer"/>

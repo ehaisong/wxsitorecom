@@ -67,6 +67,8 @@ class ShareAction extends WapAction
 
 	public function ShareNum()
 	{
+		$nowtime = time();
+		$actendTime = $nowtime + 10;
 		$ShareNumData = explode(',', $_POST['ShareNumData']);
 		$table = D($ShareNumData[0]);
 		$tableWhere = explode(';', $ShareNumData[1]);
@@ -78,7 +80,14 @@ class ShareAction extends WapAction
 
 		$where['token'] = $_POST['token'] ? $_POST['token'] : $_GET['token'];
 		$dbinfo = $table->where($where)->find();
+		if (($ShareNumData[0] == "helping_user") && !empty($dbinfo)) {
+			$tmpdata = M("helping")->where(array("id" => $dbinfo["pid"], "token" => $dbinfo["token"]))->find();
+			$actendTime = ($tmpdata ? $tmpdata["end"] : 0);
+		}
+
+		if ($nowtime < $actendTime) {
 		$table_up = $table->where($where)->save(array($ShareNumData[3] => $dbinfo[$ShareNumData[3]] + 1));
+		}
 		$data['error'] = 0;
 		$this->ajaxReturn($data, 'JSON');
 	}

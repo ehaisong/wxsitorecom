@@ -23,8 +23,8 @@ ul.modules li div.mright{float:right;width:55%;text-align:right;}
 <body style="background:#fff;padding:20px 20px;">
 <div class="cLineB">
 <ul id="tags" style="margin: -6px 0 0;">
-	<li style="width:200px;"><a href="{vifnn::U('Message/message_fans',array('token'=>$token))}">全部粉丝<span>({vifnn:$all_fans})</span></a></li>
-	<li class="selectTag" style="width:200px;"><a href="{vifnn::U('Message/message_fans_selected',array('token'=>$token))}">已选粉丝(<span id="selected">{vifnn:$selected_nums}</span>)</a> <span></span></li>
+	<li style="width:200px;"><a href="{vifnn::U('Message/message_fans',array('token'=>$token,'cache_name'=>$cache_name))}">全部粉丝<span>({vifnn:$all_fans})</span></a></li>
+	<li class="selectTag" style="width:200px;"><a href="{vifnn::U('Message/message_fans_selected',array('token'=>$token,'cache_name'=>$cache_name))}">已选粉丝(<span id="selected">{vifnn:$selected_nums}</span>)</a> <span></span></li>
 	<div class="clr"></div>
 </ul>
 </div>
@@ -37,14 +37,15 @@ ul.modules li div.mright{float:right;width:55%;text-align:right;}
 	地区：
 		<select name="province" style="width:114px;"></select>
 		<select name="city" style="width:114px;"></select>
-	<input type="" class="px" name="name" placeholder="请输入用户昵称" style="width:100px;" value="{vifnn:$name}"/>
+	<input type="" class="px" name="name" placeholder="请输入昵称或手机号搜索" style="width:180px;" value="{vifnn:$name}"/>
 	<input type="submit" value="搜索" class="btnGrayS"/>
 </form>
 <table class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
 <thead>
 <tr>
-	<th>粉丝昵称</th>
-	<th>分组名称</th>
+	<th width="30%">粉丝昵称</th>
+	<th width="30%">粉丝头像</th>
+	<th width="20%">分组名称</th>
 	<th style=" width:80px;">操作 <span class="tooltips" ><img src="{vifnn::RES}/images/price_help.png" align="absmiddle" /><span>
 	<p>点击“选中”即可</p>
 	</span></span>
@@ -55,6 +56,7 @@ ul.modules li div.mright{float:right;width:55%;text-align:right;}
 <volist name="list" id="m">
 <tr>
 	<td>{vifnn:$m.nickname}</td>
+	<td><img src="{vifnn:$m.headimgurl}" width="50px;height:50px;"></td>
 	<td>{vifnn:$m.group_name}</td>
 	<td class="norightborder">
 		<a href="javascript:;" onclick="cancel_select('{vifnn:$m.openid}',this)"><img src='{vifnn:$staticPath}/tpl/static/yes.png' width='20px;' height='20px'/></a>

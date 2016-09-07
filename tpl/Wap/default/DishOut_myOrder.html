@@ -18,29 +18,55 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- Mobile Devices Support @end -->
 </head>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/icomoon/style.css" />
 <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/repast/css/home.css" media="all">
 <link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/repast/css/wei_canyin.css" media="all" />
 <style type="text/css">
+	.my_menu_list{
+		table-layout: fixed;
+	}
 .my_menu_list th{color: #7C7C7C;}
+.my_menu_list td{
+	font-size: 12px;
+	word-break: break-all;
+	padding: 5px;
+}
+	.list_order ol table td{
+		padding: 5px;
+	}
+
 .box li{margin-left:15px;}
-#list td{padding-left:15px;}
 .headselect a{color:#fff;}
 .orderpaybtn{position: absolute;
-right: 80px;
-width: 65px;
+right: 0px;
+width: 60px;
 height: 30px;
 line-height: 30px;
 text-align: center;
 margin-top: -7px;
 background: #ef7f2d;
 color: #FFFFFF;
+	font-size: 12px;
+}
+
+.canclebtn{position: absolute;
+	right: 65px;
+	width: 60px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	margin-top: -7px;
+	background: #f5f5f5;
+	border: solid 1px #dcdcdc;
+	color: #333;
+	font-size: 12px;
 }
 </style>
 <body id="page_intelOrder" class="myOrderCon">
 <header class="nav" style="margin:0px">
 		<div>
 			<a href="javascript:;" class="on">我的订单</a>
-			<a href="{vifnn::U('DishOut/MyShop',array('token' => $token,'cid'=>$cid,'wecha_id' => $wecha_id))}">门店详情</a>
+			<a href="{vifnn::U('DishOut/MyShop',array('token' => $token,'cid'=>$cid))}">门店详情</a>
 		</div>
 	</header>
 <div class="container">
@@ -51,25 +77,57 @@ color: #FFFFFF;
 		 <if condition="!empty($orderList)">
 			<volist name="orderList" id="order">
 				<li>
-				<label style="float:none;color:#666666;font-size: 15px;" onclick="this.classList.toggle('on');">订餐人：{vifnn:$order['name']}<if condition="$order['paid'] eq 0 AND ($order['time'] gt $today)">
-				<a href="{vifnn::U('DishOut/OrderPayAgain', array('token'=>$token, 'cid'=>$cid ,'orid'=>$order['id'], 'wecha_id'=>$wecha_id))}" class="btn orderpaybtn">去付款</a>
-				</if>
-				<br/>下单时间：{vifnn:$order['time']|date="Y-m-d H:i:s",###} </label>
+				<label style="float:none;color:#666666;font-size: 15px;" onclick="this.classList.toggle('on');">订餐人：{vifnn:$order['name']}
+					<if condition="$order['status']!='4'&&$order['paid']=='0'">
+						<a href="{vifnn::U('DishOut/OrderPayAgain', array('token'=>$token, 'cid'=>$cid ,'orid'=>$order['id']))}" class="btn orderpaybtn">去付款</a>
+					</if>
+					<if condition="$order['status']=='0'||$order['status']=='1'||$order['status']=='2'">
+						<a href="javascript:;" data-status="{vifnn:$order.status}" data-oid="{vifnn:$order['id']}" data-cid="{vifnn:$cid}" data-token="{vifnn:$token}" class="btn canclebtn">取消</a>
+					</if>
+				<br/>下单时间：{vifnn:$order['time']|date="Y-m-d H:i:s",###}<br/>
+					<switch name="order['status']">
+						<case value="0"><span style="color:red">待接单</span></case>
+						<case value="1"><span style="color:#ff9000">待配送</span></case>
+						<case value="2"><span style="color: #b5d601;">配送中</span></case>
+						<case value="3"><span style="color:green">已完成</span></case>
+						<case value="4"><span style="color: #959595;">已取消</span></case>
+					</switch>
+					<eq name="order['paid']" value="1">
+						<span style="color:green;margin-left: 10px;">已支付&nbsp;</span>
+						<else/>
+						<eq name="order['paid']" value="2">
+							<span style="color:green;margin-left: 10px;">已退款&nbsp;</span>
+							<else/>
+							<span style="color:red;margin-left: 10px;">未支付</span>
+						</eq>
+					</eq>
+					<if condition="$order['paytype']=='daofu'||$order['paytype']=='dianfu'">
+						<span style="color:orange;margin-left: 10px;">{vifnn:$order['paytypestr']}</span>
+					</if>
+				</label>
 				<ol>
 				<table class="my_menu_list">
 				<thead>
 					<tr>
-						<th style="padding-left: 17px;">美食列表</th>
-						<th style="padding-right: 20px;">{vifnn:$order['total']}份</th>
-						<th style="padding-right: 0px;"><strong class="highlight">￥{vifnn:$order['price']}</strong></th>
+						<th>美食列表</th>
+						<th>{vifnn:$order['total']}份</th>
+						<th><strong class="highlight">￥{vifnn:$order['price']}</strong></th>
 					</tr>
 				</thead>
 				<tbody>
 				 <vifnnlist array="order['info']" key="dk" foreach="ditem">
 				  <tr>
-					<td>{vifnn:$ditem['name']}</td>
-					<td style="width: 60px;">X{vifnn:$ditem['num']}</td>
-					<td style="width: 90px;">￥{vifnn:$ditem['price']}</td>
+					<td style="width: 45%;">
+						{vifnn:$ditem['name']}
+						<notempty name="ditem['spec']">
+							<br/>
+						<span style="font-size: 12px;color: orangered;">
+							{vifnn:$ditem['spec']}<notempty name="ditem['attr']">/{vifnn:$ditem['attr']}</notempty>
+						</span>
+						</notempty>
+					</td>
+					<td style="width: 20%;">X{vifnn:$ditem['num']}</td>
+					<td style="width: 35%;">￥{vifnn:$ditem['price']}</td>
 				  </tr>
 				  </vifnnlist>
 				</tbody>
@@ -77,12 +135,16 @@ color: #FFFFFF;
 
 			<ul class="box">
 				<li>配送费：￥<?php echo $order['delivery_fee']/100;?></li>
+				<notempty name="order['meal_fee']">
+					<li>餐盒费：￥<?php echo $order['meal_fee']/100;?></li>
+				</notempty>
+				<volist name="order['offer_list']" id="offer">
+					<li>{vifnn:$offer.type|enum_list='offer_name',###}：-{vifnn:$offer.offer}</li>
+				</volist>
 				<li>订餐人：{vifnn:$order['name']}</li>
 				<li>手机：{vifnn:$order['tel']}</li>
 				<li>送餐地址：{vifnn:$order['address']}</li>
 				<li>送餐时间：<if condition="$order['reservetime'] gt 0">{vifnn:$order['reservetime']|date="Y-m-d H:i",###}<else/>尽快</if> 送到</li>
-				<li>支付方式：{vifnn:$order['paytypestr']} <if condition="!empty($order['paystatus'])">({vifnn:$order['paystatus']})</if></li>
-				<li>商家外送方式：<if condition="$order['stype'] eq 1">按起送价方式<elseif condition="$order['stype'] eq 2"/>按起步价方式<else/>其他方式</if></li>
 				</ul>
 			<ul class="box">
 				<li>备注</li>
@@ -93,34 +155,13 @@ color: #FFFFFF;
 				</if>
 				</li>
 			</ul>
-			<ul class="box">
-				<li>订单状态：</li>
-				<?php
-				$statustr='';
-				if($order['paid']==1){
-				  $statustr='<li style="color:green">已付款</li>';
-				}else{
-				  $statustr='<li style="color:red">未付款</li>';
-				}
-				if($order['isuse']==1){
-				  $statustr.='<li style="color:green">已发货</li>';
-				}else{
-				  $statustr.='<li style="color:red">未发货</li>';
-				}
-				if($order['isyes']==1){
-				  $statustr.='<li style="color:green">已确认收货</li>';
-				}else{
-				  $url = U('DishOut/myorder_yes',array('token'=>$token,'cid'=>$cid,'id'=>$order['id']));
-				  $statustr.="<li><a href=\"javascript:isyes('".$url."');\" style=\"color:red\">未确认收货（点击确认收货）</a></li>";
-				}
-				?>
-				{vifnn:$statustr}
-			</ul>
 			<?php if($order['deliveryman'] != ''){?>
 			<ul class="box">
 			<li>送餐员信息：</li>
 			<li>{vifnn:$order['deliveryman']['name']}</li>
-			<li>{vifnn:$order['deliveryman']['tel']}</li>
+			<li style="line-height: 24px;">
+				<a href="tel:{vifnn:$order['deliveryman']['tel']}" style="display: block;margin: 0px;height: 24px;"><span class="icon-icon-phone" style="margin-right: 10px;display: inline-block;font-size: 14px;color: orangered;"></span>{vifnn:$order['deliveryman']['tel']}</a>
+			</li>
 			</ul>
 			<?php }?>
 			</ol>
@@ -151,6 +192,60 @@ layer.open({
     }
 });
 }
+
+	$('.canclebtn').click(function(event){
+		event.stopPropagation();
+		var status=$(this).attr('data-status');
+		var obj={oid:$(this).attr('data-oid'),cid:$(this).attr('data-cid'),token:$(this).attr('data-token')};
+		if(status=='0'){
+			layer.open({
+				content: '是否确认取消该订单？',
+				btn: ['确认', '取消'],
+				shadeClose:true,
+				yes:function(){
+					cancleOrder(obj);
+				},
+				no: function(){
+					layer.closeAll();
+				}
+			});
+		}else{
+			layer.open({
+				content: '商家已接单，目前正在'+(status=='1'?'等待配送中':'配送中')+'，如需取消订单请电话联系商家协商处理',
+				btn: ['拨打电话', '取消'],
+				shadeClose:true,
+				yes:function(){
+					location.href='tel:{vifnn:$company["tel"]}';
+				},
+				no: function(){
+					layer.closeAll();
+				}
+			});
+		}
+	});
+
+	function cancleOrder(obj)
+	{
+		$.post('{vifnn::U("DishOut/cannelOrder")}',obj,function(data)
+		{
+			try{
+				data=JSON.parse(data);
+			}catch (e){data=null}
+			if(data&&data['status']=='1'){
+				location.reload();
+			}else{
+				layer.open({
+					title: [
+						'错误提示'
+					],
+					content: data['info']
+				});
+			}
+		})
+	}
+
+
+
 </script>
 </body>
 <script type="text/javascript">

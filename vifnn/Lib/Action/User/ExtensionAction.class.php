@@ -6,14 +6,8 @@ class ExtensionAction extends UserAction
 
 	public function _initialize()
 	{
-		parent::_initialize();
-		$this->canUseFunction('Extension');
 		$this->actModel = new ExtensionActivityModel();
 		parent::_initialize();
-		if ($this->staticPath=='' || empty($this->staticPath)){
-		   $this->staticPath = rtrim($this->siteUrl,'/');
-		   $this->assign('staticPath', $this->staticPath);
-		}
 	}
 
 	public function index()

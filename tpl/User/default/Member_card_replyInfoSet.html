@@ -9,7 +9,10 @@
  </div>
       
     <div class="msgWrap bgfc" style="margin-top:10px;">
-	  <form class="form" method="post" action="" target="" enctype="multipart/form-data">	 
+	 <if condition="$iscashierCrad AND empty($cashierCrad)">
+		 <p style="font-size:17px;"><a href="{vifnn::U('Member_card/index',array('token'=>$token))}">您还没有会员卡，请去创建吧！</a></p>
+	 <else />
+	  <form class="form" method="post" action="" target=" " enctype="multipart/form-data">	 
 		<table class="userinfoArea" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%">
 			<tbody>
 				<tr>
@@ -41,23 +44,58 @@
 					<th>非会员回复图片：</th>
 					<td><input type="text" name="picurl1" value="{vifnn:$set2.picurl}" id="pic1" class="px" style="width:550px;"> <script src="/tpl/static/upyun.js"></script><a href="###" onclick="upyunPicUpload('pic1',700,420,'{vifnn:$token}')" class="btnGrayS" class="a_upload">上传</a> <a href="###" onclick="viewImg('pic1')" style="margin-left:10px;">预览</a>   &nbsp; 大小为720x400<br>非会员回复会员卡的时候出现的图文图片地址</td>
 				</tr>
-				<tr>
-					<th>第三方接口：</th>
-					<td><input name="apiurl" value="{vifnn:$set.apiurl}" class="px" style="width:550px;" type="text">   &nbsp; {wechat_id}表示用户参数</td>
-				</tr>
+					<if condition="$iscashierCrad AND !empty($cashierCrad)">
+					<tr>
+					  <th>会员卡名称信息</th>
+					  <td><span>名称</span>：{vifnn:$cashierCrad['title']}&nbsp;&nbsp;&nbsp;
+					  <span>卡号ID</span>：{vifnn:$cashierCrad.wx_card_id}&nbsp;&nbsp;&nbsp;
+					  <span>库存</span>：{vifnn:$cashierCrad.quantity}&nbsp;&nbsp;&nbsp;<span>已领取</span>：{vifnn:$cashierCrad.receive}&nbsp;&nbsp;&nbsp;<span>已核销</span>：{vifnn:$cashierCrad.consume}
+					  </td>
+					<tr>
+					  <th><span class="red">*</span> 请选择一个渠道会员卡链接：</th>
+					  <td>
+					  <php> if(!empty($cashierCradChannel)){
+					     $apiurl=htmlspecialchars_decode($set['apiurl'],ENT_QUOTES);
+					  </php>
+					  <select  name="apiurl" class="px" style="height: 30px;width: 200px;">
+					  <volist name="cashierCradChannel" id="vo">
+						 <option value="{vifnn:$vo.channel_url}&cfrom=1&wechat_id={wechat_id}" <php>$channel_url=trim($vo['channel_url']).'&cfrom=1&wechat_id={wechat_id}';
+						 if($channel_url==$apiurl){echo 'selected="selected"';}</php> > {vifnn:$vo.channel_name}</option>
+					  </volist>
+					  </select>
+					 <php> }else{</php>
+					     <p style="font-size:17px;"><a href="{vifnn::U('Member_card/index',array('token'=>$token))}">您还没有可用的渠道会员卡可用，点击这里请前去核查！</a></p>
+					  <php> }</php>
+					  </td>
+					  </tr>
+					<else/>
+					<tr>
+					 <th>第三方接口：</th>
+					 <td>
+					<input name="apiurl" value="{vifnn:$set.apiurl}" class="px" style="width:550px;" type="text">   &nbsp; {wechat_id}表示用户参数
+					</td>
+					</tr>
+					</if>
+					
+				
 				
 				<th>&nbsp;</th>
 					<td>
 					<input type="hidden" name="keyword" value="{vifnn:$infoType.keyword}" />
 					<input type="hidden" name="infotype" value="{vifnn:$infoType.type}" />
 					<input type="hidden" name="token" value="{vifnn:$token}" />
+					   <if condition="$iscashierCrad AND !empty($cashierCrad) AND !empty($cashierCradChannel)">
 						<button type="submit" name="button" class="btnGreen">保存</button>
+						<elseif condition="!$iscashierCrad"/>
+						<button type="submit" name="button" class="btnGreen">保存</button>
+						</if>
 						<a href="javascript:history.go(-1);" class="btnGray vm"  style="margin-left:20px;">取消</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</form>
+	</if>
   </div> 
  
   

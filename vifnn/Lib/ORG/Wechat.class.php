@@ -128,7 +128,10 @@ class Wechat
 
 	private function music($music)
 	{
-		list($music['Title']) = $music;
+		$music["HQMusicUrl"] = $music[3];
+		$music["MusicUrl"] = $music[2];
+		$music["Description"] = $music[1];
+		$music["Title"] = $music[0];
 		$this->data['Music'] = $music;
 	}
 
@@ -141,10 +144,18 @@ class Wechat
 				$value[3] .= '?news_response=1';
 			}
 			else {
-				$value[3] .= '&news_response=1';
+				$iswxUrl = strpos($value[3], "mp.weixin.qq.com");
+				if (($iswxUrl == 7) || ($iswxUrl == 8)) {
+				}
+				else {
+					$value[3] .= "&news_response=1";
+				}
 			}
 
-			list($articles[$key]['Title'], $articles[$key]['Description'], $articles[$key]['PicUrl'], $articles[$key]['Url']) = $value;
+			$articles[$key]["Url"] = $value[3];
+			$articles[$key]["PicUrl"] = $value[2];
+			$articles[$key]["Description"] = $value[1];
+			$articles[$key]["Title"] = $value[0];
 
 			if (9 <= $key) {
 				break;

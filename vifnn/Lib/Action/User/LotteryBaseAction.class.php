@@ -384,10 +384,19 @@ class LotteryBaseAction extends UserAction
 		foreach ($record_list as $k => $v) {
 			$record[$k] = $v;
 			$record[$k]['company'] = M('company')->where(array('token' => $this->token, 'id' => $v['company_id']))->getField('name');
-
-			if ($v['phone'] == '') {
+			if (($v["phone"] == "") || ($v["wecha_name"] == "")) {
 				$where_userinfo['wecha_id'] = $v['wecha_id'];
-				$phone[$v['id']] = $userinfo_db->where($where_userinfo)->getField('tel');
+				$where_userinfo["token"] = $this->token;
+				$userinfodata = $userinfo_db->where($where_userinfo)->field("tel,wechaname")->find();
+
+				if (empty($v["phone"])) {
+					$phone[$v["id"]] = $userinfodata["tel"];
+					$record[$k]["phone"] = $userinfodata["tel"];
+				}
+
+				if (empty($v["wecha_name"])) {
+					$record[$k]["wecha_name"] = $userinfodata["wechaname"];
+				}
 			}
 		}
 

@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html><head>
+<if condition="$zd['status'] eq 1">
+            {vifnn:$zd['code']}
+        </if>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>{vifnn:$tpl.wxname}</title>
 
 <meta name="format-detection" content="telephone=no">
@@ -10,6 +14,13 @@
 <link type="text/css" rel="stylesheet" href="./tpl/static/tpl/1347/css/base.css">
  <script type="text/javascript" src="./tpl/static/tpl/1334/js/jquery.min.js"></script>
 <script type="text/javascript" src="./tpl/static/tpl/1334/js/touch.js"></script>
+	<style type="text/css">
+
+	<php>if(MODULE_NAME=='Business' && ACTION_NAME == 'index'){</php>
+      #menu381 .menuaimg{background-color: #E86D46;}
+	<php>}</php>
+
+</style>
 </head>
 
 <body class="bg38 hPC">
@@ -33,7 +44,7 @@
 </if>
     <ul class="oh menu381" id="menu381">
       <volist name="info" id="vo">  
-          <li><a href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>"><img src="{vifnn:$vo.img}"><span>{vifnn:$vo.name}</span></a></li>
+          <li><a class="menuaimg" href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>"><img src="{vifnn:$vo.img}"><span>{vifnn:$vo.name}</span></a></li>
       </volist>  
     </ul>
 </section><!--container end-->
@@ -140,19 +151,20 @@ window.addEventListener("resize",function(){
 
 
 <div style="height: 34px;line-height: 34px;font-size: 12px;background: #e3e2dd;text-align: center;color: #999;">
-<if condition="$iscopyright eq 1">
-{vifnn:$homeInfo.copyright}
-<else/>
-{vifnn:$siteCopyright}
-</if>
+  <p>
+  <if condition="$iscopyright eq 1 && $homeInfo.copyright neq ''">
+  {vifnn:$homeInfo.copyright}
+  <elseif condition="$iscopyright eq 1 && $homeInfo.copyright eq ''"/>
+  技术支持：{vifnn:$tpl['wxname']}
+  <else/>
+  {vifnn:$siteCopyright}
+  </if>
+  </p>
 </div>
-<div class="copyright" style="display:none;">
-<if condition="$iscopyright eq 1">
-{vifnn:$homeInfo.copyright}
-<else/>
-{vifnn:$siteCopyright}
+ <include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>
+<if condition="$state eq 1">
+<include file="Index:fudong"/>
 </if>
-</div>  <include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/> 
 <!-- share -->
 <include file="Index:share" />
 </body></html>

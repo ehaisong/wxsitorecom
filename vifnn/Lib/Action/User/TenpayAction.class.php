@@ -2,6 +2,7 @@
 class TenpayAction extends UserAction{
 	public function index(){
 		if (C('agent_version')){
+			$agentid = ($this->thisAgent["is_package"] == "0" ? "0" : $this->agentid);
 			$group=M('User_group')->field('id,name,price')->where('price>0 AND agentid='.$this->agentid)->select();
 		}else {
 			$group=M('User_group')->field('id,name,price')->where('price>0')->select();
@@ -71,16 +72,12 @@ class TenpayAction extends UserAction{
 		$reqHandler->setParameter("time_expire", "");             //订单失效时间
 		$reqHandler->setParameter("buyer_id", "");                //买方财付通帐号
 		$reqHandler->setParameter("goods_tag", "");               //商品标记
-		$reqHandler->setParameter("trade_mode",1);              //交易模式（1.即时到帐模式，2.中介担保模式，3.后台选择（卖家进入支付中心列表选择））
-		$reqHandler->setParameter("transport_desc","");              //物流说明
-		$reqHandler->setParameter("trans_type","1");              //交易类型
-		$reqHandler->setParameter("agentid","");                  //平台ID
-		$reqHandler->setParameter("agent_type","");               //代理模式（0.无代理，1.表示卡易售模式，2.表示网店模式）
-		$reqHandler->setParameter("seller_id","");                //卖家的商户号
-
-
-
-		//请求的URL
+		$reqHandler->setParameter("trade_mode", 1);
+		$reqHandler->setParameter("transport_desc", "");
+		$reqHandler->setParameter("trans_type", "1");
+		$reqHandler->setParameter("agentid", "");
+		$reqHandler->setParameter("agent_type", "");
+		$reqHandler->setParameter("seller_id", "");
 		$reqUrl = $reqHandler->getRequestURL();
 
 		//获取debug信息,建议把请求和debug信息写入日志，方便定位问题

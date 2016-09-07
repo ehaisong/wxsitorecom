@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>收银台微信绑定</title>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="app-id=518966501" name="apple-itunes-app" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no, maximum-scale=1.0"/>
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta content="telephone=no" name="format-detection" />
+	<link href="{vifnn:$staticPath}/tpl/static/unitary/css/comm.css" rel="stylesheet" type="text/css" />
+	<link href="{vifnn:$staticPath}/tpl/static/unitary/css/login.css" rel="stylesheet" type="text/css" />
+	<style>
+		.registerCon li input { padding: 15px; width: 100%; height: 45px; color: #333; border: 1px solid #dedede; border-radius: 5px; margin-top: -1px; font-size: 16px; -webkit-box-sizing: border-box; }
+		.registerCon li select { padding: 5px; width: 100%; height: 45px; color: #333; border: 1px solid #dedede; border-radius: 5px;text-align:center;font-weight:bold; margin-top: -1px; font-size: 16px; -webkit-box-sizing: border-box; }
+	</style>
+</head>
+<body>
+	<script src="{vifnn:$staticPath}/tpl/static/unitary/js/jquery-2.1.3.min.js" language="javascript" type="text/javascript"></script>
+	<div class="wrapper">
+		<div class="registerCon">
+		<if condition="$isnoti eq 0">
+		<form action="{vifnn::U('Cashier/index',array('token'=>$token))}" id="cashier_form" method="post" accept-charset="utf-8">
+			<ul>
+				<li class="accAndPwd">
+					<dl>
+						账号
+						<input type="text" value="" id="username" name="username" placeholder="账号"/>
+					</dl>
+				</li>
+				<li class="accAndPwd">
+					<dl>
+						密码
+						<input type="password" value="" id="password" name="password" placeholder="密码"/>
+					</dl>
+				</li>
+				<li class="accAndPwd">
+					<dl>
+						本人手机号
+						<input type="text" value="" id="phone" name="phone" placeholder="本人手机号" />
+					</dl>
+				</li>
+				<li class="accAndPwd">
+					<dl>
+						<select name="type" id="type">
+							<option value="merchant">商户登录</option>
+							<option value="employee">员工登录</option>
+						</select>
+					</dl>
+				</li>
+				<li><input type="button" id="btnNext" style="background-color: #44B549;color:#fff;" class="button" value="微信绑定" style="width:100%;"></li>
+			</ul>
+		</form>
+			<elseif condition="$isnoti eq 1"/>
+				<div style="font-size:20px;font-weight: bold;">您已经绑定{vifnn:$utype}：{vifnn:$username}</div>
+				<!-- <div>你可以点击 <a style="color:blue" href="{vifnn::U('Cashier/index',array('token'=>$token))}&atype=relieve">解除绑定</a></div> -->
+		</if>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			$("#btnNext").click(function(){
+				var username = $("#username").val();
+				var password = $("#password").val();
+				var type = $("#type").val();
+				var phone = $("#phone").val();
+				var phone_length = phone.length;
+				var phone_str = phone.substr(0,1);
+				if(username == ""){
+					alert("请填写您的账号");
+				}else if(password == ""){
+					alert("请填写您的密码");
+				}else if(phone == ""){
+					alert("请填写您的手机号码");
+				}else if(phone_length != 11 || phone_str != '1'){
+					alert("请填写正确的手机号码");
+				}else{
+					$('#cashier_form').submit();
+				}
+			})
+		})
+	</script>
+</body>
+</html>

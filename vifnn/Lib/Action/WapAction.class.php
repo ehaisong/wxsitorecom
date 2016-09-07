@@ -459,17 +459,14 @@ class WapAction extends BaseAction {
 
 		}
 
-		//便于前端调试 @xulinyang
-		if(defined('APP_DEBUG')&&APP_DEBUG&&$_GET['rget']=='1'&&(!empty($_GET['rwid'])||!empty($_GET['rwname'])))
-		{
+		//便于前端调试 @VIFNN
+		if(defined('APP_DEBUG')&&APP_DEBUG&&$_GET['rget']=='1'&&(!empty($_GET['rwid'])||!empty($_GET['rwname']))) {
 			$rwid=$_GET['rwid'];
-			if(!empty($_GET['rwname']))
-			{
+			if(!empty($_GET['rwname'])) {
 				$rUser=M('userinfo')->where(array('token'=>$this->token,'wechaname'=>array('like','%'.$_GET['rwname'].'%')))->field('wecha_id')->find();
 				$rwid=$rUser['wecha_id'];
 			}
-			if(!empty($rwid))
-			{
+			if(!empty($rwid)) {
 				$this->wecha_id=$rwid;
 				$_SESSION[$session_openid_name]=$this->wecha_id;
 				session('wecha_id',$this->wecha_id);
@@ -633,10 +630,9 @@ class WapAction extends BaseAction {
 		if ($_SESSION['token_openid_' . $this->token] && $this->_get('wecha_id') && IS_GET && !IS_AJAX && !isset($_GET['state']) && !strpos($_SERVER['HTTP_HOST'], 'weixin.qq.com') && !in_array(MODULE_NAME, $allowpassArr) && !($users['is_syn'] > 0)) {
 			$url_params = $_GET;
 			unset($url_params['wecha_id']);
-			unset($url_params['news_response']);
+			//unset($url_params['news_response']);
 			header('Location:' . $this->siteUrl . '/index.php?g=' . GROUP_NAME . '&m=' . MODULE_NAME . '&a=' . ACTION_NAME . '&' . http_build_query($url_params));exit;
 		}
-
 	}
 
 	/**
@@ -908,7 +904,7 @@ class WapAction extends BaseAction {
 	 * @ 会员提醒
 	 * @param $message 提示内容，可留空
 	 * @param $type 提醒样式 默认0 提醒注册/登录 ; 1 提醒关注
-	 * @param $is_scene 使用场景二维码 @xulinyang
+	 * @param $is_scene 使用场景二维码 @VIFNNcms
 	 */
 	public function memberNotice($message = '', $style = 0, $custom_url = '', $custom_btn_msg = '', $is_scene = false, $scene_data = null) {
 		S('fans_' . $this->token . '_' . $this->wecha_id, NULL);
@@ -1082,7 +1078,7 @@ EOM;
   <div class="tipThis">
     <a href="javascript:;" class="xxClosed"></a>
     <div class="tipInfo">
-      <p><i></i>您好，你需要先填写个人信息才能参加活动。</p>
+      <p><i></i>$message</p>
       <div class="goBtn">
         <a href="$href"><i></i>去填写</a>
       </div>
@@ -1129,7 +1125,7 @@ EOM;
 
 /**
  * 获取二维码
- * 已废弃 @xulinyang 请参考memberNotice
+ * 已废弃 @VIFNNcms 请参考memberNotice
  */
 
 	public function getQrcode($kword) {
@@ -1368,4 +1364,69 @@ EOM;
 		}
 	}
 
+	//检查统计
+	protected function checkTongji($act_token,$act_name,$act_id)
+	{
+		//jm73com
+        if (C('tjstatus') != '1'){
+			return;
+		}
+		if (IS_POST || IS_AJAX) {
+			return false;
+		}
+		$status=S('tongji_'.$act_token.'_'.$act_name.'_'.$act_id);
+		if($status===false){
+			$status='0';
+			$tongjiModel=M('tongji');
+			$tongji=$tongjiModel->where(array('act_token'=>$act_token,'act_name'=>$act_name,'act_id'=>$act_id,'uid'=>$this->wxuser['uid']))->find();
+			if($tongji){
+				$status=$tongji['status'];
+			}
+			S('tongji_'.$act_token.'_'.$act_name.'_'.$act_id,$status);
+		}
+		define('TONGJI_STATUS',$status=='1'?'1':'0');
+		$this->assign('tongji_status',TONGJI_STATUS);
+		if($status=='1'){
+			$source=session('tongji_source');
+			if(!empty($source)) {
+				$this->assign('tongji_source',$source);
+			}
+			$key='tongji_config_'.$this->wxuser['uid'];
+			$config=S($key);
+			if(empty($config)){
+				$config=M('users')->where(array('id'=>$this->wxuser['uid']))->getField('tongji_config');
+				S($key,$config);
+			}
+			$config=json_decode($config,true);
+			$this->assign('tongji_config',$config);
+			$tongjiUser=D('TongjiUser');
+			$mark=$tongjiUser->getMark($this->token,$this->wecha_id);
+			$shareMark=md5(uniqid().get_ucode(8,'1Aa'));
+			define('SELF_MARK',$mark);
+			define('SHARE_MARK',$shareMark);
+			$this->assign('self_mark',$mark);
+			$this->assign('share_mark',$shareMark);
+			$this->assign('tongji_data',array('act_id'=>$act_id,'act_token'=>$act_token,'act_name'=>$act_name));
+			if($mark) {
+				if(!isset($_GET['mk'])||$_GET['mk']!=$mark) {
+					$url=remove_url_param(__SELF__,array(
+						'mk'=>'[0-9a-zA-Z]{32}',
+						'sk'=>'[0-9a-zA-Z]{32}'
+					));
+					$url=$url.strpos('?')===false?$url.'?mk='.SELF_MARK:$url.'&mk='.SELF_MARK;
+					if(!empty($_GET['mk'])) {
+						session('tongji_source',array('mark'=>I('get.mk'),'share'=>I('get.sk'),'referrer'=>__SELF__));
+					}
+					redirect($url);
+				}
+			}
+		}
+		if(!empty($this->wecha_id)){
+			$share = new WechatShare($this->wxuser, $this->wecha_id);
+			$this->shareScript=$share->getSgin();
+			$this->assign('shareScript', $this->shareScript);
+		}
+	}
+
 }
+?>

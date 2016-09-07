@@ -72,7 +72,7 @@
                 <div class="fr"></div>
             </li>
         </ul>
-        <div class="players">
+        <div class="players" id="playersdiv">
             <!--<div class="player">-->
                 <!--<h2>美丽的世界</h2>-->
                 <!--<img src="images/avatar.png" alt="avatar">-->
@@ -143,14 +143,7 @@
 
 <!-- Footer -->
 <include file="Scene:footer"/>
-<param class="param"
-url-location="{vifnn::U('Scene/shake_active', array('token'=>$token, 'id'=>$id))}"
-url-start="{vifnn::U('Scene/startShake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}"
-url-run="{vifnn::U('Scene/shakeRun', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}"
-url-all="{vifnn::U('Scene/show_shake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}"
-start-time="{vifnn::$shake['starttime']}",
-title-chage="{vifnn::$shake['cheer']}",
-/>
+<param class="param" url-location="{vifnn::U('Scene/shake_active', array('token'=>$token, 'id'=>$id))}" url-start="{vifnn::U('Scene/startShake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}" url-run="{vifnn::U('Scene/shakeRun', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}" url-all="{vifnn::U('Scene/show_shake', array('token'=>$token, 'id'=>$id, 'shake_id'=>$info['shake_id']))}" start-time="{vifnn::$shake['starttime']}" title-chage="{vifnn::$shake['cheer']}" />
 <script src="{vifnn::STATICS}/scene/js/jquery-1.7.2.min.js"></script> 
 <script src="{vifnn::STATICS}/scene/js/scroll-marquee.js"></script> 
 <script src="{vifnn::STATICS}/scene/js/jquery.soChange.js"></script> 

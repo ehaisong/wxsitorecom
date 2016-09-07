@@ -53,7 +53,7 @@ function selectall(name) {
 <div class="pageNavigator left"> <a href="{vifnn::U('Company/index',array('token'=>$token,'isBranch'=>1))}" title="" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm"></if> 添加</a></div>
 <div class="clr"></div>
 </div>
-<if condition="$wxuser.winxintype eq 3">
+<if condition="$wxuser.winxintype eq 3 OR $wxuser.winxintype eq 4">
 	<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
 温馨提示：1、新添加的门店将在5个工作日内审核完成，微信会通过下面填写的电话或者手机对您的门店进行确认，未接到电话会导致门店审核失败。
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -73,7 +73,7 @@ function selectall(name) {
 <th width="160">地址</th>
 <th width="280">分支登陆地址</th>
 <th width="135">添加时间</th>
-<if condition="$wxuser.winxintype eq 3">
+<if condition="$wxuser.winxintype eq 3 OR $wxuser.winxintype eq 4">
 <th width="80">状态</th></if>
 <th class="norightborder" width="80">操作</th>
 </tr>
@@ -90,7 +90,7 @@ function selectall(name) {
 <td>{vifnn:$c.province}{vifnn:$c.city}{vifnn:$c.district}{vifnn:$c.address}</td>
 <td>{vifnn:$c.url}</td>
 <td><if condition="$c.add_time neq 0">{vifnn:$c.add_time|date='Y-m-d H:i:s',###}<else />---</if></td>
-<if condition="$wxuser.winxintype eq 3"><td><if condition="$c['available_state'] eq 2"><span style="color:red;">审核中</span><elseif condition="$c['available_state'] eq 3 || $c['available_state'] eq 0" /><span style="color:green;">审核通过</span><elseif condition="$c['available_state'] eq 4" /><span style="color:red;">审核驳回</span></if></td></if>
+<if condition="$wxuser.winxintype eq 3 OR $wxuser.winxintype eq 4"><td><if condition="$c['available_state'] eq 2"><span style="color:red;">审核中</span><elseif condition="$c['available_state'] eq 3 || $c['available_state'] eq 0" /><span style="color:green;">审核通过</span><elseif condition="$c['available_state'] eq 4" /><span style="color:red;">审核驳回</span></if></td></if>
 <td class="norightborder"><a href="{vifnn::U('Company/index',array('token'=>$token,'id'=>$c['id'],'isBranch'=>1))}">修改</a> <a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Company/delete',array('token'=>$token,'id'=>$c['id'],'isBranch'=>1))}');">删除</a></td>
 </tr>
 </volist>

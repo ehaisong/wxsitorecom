@@ -378,7 +378,7 @@ class HotelsAction extends UserAction
 					$op->printit($this->token, $this->_cid, 'Hotel', $msg, 1);
 				}
 				
-				Sms::sendSms($this->token, "{$company['name']}欢迎您，本店对您的订单号为：{$thisOrder['orderid']}的订单状态进行了修改，如有任何疑意，请您及时联系本店！", $thisOrder['tel']);
+				Sms::sendSms($this->token, "你好！{$company['name']}欢迎您，本店对您的订单号为：{$thisOrder['orderid']}的订单状态进行了修改，如有任何疑意，请您及时联系本店！", $thisOrder['tel']);
 				$this->success('修改成功',U('Hotels/orderInfo',array('token'=>session('token'),'id'=>$thisOrder['id'])));
 			} else {
 				$sort = M('Hotels_house_sort')->where(array('cid' => $this->_cid, 'token' => $this->token, 'id' => $thisOrder['sid']))->find();
@@ -430,6 +430,7 @@ class HotelsAction extends UserAction
 		if (IS_POST) {
 			$id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 			$_POST['token'] = $this->token;
+			$infoStrlen = dstrlen($_POST["info"]);
 			if (strlen($_POST['info']) > 20) {
 				$this->error("描述不要超过20个字符");
 				die;

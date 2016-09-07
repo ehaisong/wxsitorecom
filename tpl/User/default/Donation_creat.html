@@ -3,11 +3,11 @@
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
 <script src="/tpl/static/upyun.js"></script>
-<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/kindeditor/themes/default/default.css" />
-<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/kindeditor/plugins/code/prettify.css" />
-<script src="{vifnn:$staticPath}/tpl/static/kindeditor/kindeditor.js" type="text/javascript"></script>
-<script src="{vifnn:$staticPath}/tpl/static/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
-<script src="{vifnn:$staticPath}/tpl/static/kindeditor/plugins/code/prettify.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/tpl/static/kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="/tpl/static/kindeditor/plugins/code/prettify.css" />
+<script src="/tpl/static/kindeditor/kindeditor.js" type="text/javascript"></script>
+<script src="/tpl/static/kindeditor/lang/zh_CN.js" type="text/javascript"></script>
+<script src="/tpl/static/kindeditor/plugins/code/prettify.js" type="text/javascript"></script>
 <script src="{vifnn::RES}/js/date/WdatePicker.js"></script>
 <div class="content">
 	<div class="cLineB">
@@ -29,7 +29,7 @@
 	</div>
 	<!--tab end-->
 	<div class="msgWrap">
-		<form class="form" method="post" action="" target="" enctype="multipart/form-data">
+		<form class="form" method="post" action="" target=" " enctype="multipart/form-data">
 			<input type="hidden" name="id" value="{vifnn:$donation['id']}" />
 			<table class="userinfoArea" style="margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%">
 				<tbody>
@@ -80,7 +80,7 @@
 						<td><input type="text" name="note" value="{vifnn:$donation.note}" class="px" style="width:550px;">&nbsp;&nbsp;&nbsp;<span id="note_msg"></span></td>
 					</tr>
 					<tr>
-						<th width="120">募捐详情：</th>
+						<th width="120"><span class="red">*</span>募捐详情：</th>
 						<td><textarea class="px" id="content" name="content" style="width: 560px; height: 200px;">{vifnn:$donation['content']}</textarea></td>
 					</tr>
 				
@@ -135,6 +135,21 @@
 					<tr>
 						<th width="120"><span class="red">*</span>活动结束时间：</th>
 						<td><input type="text" class="px" id="endtime" value="{vifnn:$donation.endtime|default=strtotime('+1 month')|date='Y-m-d H:i',###}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" name="endtime"></td>
+					</tr>
+					<tr>
+					<th>是否需要关注才能参与：</th>
+					<td>
+					  <input type="radio" name="need_attention" value="1" <if condition="$donation.need_attention eq '1' or $donation.need_attention eq 0">checked</if>>
+					  是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="need_attention" value="2" <if condition="$donation.need_attention eq '2'">checked</if>>否<span style="width:318px;">&nbsp;&nbsp;&nbsp;{vifnn:$__access_remind__}</span>
+					</td>
+					</tr>
+					<tr>
+					<th>是否需要粉丝手机号：</th>
+					<td>
+					  <input type="radio" name="need_phone" value="1" <if condition="$donation.need_phone eq '1'">checked</if>>
+					  是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="need_phone" value="2" <if condition="$donation.need_phone eq '2'  or $donation.need_phone eq 0">checked</if>>否
+					  &nbsp;&nbsp;&nbsp;&nbsp;(选择是,如果粉丝没有手机号则在活动页面提示粉丝需要填写手机号)
+					</td>
 					</tr>
 					<tr>
 						<th>&nbsp;</th>
@@ -247,14 +262,20 @@ $(function(){
 	});
 
 });
-  KindEditor.ready(function(K) {
-    window.editor = K.create('#content', {
-      resizeType : 1,
-      allowPreviewEmoticons : false,
-      allowImageUpload : true,
-      uploadJson : '/index.php?g=User&m=Upyun&a=kindedtiropic',
-      items : ['source','fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold','underline','removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist','insertunorderedlist','fullscreen']
-      });
-  });
+var editor;
+KindEditor.ready(function(K) {
+	editor = K.create('#content', {
+		filterMode: false,
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : true,
+		postParams:{'PHPSESSID':"<?php echo session_id();?>"},
+		uploadJson : '/index.php?g=User&m=Upyun&a=kindedtiropic',
+		items : ['source','fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+'insertunorderedlist', '|', 'emoticons', 'image','multiimage','fullscreen'],
+		 afterBlur: function () { this.sync(); }
+	});
+});
 </script>
 <include file="Public:footer"/>

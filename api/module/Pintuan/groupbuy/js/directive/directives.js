@@ -2,8 +2,8 @@
  *
  * 指令系统
  *
- *  @author 赵仁杰
- *  @since 2016-1-27 14:00
+ *  @author VIFNN
+ *  @since 2016-7-27 14:00
  *
  * */
 "use strict";
@@ -369,7 +369,7 @@ dire.directive("indexShopList", ["$rootScope", "$http", "$location", "$routePara
 
 
 // 团购页面模板
-dire.directive("detailtel", ["$rootScope", "$location", "$interval", "$routeParams", "$http", "gitip","$timeout", function ($rootScope, $location, $interval, $routeParams, http, gitip, $timeout) {    // 购物页面模板
+dire.directive("detailtel", ["$rootScope", "$location", "$interval", "$routeParams", "$http", "gitip","$timeout",'$sce', function ($rootScope, $location, $interval, $routeParams, http, gitip, $timeout,$sce) {    // 购物页面模板
     return {
         templateUrl: 'templates/groupbuy/detailtel.html',
         restrict: 'E',
@@ -499,6 +499,7 @@ dire.directive("detailtel", ["$rootScope", "$location", "$interval", "$routePara
 
 
                     scope.detaildata = data.err_msg;
+					scope.detaildata.product.info = $sce.trustAsHtml(scope.detaildata.product.info);
                     scope.carouselImg = data.err_msg.product_image_list;
                     scope.detaildata.shareUrl = $location.absUrl();
                     $rootScope.detaildata = scope.detaildata;    // 将数据保留起来，留到下个页面使用
@@ -860,7 +861,7 @@ dire.directive('detailinfotel', ["$rootScope", "$location", "$routeParams", "$in
                         if($(".lastpricedetailinfo").width() > 90) {
                             if($(document).width() - 90 < ($(".lastpricedetailinfo").width() + $(".lastpricedetailinfoa").width())) {
                                 $(".lastpricedetailinfoa").css("margin-left",0);
-                                $(".index-shop-info").css("height", "81px");
+                                //$(".index-shop-info").css("height", "81px");
                             }
                         }
                         clearInterval(timer);

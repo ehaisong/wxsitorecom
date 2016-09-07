@@ -38,10 +38,10 @@ class AlipayAction extends BaseAction{
 			exit;
 		}
 		/***正好是0.01时有问题****/
-		if ( 0.009 > $price) {
+		if ($price <= 0.009)  {
 			$this->error('价格不能小于0.01元');
 		}
-		$from=isset($_GET['from'])?$_GET['from']:'shop';
+		$from = (isset($_GET["from"]) ? trim($_GET["from"]) : "shop");
 		$alipayConfig = $this->alipayConfig;
 		
 		//反序列化得到支付的配置信息
@@ -96,8 +96,12 @@ class AlipayAction extends BaseAction{
 			$_GET['source'] = 'vifnn';
 			redirect($user['source_domain'].A('Home/Auth')->getCallbackUrl($user['is_syn'], 'pay').http_build_query($_GET));
 		} else {
-			$obj = new Member_card_coupon_recordModel();
-			$coupons = $obj->get_coupon($this->wecha_id, $this->token, $price, $orderInfo['cid']);
+			$coupons = array();
+
+			if (strtolower($from) != "micrstore") {
+			   $obj = new Member_card_coupon_recordModel();
+			   $coupons = $obj->get_coupon($this->wecha_id, $this->token, $price, $orderInfo['cid']);
+			}
 			$this->assign('coupons', $coupons);
 			$this->display('check');
 		}

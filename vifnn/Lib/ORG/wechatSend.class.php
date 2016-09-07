@@ -62,17 +62,16 @@ class wechatSend
 
 	public function sendCard($token, $wechaId, $cardId)
 	{
-		if ($this->_sendCard($cardId, $wechaId, $token)) {
-			return true;
-		}
-
-		return false;
+		$data = $this->_sendCard($cardId, $wechaId, $token);
+		return $data;
 	}
 
 	private function _sendCard($card_id = '', $wecha_id = '', $token = '')
 	{
-		if (($token == '') || ($wecha_id == '') || ($card_id == '')) {
-			return false;
+		$data = array("status" => false, "msg" => "");
+		if (($token == "") || ($wecha_id == "") || ($card_id == "")) {
+			$data["msg"] = "参数不能为空！";
+			return $data;
 		}
 
 		$thisWxUser = M('Wxuser')->field('appid,appsecret,winxintype')->where(array('token' => $token))->find();
@@ -80,7 +79,8 @@ class wechatSend
 		$access_token = $apiOauth->update_authorizer_access_token($thisWxUser['appid']);
 
 		if ($access_token == '') {
-			return false;
+			$data["msg"] = "Oauth授权失败！";
+			return $data;
 		}
 
 		$msgtype = 'wxcard';
@@ -90,10 +90,12 @@ class wechatSend
 		$result_array = json_decode($result_json, true);
 
 		if ($result_array['errcode'] == 0) {
-			return true;
+			$data["status"] = true;
+			return $data;
 		}
 		else {
-			return false;
+			$data["msg"] = $result_array["errmsg"];
+			return $data;
 		}
 	}
 

@@ -24,10 +24,10 @@ document.head.appendChild(meta);
 window.shareData = {  
             "moduleName":"Card",
             "moduleID":"0",
-            "imgUrl": "", 
+            "imgUrl": "{vifnn::$memberConfig['picurl']}", 
             "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('Card/index',array('token'=>$token))}",
-            "tTitle": "会员卡",
-            "tContent": ""
+            "tTitle": "{vifnn:$f_siteName}-会员卡",
+            "tContent": "{vifnn::$memberConfig['info']}"
 };
 </script>
 {vifnn:$shareScript}

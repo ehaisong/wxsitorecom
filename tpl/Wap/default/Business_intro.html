@@ -45,6 +45,12 @@
     <div class="page-bizinfo" >
         <div style="position: relative;" class="header">
             <h1 id="activity-name">{vifnn:$busines['mtitle']}</h1>
+			<br/>
+			<div style="line-height: 25px;">
+			<h3>公司电话：{vifnn:$busines['compyphone']}</h3>
+			<h3>地址：{vifnn:$busines['address']}</h3>
+			<a href="{vifnn::U('Business/companyMap', array('token'=>$token, 'bid'=>$bid,'type'=>$type))}" style="font-size: 14px;color: #46A5F5;">点击这里地图中查看</a>
+			</div>
             <!-- <span class="commentNum">浏览次数:{vifnn:$readinfo['click']}</span> -->
         </div>
         <div id="content" class="text">

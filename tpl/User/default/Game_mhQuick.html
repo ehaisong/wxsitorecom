@@ -1,0 +1,109 @@
+<include file="Public:head"/>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/gameconfig.css">
+
+
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/upyun.js?{vifnn::date('YmdHis',time())}"></script>
+
+<style>
+	.button_link {
+		display: inline-block;
+		padding: 5px 20px;
+		margin: 0 5px;
+		color: #44b549;
+		background: #FFFFFF;
+		font-size: 14px;
+		line-height: 21px;
+		height: 21px;
+		border: 1px solid #DEDEDE;
+		border-radius: 16px;
+		text-align: center;
+		transition: color 500ms ease-in, background 500ms ease-in;
+	}
+	.button_link:hover {
+		background: #44b549;
+		color: #FFFFFF;
+	}
+	.submit_box {
+		background: #ededed;
+		padding: 10px 0;
+		margin-bottom: 10px;
+	}
+	.submit_box .button_link {
+		height: 33px;
+		width: 70px;
+		margin: 0 auto;
+		display: block;
+	}
+</style>
+<div class="content">
+	<div class="cLineB">
+		<h4>公众号快捷关注设置</h4>
+		<a href="/index.php?g=User&m=Game&a=index&token={vifnn:$token}" class="right btnGrayS vm">返回我的活动</a>
+
+		<div class="clr"></div>
+	</div>
+
+	<br />
+
+	<div class="msgWrap">
+
+		<if condition="$usertplid eq 2">
+			<div class="alert alert-success alert-dismissable" style="margin-top:20px;">
+				<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+				<else/>
+				<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
+		</if>
+		温馨提示：<br>
+		　1、此页面为未在平台绑定公众号引导关注二维码设置页面。
+		<br>
+		　2、在本页面，您可以上传您的公众号的二维码和添加一键关注连接，来引导玩家关注您的公众号，从而达到吸粉的目的。
+	</div>
+
+	<form id="qrImgForm" action="" method="post">
+		<div>
+			<span>公众号二维码：</span>
+			<input type="text" id="qrImg" name="qr_img" placeholder="请上传您的公众号的二维码" value="{vifnn:$qrImg}"
+			       class="px" style="width: 550px; margin: 8px 0; ">
+			<a href="javascript:void(0);" class="a_upload"
+			   onclick="upyunPicUpload('qrImg', 500, 500,'{vifnn:$token}')">上传</a>
+			<a href="javascript:void(0);" class="a_upload" onclick="viewImg('qrImg')">预览</a>
+		</div>
+
+		<div>
+			<span>快捷关注链接：</span>
+			<input type="text" id="quickUrl" name="quick_url" placeholder="请填写快捷关注链接地址" value="{vifnn:$quickUrl}"
+			       class="px" style="width: 550px; margin: 8px 0; ">
+		</div>
+		<div style="height: 53px; text-align: center; margin-top: 8px;">
+			<button type="submit" name="button" class="btnGreen" style="width: 120px; height: 35px;">提交</button>
+		</div>
+	</form>
+</div>
+</div>
+</div>
+<script>
+	$("#qrImgForm").bind("submit", function (event) {
+		var hasError = false;
+		var alertMsg = '';
+		var qrImg = $("#qrImg").val();
+		var quickUrl = $("#quickUrl").val();
+
+		if (!qrImg) {
+			hasError = true;
+			alertMsg += "公众号二维码不可为空！\r\n";
+		}
+		if (!quickUrl) {
+			hasError = true;
+			alertMsg += "快捷关注地址不可为空！\r\n";
+		}
+		if (hasError) {
+			event.preventDefault();
+			alert(alertMsg);
+		}
+	});
+</script>
+</div>
+<include file="Public:footer"/>

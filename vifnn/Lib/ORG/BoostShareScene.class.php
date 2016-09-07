@@ -39,3 +39,6 @@ class BoostShareScene extends BaseScene
 		return $obj;
 	}
 }
+
+
+?>

@@ -1,64 +1,305 @@
 <include file="Public:head"/>
 <if condition="$usertplid neq 2">
-<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
+	<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
 </if>
-<link rel="stylesheet" type="text/css" href="./tpl/User/default/common/css/cymain.css" />
+<link rel="stylesheet" type="text/css" href="./tpl/User/default/common/css/cymain.css"/>
 <script src="{vifnn::$staticPath}/tpl/static/jquery.qrcode.min.js" type="text/javascript"></script>
 <script src="{vifnn::$staticPath}/tpl/static/layer/layer.js" type="text/javascript"></script>
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
 
 <div class="content">
-<include file="Game:tab"/>
-<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-bottom:5px;font-size:12px;margin-top:5px;">微游戏是我们与第三方游戏平台合作功能，将会不断推出热门微信游戏</div>
-<div class="msgWrap form">
-<div class="bdrcontent">
-<div id="div_ptype">
-<table class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
-<thead>
-<tr>
-<th style=" width:120px;">Logo</th>
-<th style=" width:100px;">名称</th>
-<th style=" width:190px;">介绍</th>              
-<th style=" width:60px;" class="norightborder">操作</th>
-</tr>
-</thead>
-<volist name="games" id="item">
-<tr>
-<td><img src="{vifnn:$item.logo}" width="60" /></td>
-<td>{vifnn:$item.title}</td>
-<td>{vifnn:$item.intro}</td>
-<td class="norightborder">
-<a onclick="qrcode('{changjingUrl}index.php?m=Game&c=index&a=index&start=true&id={vifnn:$item.id}')" href="javascript:void(0)">预览此游戏</a>
-<a href="{vifnn::U('Game/gameSet',array('gameid'=>$item['id']))}">使用此游戏</a>
-</td>
-</volist>
-</tr>
-</table>
-</div>
-</div>
-<div class="footactions" style="padding-left:10px">
-  <div class="pages">{vifnn:$page}</div>
-</div>
-</div>
+	<style>
+		.search{width:100%;margin:15px 0;}
+		.search .search_input{float:right;}
+		.search .search_input input{text-align:center;float:left;display: inline-block;width:164px;height:41px;line-height:41px;border:0;background:#44b549;font-size:14px;color:#ffffff;padding: 0;}
+		.search .search_input input::-webkit-input-placeholder {color: #FFFFFF !important; /* WebKit browsers */}
+	　　.search .search_input input:-moz-placeholder {color: #FFFFFF !important; /* Mozilla Firefox 4 to 18 */}
+	　　.search .search_input input::-moz-placeholder {color: #FFFFFF !important; /* Mozilla Firefox 19+ */}
+	　　.search .search_input input:-ms-input-placeholder {color: #FFFFFF !important; /* Internet Explorer 10+ */}
+		.search .search_input span{width:41px;height:41px;line-height:41px;float:left;background:#a5a5a5;display:inline-block;}
+		.search .search_input i{background: url({vifnn:$staticPath}/tpl/static/welcome/images/h_03.png);display:inline-block;width: 23px;height: 25px;margin-top: 8px;}
+	</style>
+	<div class="search clearfix">
+		<div class="search_input clearfix">
+			<form action="" method="post">
+				<input type="text" name="search" id="textfield" value="{vifnn:$search}" placeholder="请输入游戏名称" style="color:#fff;font-size: 13px;">
+				<button class="search_what"><span><i></i></span></button>
+			</form>
+		</div>
+	</div>
+
+	<include file="Game:tab"/>
+	<div class="msgWrap form">
+		<div class="bdrcontent">
+			<div id="div_ptype">
+				<div id="gamelist">
+					<ul class="feature_table clearfix">
+						<style>
+							.feature_table{width:100%;display: inline-block;margin-top: 20px;}
+							.feature_table li{width:48%;height:150px;background:#fff;float:left;margin-bottom:30px;margin-right: 2%}
+							/* .feature_table li:nth-child(even){margin-left:2%;}*/
+							.feature_table .feat_img{float:left;margin:10px;position:relative;}
+							.feature_table .feat_img img{width:114px;height:114px;}
+							.feature_table .feat_img .erweima{ display:none; position:absolute; width:100%; height:100%; top:0; left:0; background:rgba(0,0,0,0.5); text-align: center; z-index:9}
+							.feature_table .feat_img .erweima img{ width:90px; height:90px; margin-top:12px;}
+							.feature_table .feat_txt{float:left;width:334px;margin:15px 0;}
+							.feature_table .feat_txt h5{color:#1a1a1a;font-size:17px;font-weight:normal;text-align:left;line-height:24px;cursor: pointer;}
+							.feature_table .feat_txt h5 span{display:inline-block;}
+							.feature_table .feat_txt h5 span a:hover{color:#44b549;}
+							.feature_table .feat_txt h5 span.edit_button{height:20px;padding:2px 1px 2px 24px;background:url("{vifnn:$staticPath}/tpl/static/game/images/library/edit.png") 3px 3px no-repeat;font-size:12px;line-height:20px;float:right;}
+							.feature_table .feat_txt h5 span.edit_button a{color:#44b549 !important;}
+							.feature_table .feat_txt h5 i{font-style:normal;vertical-align: middle;display:inline-block;height:21px;line-height:21px;padding:0 8px;color:#fff;background:#44b549;border-radius:5px;font-size:12px;overflow:hidden;margin-right:7px;}
+							.feature_table .feat_txt p{font-size:14px;color:#5a5a5a;line-height:22px;text-align:left;width:82%;height:44px;overflow:hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+							.feature_table .feat_txt a{color:black;display:inline-block;float:right;text-align:right;  font-size: 13px;}
+						</style>
+						<volist name="games" id="item">
+							<li class="clearfix ">
+								<div class="feat_img feat_img_{vifnn:$item.id}">
+									<img src="{vifnn:$item.logo}">
+
+									<div class="erweima_{vifnn:$item.id}"
+									     style="display:none; position:absolute; width:100%; height:100%; top:0; left:0; background:rgba(0,0,0,0.5); text-align: center; z-index:9;border-radius: 15px;">
+										<div id="qrcode_{vifnn:$item.id}_hover" style="margin-top: 12px;"></div>
+										<img src="{vifnn:$item.logo}"
+										     style="width:30px;height:30px;margin-top:-60px;position:relative;z-index:1;">
+									</div>
+								</div>
+								<script>
+									$(".feat_img_{vifnn:$item.id}").hover(function () {
+										$(this).find(".erweima_{vifnn:$item.id}").stop().fadeToggle(300);
+									})
+									$("#qrcode_{vifnn:$item.id}_hover").css("margin-top", "12px");
+									$("#qrcode_{vifnn:$item.id}_hover").qrcode({
+										render: "canvas",
+										width:  90,
+										height: 90,
+										text:   "http://www.meihua.com/index.php?m=Game&c=index&a=index&start=true&id={vifnn:$item.id}"
+									});
+								</script>
+								<div class="feat_txt">
+									<h5 style="margin-top: -3px;">
+										<span>
+											<a href="{vifnn::U('Game/gameSet',array('gameid'=>$item['id']))}"
+											   style="font-size: 17px;">{vifnn:$item.title}</a>
+										</span>
+
+										<span class="edit_button">
+											<a href="{vifnn::U('Game/gameSet',array('gameid'=>$item['id']))}">我要定制</a>
+										</span>
+									</h5>
+									<a href="javascript:void(0)" onclick="class_id({vifnn:$item.id})"
+									   style="float: left;text-align: left;">
+										<p style="min-width:285px;margin-top: 7px;">{vifnn:$item.intro}</p>
+									</a>
+									<br/>
+									<a href="javascript:void(0)" onclick="class_id({vifnn:$item.id})"
+									   style="margin-top: -20px;">【详细】</a>
+									<br/>
+									<br/>
+									<h5 style="margin-top: 6px;">
+										<i>游戏</i>
+										<if condition="is_array($item['cat_id'])">
+											<?php $catType = $item['cat_id']; ?>
+											<volist name="catType" id="catName">
+												<i>{vifnn:$catName}</i>
+											</volist>
+										<else />
+											<i>{vifnn:$item.cat_id}</i>
+										</if>
+									</h5>
+								</div>
+							</li>
+						</volist>
+					</ul>
+				</div>
+
+				<div class="layer">
+					<style>
+						.layer{ position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; display:none}
+					</style>
+				</div>
+
+				<div id="gameListInfo">
+					<style>
+						.close{ background:url({vifnn:$staticPath}/tpl/static/welcome/images/21_03.png); width:46px; height:46px;  position: absolute;  right: -19px;  top: -16px; cursor:pointer;opacity: 1;}
+						.close:hover{opacity: 1;}
+						.popup{position: fixed; top:8%; width:760px; background:#fff;  z-index: 9999; left:50%; margin-left:-400px; padding:30px 30px 5px 30px;display:none}
+						.popup_bud{overflow:auto;  overflow-x: hidden;top: 30px;right: 30px;bottom: 56px;left: 30px;position: absolute;}
+						.popup .popup_title{display: inline-block;}
+						.popup .feat_img{float:left;margin:10px; }
+						.popup .feat_img img{width:114px;height:114px;}
+						.popup .feat_txt{float:left;width:558px;margin: 20px 0 0 0;}
+						.popup .feat_txt h5{color:#1a1a1a;font-size:16px;font-weight:normal;text-align:left;margin-bottom:15px;line-height:24px;}
+						.popup .feat_txt h5 span{display:inline-block;}
+						.popup .feat_txt h5 i{font-style:normal;vertical-align: middle;display:inline-block;height:21px;line-height:21px;padding:0 8px;color:#fff;background:#bfbfbf;border-radius:5px;font-size:12px;overflow:hidden;margin-left:7px;}
+						.popup .feat_txt p{font-size:14px;color:#5a5a5a;line-height:22px;text-align:left;width:100%; }
+						.popup .feat_txt a{color:#44b549;display:inline-block;width:100%;text-align:right;}
+
+						.popup .popup_content{width:625px; margin:0 auto;}
+						.popup_pro{overflow:auto; padding-bottom:20px;font-size: 16px;}
+						.popup_pro p{font-size: 16px;}
+						.popup_bud::-webkit-scrollbar{width:8px;height:30px;}
+						.popup_bud::-webkit-scrollbar-button{ background:transparent; height:10px;}
+						.popup_bud::-webkit-scrollbar-track{background:transparent;}
+						.popup_bud::-webkit-scrollbar-track-piece{}
+						.popup_bud::-webkit-scrollbar-thumb{background:#ebebeb;border-radius:4px;}
+						.popup_bud::-webkit-scrollbar-corner{background:#ebebeb;}
+						.popup_bud::-webkit-scrollbar-resizer{background:#ebebeb;}
+						.popup .popup_content .popup_info{ color:#44b549; font-size:16px; position:relative; text-align:center; line-height:45px; height:45px; }
+						.popup .popup_content .popup_info span{ padding:0 20px; background:#fff; display: inline-block;}
+						.popup .popup_content .popup_info i{ background:#44b549;color:#44b549; position:absolute; width:100%;top:50%; left:0; height:1px; z-index:-1;}
+						.popup .popup_content .popup_img{ width:625px;}
+						.popup .popup_content .popup_txt{ padding-top:10px; line-height:24px; font-size:14px; color:#1a1a1a;}
+						.popup  .popup_button{ width:100%; text-align:center; margin:10px 0;position: absolute;bottom: 5px;left: 0;}
+						.popup  .popup_button button{width:134px; height:41px; line-height:41px; border-radius:10px; color:#fff; background:#44b549; font-size:14px;cursor: pointer;}
+					</style>
+					<volist name="games" id="item">
+						<div class="popup func_{vifnn:$item.id}" style="margin-bottom: 10px; display: none;">
+							<div class="close"></div>
+							<div class="popup_bud">
+								<div class="popup_title clearfix">
+									<div class="feat_img">
+										<img src="{vifnn:$item.logo}">
+									</div>
+									<div class="feat_txt feat_txt_i " style="width:475px;">
+										<h5>
+											<span>{vifnn:$item.title}</span>
+											<i style="margin-left:5px;">游戏</i>
+											<if condition="is_array($item['cat_id'])">
+												<?php $catType = $item['cat_id']; ?>
+												<volist name="catType" id="catName">
+													<i>{vifnn:$catName}</i>
+												</volist>
+											<else />
+												<i>{vifnn:$item.cat_id}</i>
+											</if>
+										</h5>
+
+										<p style="width: 470px;height: 66px;-webkit-line-clamp: 3;">
+											{vifnn:$item.intro}</p>
+									</div>
+									<div style="width:115px;height:115px;float:left;margin-top:10px;">
+										<div id="qrcode_{vifnn:$item.id}" style="position:relative;">
+										</div>
+										<img src="{vifnn:$item.logo}"
+										     style="width:30px;height:30px;margin-top:-73px;margin-left:43px;position:relative;z-index:1;">
+									</div>
+									<script>
+										$("#qrcode_{vifnn:$item.id}").qrcode({
+											render: "canvas",
+											width:  115,
+											height: 115,
+											text:   "http://www.meihua.com/index.php?m=Game&c=index&a=index&start=true&id={vifnn:$item.id}"
+										});
+									</script>
+								</div>
+								<div class="popup_content">
+									<div class="popup_info">
+										<span>游戏玩法</span>
+										<i></i>
+									</div>
+									<div class="popup_pro" style="text-align: left;">
+										<div>
+											<?php echo htmlspecialchars_decode(stripslashes($item['rule'])) ?>
+										</div>
+
+										{vifnn:$item.rule_pic}
+									</div>
+								</div>
+							</div>
+							<div class="popup_button">
+								<a href="{vifnn::U('Game/gameSet',array('gameid'=>$item['id']))}">
+									<button>使用此游戏</button>
+								</a>
+							</div>
+						</div>
+					</volist>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="msgWrap form">
+		<style>
+			.pages {
+				height: 40px;
+				margin-bottom: 10px;
+			}
+
+			.pages .page_box {
+				margin: 0 auto;
+				display: inline-block;
+			}
+			.pages a {
+				height: 35px !important;
+				padding: 0 15px !important;
+				float: left !important;
+				margin-right: 15px !important;
+				line-height: 35px !important;
+				font-size: 14px !important;
+				border: #1abd6c 1px solid !important;
+				color: #1abd6c !important;
+			}
+
+			.pages .page_info {
+				border-color: transparent !important;
+				color: #999999 !important;
+				cursor: default;
+			}
+
+			.game_page li {
+				height: 35px !important;
+				padding: 0 15px !important;
+				float: left !important;
+				margin-right: 15px !important;
+				line-height: 35px !important;
+				font-size: 14px !important;
+				border: #1abd6c 1px solid !important;
+				color: #1abd6c !important;
+			}
+
+			.current {
+				height: 35px !important;
+				padding: 0 15px !important;
+				float: left !important;
+				margin-right: 15px !important;
+				line-height: 35px !important;
+				font-size: 14px !important;
+				border: #1abd6c 1px solid !important;
+				background: #1abd6c !important;
+			}
+		</style>
+		<div class="msgWrap form">
+			<div style="width:100%;height:100%;margin-top:10%;display:<if condition="count($games) eq 0">block<else />none</if>;" class="h_key">
+				<center>
+					<img src="{vifnn:$staticPath}/tpl/static/welcome/images/kong.png" alt="">
+				</center>
+			</div>
+		</div>
+		<div class="footactions" style="padding-left:10px">
+			<div class="pages">
+				<div class="page_box">{vifnn:$page}</div>
+			</div>
+		</div>
+	</div>
 </div>
 <script type="text/javascript">
-	function qrcode(url){
-		url = url.replace('{changjingUrl}','http://www.meihua.com/');
-		layer.open({
-			type: 1,
-			title: false,
-			closeBtn: false,
-			shadeClose: true,
-			skin: 'yourclass',
-			content: '<div id="qrcode"></div>'
-		});
-		$("#qrcode").qrcode({
-			render: "canvas",
-			width: 200,
-			height:200,
-			text: url
-		});
+	var h=$(window).height();
+	function class_id(xx){
+		$(".popup").css({"top":h*0.05, "bottom":h*0.05});
+		$("body").css("width", $(window).width());
+		$("body").css({"overflow":"hidden","height":h});
+		$(".layer").fadeToggle(0);
+		$(".func_"+xx).fadeToggle(0);
+		$(".func_"+xx).show();
 	}
+
+	$(".layer, .popup .close").click(function(){
+		$("body").css("width","");
+		$("body").css({"overflow":"auto","height":"auto"});
+		$(".layer").fadeToggle(0);
+		$(".popup").hide();
+	});
 </script>
 <include file="Public:footer"/>

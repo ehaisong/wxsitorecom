@@ -11,7 +11,7 @@
           </div>
 
           <div class="cLine">
-    <div class="alert">
+    <div class="alert alert-success">
     <p>（ 订单总数：<span class="redamount">{vifnn:$count}</span>　
 <if condition="($type eq 'gover') OR ($type eq 'property')">
 ）
@@ -73,7 +73,7 @@
           </div>
            <script>
             function showIntroDetail(id){
-                art.dialog.open('{vifnn::U('Business/orders_list',array('token'=>$token,'type'=>$type))}&id='+id,{lock:false,title:'订单详情',width:700,height:420,yesText:'关闭',background: '#000',opacity: 0.87});
+                art.dialog.open('{vifnn::U('Business/orders_list',array('token'=>$token,'type'=>$type))}&id='+id,{lock:false,title:'订单详情',width:700,height:420,yesText:'关闭',background: '#000',opacity: 0.87,close: function(){location.reload();}});
             }
         </script>
 
@@ -84,4 +84,5 @@
             <div class="clr"></div>
           </div>
         </div>
+<script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
 <include file="Public:footer"/>

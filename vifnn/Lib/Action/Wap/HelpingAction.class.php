@@ -2,15 +2,23 @@
 class HelpingAction extends WapAction{
 	public $helping;
 	public $isamap;
+	public $help_rank;
+	public $share_key_openid = "";
 	public function _initialize(){
 		parent::_initialize();
 		$id = $this->_get('id','intval');
+		$this->checkTongji($this->token, "helping", $id);
+		$this->assign($this->token, "helping", $id);
 		$helping = S($id.'helping'.$this->token);
 		if($helping == ''){
-			$helping = M('Helping')->where(array('token'=>$this->token,'id'=>$id,'is_open'=>1))->find();
+			$helping = M("Helping")->where(array("id" => $id))->find();
 			if($helping == ''){
 				$this->error('活动不存在');
-			}else{
+			}
+			else if ($helping["is_open"] == 2) {
+				$this->error("活动已关闭");
+			}
+			else{
 				S($id.'helping'.$this->token,$helping);
 			}
 		}
@@ -47,7 +55,7 @@ class HelpingAction extends WapAction{
 		}
 		$reply_pic = explode("http",$this->helping['reply_pic']);
 		if(count($reply_pic) <= 1){
-			$this->helping['reply_pic'] = C("site_url").$this->helping['reply_pic'];
+			$this->helping["reply_pic"] = $this->siteUrl . $this->helping["reply_pic"];
 		}
 		$this->assign('info',$this->helping);
 		$fansinfo = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id))->find();
@@ -55,7 +63,7 @@ class HelpingAction extends WapAction{
 		$share_key 	= $this->_get('share_key','trim');
 		$now 		= time();
 		
-		M('helping')->where(array('token'=>$this->token,'id'=>$id))->setInc('pv',1);
+		M("helping")->where(array("id" => $id))->setInc("pv", 1);
 		
 		if($_GET['tel'] != '' && $this->wecha_id != ''){
 			$userinfo_tel = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id))->save(array('tel'=>$_GET['tel'],'isverify'=>1));
@@ -63,7 +71,7 @@ class HelpingAction extends WapAction{
 			$fansinfo['tel'] = $_GET['tel'];
 			S('fans_'.$this->token.'_'.$this->wecha_id,$fansinfo);
 		}
-		$my         = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id))->find();
+
 		$myhelp     = M('helping_user')->where(array('pid'=>$id,'token'=>$this->token,'wecha_id'=>$this->wecha_id))->find();
 		if($myhelp['is_join2'] == 1){
 			$backtext = "返回我的";
@@ -80,7 +88,7 @@ class HelpingAction extends WapAction{
 			if($is_my != ''){
 				$this->redirect('Helping/index',array('token'=>$this->token,'id'=>$id));
 			}
-			//是否已经助力过了 @xulinyang
+			//是否已经助力过了 @VIFNN
 			$is_share 	= M('Helping_record')->where(array('pid'=>$id,'wecha_id'=>$this->wecha_id,'share_key'=>$share_key))->count();
 			$this->assign('is_share',$is_share>0?'1':'0');
 			if($this->helping['is_help']==1||($this->helping['is_help']==2&&$this->isSubscribe()))
@@ -119,7 +127,7 @@ class HelpingAction extends WapAction{
 				$this->assign('memberNotice','');
 			}
 			if($autoJoin=='1'&&(($myhelp['is_join2'] == 0 && $myhelp != '' && $myhelp['help_count'] > 1) || (intval($_GET['is_join2']) == 1 && $myhelp['is_join2'] == 0))){
-				$join = M('helping_user')->where(array('pid'=>$id,'token'=>$this->token,'wecha_id'=>$this->wecha_id))->save(array('is_join2'=>1,'add_time'=>time(),'help_count'=>($myhelp['help_count']+1)));
+				$join = M("helping_user")->where(array("token" => $this->token, "wecha_id" => $this->wecha_id, "pid" => $id))->save(array("is_join2" => 1, "add_time" => time(), "help_count" => $myhelp["help_count"] + 1));
 				$this->redirect('Helping/index',array('token'=>$this->token,'id'=>$id));
 			}
 		}
@@ -137,58 +145,66 @@ class HelpingAction extends WapAction{
 			$us 		= M('Helping_user')->where(array('token'=>$this->token,'wecha_id'=>$this->wecha_id,'pid'=>$this->helping['id']))->find();
 			
 			if(!empty($this->wecha_id) && empty($us)) {
-				$data 	= array(
-					'pid' 			=> $this->helping['id'],
-					'wecha_id'		=> $this->wecha_id,
-					'token'			=> $this->token,
-					'add_time' 		=> 0,
-					'help_count' 	=> 0,
-					'share_key'		=> 0,
-					'is_join2'		=> 0
-				);
+				$share_key2 = $this->getKey($this->wecha_id);
+				$data = array("pid" => $this->helping["id"], "wecha_id" => $this->wecha_id, "token" => $this->token, "add_time" => 0, "help_count" => 0, "share_key" => $share_key2, "is_join2" => 0);
 				$uid = M('Helping_user')->add($data);
-				$share_key2 = $this->getKey($uid);
-				M('Helping_user')->where(array('token'=>$this->token,'id'=>$uid))->save(array('share_key'=>$share_key2));
 			}
 			
 			if($share_key!=''){
 				$user 	= M('Helping_user')->where(array('token'=>$this->token,'share_key'=>$share_key,'pid'=>$this->helping['id']))->find();
-			}else{
-				$user 	= M('Helping_user')->where(array('token'=>$this->token,'wecha_id'=>$fansinfo['wecha_id'],'pid'=>$this->helping['id']))->find();
+				$this->share_key_openid = $user["wecha_id"];
 			}
-			
-			$rank 	= M('Helping_user')->where(array('token'=>$this->token,'pid'=>$this->helping['id'],'is_join2'=>1,'help_count'=>array('gt',0)))->order('help_count desc,share_num desc')->select();
-			$i = 0;
-			foreach($rank as $v){
-				$i++;
-				$paiming[$v['wecha_id']] = $i;
+			else {
+				$user = M("Helping_user")->where(array("token" => $this->token, "wecha_id" => $fansinfo["wecha_id"], "pid" => $this->helping["id"]))->find();
 			}
-			$user['help_rank'] 	= $paiming[$user['wecha_id']];
+
+			$rank = M("Helping_user")->where(array(
+	"token"      => $this->token,
+	"pid"        => $this->helping["id"],
+	"is_join2"   => 1,
+	"help_count" => array("gt", $myhelp["help_count"])
+	))->count();
+			$this->help_rank = 0 < $rank ? $rank + 1 : "";
 		}
-		$count 	= M('Helping_user')->where(array('token'=>$this->token,'pid'=>$this->helping['id'],'is_join2'=>1,'help_count'=>array('gt',0)))->count();
-		$this->assign('autoClick',$autoClick);
-		$user['wechaname'] = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$user['wecha_id']))->getField('wechaname');
-		$user['portrait'] = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$user['wecha_id']))->getField('portrait');
-		
-		$this->assign('share_key',$share_key);
-		//$this->assign('share',$share);@xulinyang $share变量不存在
-		$this->assign('rank',$this->get_rank($this->helping));
-		$this->assign('user',$user);
-		M('helping_user')->where(array('token'=>$this->token,'pid'=>$id,'wecha_id'=>$user['wecha_id']))->setInc('pv',1);
-		$this->assign('fans',$fansinfo);		
-		$this->assign('count',$count);
-		$this->assign('is_over',$is_over);
-		$this->assign('my',$my);
+
+		$count = M("Helping_user")->where(array(
+	"token"      => $this->token,
+	"pid"        => $this->helping["id"],
+	"is_join2"   => 1,
+	"help_count" => array("gt", 0)
+	))->count();
+		$this->assign("autoClick", $autoClick);
+		$userinfodata = M("userinfo")->where(array("token" => $this->token, "wecha_id" => $user["wecha_id"]))->getField("wecha_id,wechaname,portrait");
+		$user["wechaname"] = $userinfodata[$user["wecha_id"]]["wechaname"];
+		$user["portrait"] = $userinfodata[$user["wecha_id"]]["portrait"];
+		$this->assign("share_key", $share_key);
+		$this->assign("rank", $this->get_rank($this->helping));
+		$user["help_rank"] = (0 < $this->help_rank ? $this->help_rank : "");
+		$this->assign("user", $user);
+		M("helping_user")->where(array("token" => $this->token, "pid" => $id, "wecha_id" => $user["wecha_id"]))->setInc("pv", 1);
+		$this->assign("fans", $fansinfo);
+		$this->assign("count", $count);
+		$this->assign("is_over", $is_over);
+		$this->assign("my", $fansinfo);
 
 
 
 		if($this->helping['is_newtp'] == 1){
 			if($_GET['helps'] == 1){
-				$helps_list = M('helping_record')->where(array('token'=>$this->token,'pid'=>$id,'share_key'=>$user['share_key']))->order('addtime desc')->limit(99)->select();
-				$helps_count = M('helping_record')->where(array('token'=>$this->token,'pid'=>$id,'share_key'=>$user['share_key']))->count();
-				foreach($helps_list as $hk=>$hv){
-					$helps_list[$hk]['wechaname'] = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$hv['wecha_id']))->getField('wechaname');
-					$helps_list[$hk]['portrait'] = M('userinfo')->where(array('token'=>$this->token,'wecha_id'=>$hv['wecha_id']))->getField('portrait');
+				$helps_list = M("helping_record")->where(array("token" => $this->token, "pid" => $id, "share_key" => $user["share_key"]))->order("addtime desc")->limit(99)->select();
+				$helps_count = M("helping_record")->where(array("token" => $this->token, "pid" => $id, "share_key" => $user["share_key"]))->count();
+
+				foreach ($helps_list as $hk => $hv ) {
+					$wechaname = "";
+					$portrait = "";
+
+					if (!empty($hv["wecha_id"])) {
+						$tmparr = $this->getwxinfobywecha_id($hv["wecha_id"]);
+						$wechaname = $tmparr["wechaname"];
+						$portrait = $tmparr["portrait"];
+					}
+					$helps_list[$hk]["wechaname"] = $wechaname;
+					$helps_list[$hk]["portrait"] = $portrait;
 				}
 				$this->assign('helps_count',$helps_count);
 				$this->assign('helps_list',$helps_list);
@@ -200,7 +216,35 @@ class HelpingAction extends WapAction{
 			$this->display();
 		}
 	}
-	
+	public function getwxinfobywecha_id($wecha_id)
+	{
+		$wxnamearr = S("wecha_11id_" . $this->token);
+		$wxnamearr = json_decode($wxnamearr, 1);
+		$tt = count($wxnamearr);
+		if (!empty($wxnamearr) && ($tt < 10000)) {
+			if (isset($wxnamearr[$wecha_id])) {
+				return $wxnamearr[$wecha_id];
+			}
+		}
+
+		$userinfoDb = M("userinfo");
+		$wxuinfo = $userinfoDb->where(array("token" => $this->token, "wecha_id" => $wecha_id))->field("wecha_id,wechaname,portrait")->find();
+
+		if (!empty($wxuinfo)) {
+			if ($tt < 10000) {
+				$wxnamearr[$wxuinfo["wecha_id"]] = $wxuinfo;
+			}
+			else {
+				$wkey = $wxuinfo["wecha_id"];
+				$wxnamearr = array($wkey => $wxuinfo);
+			}
+
+			S("wecha_11id_" . $this->token, json_encode($wxnamearr));
+			return $wxuinfo;
+		}
+
+		return array("wechaname" => "", "portrait" => "");
+	}
 	public function sms(){
 		if($_POST['tel'] != ''){
 			$is_tel = M('userinfo')->where(array('token'=>$_POST['token'],'tel'=>$_POST['tel'],'isverify'=>1))->find();
@@ -246,14 +290,7 @@ class HelpingAction extends WapAction{
 		$cookie 	= cookie('helping_share');			
 		$cookie_arr = json_decode( json_encode( $cookie),true);
 		$share 		= M('Helping_user')->where(array('token'=>$this->token,'share_key'=>$share_key))->find();
-
-		$record 	= array(
-			'token' 	=> $this->token,
-			'pid' 		=> $share['pid'],
-			'share_key' => $share_key,
-			'addtime' 	=> time(),
-			'wecha_id' 	=> $this->wecha_id,
-		);
+		$record = array("token" => $this->token, "pid" => $share["pid"], "share_key" => $share_key, "addtime" => time(), "wecha_id" => $this->wecha_id);
 
 		if(empty($share)) {
 			//echo json_encode(array('err'=>2,'info'=>'分享参数错误'));
@@ -303,8 +340,15 @@ class HelpingAction extends WapAction{
 		}	
 
 	}
-	public function get_rank($params = array()){
-		$where 	= array('a.token'=>$this->token,'a.pid'=>$params['id'],'a.is_join2'=>1,'a.help_count'=>array('gt',0));
+	public function get_rank($params)
+	{
+		$pmwecha_id = (!empty($this->share_key_openid) ? $this->share_key_openid : $this->wecha_id);
+		$where = array(
+			"a.token"      => $this->token,
+			"a.pid"        => $params["id"],
+			"a.is_join2"   => 1,
+			"a.help_count" => array("gt", 0)
+			);
 		$limit = $params['rank_num'];
 		$rank = M('Helping_user')->alias('a')->field('a.*,b.wechaname,b.truename,b.tel,b.portrait')->join(' __USERINFO__ b ON a.token = b.token and a.wecha_id = b.wecha_id ')->where($where)->order('a.help_count desc,a.share_num desc')->limit($limit)->select();
 		//$rank 	= M('Helping_user')->where($where)->order('help_count desc,share_num desc')->limit($limit)->select();
@@ -313,6 +357,9 @@ class HelpingAction extends WapAction{
 			$rank[$key]['username'] 	= $val['wechaname']?$val['wechaname']:'匿名';
 			$rank[$key]['tel'] 			= $val['tel']?substr_replace($val['tel'],'****',3,4):'无';
 			$rank[$key]['portrait'] 	= $val['portrait'];
+			if ($val["wecha_id"] == $pmwecha_id) {
+				$this->help_rank = $key + 1;
+			}
 		}
 		return $rank;
 	}
@@ -320,8 +367,9 @@ class HelpingAction extends WapAction{
 	
 
 	//分享key  最长32
-	public function getKey($id){
-		$str = md5(time().mt_rand(1000,9999).$id);
+	public function getKey($wecha_id)
+	{
+		$str = md5(time() . mt_rand(1000, 9999) . $wecha_id);
 		return $str;
 	}
 

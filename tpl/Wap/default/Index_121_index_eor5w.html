@@ -29,11 +29,15 @@
             <div id="banner_box" class="box_swipe" style="visibility: visible;">
                 <ul style="list-style: none;transition: 0ms; -webkit-transition: 0ms; -webkit-transform: translate3d(0, 0, 0);">
                 <volist name="flash" id="so">
-                    <li style="vertical-align: top;">
+					<li style="vertical-align: top;">
+					 <php>if(isset($so['url']) && !empty($so['url'])){</php>
                         <a href="{vifnn:$so.url}">
                                 <img src="{vifnn:$so.img}" style="width:100%;">
                         </a>
-                    </li>
+					<php>}else{</php>
+					 <img src="{vifnn:$so.img}" style="width:100%;">
+					 <php>}</php>
+				</li>
                 </volist>                    
                 </ul>
                 <ol>
@@ -105,7 +109,7 @@
             <ul class="list_card" style="margin:10px auto">
                  <volist name="info" id="vo">
                     <if condition="$i gt 8">  
-                    <li style="width:49.5%;float:left;text-align:center"> <a href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>"><img src="{vifnn:$vo.img}" style="width:145px;height:81px;"></a></li>
+                    <li style="width:49.5%;float:left;text-align:center;margin-bottom:10px;"> <a href="<if condition="$vo['url'] eq ''">{vifnn::U('Wap/Index/lists',array('classid'=>$vo['id'],'token'=>$vo['token']))}<else/>{vifnn:$vo.url|htmlspecialchars_decode}</if>"><img src="{vifnn:$vo.img}" style="width:145px;height:81px;"></a></li>
                      </if>
                 </volist>
             </ul>
@@ -114,7 +118,7 @@
 
     </section>
 
-<div class="copyright" style="text-align:center;padding:10px 0">
+<div class="copyright" style="text-align:center;padding:15px 0">
 <if condition="$iscopyright eq 1">
 {vifnn:$homeInfo.copyright}
 <else/>
@@ -124,7 +128,10 @@
 </div>
 
                     
-<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>   
+<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>
+<if condition="$state eq 1">
+<include file="Index:fudong"/>
+</if>  
 <!-- share -->
 <include file="Index:share" />
 </body></html>

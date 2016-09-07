@@ -3,12 +3,11 @@ window.shareData = {
             "moduleName":"Business",
             "moduleID":"0",
             "imgUrl": "{vifnn:$picurl}",
-            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$token,'type'=>$busines['type'],'bid'=>$busines['bid'],'mid'=>$_GET['mid']
-			,'sid'=>$_GET['sid']))}",
-            "timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$token,'type'=>$busines['type'],'bid'=>$busines['bid'],'mid'=>$_GET['mid']
-			,'sid'=>$_GET['sid']))}",
-            "tTitle": "{vifnn:$title} {vifnn:$sec_item['name']}",
-            "tContent": "{vifnn:$busines['business_desc']|html_entity_decode|strip_tags|mb_substr=0,89,'utf-8'}..."
+            "sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$token,'type'=>$busines['type'],'bid'=>$busines['bid'],'cid'=>$_GET['cid'],'mid'=>$_GET['mid'],'sid'=>$_GET['sid'],'show'=>$show))}",
+            "timeLineLink": "{vifnn:$f_siteUrl}{vifnn::U(MODULE_NAME/ACTION_NAME,array('token'=>$token,'type'=>$busines['type'],'bid'=>$busines['bid'],'cid'=>$_GET['cid'],'mid'=>$_GET['mid'],'sid'=>$_GET['sid'],'show'=>$show))}",
+            "tTitle": "{vifnn:$title|shareFilter} {vifnn:$sec_item['name']|shareFilter}",
+            "tContent": "{vifnn:$busines['business_desc']|shareFilter}",
+			"fTitle": "{vifnn:$title|shareFilter} {vifnn:$sec_item['name']|shareFilter}"
         };
 </script>
 {vifnn:$shareScript}

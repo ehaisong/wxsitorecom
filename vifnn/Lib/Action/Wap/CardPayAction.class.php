@@ -89,7 +89,7 @@ class CardPayAction extends BaseAction
 		$udata['balance'] = $uinfo['balance'] - $price;
 		$set_exchange = M('Member_card_exchange')->where(array('cardid' => $cardid))->find();
 		if (0 < $set_exchange['reward']) {
-			$arr['score'] = intval($price * $set_exchange['reward']);
+			$arr["score"] = ($set_exchange["expense"] <= $price ? floor(($set_exchange["reward"] / $set_exchange["expense"]) * $price) : 0);
 		}
 		$udata['total_score'] = $uinfo['total_score'] + $arr['score'];
 		$udata['expensetotal'] = $uinfo['expensetotal'] + $price;

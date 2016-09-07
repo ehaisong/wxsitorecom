@@ -1,7 +1,26 @@
-<include file="Public:head1"/>
+<include file="Public:head2" />
+<link href="{vifnn:$staticPath}/tpl/static/icomoon/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/extension/css/jquery-ui-1.9.1.custom.min.css">
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/static/extension/css/jquery.bigcolorpicker.css" />
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/extension/css/hbconfig.css">
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/extension/upload.css"/>
+<script>
+    var _staticPath='{vifnn:$staticPath}/tpl/static/extension/';
+    var _uploadUrl='{vifnn::U("uploadFile",array("token"=>$_GET["token"]))}';
+</script>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/laydate/laydate.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="{vifnn:$staticPath}/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<!--引入web uploader JS-->
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/spin.min.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/webuploader/webuploader.nolog.min.js"></script>
+<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/extension/upload.js"></script>
+
 
 <div class="content">
-    <div class="cLineB"><h4>添加推广海报【背景图一定要自己上传设置（不可用系统默认的），需要认证服务号才可以使用！】</h4><a href="{vifnn::U('index',array('token'=>$_GET['token']))}" class="right btnGrayS vm" style="margin-top:-27px">返回</a></div>
+    <div class="cLineB"><h4>添加推广海报</h4><a href="{vifnn::U('index',array('token'=>$token))}" class="right btnGrayS vm" style="margin-top:-27px">返回</a></div>
     <!--游戏设置模块-->
     <div class="gameConfig">
 
@@ -32,7 +51,7 @@
             </div>
         </div>
         <div id="itemCtrlBox">
-            <form method="post" action="{vifnn::isset($_info['id'])?U('edit',array('token'=>$_GET['token'])):U('add',array('token'=>$_GET['token']))}">
+            <form method="post" action="{vifnn::isset($_info['id'])?U('edit',array('token'=>$token)):U('add',array('token'=>$token))}">
             <!--游戏设置主体-->
             <div class="gBd clearfix">
                 <!--左侧手机游戏界面-->
@@ -41,17 +60,13 @@
                         <div id="itemContent">
                             <div class="itemList">
                                 <div class="row normalStyle style1">
-                                    <div class="hd">
+                                    <div class="bd">
                                         <div class="opacityHd">
-
                                         </div>
                                         <img src="{vifnn:$staticPath}/tpl/static/extension/hbimage/placeholder/avatar.png" class="avatar" alt="avatar"/>
-                                        <p class="minText me">我是<em>[用户昵称]</em></p>
-                                        <p class="minText for"><s>我为</s><em>{vifnn:$_info.company|default='[企业昵称]'}</em><s>代言</s></p>
+                                        <p class="minText nicknameText me">我是<em>[用户昵称]</em></p>
+                                        <p class="minText companyText for"><s>我为</s><em>{vifnn:$_info.company|default='[企业昵称]'}</em><s>代言</s></p>
                                         <p class="descDate">推广时间：<em class="start">2016-03-18</em>至<em class="end">2016-04-30</em></p>
-                                    </div>
-                                    <div class="bd">
-
                                         <div  class="descText">
                                             <p>[海报描述]</p>
                                         </div>
@@ -61,15 +76,12 @@
                                     <div class="moduleLayerBox"><div class="moduleLayer"><div class="item"><a class="item hdTool tool" href="javascript:;">编辑样式</a></div></div><div class="moduleLayer"><div class="item"><a class="item bgTool tool" href="javascript:;">编辑背景</a></div></div></div>
                                 </div>
                                 <div class="row normalStyle style2">
-                                    <div class="hd">
+                                    <div class="bd">
                                         <div class="opacityHd">
-
                                         </div>
                                         <img src="{vifnn:$staticPath}/tpl/static/extension/hbimage/placeholder/avatar.png" class="avatar" alt="avatar"/>
-                                        <p class="minText me">我是<em>[用户昵称]</em></p>
-                                        <p class="minText for"><s>我为</s><em>{vifnn:$_info.company|default='[企业昵称]'}</em><s>代言</s></p>
-                                    </div>
-                                    <div class="bd">
+                                        <p class="minText nicknameText me">我是<em>[用户昵称]</em></p>
+                                        <p class="minText companyText for"><s>我为</s><em>{vifnn:$_info.company|default='[企业昵称]'}</em><s>代言</s></p>
                                         <div  class="descText">
                                             <p>[海报描述]</p>
                                         </div>
@@ -80,15 +92,13 @@
                                     <div class="moduleLayerBox"><div class="moduleLayer"><div class="item"><a class="item hdTool tool" href="javascript:;">编辑样式</a></div></div><div class="moduleLayer"><div class="item"><a class="item bgTool tool" href="javascript:;">编辑背景</a></div></div></div>
                                 </div>
                                 <div class="row normalStyle style3">
-                                    <div class="hd">
+                                    <div class="bd">
                                         <div class="opacityHd">
 
                                         </div>
                                         <img src="{vifnn:$staticPath}/tpl/static/extension/hbimage/placeholder/avatar.png" class="avatar" alt="avatar"/>
-                                        <p class="minText me">我是<em>[用户昵称]</em></p>
-                                        <p class="minText for"><s>我为</s><em>{vifnn:$_info.company|default='[企业昵称]'}</em><s>代言</s></p>
-                                    </div>
-                                    <div class="bd">
+                                        <p class="minText nicknameText me">我是<em>[用户昵称]</em></p>
+                                        <p class="minText companyText for"><s>我为</s><em>{vifnn:$_info.company|default='[企业昵称]'}</em><s>代言</s></p>
                                         <div  class="descText">
                                             <p>[海报描述]</p>
                                         </div>
@@ -106,9 +116,7 @@
                         <a href="javascript:;" class="next"></a>
                     </div>
                     <input type="hidden" id="hbModStyle" name="banner_config" value='{vifnn:$_info["banner_config"]}'/>
-              <br><br><br> 
-			  <div align="center"><a href="{vifnn:$f_siteUrl}/tpl/static/extension/hbimage/placeholder/hbbg.rar">下载背景素材</a></div>
-			   </div>
+                </div>
                 <!--左侧手机游戏界面-->
 
                 <!--右侧设置表单-->
@@ -169,6 +177,34 @@
                                 <div class="putWrap">
                                     <input  placeholder="" type="text" name="company" value="{vifnn:$_info.company}" />
                                     <!--<p class="tipInfo">只能写一个关键词，用户输入此关键词将会触发此活动。</p>-->
+                                    <div style="margin-top: 5px;" class="cssRadio time_switcher">
+                                        <input type="radio" id="company_show" name="company_display" value="1">
+                                        <label class="radioLabel" for="company_show">显示</label>
+                                        <input type="radio" id="company_hidden" name="company_display" value="0">
+                                        <label class="radioLabel" for="company_hidden">不显示</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formRow">
+                                <span class="rowTitle">用户头像：</span>
+                                <div class="putWrap">
+                                    <div style="margin-top: 5px;" class="cssRadio time_switcher">
+                                        <input type="radio" id="avatar_show" name="avatar_display" value="1">
+                                        <label class="radioLabel" for="avatar_show">显示</label>
+                                        <input type="radio" id="avatar_hidden" name="avatar_display" value="0">
+                                        <label class="radioLabel" for="avatar_hidden">不显示</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formRow">
+                                <span class="rowTitle">用户昵称：</span>
+                                <div class="putWrap">
+                                    <div style="margin-top: 5px;" class="cssRadio time_switcher">
+                                        <input type="radio" id="nickname_show" name="nickname_display" value="1">
+                                        <label class="radioLabel" for="nickname_show">显示</label>
+                                        <input type="radio" id="nickname_hidden" name="nickname_display" value="0">
+                                        <label class="radioLabel" for="nickname_hidden">不显示</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="formRow">
@@ -267,10 +303,8 @@
                                 <div class="formRow">
                                     <span class="rowTitle "><i>*</i>海报字体：</span>
                                     <div class="putWrap">
-                                        <p>您的服务器尚未安装“微软雅黑”字体，海报功能无法正常运行，请点击以下地址下载安装：</p>
-										<a href="http://pan.baidu.com/s/1bpLpDUZ" target="_blank">下载海报功能字体地址</a>
-                                        <a href="javascript:;" class="a_choose install_font" style="margin-top: 5px;display: inline-block;">下载字体后按照说明安装</a>
-
+                                        <p>您的服务器尚未安装“微软雅黑”字体，请在VIFNNcms群文件下载字体,然后点击：</p>
+                                        <a href="javascript:;" class="a_choose install_font" style="margin-top: 5px;display: inline-block;">安装字体</a>
                                     </div>
                                 </div>
                                 <script>
@@ -282,7 +316,7 @@
                                             return false;
                                         installing=true;
                                         $('.install_font').text('安装中...');
-                                        layer.msg('请下载字体文件覆盖到服务器中即可！');
+                                        layer.msg('由于字体文件比较大，安装过程可能会持续几分钟，请耐心等候');
                                         $.post('{vifnn::U("installFont")}',function(result)
                                         {
                                             try {
@@ -734,3 +768,30 @@ $(function(){
 
 <script src="/tpl/static/upyun.js"></script>
 <include file="Public:footer" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,170 +1,491 @@
-<include file="Repast:newheader" />
-<script type="text/javascript">
-<if condition="$isMember AND $discount gt 0">
-var discount="{vifnn:$discount}";
-<else/>
-var discount=0;
-</if>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{vifnn:$company['name']}-菜单</title>
+	<meta charset="utf-8">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="yes" name="apple-touch-fullscreen">
+	<meta content="telephone=no,email=no" name="format-detection">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<style>
+		.open_tip{
+			background-color: #fffaf2;
+			color: #f19100;
+			border: solid 1px #ffdca8;
+			font-size: 12px;
+			padding: 5px 10px;
+			line-height: 20px;
+			margin: 5px;
+			text-align: center;
+		}
+		.none_tip{
+			width: 40%;
+			position: absolute;
+			left: 50%;
+			margin-left:-20%;
+			box-sizing: border-box;
+			margin-top: 40px;
+		}
+		.none_tip_icon{
+			width: 80%;
+			margin-left: 10%;
+		}
+		.none_tip_icon img{
+			max-width: 100%;
+			display: block;
+			margin: 0px;
+			border: none;
+		}
+		.none_tip p{
+			font-size: 14px;
+			color: #777;
+			margin-top: 10px;
+			text-align: center;
+			display: block;
+		}
+		.itemDetail .thumb
+		{
+			margin-top: 5px;
+		}
+		.itemDetail .thumb img
+		{
+			max-width: 100%;
+			border-radius: 5px;
+			display: block;
+			margin: 0px auto;
+		}
+		.itemDetail .intro
+		{
+			margin-top: 5px;
+		}
+	</style>
+	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/repast_v1/css/wmStyle.css">
+	<script>
+		var data ={vifnn:$_json};
+		var catalog; //分类
+		var yTotalPrice = 0; //总费用
+		var parentFindId;
+		var delivery = parseFloat('{vifnn:$pricing}'); //达到多少开始派送
+		var inventoryLimit='{vifnn:$kconoff}';
+		//console.log(data);
+	</script>
+</head>
+<body>
+<div class="lodingCover">
+	<div class="spinner">
+		<div class="rect1"></div>
+		<div class="rect2"></div>
+		<div class="rect3"></div>
+		<div class="rect4"></div>
+		<div class="rect5"></div>
+	</div>
+</div>
 
-</script>
-<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/repastnew/js/dialog.js"></script>
-<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/repastnew/js/scroller.js"></script>
-<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/repastnew/js/dmain.js"></script>
-<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/repastnew/js/menu.js"></script>
-<body onselectstart="return true;" ondragstart="return false;">
-<script type="text/javascript">
-var totalPrice=totalNum=0;
-<php>if($cid>0){
-echo "var mycid=$cid;";
-  }else{
-echo "var mycid=0;";
-  }
-</php>
+<section class="scrollNews">
+	<div class="warp">
+		<i class="fr arrow"></i>
+		<i class="notificationIcon fl"></i>
+		<div class="scrollText" id="marqueen">
+			<ul><li id="marqueenText"><marquee scrolldelay="100">{vifnn:$company.announcement|default='暂无公告'|short=75}</marquee></li></ul>
+		</div>
+	</div>
+</section>
+<neq name="isOpen" value="1">
+	<div class="open_tip">很抱歉，暂停营业,商家正在休息中</div>
+</neq>
+<section class="searchBox">
+	<div class="wrap">
+    <span class="fl">
+        <i class=""></i>
+    </span>
+		<div class="ofh">
+			<form action="" autocomplete="off" id="search_form">
+				<input id="search_input" type="search" placeholder="搜索店内商品" value="{vifnn::I('get.keyword')}" />
+			</form>
+		</div>
+	</div>
+</section>
 
-function check_i_like(id,islove){
-	$.post("{vifnn::U('Repast/doLike', array('token'=>$token, 'cid'=>$cid, 'wecha_id'=>$wecha_id))}", {did:id,islove:islove}, function(msg){});			
-}
-var islock=false;
-function next(){
-	totalPrice=$.trim($('#allmoney').text());
-	totalPrice=parseFloat(totalPrice);
-	totalNum=$.trim($('#menucount').text());
-	totalNum=parseInt(totalNum);
-	if((totalNum>0) && (totalPrice>0)){
-		var data=getMenuChecklist();//[{'id':id,'count':count},{'id':id,'count':count}]
-		if((data.length>0) && !islock){
-			islock=true;
-			$('#nextstep').removeClass('orange show').addClass('gray disabled');
-			$.ajax({
-				type: "POST",
-				url: "{vifnn::U('Repast/processOrder', array('token'=>$token, 'cid'=>$cid, 'wecha_id'=>$wecha_id,'orid'=>$orid))}",
-				data: {"cart":data,"mycid":mycid},
-				async:true,
-				success: function(res){
-					islock=false;
-					$('#nextstep').removeClass('gray disabled').addClass('orange show');
-					if(res.error==0) //成功
-					{ 
-					  window.location.href="{vifnn::U('Repast/sureOrder', array('token'=>$token, 'cid'=>$cid, 'wecha_id'=>$wecha_id,'orid'=>$orid))}";
-					}else{
-					  alert(res.msg);
-					}
-				},
-				dataType: "json"
-			  });
+<notempty name="_groupList">
+	<section  class="scrollNav" id="scrollNav">
+		<div class="ot-menu" id="segmentedControls">
+			<volist name="_group" id="gp">
+				<a data-index="{vifnn:$key}" id="dataIndex{vifnn:$key}" style="display: {vifnn::($gp['total']<=0)?'none':'block'};" >{vifnn:$gp.name} <i>0</i></a>
+			</volist>
+		</div>
+	</section>
+
+	<section class="rightMainList" id="segmentedControlContents">
+		<volist name="_groupList" id="gl">
+			<div class="ctrlContent" id="{vifnn:$key}">
+				<section class="categoryTitles">
+					<h2>{vifnn:$gl.group_name}</h2>
+				</section>
+				<ul>
+					<volist name="gl['list']" id="vo">
+						<li class="clearfix">
+							<div class="i-pic fl show_detail" data-id="{vifnn:$vo.id}" data-thumb="{vifnn::img_url($vo['image'],'','dish_thumb')}">
+								<img src="{vifnn::img_url($vo['image'],'','dish_thumb')}"/>
+							</div>
+							<div class="descText ofh">
+								<h3>{vifnn:$vo.name}</h3>
+								<p class="subTit">
+									<span>月销:{vifnn:$vo.m_sales}</span>
+									<eq name="kconoff" value="1">
+										<span class="stock" data="{vifnn:$vo.instock}">库存:{vifnn:$vo.instock}</span>
+									</eq>
+								</p>
+								<p class="tags">
+									<if condition="($vo['isdiscount'] eq 1) AND ($discount gt 0) AND $isMember=='1'">
+										<i class="tag-a" data="{vifnn:$discount/10}">{vifnn:$discount}折</i>
+									</if>
+									<eq name="vo['ishot']" value="1"><i class="tag-b">推荐</i></eq>
+								</p>
+								<p class="price" data-packing="{vifnn::$vo['is_meal']=='1'?($meal_fee):0}">￥<em>{vifnn:$vo.price}</em><notempty name="vo['spec']"><i>起</i></notempty></p>
+								<div class="setDiv quantity">
+									<notempty name="vo['spec']">
+										<span class="oBtn {vifnn::$isOpen!='1'?'disabled':''}" data="pro_{vifnn:$vo.id}">选规格</span>
+										<else/>
+										<span class="minus reduceFromCart {vifnn::$isOpen!='1'?'disabled':''}"><i></i></span><span class="num">0</span><span class="plus addToCart {vifnn::$isOpen!='1'?'disabled':''}"><i></i></span>
+									</notempty>
+								</div>
+							</div>
+							<input type="hidden" class="pro_id"  value="{vifnn:$vo.id}">
+							<input type="hidden" name="item{vifnn:$vo.id}" class="item{vifnn:$vo.id} items"  value="">
+						</li>
+					</volist>
+				</ul>
+			</div>
+		</volist>
+	</section>
+	<else/>
+	<div class="none_tip">
+		<div class="none_tip_icon"><img src="{vifnn:$staticPath}/tpl/static/dishout_v1/images/none.png" /></div>
+		<p>
+			抱歉！没有搜索到结果<br>
+			<span style="font-size: 12px">换个关键词试试吧</span>
+		</p>
+	</div>
+</notempty>
+
+<div class="cartDetail pa">
+	<div class="hd">
+		<div class="wrap clearfix">
+			<a class="delete fr" href="javascript:;"><i></i>清空</a>
+			<strong>购物车</strong>
+		</div>
+	</div>
+	<div class="bd">
+		<form id="order_form" action="{vifnn::U('orderBooking')}" method="post">
+			<div class="wrap" id="shopping_list"></div>
+			<input type="hidden" name="mycid" value="{vifnn:$cid}" />
+			<input type="hidden" name="orid" value="{vifnn:$orid}" />
+		</form>
+	</div>
+</div>
+
+<footer class="cart pr">
+	<div class="fl leftInfo">
+		<div class="dis-cell">
+			<div class="b-flex dib cartIcon pr"><i class=""></i> <sup class="pa">0</sup></div> <span class="money b-flex">￥<em>0</em></span>
+		</div>
+	</div>
+	<a href="javascript:;" class="buyTextTip fr">去结算</a>
+	<a href="javascript:;" id="buyNow" class="buyNow fr">去结算</a>
+</footer>
+
+<div id="flyItem" class="fly_item"><img src="" width="50" height="50" /></div>
+<section class="fullBg"></section>
+<section class="window itemInfo">
+	<div class="autoWidth">
+		<div class="wrap">
+			<div class="hd pr">
+				<h2></h2><a href="javascript:;" class="windowXclosed pa"></a>
+			</div>
+			<div class="bd">
+				<div class="tags">
+					<div class="cell">
+						<h4>规格</h4>
+						<div class="t-list gg">
+							<a href="javascript:;">大份</a>
+							<a href="javascript:;">大份</a>
+							<a href="javascript:;">大份</a>
+						</div>
+					</div>
+					<div class="cell">
+						<h4>属性</h4>
+						<div class="t-list sx">
+						</div>
+					</div>
+				</div>
+
+				<div class="calculate  quantity quantity-row">
+					<div class="fr">
+						<span class="minus"><i></i></span><span class="num">0</span><span class="plus"><i></i></span>
+					</div>
+					<strong>商品数量</strong>
+				</div>
+				<div class="calculate  price price-row">
+					<div class="fr">
+						￥<span>0</span>
+					</div>
+					<strong>商品价格</strong>
+				</div>
+
+				<div class="intro">
+					<h4>介绍</h4>
+					<div class="desc"><p></p></div>
+				</div>
+
+			</div>
+			<div class="btn"><a href="javascript:;">加入购物车</a></div>
+
+		</div>
+	</div>
+</section>
+
+<section class="window itemDetail">
+	<div class="autoWidth">
+		<div class="wrap">
+			<div class="hd pr">
+				<h2 class="itemDetail_title"></h2><a href="javascript:;" class="windowXclosed pa"></a>
+			</div>
+			<div class="bd">
+				<div class="thumb"><img class="itemDetail_img" src="" /></div>
+				<div class="intro">
+					<div class="desc"><p class="itemDetail_desc"></p></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="window itemNews">
+	<div class="autoWidth">
+		<div class="wrap">
+			<div class="hd pr">
+				<h2>公告</h2><a href="javascript:;" class="windowXclosed pa"></a>
+			</div>
+			<div class="bd">
+				<div class="pp">
+					<p>{vifnn:$company.announcement|default='暂无公告'}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="{vifnn:$staticPath}/tpl/static/repast_v1/js/zepto.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/repast_v1/js/common.js"></script>
+<neq name="isOpen" value="1">
+	<script>
+		$('.scrollNav').css({'top':parseInt($('.scrollNav').css('top'))+42});
+		$('.rightMainList').css({'top':parseInt($('.rightMainList').css('top'))+42});
+	</script>
+</neq>
+
+<script>
+	$(function(){
+
+//    setInterval(function(){
+//        $('#scrollNews li').last().css({'height':'0px','opacity': '0'}).insertBefore('#scrollNews li:nth-child(1)').animate({'height':'40px','opacity': '1'}, function() {
+//            $(this).removeAttr('style');
+//        },300,'ease-in');
+//    },3000);
+
+		$(".cart .leftInfo").on("tap",function(){
+			if($(".cart").hasClass("clicked")){
+				if($(this).hasClass("on")){
+					$(".cartDetail").hide();
+					$(this).removeClass("on");
+					$(".fullBg").hide();
+					$(".rightMainList").css('overflow','auto');
+					$(".window").hide();
+				}else{
+					$(this).addClass("on");
+					$(".fullBg").show();
+					$(".rightMainList").css('overflow','hidden');
+					$(".cartDetail").show();
+					$(".window").hide();
+				}
+
 			}else{
 				return false;
 			}
-		}else{
+		});
+
+		$(".show_detail").on("tap",function(){
+
+			var thumb=$(this).attr('data-thumb');
+			var id=$(this).attr('data-id');
+			$('.itemDetail').find('.itemDetail_img').prop('src',thumb);
+			if(typeof data['pro_'+id]!='undefined'){
+				var tit=data['pro_'+id]['tit'];
+				var desc=data['pro_'+id]['desc'];
+				$('.itemDetail').find('.itemDetail_title').text(tit);
+				if(desc&&desc!=''){
+					$('.itemDetail').find('.intro').show();
+					$('.itemDetail').find('.itemDetail_desc').text(desc);
+				}else{
+					$('.itemDetail').find('.intro').hide();
+				}
+			}
+			showWindow(".itemDetail");
+			topWindow(".itemDetail");
+		});
+
+		$(".rightMainList li .oBtn").on("tap",function(){
+			if($(this).hasClass("disabled")){
+				return false;
+			}
+			showWindow(".itemInfo");
+			topWindow(".itemInfo");
+		});
+		$(".scrollNews .scrollText li").on("tap",function(){
+			showWindow(".itemNews");
+			topWindow(".itemNews");
+		});
+		$("a.windowXclosed,.fullBg").on("tap",function(){
+			$(".fullBg").hide();
+			$(".window").hide();
+			$(".cartDetail").hide();
+			$(".rightMainList").css('overflow','auto');
+		});
+
+		function topWindow(obj){
+			var h=$(window).height();
+			var objH=$(obj).height();
+			var top=(h-objH)/2;
+			$(obj).css('top',top+'px');
+		}
+
+		function showWindow(obj){
+			$(".fullBg").show();
+			$(obj).show();
+		}
+	});
+</script>
+<script type="text/javascript">
+	var controls = document.getElementById("segmentedControls");
+	var contents = document.getElementById("segmentedControlContents");
+	if(controls){
+		//默认选中第一个
+		controls.querySelector('a').classList.add('active');
+	}
+	(function() {
+		var controlsElem = document.getElementById("segmentedControls");
+		var contentsElem = document.getElementById("segmentedControlContents");
+		if(!controlsElem){
 			return false;
 		}
-}
+		var controlListElem = controlsElem.querySelectorAll('a');
+		var contentListElem = contentsElem.querySelectorAll('.ctrlContent');
+		var controlWrapperElem = controlsElem.parentNode;
+		var controlWrapperHeight = controlWrapperElem.offsetHeight;
+		var controlMaxScroll = controlWrapperElem.scrollHeight - controlWrapperHeight;//左侧类别最大可滚动高度
+		var maxScroll = contentsElem.scrollHeight - contentsElem.offsetHeight;//右侧内容最大可滚动高度
+		var controlHeight = controlListElem[0].offsetHeight;//左侧类别每一项的高度
+		var controlTops = []; //存储control的scrollTop值
+		var contentTops = [0]; //存储content的scrollTop值
+		var length = contentListElem.length;
+		for (var i = 0; i < length; i++) {
+			controlTops.push(controlListElem[i].offsetTop + controlHeight);
+		}
+		for (var i = 1; i < length; i++) {
+			var offsetTop = contentListElem[i].offsetTop;
+			if (offsetTop + 100 >= maxScroll) {
+				var height = Math.max(offsetTop + 100 - maxScroll, 100);
+				var totalHeight = 0;
+				var heights = [];
+				for (var j = i; j < length; j++) {
+					var offsetHeight = contentListElem[j].offsetHeight;
+					totalHeight += offsetHeight;
+					heights.push(totalHeight);
+				}
+				for (var m = 0, len = heights.length; m < len; m++) {
+					contentTops.push(parseInt(maxScroll - (height - heights[m] / totalHeight * height)));
+				}
+				break;
+			} else {
+				contentTops.push(parseInt(offsetTop));
+			}
+		}
+		contentsElem.addEventListener('scroll', function() {
+			var scrollTop = contentsElem.scrollTop;
+			for (var i = 0; i < length; i++) {
+				var offsetTop = contentTops[i];
+				var offset = Math.abs(offsetTop - scrollTop);
+//						console.log("i:"+i+",scrollTop:"+scrollTop+",offsetTop:"+offsetTop+",offset:"+offset);
+				if (scrollTop < offsetTop) {
+					if (scrollTop >= maxScroll) {
+						onScroll(length - 1);
+					} else {
+						onScroll(i - 1);
+					}
+					break;
+				} else if (offset < 20) {
+					onScroll(i);
+					break;
+				}else if(scrollTop >= maxScroll){
+					onScroll(length - 1);
+					break;
+				}
+			}
+		});
+		var lastIndex = 0;
+		//监听content滚动
+		var onScroll = function(index) {
+			if (lastIndex !== index) {
+				lastIndex = index;
+				var lastActiveElem = controlsElem.querySelector('.active');
+				lastActiveElem && (lastActiveElem.classList.remove('active'));
+				var currentElem = controlsElem.querySelector('a:nth-child(' + (index + 1) + ')');
+				currentElem.classList.add('active');
+				//简单处理左侧分类滚动，要么滚动到底，要么滚动到顶
+				var controlScrollTop = controlWrapperElem.scrollTop;
+				if (controlScrollTop + controlWrapperHeight < controlTops[index]) {
+					controlWrapperElem.scrollTop = controlMaxScroll;
+				} else if (controlScrollTop > controlTops[index] - controlHeight) {
+					controlWrapperElem.scrollTop = 0;
+				}
+			}
+		};
+		//滚动到指定content
+		var scrollTo = function(index) {
+			contentsElem.scrollTop = contentTops[index];
+		};
+		[].forEach.call(document.querySelectorAll('.ot-menu  a'), function (el) {
+			el.addEventListener('click', function() {
+				scrollTo(this.getAttribute('data-index'));
+				return false;
+			}, false);
+		});
+	})();
+
+	document.body.addEventListener('touchstart', function () { });
+	window.setTimeout(function(){
+		$(".lodingCover").remove();
+	},600);
+
+	document.getElementById('search_form').addEventListener('submit',function(event){
+		event.preventDefault();
+		var url=location.href;
+		var val=document.getElementById('search_input').value;
+		if(/keyword\=/.test(url)){
+			url=url.replace(/keyword\=[^&]*/,'keyword='+val);
+		}else{
+			url=url.indexOf('?')>-1?(url+'&keyword='+val):(url+'?keyword='+val);
+		}
+		if(url!=location.href){
+			location.href=url;
+		}
+	});
+
+	$('#buyNow').click(function(){
+		$('#order_form').submit();
+	});
+
 
 </script>
-<div data-role="container" class="container menu">
-<section data-role="body">
-<div class="left">
-	<div class="top">
-		<div id="ILike"><a><span class="icon hartblckgray"></span>我喜欢</a></div>
-	</div>
-		<div class="top">
-		<div id="all_dish"><a><span></span>全部菜</a></div>
-	</div>
-	<div class="content">
-	<ul id="typeList"><!--class="on"-->
-		<if condition="!empty($fenleiarr)">
-			<vifnnlist array="fenleiarr" key="ik" foreach="item">
-			<li id="li_type{vifnn:$key}">{vifnn:$item}</li>
-			</vifnnlist>
-		</if>
-	</ul>
-	</div>
-</div>
-
-<div class="right" id="usermenu">
-<div class="all" id="menuList">
-	<if condition="!empty($disharr)">
-    <vifnnlist array="disharr" key="dk" foreach="ditem">
-	<ul id="ul_type{vifnn:$key}">
-	   <vifnnlist array="ditem" key="ddk" foreach="dditem">
-		<li id="dish_li{vifnn:$dditem['id']}" <if condition="$dditem['mylove'] eq 1">class="like"</if>>
-		 <div class="licontent">
-			<div class="span showPop">
-				<if condition="!empty($dditem['image'])">
-				<img src="{vifnn:$dditem['image']}" alt="" url="{vifnn:$dditem['image']}">
-				</if>
-				<if condition="$dditem['ishot'] eq 1">
-				 <span class="ishot" style="left: -5px;">推荐</span>
-				</if>
-			   <if condition="$isMember AND $discount gt 0 AND $dditem['isdiscount']">
-				 <span class="ishot" style="left: 59%;">{vifnn:$discount}折</span>
-				</if>
-			</div>
-			<div class="menudesc showPop">
-				<h3>{vifnn:$dditem['name']}</h3>
-				<p class="salenum">月售：<span class="sale_num">{vifnn:$dditem['m_sale']}</span><span class="theunit" style="display:none"><if condition="!empty($dditem['unit'])">{vifnn:$dditem['unit']}<else/>份</if></span>
-				<if condition="$kconoff eq 1"><br/>库存：{vifnn:$dditem['instock']}</if>
-				<!--<span class="sales"><strong class="sale_8"></strong></span>--></p>
-				<p class="mylovedish"> <span class="icon hart"><input autocomplete="off" class="thisdid" type="hidden" value="{vifnn:$dditem['id']}"></span></p>
-				<div class="info">{vifnn:$dditem['des']|htmlspecialchars_decode=ENT_QUOTES}</div>
-			</div>
-			<div class="price_wrap">
-				<strong>￥<span class="unit_price">{vifnn:$dditem['price']}<if condition="!empty($dditem['unit'])">/{vifnn:$dditem['unit']}</if><input type="hidden" class="tureunit_price" <if condition="isset($dditem['zkprice']) AND $dditem['zkprice'] gt 0">value="{vifnn:$dditem['zkprice']}"<else/>value="{vifnn:$dditem['price']}"</if>></span></strong>
-				<div class="fr" <if condition="$kconoff eq 1"> max="{vifnn:$dditem['instock']}" <else/>max="-1"</if>>
-				    <if condition="$kconoff eq 0 OR $dditem['instock'] gt 0">
-					 <a href="javascript:void(0);" class="btn plus" <php> if(isset($dditem['ornum']) && !empty($dditem['ornum'])) echo "data-num=".$dditem['ornum']; else echo "data-num=''";</php>></a>
-					</if>
-				</div>
-				<input autocomplete="off" class="number" type="hidden" name="dish[{vifnn:$dditem['id']}]" value="0">
-			</div>
-			</div>
-		</li>
-		</vifnnlist>
-	</ul>
-   </vifnnlist>
-  </if>
- </div>
-</div>
-</section>
-</div>
-	<footer data-role="footer">			
-		<nav class="g_nav">
-			<div>
-				<span class="cart"></span>
-				<span> <span class="money">￥<label id="allmoney">0</label> </span>/<label id="menucount">0</label>个菜</span>
-				<a href="javascript:next();" class="btn gray disabled" id="nextstep">选好了</a>
-			</div>
-		</nav>
-	</footer>
-
-	<div class="menu_detail" id="menuDetail">
-		<img style="display: none;">
-		<div class="nopic"></div>
-		<a href="javascript:void(0);" class="comm_btn" id="detailBtn"></a>
-		<dl>
-			<dt>价格：</dt>
-			<dd class="highlight">￥<span class="price"></span></dd>
-		</dl>
-		<p class="sale_desc"></p>
-		<dl class="desc">
-			<dt>介绍：</dt>
-			<dd class="info"></dd>
-		</dl>
-	</div>
-
-<script type="text/javascript">
-window.shareData = {  
-            "moduleName":"Repast",
-            "moduleID":"{vifnn:$company['id']}",
-            "imgUrl": "{vifnn:$company['logourl']}", 
-            "timeLineLink": "{vifnn::$f_siteUrl .  U('Repast/dishMenu',array('token' => $token,'cid'=>$cid))}",
-            "sendFriendLink": "{vifnn::$f_siteUrl .  U('Repast/dishMenu',array('token' => $token,'cid'=>$cid))}",
-            "tTitle": "{vifnn:$metaTitle}",
-            "tContent": "{vifnn:$metaTitle}"
-        };
-
-</script>
-{vifnn:$shareScript}
-
 </body>
 </html>

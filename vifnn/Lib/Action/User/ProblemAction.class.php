@@ -30,6 +30,7 @@ class ProblemAction extends UserAction{
 		if(IS_POST){
 			$_POST['add_time'] 	= time();
 			$_POST['token'] 	= $this->token;
+			$_POST["rank_num"] = ((int) $_POST["rank_num"] != 0 ? (int) $_POST["rank_num"] : 10);
 
 			if($set_db->create()){
 				//添加
@@ -281,16 +282,29 @@ class ProblemAction extends UserAction{
 
 	/*用户信息*/
 	public function user_info(){
-		$search 	= $this->_post('search','trim');
 		$problem_id = $this->_get('problem_id','intval');
 		$where 		= array('token'=>$this->token,'problem_id'=>$problem_id);
-		if(!empty($search)){
-			$where['user_name|nickname'] = array('like','%'.$search.'%');
+		if($_GET['search']!='')
+		{
+			if(validate_regex(I('get.search'),'mobile'))
+			{
+				$where['phone']=I('get.search');
+			}
+			else
+			{
+				$where['user_name|nickname'] = array('like','%'.I('get.search').'%');
+			}
 		}
+		$order=array();
+		if($_GET['score_count']!='')
+		{
+			$order['score_count']=I('get.score_count');
+		}
+
+		$order["add_time"] = "asc";
 		$count		= M('Problem_user')->where($where)->count();
 		$Page   	= new Page($count,15);
-		$info 		= M('Problem_user')->where($where)->order('add_time desc')->limit($Page->firstRow.','.$Page->listRows)->select();
-
+		$info 		= M('Problem_user')->where($where)->order($order)->limit($Page->firstRow.','.$Page->listRows)->select();
 		$this->assign('info',$info);
 		$this->assign('problem_id',$problem_id);
 		$this->assign('page',$Page->show());

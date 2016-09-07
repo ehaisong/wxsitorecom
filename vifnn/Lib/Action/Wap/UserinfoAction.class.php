@@ -239,6 +239,7 @@ class UserinfoAction extends WapAction
 									$cinfo = M('Member_card_coupon')->where(array('token' => $this->token, 'id' => $value['item_value']))->find();
 
 									if ($cinfo['is_weixin'] == 0) {
+										if (1 <= (int) $cinfo["total"]) {
 										$data['token'] = $this->token;
 										$data['wecha_id'] = $this->wecha_id;
 										$data['coupon_id'] = $value['item_value'];
@@ -269,9 +270,67 @@ class UserinfoAction extends WapAction
 										}
 
 										M('Member_card_coupon_record')->add($data);
+											M("Member_card_coupon")->where(array("token" => $this->token, "id" => $value["item_value"]))->setDec("total", 1);
+										}
 									}
 									else {
 										$api_item = 1;
+									}
+								}
+							}
+
+							$recommend_card = M("member_card_create")->where(array("token" => $this->token, "cardid" => $cardid, "number" => trim($_POST["recommend_id"])))->find();
+							$recommend_where = array(
+								"token"     => $this->token,
+								"cardid"    => $recommend_card["cardid"],
+								"is_open"   => "1",
+								"recommend" => 1,
+								"start"     => array("lt", $now),
+								"end"       => array("gt", $now)
+								);
+							$recommend_gifts = M("Member_card_gifts")->where($recommend_where)->select();
+
+							if (!empty($recommend_gifts)) {
+								foreach ($recommend_gifts as $k => $v ) {
+									$rec_cinfo = M("Member_card_coupon")->where(array("token" => $this->token, "id" => $v["item_value"]))->find();
+
+									if ($rec_cinfo["is_weixin"] == 0) {
+										if (1 <= (int) $rec_cinfo["total"]) {
+											$data["token"] = $this->token;
+											$data["wecha_id"] = $recommend_card["wecha_id"];
+											$data["coupon_id"] = $v["item_value"];
+											$data["is_use"] = "0";
+											$data["cardid"] = $recommend_card["cardid"];
+											$data["add_time"] = $now;
+
+											if ($v["item_attr"] == 1) {
+												$data["coupon_type"] = "1";
+											}
+											else if ($v["item_attr"] == 2) {
+												$data["coupon_type"] = "3";
+											}
+											else {
+												$data["coupon_type"] = "2";
+											}
+
+											$data["cancel_code"] = $this->_create_code(12);
+
+											if ($rec_cinfo["type"] == 1) {
+												$data["coupon_attr"] = serialize(array("coupon_name" => $rec_cinfo["title"]));
+											}
+											else if ($rec_cinfo["type"] == 2) {
+												$data["coupon_attr"] = serialize(array("coupon_name" => $rec_cinfo["title"], "gift_name" => $rec_cinfo["gift_name"], "integral" => $rec_cinfo["integral"]));
+											}
+											else {
+												$data["coupon_attr"] = serialize(array("coupon_name" => $rec_cinfo["title"], "least_cost" => $rec_cinfo["least_cost"], "reduce_cost" => $rec_cinfo["reduce_cost"]));
+											}
+
+											M("Member_card_coupon_record")->add($data);
+											M("Member_card_coupon")->where(array("token" => $this->token, "id" => $v["item_value"]))->setDec("total", 1);
+										}
+									}
+									else {
+										$this->sendCard($rec_cinfo["card_id"]);
 									}
 								}
 							}
@@ -698,6 +757,42 @@ class UserinfoAction extends WapAction
 		else {
 			return false;
 		}
+	}
+
+	public function sendCard($card_id = '')
+	{
+		$thisWxUser = M("Wxuser")->field("appid,appsecret,winxintype")->where(array("token" => $this->token))->find();
+		$access_token = $apiOauth->update_authorizer_access_token($thisWxUser["appid"]);
+		$msgtype = "wxcard";
+		$postData = "{\"touser\":\"" . $this->wecha_id . "\",\"msgtype\":\"" . $msgtype . "\",\"" . $msgtype . "\":{\"card_id\":\"" . $card_id . "\"}}";
+		$extraUrl = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" . $access_token;
+		$result_json = $this->curlGet($extraUrl, "POST", $postData);
+		$result_array = json_decode($result_json, true);
+
+		if ($result_array["errcode"] == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function curlGet($url,$method = "get", $data = '')
+	{
+		$ch = curl_init();
+		$header = "Accept-Charset: utf-8";
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$temp = curl_exec($ch);
+		return $temp;
 	}
 }
 

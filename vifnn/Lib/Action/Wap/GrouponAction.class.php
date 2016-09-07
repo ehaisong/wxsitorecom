@@ -22,7 +22,12 @@ class GrouponAction extends ProductAction{
 			$this->isamap=1;
 			$this->amap=new amap();
 		}
-	
+		$reply = M('Reply_info')->where(array('infotype'=>'Groupon','token'=>$this->token))->find();
+		if (IS_GET) {
+			D("Userinfo")->convertFake(M("product_cart"), array("token" => $this->token, "wecha_id" => $this->wecha_id, "fakeopenid" => $this->fakeopenid));
+		}
+
+		$this->assign('reply',$reply);
 	}
 	
 	public function grouponIndex(){
@@ -52,8 +57,12 @@ class GrouponAction extends ProductAction{
 		$this->assign('order',$order);
 		$this->assign('method',$method);
 		//
-        	
-		$products = $this->product_model->where($where)->order($order.' '.$method)->limit($this->pageSize)->select();
+		if ($order == "salecount") {
+			$products = $this->product_model->where($where)->field("*,sum(salecount+fakemembercount) as newsalecount")->order("newsalecount " . $method)->group("id")->limit($this->pageSize)->select();
+		}
+		else {
+		        $products = $this->product_model->where($where)->order($order.' '.$method)->limit($this->pageSize)->select();
+		}
 		$now=time();
 		$i=0;
 		if ($products){
@@ -96,20 +105,13 @@ class GrouponAction extends ProductAction{
 		$orders=array('time','discount','price','salecount');
 		$order=isset($_GET['order'])&&in_array($_GET['order'],$orders)?$_GET['order']:'time';
 		//
-		$products = $this->product_model->where($where)->order($order.' '.$method)->limit($start.','.$pageSize)->select();
-		/*
-		$now=time();
-		$i=0;
-		if ($products){
-			foreach ($products as $p){
-				$products[$i]['new']=0;
-				if ($now-$p['time']<3*24*3600){
-					$products[$i]['new']=1;
-				}
-				$i++;
-			}
+		if ($order == "salecount") {
+			$products = $this->product_model->where($where)->field("*,sum(salecount+fakemembercount) as newsalecount")->order("newsalecount " . $method)->group("id")->limit($start . "," . $pageSize)->select();
 		}
-		*/
+		else {
+			$products = $this->product_model->where($where)->order($order . " " . $method)->limit($start . "," . $pageSize)->select();
+		}
+
 		$str='{"products":[';
 		if ($products){
 			$comma='';
@@ -149,7 +151,7 @@ class GrouponAction extends ProductAction{
 		$this->assign('intro',$intro);
 		//店铺信息
 		$company_model=M('Company');
-		$where=array('token'=>$this->token);
+		$where=array('token'=>$this->token,'isbranch'=>0);
 		$thisCompany=$company_model->where($where)->find();
 		$this->assign('thisCompany',$thisCompany);
 		//分店信息
@@ -399,7 +401,6 @@ class GrouponAction extends ProductAction{
 
 			$product_model=M('product');
 			$product_cart_list_model=M('product_cart_list');
-			$product_model->where(array('id'=>intval($_POST['productid'])))->setInc('salecount',$_POST['quantity']);
 			$productName = $product_model->where(array('id'=>intval($_POST['productid'])))->getField('name');
 			//保存个人信息
 			if ($_POST){
@@ -455,10 +456,12 @@ class GrouponAction extends ProductAction{
 				$id=intval($_GET['id']);
 				$where['id']=$id;
 			}
-
-			if($this->wxuser['winxintype'] == 3 && $this->wxuser['oauth'] == 1){
-				$addr = new WechatAddr($this->wxuser);
-				$this->assign('addrSign', $addr->addrSign());
+		
+			if($this->isWechat) {
+				if($this->wxuser['winxintype'] == 3 && $this->wxuser['oauth'] == 1){
+					$addr = new WechatAddr($this->wxuser);
+					$this->assign('addrSign', $addr->addrSign());
+				}
 			}
 			
 			$product=$this->product_model->where($where)->find();
@@ -536,7 +539,7 @@ class GrouponAction extends ProductAction{
 	public function company($display=1){
 		//店铺信息
 		$company_model=M('Company');
-		$where=array('token'=>$this->token);
+		$where=array('token'=>$this->token,'isbranch'=>0);
 		if (isset($_GET['companyid'])){
 			$where['id']=intval($_GET['companyid']);
 		}
@@ -562,6 +565,7 @@ class GrouponAction extends ProductAction{
 		if (!$this->isamap){
 			$this->display('companyMap_'.$this->tplid);
 		}else {
+			$thisCompany = M('Company')->where(array('id'=>(Int) $_GET['companyid'], 'token'=>$this->token))->find();
 			$amap=$this->amap;
 			$link=$amap->getPointMapLink($thisCompany['longitude'],$thisCompany['latitude'],$thisCompany['name']);
 			header('Location:'.$link);

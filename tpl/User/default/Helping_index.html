@@ -92,6 +92,9 @@
 </if>
 	<a href="{vifnn::U('Helping/rank',array('id'=>$item['id'],'token'=>$token))}">助力排行榜</a>
 	<a href="{vifnn::U('Helping/set',array('id'=>$item['id'],'token'=>$token))}">修改</a>
+    <eq name="tj_status" value="1">
+        <a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'helping','act_id'=>$item['id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>
+    </eq>
 	<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Helping/del',array('id'=>$item['id'],'token'=>$token))}');">删除</a></td>
 </tr>
 

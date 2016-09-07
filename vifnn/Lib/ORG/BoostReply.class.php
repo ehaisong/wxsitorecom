@@ -23,3 +23,5 @@ class BoostReply
 	}
 }
 echo "\r\n";
+
+?>

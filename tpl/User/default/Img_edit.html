@@ -331,6 +331,19 @@ $(function(){
                       设置隐藏后，关键词触发图文消息不会显示diy素材中的“关注”和“原文”素材。（微信粉丝接收信息不受影响）
                   </TD>
                 </TR>
+				<vifnnif where="$grades">
+				<tr>
+					<th>所需会员级别：</th>
+					<td>	
+						<select name="read_grade" class="pt" style="width:138px;">
+							<option value="0">无需级别</option>
+							<volist name="grades" id="vo">
+								<option value="{vifnn:$vo.id}" <if condition="$vo['id'] eq $info['read_grade']">selected="selected"</if>>{vifnn:$vo.grade_name}</option>
+							</volist>
+						</select> &nbsp;&nbsp;&nbsp;&nbsp;(高于或等于该级别的会员才能阅读)
+					</td>
+				</tr>
+				</vifnnif>
                 <TR>
                   <TH valign="top"><label for="info">图文详细页内容：</label></TH>
                   <TD><textarea name="info" id="info"  rows="5" style="width:590px;height:360px">{vifnn:$info.info}</textarea>

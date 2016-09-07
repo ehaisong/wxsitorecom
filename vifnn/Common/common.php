@@ -13,6 +13,7 @@ function isAndroid(){
 }
 
 function arr_htmlspecialchars($value){
+	return $value;
 	return is_array($value) ? array_map('arr_htmlspecialchars', $value) : htmlspecialchars($value);
 }
 
@@ -209,7 +210,7 @@ function filterPost(&$post, $params = array()) {
  */
 function getUpdateServer()
 {
-	return C('update_server') ? C('update_server') : 'http://up.vifnn.com/';
+	return C("update_server") ? C("update_server") : "http://gongdan.weihubao.com/";
 }
 
 /**
@@ -289,5 +290,16 @@ function rand_money($min,$max){
 		return 'http://cron.weihubao.com';
 	}
 
-require APP_PATH.'Common/business.php';//@V-I-F-N-N
+function time2string($second)
+{
+	$day = (floor($second / (3600 * 24)) != 0 ? floor($second / (3600 * 24)) . "天" : "");
+	$second = $second % (3600 * 24);
+	$hour = (floor($second / 3600) != 0 ? floor($second / 3600) . "小时" : "");
+	$second = $second % 3600;
+	$minute = (floor($second / 60) != 0 ? floor($second / 60) . "分" : "");
+	$second = $second % 60;
+	$second = $second;
+	return $day . $hour . $minute . $second . "秒";
+}
+require APP_PATH.'Common/business.php';//@V-I-F-N-N.C-O-M
 ?>

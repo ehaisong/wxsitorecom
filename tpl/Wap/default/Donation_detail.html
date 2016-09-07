@@ -60,7 +60,7 @@ function lists(page)
 			if(dat.city !=""){
 				html += '<div class="n">' + dat.wechaname + '/' + dat.city + '</div>'; 
 			}else{
-				html += '<div class="n">' + dat.wechaname'</div>'; 
+				html += '<div class="n">' + dat.wechaname+'</div>'; 
 			}
 			html += '<div class="d" style="color:#5a5451;">和<span>' + dat.people + '</span>位伙伴筹得善款<span>' + dat.price + '</span>元</div>'; 
 			html += '<div style="font-size:13px;color:#b0a7a2;margin:5px 0;line-height:20px;">' + dat.share_content + '</div>'; 
@@ -93,5 +93,6 @@ window.shareData = {
 };
 </script>
 {vifnn:$shareScript}
+<include file="Public:tongji" />
 </body>
 </html>

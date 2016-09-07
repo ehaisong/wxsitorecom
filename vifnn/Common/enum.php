@@ -3,7 +3,7 @@ return array(
     'ENUM_LIST'=>array(
         'status'=>array(
             array('value'=>'1','text'=>'开启'),
-            array('value'=>'0','text'=>'关闭'),
+            array('value'=>'0','text'=>'关闭')
         ),
         'reward_type'=>array(
             array('value'=>'cash','text'=>'红包'),
@@ -12,6 +12,21 @@ return array(
         'boolean'=>array(
             array('value'=>'1','text'=>'是'),
             array('value'=>'0','text'=>'否')
+        ),
+        'pay_type'=>array(
+            array('value'=>'alipay','text'=>'支付宝'),
+            array('value'=>'weixin','text'=>'微信支付'),
+            array('value'=>'tenpay','text'=>'财付通[wap手机]'),
+            array('value'=>'tenpaycomputer','text'=>'财付通[即时到帐]'),
+            array('value'=>'yeepay','text'=>'易宝支付'),
+            array('value'=>'allinpay','text'=>'通联支付'),
+            array('value'=>'daofu','text'=>'货到付款'),
+            array('value'=>'dianfu','text'=>'到店付款'),
+            array('value'=>'chinabank','text'=>'网银在线'),
+            array('value'=>'CardPay','text'=>'会员卡支付'),
+        ),
+        'offer_name'=>array(
+            array('value'=>'discount','text'=>'会员折扣'),
         ),
     ),
     'SCORE_USE_CAT'=>array(
@@ -60,6 +75,7 @@ return array(
         'ip'=>'/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/'
     ),
     'EXTENSION_PATH'=>'./uploads/extension',
+	'IMAGE_DEFAULTS'     => array('dish_thumb' => '/tpl/static/dishout_v1/images/thumb.jpg'),
     /*
      * 注册场景处理类
      * 'type'=>'Type@index,Type2@index'
@@ -75,5 +91,17 @@ return array(
     'IS_MEIHUA'             => false,
     'MEIHUA_URL'            => '',
     'MEIHUA_TOKEN'			=> '',
-    'DEFAULT_TPL_ID'=>'2'//默认模板
+    'DEFAULT_TPL_ID'=>'2',//默认模板
+    'DATA_AUTH'=>'pigcms123456',//数据加密
+    'DATA_TOKEN'=>'pigcms123456',//数据签名
+    'TONGJI_DOMAIN'=>'tongji.weihubao.com',
+    //'TONGJI_DOMAIN'=>'tongji.test',
+    'TONGJI_SERVICE'=>array(
+        'base'=>'http://tongji.weihubao.com/user/api',
+        //'base'=>'http://tongji.test/user/api',
+        'is_sign'=>true,
+    ),
+    'TONGJI_SCRIPT'=>'http://s.404.cn/tpl/static/ftongji/tongji.min.js?v=1',
+    //'TONGJI_SCRIPT'=>'http://tongji.test/Public/Static/tongji/tongji.js',
+    'DISH_ORDER_TIMEOUT'=>420,//餐饮中订单支付超时释放库存时间 s
 );

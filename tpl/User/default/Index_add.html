@@ -74,7 +74,7 @@ $(function(){
       </if>
       </h4>
       </div>
-          <form method="post" action="{vifnn::U('User/Index/insert')}" enctype="multipart/form-data">
+          <form method="post" action="{vifnn::U('User/Index/insert')}<if condition='!empty($comefromsyttoken)'>&comefromsyttoken={vifnn:$comefromsyttoken}</if>"  enctype="multipart/form-data">
           <div class="msgWrap">
             <table class="userinfoArea" border="0" cellspacing="0" cellpadding="0" width="100%">
               <thead>

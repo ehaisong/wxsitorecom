@@ -1,0 +1,108 @@
+<if condition="$ischild neq 1">
+<include file="Public:head" />
+<else />
+<include file="Repast:head" />
+</if>
+<style>
+ .field_tip
+ {
+  font-size: 12px;
+  margin: 0px;
+  margin-top: 5px;
+  color: #888;
+ }
+ .opts_list
+ {
+  display: block;
+  width: 280px;
+  max-height: 600px;
+  overflow: auto;
+ }
+ .opts_list li
+ {
+  height: 32px;
+  width: 250px;
+  margin-bottom: 5px;
+ }
+ .opts_list li .remove_btn
+ {
+  height: 32px;
+  line-height: 32px;
+  display: inline-block;
+ }
+ .opts_input
+ {
+  border: solid 1px #dcdcdc;
+  height: 20px;
+  line-height: 20px;
+  width: 200px;
+  padding: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  margin-right: 10px;
+ }
+ .opts_input:focus
+ {
+  border: solid 1px #090;
+ }
+</style>
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<div class="content">
+	<div class="cLineB">
+		<h4>绑定管理员</h4>
+		<a href="{vifnn::U('Repast/bind',array('token' => $token,'cid'=>$cid))}" class="right  btnGreen" style="margin-top:-27px">返回</a>
+	</div>
+<form method="post" action="{vifnn::empty($_info['id'])?U('bindAdd'):U('bindEdit')}" id="formID">
+<input type="hidden" name="id" value="{vifnn:$tableData.id}" />
+<input type="hidden" name="cid" value="{vifnn:$cid}" />
+    <div class="msgWrap bgfc">
+     <table class="userinfoArea" style=" margin:0;" border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tbody>
+       <tr>
+        <th><span class="red">*</span>选择门店：</th>
+        <td>
+         <neq name="ischild" value="1">
+          <select name="cid" selectedval="{vifnn:$_info.cid}">
+           <option value="{vifnn:$company_main.id}">[总店] {vifnn:$company_main.name}</option>
+           <volist name="company_list" id="com">
+            <option value="{vifnn:$com.id}">{vifnn:$com.name}</option>
+           </volist>
+          </select>
+          <else/>
+          本店
+         </neq>
+        </td>
+       </tr>
+       <tr>
+        <th><span class="red">*</span>绑定微信：</th>
+        <td>
+         <input name="wecha_id" id="fans_id" class="px" style="width:200px;" value="{vifnn:$_info.wecha_id}">
+         <a href="javascript:void(0);" class="a_choose" id="add_fans">选择粉丝</a>
+         <a href="javascript:void(0);" id="clear_fans">清空</a>
+        </td>
+       </tr>
+       <td>
+        <notempty name="_info['id']">
+         <input type="hidden" name="id" value="{vifnn:$_info.id}" />
+        </notempty>
+       <button ajax="post" type="button" name="submit" class="btnGreen" id="save">保存</button> &nbsp; </td>
+       </tr>
+      </tbody>
+     </table>
+     </div>
+</form>
+</div>
+<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/smart/smart.js"></script>
+<script>
+ $('#add_fans').click(function(){
+  var token 	= '{vifnn:$token}';
+  var group 	= $('#group').val();
+  art.dialog.open('?g=User&m=Service&a=service_fans&token='+token+'&group='+group,{lock:true,title:'选择粉丝',width:600,height:400,yesText:'关闭',background: '#000',opacity: 0.45});
+ });
+ $('#clear_fans').click(function(){
+  $('#fans_id').val('');
+ });
+</script>
+<include file="Public:footer" />

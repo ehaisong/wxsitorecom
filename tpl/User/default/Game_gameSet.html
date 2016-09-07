@@ -1,8 +1,8 @@
-<include file="Public:head"/>
+<include file="Public:headnew"/>
 <if condition="$usertplid neq 2">
 <script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
 <link href="{vifnn:$staticPath}/tpl/static/new/css/bootstrap.css" rel="stylesheet">
-<!--<link href="{vifnn:$staticPath}/tpl/static/new/css/style.css" rel="stylesheet">-->
+<link href="{vifnn:$staticPath}/tpl/static/new/css/style.css" rel="stylesheet">
 </if>
 <link rel="stylesheet" href="{vifnn::STATICS}/kindeditor/themes/default/default.css" />
 <link rel="stylesheet" href="{vifnn::STATICS}/kindeditor/plugins/code/prettify.css" />
@@ -104,7 +104,31 @@ items : [
 					<th>游戏时间限制：</th>
 					<td>
 							<input type="input" class="px" id="start_time" value="{vifnn:$info.start_time|default=time()|date='Y-m-d H:i',###}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" name="start_time">&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;
-							<input type="input" class="px" id="end_time" value="{vifnn:$info.end_time|default=strtotime('+1 month')|date="Y-m-d H:i",###}" name="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+							<if condition="$gameid eq 50 || $gameid eq 33">
+								<php>
+									if (isset($info['end_time'])) {
+										$info['end_time'] = $info['end_time'] > strtotime('2016-06-30 23:59:00') ? strtotime('2016-06-30 23:59:00') : $info['end_time'];
+									}
+									$defaultEndTime = strtotime('+1 month') > strtotime('2016-06-30 23:59:00') ? strtotime('2016-06-30 23:59:00') : strtotime('+1 month');
+								</php>
+								<input type="input" class="px" id="end_time" value="{vifnn:$info.end_time|default=$defaultEndTime|date="Y-m-d H:i",###}" name="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',maxDate:'2016-06-30 23:59:00'})">
+								<br/>
+								<br/>
+								<font color="red">该游戏将于2016-07-01做下架处理</font>
+							<elseif condition="$gameid eq 61 || $gameid eq 62 || $gameid eq 71  || $gameid eq 75 || $gameid eq 80" />
+								<php>
+									if (isset($info['end_time'])) {
+										$info['end_time'] = $info['end_time'] > strtotime('2016-08-19 23:59:00') ? strtotime('2016-08-19 23:59:00') : $info['end_time'];
+									}
+									$defaultEndTime = strtotime('+1 month') > strtotime('2016-08-19 23:59:00') ? strtotime('2016-08-19 23:59:00') : strtotime('+1 month');
+								</php>
+								<input type="input" class="px" id="end_time" value="{vifnn:$info.end_time|default=$defaultEndTime|date="Y-m-d H:i",###}" name="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',maxDate:'2016-08-19 23:59:00'})">
+								<br/>
+								<br/>
+								<font color="red">该游戏将于2016-08-20做下架处理</font>
+							<else />
+								<input type="input" class="px" id="end_time" value="{vifnn:$info.end_time|default=strtotime('+1 month')|date="Y-m-d H:i",###}" name="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})">
+							</if>
 					</td>
 				</tr>
 

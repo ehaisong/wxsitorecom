@@ -8,10 +8,10 @@ class LuckyFruitAction extends LotteryBaseAction
 	public function _initialize()
 	{
 		parent::_initialize();
-		$this->canUseFunction('LuckyFruit');
+		$this->canUseFunction("LuckyFruit");
 		$this->lotteryType = 4;
-		$this->lotteryTypeName = '水果达人';
-		$this->assign('lotteryTypeName', $this->lotteryTypeName);
+		$this->lotteryTypeName = "水果达人";
+		$this->assign("lotteryTypeName", $this->lotteryTypeName);
 	}
 
 	public function cheat()
@@ -29,7 +29,7 @@ class LuckyFruitAction extends LotteryBaseAction
 	public function sn()
 	{
 		parent::sn($this->lotteryType);
-		$this->display('Lottery:sn');
+		$this->display("Lottery:sn");
 	}
 
 	public function add()
@@ -45,8 +45,9 @@ class LuckyFruitAction extends LotteryBaseAction
 	public function record()
 	{
 		parent::lottery_record($this->lotteryType);
-		$this->display('Lottery:record');
+		$this->display("Lottery:record");
 	}
 }
+
 
 ?>

@@ -130,6 +130,9 @@
 						<a href="javascript:drop_confirm('关闭后将不再手机上显示，确定关闭吗?','{vifnn::U('Unitary/operate',array('token'=>$token,'unitaryid'=>$vo['id'],'type'=>'stop','p'=>$_GET['p']))}')">关闭</a>
 						</if>
 						<a href="{vifnn::U('Unitary/data',array('token'=>$token,'unitaryid'=>$vo['id']))}">数据</a>
+						<eq name="tj_status" value="1">
+							<a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'unitary','act_id'=>$vo['id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>
+						</eq>
 						<if condition="($vo.state eq 0) and ($vo.pay_count eq 0)">
 						<a href="javascript:drop_confirm('您确定要删除【{vifnn:$vo.name}】吗?', '{vifnn::U('Unitary/operate',array('token'=>$token,'unitaryid'=>$vo['id'],'type'=>'del'))}')">删除</a>
 						</if>

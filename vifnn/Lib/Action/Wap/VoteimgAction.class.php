@@ -9,6 +9,7 @@ class VoteimgAction extends WapAction
 		parent::_initialize();
 		
 		$this->action_id = $this->_request('id', 'intval');
+		$this->checkTongji($this->token, "voteimg", $this->action_id);
 		if (IS_GET) {
 			D('Userinfo')->convertFake(M('voteimg_users'), array('token' => $this->token, 'wecha_id' => $this->wecha_id, 'fakeopenid' => $this->fakeopenid));
 		}
@@ -92,6 +93,7 @@ class VoteimgAction extends WapAction
 		$this->clear_vote_day();
 		$this->assign('alllist', $list);
 		$this->assign('id', $this->action_id);
+		$this->assign("vote_id", $this->action_id);
 		$this->assign('token', $this->token);
 		$this->assign('key_word', $key_word);
 		$this->assign('type', $type);
@@ -150,36 +152,44 @@ class VoteimgAction extends WapAction
 		}
 		if ($this->wecha_id == '') {
 			echo json_encode(array('status' => 'fail', 'data' => '投票失败,参数错误'));
-			die;
+			exit();
 		}
 		$voteimg = M('voteimg')->where(array('id' => $vote_id))->find();
 		if (!empty($voteimg) && $voteimg['display'] != 1) {
 			echo json_encode(array('status' => 'fail', 'data' => '投票失败,活动已关闭'));
-			die;
-		} else {
-			if (empty($voteimg)) {
-				echo json_encode(array('status' => 'fail', 'data' => '投票失败,活动不存在'));
-				die;
-			}
+			exit();
 		}
-		if ($voteimg['end_time'] < $_SERVER['REQUEST_TIME']) {
-			echo json_encode(array('status' => 'fail', 'data' => '投票失败,活动已结束'));
-			die;
-		} else {
-			if ($_SERVER['REQUEST_TIME'] < $voteimg['start_time']) {
-				echo json_encode(array('status' => 'fail', 'data' => '投票失败,活动未开始'));
-				die;
+		else if (empty($voteimg)) {
+			echo json_encode(array("status" => "fail", "data" => "投票失败,活动不存在"));
+			exit();
+		}
+
+		if ($voteimg["end_time"] < $_SERVER["REQUEST_TIME"]) {
+			echo json_encode(array("status" => "fail", "data" => "投票失败,活动已结束"));
+			exit();
+		}
+		else if ($_SERVER["REQUEST_TIME"] < $voteimg["start_time"]) {
+			echo json_encode(array("status" => "fail", "data" => "投票失败,活动未开始"));
+			exit();
+		}
+
+		if (($voteimg["start_time_spell"] != "") || ($voteimg["end_time_spell"] != "")) {
+			list($start_hour_time, $start_minute_time) = ($voteimg["start_time_spell"] == "" ? array("00", "00") : explode(":", $voteimg["start_time_spell"]));
+			list($end_hour_time, $end_minute_time) = ($voteimg["end_time_spell"] == "" ? array("23", "59") : explode(":", $voteimg["end_time_spell"]));
+			if (!(mktime($start_hour_time, $start_minute_time, 0, date("m"), date("d"), date("Y")) <= $_SERVER["REQUEST_TIME"]) && ($_SERVER["REQUEST_TIME"] <= mktime($end_hour_time, $end_minute_time, 0, date("m"), date("d"), date("Y")))) {
+				echo json_encode(array("status" => "fail", "data" => "投票时间段为" . $start_hour_time . ":" . $start_minute_time . "至" . $end_hour_time . ":" . $end_minute_time));
+				exit();
 			}
 		}
 		if (!$this->notice($voteimg)) {
 			echo json_encode(array('status' => 'fail', 'data' => '未关注用户不能参与投票'));
-			die;
+			exit();
 		}
 		$voteimg_item = M('voteimg_item')->where(array('id' => $id, 'check_pass' => 1))->find();
 		if ($voteimg['self_status'] != 1) {
 			if (!empty($voteimg_item['wecha_id']) && $this->wecha_id == $voteimg_item['wecha_id']) {
 				echo json_encode(array('status' => 'fail', 'data' => '自己不能给自己投票'));
-				die;
+				exit();
 			}
 		}
 		$where = array('vote_id' => $vote_id, 'token' => $this->token, 'wecha_id' => $this->wecha_id);
@@ -187,7 +197,7 @@ class VoteimgAction extends WapAction
 		if (0 < (int) $voteimg['limit_vote_day']) {
 			if ($voteimg['limit_vote_day'] <= $vote_user['votenum_day']) {
 				echo json_encode(array('status' => 'fail', 'data' => '超过今日投票数限制'));
-				die;
+				exit();
 			}
 		}
 		if (0 < (int) $voteimg['limit_vote_item']) {
@@ -195,13 +205,13 @@ class VoteimgAction extends WapAction
 			$today_count = array_count_values($vote_today);
 			if ($voteimg['limit_vote_item'] <= $today_count[$id]) {
 				echo json_encode(array('status' => 'fail', 'data' => '超今日票数限制请投其他选项'));
-				die;
+				exit();
 			}
 		}
 		if (0 < (int) $voteimg['limit_vote']) {
 			if ($voteimg['limit_vote'] <= $vote_user['votenum']) {
 				echo json_encode(array('status' => 'fail', 'data' => '超过总投票数限制'));
-				die;
+				exit();
 			}
 		}
 		$u = array();
@@ -226,14 +236,19 @@ class VoteimgAction extends WapAction
 					$gethongbao = $this->gethongbao($voteimg_item, $share_code, $vote_user);
 					if ($gethongbao['votestatus'] == 1) {
 						echo json_encode(array('status' => 'hbdone', 'data' => array('getmoney' => $gethongbao['money'])));
-						die;
+						exit();
 					}
 				}
+
+				if (($voteimg["lottery_type"] != 6) && (S($this->token . "_" . $vote_id . "_" . $this->wecha_id . "_remind") != "no") && (!S($this->token . "_" . $vote_id . "_" . $this->wecha_id . "_remind") || !S($this->token . "_" . $vote_id . "_higremind"))) {
+					S($this->token . "_" . $vote_id . "_" . $this->wecha_id . "_remind", "yes", mktime("23", "59", "59", date("m"), date("d"), date("Y")) - $_SERVER["REQUEST_TIME"]);
+					S($this->token . "_" . $vote_id . "_higremind", 1);
+				}
 				if ($voteimg['limit_vote_day'] == 0) {
-					echo json_encode(array('status' => 'done', 'data' => array('left_vote_day' => '')));
+					echo json_encode(array('status' => 'done', 'data' => array('left_vote_day' => '', "allowlottery" => S($this->token . "_" . $vote_id . "_" . $this->wecha_id . "_remind"))));
 					die;
 				} else {
-					echo json_encode(array('status' => 'done', 'data' => array('left_vote_day' => $voteimg['limit_vote_day'] - $vote_user['votenum_day'] - 1)));
+					echo json_encode(array('status' => 'done', 'data' => array('left_vote_day' => $voteimg['limit_vote_day'] - $vote_user['votenum_day'] - 1, "allowlottery" => S($this->token . "_" . $vote_id . "_" . $this->wecha_id . "_remind"))));
 					die;
 				}
 			} else {
@@ -532,31 +547,67 @@ class VoteimgAction extends WapAction
 		$this->check_expire($action_info);
 		if ($action_info['default_skin'] == 1) {
 			$this->display('vote_record_index');
-		} else {
-			if ($action_info['default_skin'] == 2) {
-				$this->display('vote_record_index_new');
-			} else {
-				if ($action_info['default_skin'] == 3) {
-					$this->display('vote_record_index_third');
-				} else {
-					if ($action_info['default_skin'] == 4) {
-						$this->display('vote_record_index_fourth');
-					} else {
-						$this->display('vote_record_index');
-					}
-				}
-			}
+		}
+		else if ($action_info['default_skin'] == 2) {
+			$this->display('vote_record_index_new');
+		}
+		else if ($action_info['default_skin'] == 3) {
+			$this->display('vote_record_index_third');
+		}
+		else if ($action_info['default_skin'] == 4) {
+			$this->display('vote_record_index_fourth');
+		}
+		else {
+			$this->display('vote_record_index');
 		}
 	}
+
 	public function stat_info()
 	{
 		if (empty($this->action_id) || empty($this->token)) {
 			$return_json = json_encode(array('item_count' => 0, 'voted_count' => 0, 'visit_count' => 0));
 		}
-		$item_count = M('voteimg_item')->where(array('vote_id' => $this->action_id, 'token' => $this->token, 'check_pass' => 1))->count();
-		$voted_count = M('voteimg_item')->where(array('vote_id' => $this->action_id, 'token' => $this->token))->sum('vote_count');
-		$visit_count_self = M('voteimg_stat')->where(array('vote_id' => $this->action_id, 'token' => $this->token))->getField('count');
-		$visit_count = M('voteimg_users')->where(array('vote_id' => $this->action_id, 'token' => $this->token))->count();
+
+		$cache_item_count = S($this->token . "_" . $this->action_id . "_item_count");
+
+		if ($cache_item_count) {
+			$item_count = $cache_item_count;
+		}
+		else {
+			$item_count = M("voteimg_item")->where(array("vote_id" => $this->action_id, "token" => $this->token, "check_pass" => 1))->count();
+			S($this->token . "_" . $this->action_id . "_item_count", $item_count, 600);
+		}
+
+		$cache_voted_count = S($this->token . "_" . $this->action_id . "_voted_count");
+
+		if ($cache_voted_count) {
+			$voted_count = $cache_voted_count;
+		}
+		else {
+			$voted_count = M("voteimg_item")->where(array("vote_id" => $this->action_id, "token" => $this->token))->sum("vote_count");
+			S($this->token . "_" . $this->action_id . "_voted_count", $voted_count, 600);
+		}
+
+		$cache_count_self = S($this->token . "_" . $this->action_id . "_count_self");
+
+		if ($cache_count_self) {
+			$visit_count_self = $cache_count_self;
+		}
+		else {
+			$visit_count_self = M("voteimg_stat")->where(array("vote_id" => $this->action_id, "token" => $this->token))->getField("count");
+			S($this->token . "_" . $this->action_id . "_count_self", $visit_count_self, 600);
+		}
+
+		$cache_visit_count = S($this->token . "_" . $this->action_id . "_visit_count");
+
+		if ($cache_visit_count) {
+			$visit_count = $cache_visit_count;
+		}
+		else {
+			$visit_count = M("voteimg_users")->where(array("vote_id" => $this->action_id, "token" => $this->token))->count();
+			S($this->token . "_" . $this->action_id . "_visit_count", $visit_count, 600);
+		}
+
 		if (0 < $visit_count_self) {
 			$visit_count = $visit_count_self + $visit_count;
 		}
@@ -1004,7 +1055,12 @@ class VoteimgAction extends WapAction
 		} else {
 			$allowlottery = 'no';
 		}
-		$this->assign('allowlottery', $allowlottery);
+
+		if (!S($this->token . "_" . $this->action_id . "_" . $this->wecha_id . "_remind") || !S($this->token . "_" . $this->action_id . "_higremind")) {
+			S($this->token . "_" . $this->action_id . "_" . $this->wecha_id . "_remind", $allowlottery, mktime("23", "59", "59", date("m"), date("d"), date("Y")) - $_SERVER["REQUEST_TIME"]);
+			S($this->token . "_" . $this->action_id . "_higremind", 1);
+		}
+
 		return true;
 	}
 	private function clear_vote_day()

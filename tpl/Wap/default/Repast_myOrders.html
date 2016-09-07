@@ -18,7 +18,9 @@
 				  <span class="time">{vifnn:$order['otimestr']}</span>
 				  </label>
 				  </a>
+				  <php>if($order['price']>0){</php>
 				  <a href="{vifnn::U('Repast/OrderToPay', array('token'=>$token, 'cid'=>$order['cid'],'orid'=>$order['oid'], 'wecha_id'=>$wecha_id))}" class="btn" style="margin-right: 15px;">去付款</a>
+				  <php>}</php>
 				 <!---<if condition="isset($order['jiaxcai']) AND $order['jiaxcai']">
 				  <a href="{vifnn::U('Repast/dishMenu', array('token'=>$token, 'cid'=>$order['cid'],'orid'=>$order['oid'], 'wecha_id'=>$wecha_id))}" class="btn" style="margin-right: 100px;">去加菜</a>
 				</if>-->

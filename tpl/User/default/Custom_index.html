@@ -108,6 +108,9 @@
 	<a href="{vifnn::U('Custom/forms',array('set_id'=>$item['set_id'],'token'=>$token))}">输入项管理</a> &nbsp;|&nbsp;
 	<a href="{vifnn::U('Custom/record',array('set_id'=>$item['set_id'],'token'=>$token))}">表单统计</a> &nbsp;|&nbsp;
 	<a href="{vifnn::U('Custom/set',array('set_id'=>$item['set_id'],'token'=>$token))}">修改</a> &nbsp;|&nbsp;
+    <eq name="tj_status" value="1">
+        <a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'custom','act_id'=>$item['set_id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>&nbsp;|&nbsp;
+    </eq>
 	<a href="javascript:drop_confirm('删除将清除所有相关的设置信息和用户提交信息?', '{vifnn::U('Custom/del',array('set_id'=>$item['set_id'],'token'=>$token))}');">删除</a></td>
 </tr>
 </volist>

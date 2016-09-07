@@ -55,7 +55,7 @@
           </div>
            <script>
             function showIntroDetail(id){
-                art.dialog.open('{vifnn::U('School/reservation_uinfo',array('token'=>$token))}&id='+id,{lock:false,title:'预约订单详情',width:700,height:420,yesText:'关闭',background: '#000',opacity: 0.87});
+                art.dialog.open('{vifnn::U('School/reservation_uinfo',array('token'=>$token))}&id='+id,{lock:false,title:'预约订单详情',width:700,height:420,yesText:'关闭',background: '#000',opacity: 0.87,close: function(){location.reload();}});
             }
         </script>
 

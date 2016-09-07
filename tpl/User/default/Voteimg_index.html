@@ -66,6 +66,9 @@
 		 <a href="{vifnn::U('Voteimg/fansPayLog',array('vote_id'=>$vo['id'], 'token'=>$token))}" class="btnGreen">充值退款记录</a>
 		 </if>
 		  <a href="{vifnn::U('Voteimg/action_del',array('id'=>$vo['id'],'token'=>$token))}" onclick="return(confirm('确定要删除吗？'))" class="btnGreen">删除</a>
+			  <eq name="tj_status" value="1">
+				  <a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'voteimg','act_id'=>$vo['id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>
+			  </eq>
 		<a href="{vifnn::U('Voteimg/apply_custom_field',array('cid'=>$vo['id'],'token'=>$token))}" class="btnGreen">自定义报名项</a>
 		  </td>
 		</tr>

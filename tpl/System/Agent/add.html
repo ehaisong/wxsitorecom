@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>代理商管理</title>
-<link href="{vifnn::RES}/images/main.css" type="text/css" rel="stylesheet">
+<link href="{vifnn::RES}/images/style1.css" type="text/css" rel="stylesheet">
 <script src="{vifnn::STATICS}/jquery-1.4.2.min.js" type="text/javascript"></script>
 <meta http-equiv="x-ua-compatible" content="ie=7" />
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
@@ -12,69 +12,89 @@
 </head>
 <body class="warp">
 <div id="artlist" class="addn">
+<div id="btl">
 <form action="" method="post" name="form" enctype="multipart/form-data" id="myform">
 			<table width="100%" border="0" cellspacing="0" cellpadding="0" id="addn">
-
 				 <tr>
 					<th colspan="4">设置代理商</th>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>名称：</strong></td>
+					<td height="38" align="right"><strong>名称：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="name" class="ipt" size="45" value="{vifnn:$info.name}" />
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>手机：</strong></td>
+					<td height="38" align="right"><strong>手机：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="mp" class="ipt" size="45" value="{vifnn:$info.mp}" />
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>密码：</strong></td>
+					<td height="38" align="right"><strong>密码：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="password" name="password" class="ipt" size="45" value="" /> 不修改密码请留空
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>QQ：</strong></td>
+					<td height="38" align="right"><strong>QQ：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="qq" class="ipt" size="45" value="{vifnn:$info.qq}" />
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>站点地址：</strong></td>
+					<td height="38" align="right"><strong>站点地址：</strong></td>
 					<td colspan="3" class="lt">
-						<input type="text" name="siteurl" class="ipt" size="45" value="{vifnn:$info.siteurl}" /><br>
-						 比如：http://daili.baidu.com 这里的网址，即代理商的网址，可以解析二级域名或者一级域名，在IIS添加后将会显示代理信息。
+						<input type="text" name="siteurl" class="ipt" size="45" value="{vifnn:$info.siteurl}" /> 比如：http://www.baidu.com
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>到期时间：</strong></td>
+					<td height="38" align="right"><strong>到期时间：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="endtime" onClick="WdatePicker()" class="ipt" size="45" value="{vifnn:$info.endtime|date="Y-m-d",###}">
 					</td>
 				</tr>
-				<tr>
-					<td height="48" align="right"><strong>包月价格：</strong></td>
+				<tr style="display:none">
+					<td height="38" align="right"><strong>包月价格：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="monthprice" class="ipt" size="45" value="{vifnn:$info.monthprice}" />  如果该代理商按公众号数量收钱，请填写0
 					</td>
 				</tr>
+				<TR>
+                  <td height="38" align="right"><strong>自定义导航：</strong></td>
+                  <TD>
+                  <input class="radio" type="radio" name="isnav" value="0"  <if condition="$info['isnav'] eq 0" >checked</if>>支持&nbsp;&nbsp;&nbsp;&nbsp; 
+                  <input class="radio" type="radio" name="isnav" value="1"  <if condition="$info['isnav'] eq 1" >checked</if>>不支持
+                </TR>
+				<TR>
+					<td height="38" align="right"><strong>自定义套餐：</strong></td>
+					<TD>
+						<input {vifnn::$userNum>0?'disabled':''} class="radio" type="radio" name="is_package" value="1"  <if condition="$info['is_package'] eq 1" >checked</if>>支持&nbsp;&nbsp;&nbsp;&nbsp;
+						<input {vifnn::$userNum>0?'disabled':''} class="radio" type="radio" name="is_package" value="0"  <if condition="$info['is_package'] eq 0" >checked</if>>不支持
+					<notempty name="userNum">
+						&nbsp;&nbsp;&nbsp;代理商已存在客户，不能修改此项
+					</notempty>
+				</TR>
+				<!--TR>
+					<td height="38" align="right"><strong>传播分析：</strong></td>
+					<TD>
+						<input class="radio" type="radio" name="is_tongji" value="1"  <if condition="$info['is_tongji'] eq 1" >checked</if>>支持&nbsp;&nbsp;&nbsp;&nbsp;
+						<input class="radio" type="radio" name="is_tongji" value="0"  <if condition="$info['is_tongji'] eq 0" >checked</if>>不支持
+				</TR-->
 				<tr>
-					<td height="48" align="right"><strong>公众号价格：</strong></td>
+					<td height="38" align="right"><strong>公众号价格：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="wxacountprice" class="ipt" size="45" value="{vifnn:$info.wxacountprice}" /> 元/年  如果不限制，请填写0
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>账户余额：</strong></td>
+					<td height="38" align="right"><strong>账户余额：</strong></td>
 					<td colspan="3" class="lt">
 						<input type="text" name="moneybalance" class="ipt" size="45" value="{vifnn:$info.moneybalance}" />
 					</td>
 				</tr>
 				<tr>
-					<td height="48" align="right"><strong>备注说明：</strong></td>
+					<td height="38" align="right"><strong>备注说明：</strong></td>
 					<td colspan="3" class="lt">
 						<textarea name="intro" class="ipt" style="width:300px;height:80px;">{vifnn:$info.intro}</textarea>
 					</td>
@@ -83,14 +103,15 @@
 	<tr>
 		<td colspan="4" style="text-align:center">
 			<gt name="info.id" value="0">
-				<input class="bginput" type="submit" name="dosubmit" value="修 改" >
+				<input class="bginput" type="submit" name="dosubmit" value="修 改" id="inpts">
 				<else />
-				<input class="bginput" type="submit" name="dosubmit" value="添 加"></gt>
+				<input class="bginput" type="submit" name="dosubmit" value="添 加" id="inpts"></gt>
 			&nbsp;
-			<input class="bginput" type="button" onclick="javascript:history.back(-1);" value="返 回" ></td>
+			<input class="bginput" type="button" onclick="javascript:history.back(-1);" value="返 回" id="inpts"></td>
 	</tr>
 </table>
 </form>
+</div>
 <br />
 <br />
 <br />

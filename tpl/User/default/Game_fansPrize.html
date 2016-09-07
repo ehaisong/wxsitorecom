@@ -1,0 +1,140 @@
+<include file="Public:head"/>
+
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/game/css/gameconfig.css">
+
+<div class="content">
+	<div class="cLineB">
+		<h4>用户奖品列表</h4>
+
+		<div class="ztSbox">
+			<a href="/index.php?g=User&m=Game&a=index&token={vifnn:$token}" class="right btnGrayS vm">返回我的活动</a>
+			<span class="seaBox" style="display: none;">
+				<input type="search"/>
+				<button>搜索</button>
+			</span>
+		</div>
+
+		<div class="clr"></div>
+	</div>
+
+	<br />
+
+	<div class="msgWrap" <if condition="empty($prizeList['score'])">style="display: none; "</if>>
+		<h4>排名获奖信息</h4>
+		<br />
+		<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+		  <THEAD>
+		  <TR>
+		      <TH style="text-align:center" class="down-up2">奖品信息</TH>
+		      <TH style="text-align:center" class="down-up2">兑换码</TH>
+		      <TH style="text-align:center" class="down-up2">兑换状态</TH>
+		      <TH style="text-align:center" class="norightborder">操作</TH>
+		  </TR>
+		  </THEAD>
+		  <TBODY>
+		  <TR></TR>
+		  <TR>
+			  <TD>{vifnn:$prizeList['score']['content']}</TD>
+			  <TD>{vifnn:$prizeList['score']['exchangeCode']}</TD>
+			  <TD><if condition="$prizeList['score']['isExchanged'] eq 1">已兑换<else />未兑换</if></TD>
+			  <TD class="norightborder">
+				  <if condition="$prizeList['score']['isExchanged'] eq 0">
+					  <a href="index.php?g=User&m=Game&a=useConvert&id={vifnn:$id}&convert_id={vifnn:$prizeList['score']['convertId']}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+				  </if>
+			  </TD>
+		  </TR>
+		  </TBODY>
+		</TABLE>
+	</div>
+
+	<br />
+
+	<div class="msgWrap" <if condition="empty($prizeList['playing'])">style="display: none; "</if>>
+		<h4>游戏过程中获奖信息</h4>
+		<br />
+		<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+		  <THEAD>
+		  <TR>
+		      <TH style="text-align:center" class="down-up2">奖品信息</TH>
+		      <TH style="text-align:center" class="down-up2">兑换状态</TH>
+		      <TH style="text-align:center" class="norightborder">操作</TH>
+		  </TR>
+		  </THEAD>
+		  <TBODY>
+		  <TR></TR>
+		  <?php $playingData = $prizeList['playing']; ?>
+		  <volist id="list" name="playingData">
+			  <TR>
+				  <TD>{vifnn:$list.content}</TD>
+				  <TD>
+					  <if condition="$list['type'] eq 5 || $list['type'] eq 6 || $list['type'] eq 7 || $list['type'] eq 8">
+						  <if condition="$list['is_convert'] eq 1">
+							  已兑换
+						  <else />
+							  未兑换
+						  </if>
+					  <else />
+						  已兑换
+					  </if>
+				  </TD>
+				  <TD class="norightborder">
+					  <if condition="($list['type'] eq 5 || $list['type'] eq 6 || $list['type'] eq 7 || $list['type'] eq 8) && $list['is_convert'] neq 1">
+						  <a href="index.php?g=User&m=Game&a=otherConvert&act=fansPrize&convert_type=1&id={vifnn:$id}&fans_id={vifnn:$fansId}&convert_id={vifnn:$list.id}&type={vifnn:$list.type}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+					  </if>
+				  </TD>
+			  </TR>
+		  </volist>
+		  </TBODY>
+		</TABLE>
+	</div>
+
+	<br />
+
+	<div class="msgWrap" <if condition="empty($prizeList['over'])">style="display: none; "</if>>
+		<h4>游戏结束后抽奖获奖信息</h4>
+		<br />
+		<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+		  <THEAD>
+		  <TR>
+		      <TH style="text-align:center" class="down-up2">奖品信息</TH>
+		      <TH style="text-align:center" class="down-up2">兑换状态</TH>
+		      <TH style="text-align:center" class="norightborder">操作</TH>
+		  </TR>
+		  </THEAD>
+		  <TBODY>
+		  <TR></TR>
+		  <?php $overData = $prizeList['over']; ?>
+		  <volist id="list" name="overData">
+			  <TR>
+				  <TD>{vifnn:$list.content}</TD>
+				  <TD>
+					  <if condition="$list['type'] eq 5 || $list['type'] eq 6 || $list['type'] eq 7 || $list['type'] eq 8">
+						  <if condition="$list['is_convert'] eq 1">
+							  已兑换
+						  <else />
+							  未兑换
+						  </if>
+					  <else />
+						  已兑换
+					  </if>
+				  </TD>
+				  <TD class="norightborder">
+					  <if condition="($list['type'] eq 5 || $list['type'] eq 6 || $list['type'] eq 7 || $list['type'] eq 8) && $list['is_convert'] neq 1">
+						  <a href="index.php?g=User&m=Game&a=otherConvert&act=fansPrize&convert_type=2&id={vifnn:$id}&fans_id={vifnn:$fansId}&convert_id={vifnn:$list.id}&type={vifnn:$list.type}" onclick="return confirm('你确定要使用这个兑换码吗？兑换后即会失效！');">兑换</a>
+					  </if>
+				  </TD>
+			  </TR>
+		  </volist>
+		  </TBODY>
+		</TABLE>
+	</div>
+
+	<div class="msgWrap" style="<if condition="empty($prizeList['score']) && empty($prizeList['playing']) && empty($prizeList['over'])">display: block; <else />display: none; </if>padding-bottom: 20px; " >
+		<h3 style="text-align: center; margin-top: 25px; font-size: 25px; ">暂无记录！</h3>
+	</div>
+</div>
+</div>
+</div>
+
+</div>
+<include file="Public:footer"/>

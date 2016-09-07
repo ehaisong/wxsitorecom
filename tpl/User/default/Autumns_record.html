@@ -1,0 +1,83 @@
+<include file="Public:head"/>
+<link rel="stylesheet" type="text/css" href="{vifnn:$staticPath}/tpl/User/default/common/css/cymain.css" />
+<div class="content">
+  <div class="cLineB">
+	  <h4 class="left">"{vifnn:$Activity.title}"参与记录</h4>
+		  <div>
+  <a href="javascript:history.go(-1);" class="right btnGrayS vm">返回</a>
+  
+  </div>
+	  <div class="clr"></div> 
+  </div>
+  <div class="cLineB">
+            本次活动奖品总数：<span class="redamount">{vifnn:$datacount}</span>个　　　中奖人数：<span class="redamount">{vifnn:$recordcount} </span>个　　　领奖人数:<span class="redamount">{vifnn:$count}</span>　　已发奖品：<span class="redamount">{vifnn:$send}</span>个</div>
+		<div style="margin-top:20px;"><a href="{vifnn::U(MODULE_NAME.'/record',array('id'=>$Activity['id'],'isprize'=>1,'type'=>$_GET['type']))}" class="btnGrayS vm">中奖记录</a>&nbsp;&nbsp;<a href="{vifnn::U(MODULE_NAME.'/record',array('id'=>$Activity['id'],'isprize'=>0,'type'=>$_GET['type']))}" class="btnGrayS vm">未中奖记录</a>&nbsp;&nbsp;<a href="{vifnn::U(MODULE_NAME.'/record',array('id'=>$Activity['id'],'isprize'=>'all','type'=>$_GET['type']))}" class="btnGrayS vm">全部记录</a></div>
+  <div class="cLine" style=" padding: 8px 0">
+          </div>
+          <div class="msgWrap">
+          <form method="post"  action="" id="info" >
+          <input name="delall"  type="hidden" value="" />
+           <input name="wxid"  type="hidden" value="" />
+            <TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+              <THEAD>
+                <TR style="text-align: center;">
+					<TH class="select">序号</TH>
+					<TH>SN码(中奖号)</TH>
+					<TH>奖项</TH>
+					<TH>是否已发奖品</TH>
+					<TH>奖品发送时间</TH>
+					 
+					<TH>联系电话</TH>
+					<TH>中奖者微信号</TH>
+					<TH>领奖时间</TH>
+					<TH>操作</TH>
+                </TR>
+				
+              </THEAD>
+              <TBODY>
+				<volist name="list" id="list">
+					 <TR style="line-height:30px;height: 43px;line-height: 59px;">
+						<td class="select">{vifnn:$i}</td>
+						<td>{vifnn:$list.sn}</td>
+						<td>{vifnn:$list.prize}</td>
+						 <td>
+              <if condition="$list['sendstutas'] eq 0">否<else/>是</if>
+            </td>
+            <td><if condition="$list['sntime'] eq 0"> <else/>{vifnn:$list.sntime|date='Y-m-d H:i:s',###}</if>
+            </td>
+						<td>{vifnn:$list.tel}</td>
+						<td>{vifnn:$list.name}</td>
+						<td><if condition="$list['prtime'] neq 0"> {vifnn:$list.prtime|date='Y-m-d H:i:s',###}</if></td>
+						<td>
+				<if condition="$list['isprize'] eq 1">
+               <if condition="$list['sendstutas'] eq 0"> 
+                 <a href="index.php?g=User&m=Autumns&a=sendprize&id={vifnn:$list.bid}&bid={vifnn:$list.id}">发奖</a>
+              <else/>
+               <a href="index.php?g=User&m=Autumns&a=sendnull&id={vifnn:$list.bid}&bid={vifnn:$list.id}">取消发奖</a>
+              </if>
+			  <else />未中奖
+			  </if>
+			  <a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Autumns/sndelete',array('token'=>$token,'id'=>$list['bid'],'bid'=>$list['id']))}');">删除</a>
+             
+            </td>
+					</TR>
+				</volist>
+			  </TBODY>
+            </TABLE>
+           </form> 
+          </div>
+          <div class="cLine">
+            <div class="pageNavigator right">
+                 <div class="pages">{vifnn:$page}</div>
+              </div>
+            <div class="clr"></div>
+          </div>
+        </div>
+
+        <div class="clr"></div>
+      </div>
+    </div>
+  </div>
+  <!--底部-->
+  	</div>
+<include file="Public:footer"/>

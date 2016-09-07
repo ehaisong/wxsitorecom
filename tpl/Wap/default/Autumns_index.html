@@ -41,11 +41,12 @@ margin-right: 15px;border-radius:20px;line-height:24px;}
                         OPENSLIDE:true, 
             IMG:{
                 BG:"{vifnn:$linfo.hpic}"
-            },
-                        MUSICBG:"{vifnn:$linfo.backmp3}"
+            }/*,
+                        MUSICBG:"{vifnn:$linfo.backmp3}"*/
                     }
     })()
 </script>
+<audio src="{vifnn:$linfo.backmp3}"  autoplay="autoplay" loop="loop" id="audioplay"></audio>
 <script src="{vifnn:$staticPath}/tpl/static/autumns/js/sound.js"></script>
 <script src="{vifnn:$staticPath}/tpl/static/autumns/js/soundmanager.js"></script>
     <div data-role="container" class="container">
@@ -150,10 +151,29 @@ window.shareData = {
             "timeLineLink":"{vifnn:$f_siteUrl}{vifnn::U('Autumns/index',array('token'=>$token,'id'=>intval($_GET['id'])))}",
             "sendFriendLink":"{vifnn:$f_siteUrl}{vifnn::U('Autumns/index',array('token'=>$token,'id'=>intval($_GET['id'])))}",
             "weiboLink": "{vifnn:$f_siteUrl}{vifnn::U('Autumns/index',array('token'=>$token,'id'=>intval($_GET['id'])))}",
-            "tTitle": "{vifnn:$linfo.title}",
-            "tContent": "{vifnn:$linfo.info}"
+            "tTitle": "{vifnn:$linfo.title|shareFilter}",
+            "tContent": "{vifnn:$linfo.info|shareFilter}",
+			"fTitle": "{vifnn:$linfo.title|shareFilter}"
         };
 </script>
 {vifnn:$shareScript}
+<script type="text/javascript">
 
+function autoPlayAudio() {
+	wx.ready(function() {
+		document.getElementById('audioplay').play();
+	});
+	window.onload = function() {
+			$('#audioplay').prop('autoplay',true);
+			document.getElementById('audioplay').play();
+		// alert(typeof WeixinJSBridge);
+		WeixinJSBridge.invoke('getNetworkType', {}, function(e) {
+			// 在这里拿到 e.err_msg, 这里面就包含了所有的网络类型
+			// alert(e.err_msg);
+			document.getElementById('audioplay').play();
+		});
+	};
+}
+autoPlayAudio();
+</script>
 </body></html>

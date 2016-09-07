@@ -166,7 +166,6 @@
 
 	    .custom-richtext img{
 	    	width: 100% !important;
-	    	max-height: 600px ;
 	    }
 
 	    .js-mp-info a:hover{
@@ -227,8 +226,9 @@
 
 		.horizontal{
 			position: absolute;
-			bottom: 20px ;
-			right: 100px ;
+			bottom: 20px;
+			margin-left: 42%;
+			margin-bottom: -6%;
 		}
 
 		.horizontal li{
@@ -248,7 +248,7 @@
 		}
 
 		.horizontal li a.on{
-			background: none repeat scroll 0% 0% #666;
+			background: none repeat scroll 0% 0% red;
 		}
 
 	    /***** E-banner *****/
@@ -256,6 +256,13 @@
 	</head>
 
 	<body class=" body-fixed-bottom">
+		<if condition="$memberNotice neq ''">
+		<if condition="$notice_content eq 'no_follow'">
+		<div id="membernotice">{vifnn:$memberNotice}</div>
+		<elseif condition="$notice_content eq 'no_register'" />
+		{vifnn:$memberNotice}
+		</if>
+		</if>
         <!-- container -->
         <div class="header">
         <!-- ▼顶部通栏 -->
@@ -273,9 +280,6 @@
                
 		<div class="content ">
 			<div class="content-body">
-				<if condition="$memberNotice neq ''">
-		           {vifnn:$memberNotice}
-		        </if>
 			     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			        <div class="modal-dialog">
 			          <div class="modal-content">
@@ -355,11 +359,13 @@
 							<img class='img_slide slide <if condition="$vo['index'] eq 1">active</if>' id="slide{vifnn:$vo.index}" src="{vifnn:$vo.shop_big}" />
 			            </foreach>
 					</div>
-
+					<if condition="count($tdata) gt 1">
 					<ul class="horizontal">
-						<li><a class="slide_button button on" href="#slide1"></a></li>
-						<li><a class="slide_button button" href="#slide2"></a></li>
+						<volist name="tdata" id="pic">
+						<li><if condition="$key eq 0"><a class="slide_button button on" href="#slide1"></a><else /><a class="slide_button button" href="#slide1"></a></if></li>
+						</volist>
 					</ul>
+					</if>
 				</div>
 
 
@@ -375,20 +381,13 @@
 							    buttons = jQuery('.slide_button'),
 							    i = slides.index(active),
 							    width = wrap.width();
-
-							slides
-
-							.on('swipeleft', function(e) {
+							slides.on('swipeleft', function(e) {
 								if (i === slides.length - 1) { return; }
 								slides.eq(i + 1).trigger('activate');
-							})
-
-							.on('swiperight', function(e) {
+							}).on('swiperight', function(e) {
 								if (i === 0) { return; }
 								slides.eq(i - 1).trigger('activate');
-							})
-
-							.on('activate', function(e) {
+							}).on('activate', function(e) {
 								slides.eq(i).removeClass('active');
 								buttons.eq(i).removeClass('on');
 
@@ -399,16 +398,7 @@
 
 								// select active class for slide button
 								buttons.eq(i).addClass('on');
-							})
-
-							// The code below handles what happens before any swipe event is triggered.
-							// It makes the slides demo on this page work nicely, but really doesn't
-							// have much to do with demonstrating the swipe events themselves. For more
-							// on move events see:
-							//
-							// http://stephband.info/jquery.event.move
-
-							.on('movestart', function(e) {
+							}).on('movestart', function(e) {
 								// If the movestart heads off in a upwards or downwards
 								// direction, prevent it so that the browser scrolls normally.
 								if ((e.distX > e.distY && e.distX < -e.distY) ||
@@ -420,9 +410,7 @@
 								// To allow the slide to keep step with the finger,
 								// temporarily disable transitions.
 								wrap.addClass('notransition');
-							})
-
-							.on('move', function(e) {
+							}).on('move', function(e) {
 								var left = 100 * e.distX / width;
 
 								// Move slides with the finger
@@ -444,9 +432,7 @@
 										slides[i].style.left = left/5 + '%';
 									}
 								}
-							})
-
-							.on('moveend', function(e) {
+							}).on('moveend', function(e) {
 								wrap.removeClass('notransition');
 								
 								slides[i].style.left = '';
@@ -543,11 +529,11 @@
 		<if condition="$buys eq 0">
 			<button type="button" id="buy1" class="seckill">已结束</button>
 	    <elseif condition="$buys eq 2" />
-	    	<button type="button" id="buy2" class="seckill" data-toggle="modal" data-target="#myModal">
+	    	<button type="button" <if condition="$notice_content eq 'no_follow'">href="#fly_page" onclick="anchor_follow()"<elseif condition="$notice_content eq 'no_register'" />href="#TipContent" onclick="anchor()"<else /> id="buy2" data-toggle="modal" data-target="#myModal"</if> class="seckill">
 	          填写订单
 	        </button>
 	    <else />
-	    	<button type="button" id="buy" class="seckill" data-toggle="modal" data-target="#myModal">
+	    	<button type="button" <if condition="$notice_content eq 'no_follow'">href="#fly_page" onclick="anchor_follow()"<elseif condition="$notice_content eq 'no_register'" />href="#TipContent" onclick="anchor()"<else /> id="buy" data-toggle="modal" data-target="#myModal"</if> class="seckill">
 	          立即购买
 	        </button>
 	    </if>
@@ -606,7 +592,7 @@
           return false ;
         } else {
         	var num = len(name) ;
-        	if(num > 4) {
+        	if(num > 15) {
         		alert("请输入正确的收件人格式！") ;
         		return false ;        		
         	}
@@ -679,6 +665,28 @@
 
     </script>
 
-
+<script type="text/javascript">
+//锚点
+function anchor(){
+	$(".closed").show();
+    $("._flys").show();
+	$("#TipContent").show();
+	$(".zhezhao").show();
+	/*if($("#TopTipHolder").css('height') == '0px'){
+		$("#TopTipClose").click();//执行关闭
+		$("#TopTipHolder").css('height','35px');//弹出
+	}*/
+}
+function anchor_follow(){
+	$(".closed").show();
+    $("._flys").show();
+	$("#fly_page").show();
+}
+//隐藏提醒关注注册弹框
+$(".close").click(function(){
+	$("#no_follow").hide();
+	$("#bg").hide();
+});
+</script>
 </body>
 </html>

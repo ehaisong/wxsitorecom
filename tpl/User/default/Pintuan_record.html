@@ -9,6 +9,7 @@
 	<div class="cLineB">
 		<h4 class="left">拼团<?php if($pintuan!=''){echo "【".$pintuan['title']."】";}?>记录</h4>
 		<a href="javascript:history.go(-1)"  class="right btnGrayS" >返回</a>
+		<a class="right btnGrayS vm" href="{vifnn::U('Pintuan/exportorder',array('token'=>$token,'tid'=>$pintuan['id'],'team_name'=>$pintuan['title']))}">拼团记录导出</a>
 		<div class="clr"></div>
 	</div>
 	<div class="msgWrap">
@@ -64,7 +65,7 @@
 					<td class="norightborder">
 						<a href="{vifnn::U('User/Pintuan/order',array('token'=>$token,'team_id'=>$lv['id']))}">参团记录</a>
 						<if condition="$lv['isrefund'] != 1">
-						<a href="{vifnn::U('User/Pintuan/refund',array('token'=>$token,'team_id'=>$lv['id'],'tid'=>$lv['tid']))}">一键退款</a>
+						<a href="{vifnn::U('User/Pintuan/refund',array('token'=>$token,'team_id'=>$lv['id'],'tid'=>$lv['tid']))}" onclick="return(confirm('确定一键退款吗？'))">一键退款</a>
 						<else />
 						<a href="{vifnn::U('User/Pintuan/refundlog',array('token'=>$token,'team_id'=>$lv['id'],'tid'=>$lv['tid']))}">退款记录</a>
 						</if>

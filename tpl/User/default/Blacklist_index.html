@@ -1,4 +1,4 @@
-<include file="Public:head2"/>
+<include file="Public:head"/>
 <link rel="stylesheet" type="text/css" href="{vifnn::RES}/css/cymain.css"/>
 <style>
     /*开关按钮*/
@@ -141,8 +141,8 @@
                                 <div on_name="开启" off_name="关闭" class="toggle_radio" value="{vifnn:$vo.status}" name="status" url="{vifnn::U('changeStatus',array('id'=>$vo['id']))}"></div>
                             </td>
                             <td class="norightborder">
-                                <a href="{vifnn::U('edit',array('id'=>$vo['id'],'token'=>$_GET['token']))}">修改</a>
-                                <a confirm href="javascript:;" ajax="get" url="{vifnn::U('del',array('id'=>$vo['id'],'token'=>$_GET['token']))}">删除</a>
+                                <a href="{vifnn::U('edit',array('id'=>$vo['id'],'token'=>$token))}">修改</a>
+                                <a confirm href="javascript:;" ajax="get" url="{vifnn::U('del',array('id'=>$vo['id'],'token'=>$token))}">删除</a>
                             </td>
                         </tr>
                     </volist>
@@ -160,6 +160,6 @@
     </div>
 </div>
 <script>
-    $s.finderController('.finder','{vifnn::U("index",array("token"=>$_GET["token"]))}');
+    $s.finderController('.finder','{vifnn::U("index",array("token"=>$token))}');
 </script>
 <include file="Public:footer"/>

@@ -45,7 +45,7 @@
                 });
             });
 
-            function submit(){
+            function submittt(){
         var form = document.getElementById("form1");
         var obj = {truename:'',tel:'',dateline:'',wecha_id:'',rid:'',type:'',timepart:'',info:'',housetype:'',carnum:'',km:'',choose:''};
 
@@ -111,11 +111,11 @@
                  info: form.info.value,
                  choose:form.choose.value,
              }
-
         $.post("{vifnn::U('Car/add',array('token'=>$token,'wecha_id'=>$wecha_id,'addtype'=>$addtype))}", obj,
             function(data) {
                 //alert(data.msg+'--'+data.housetype);
                 if (0 == data.errno) {
+					$(".btn_submit").attr('disabled',"true");
                     alert(data.msg);
                     var count = $(".ok").text();
                     count = 1+ parseInt(count);
@@ -182,7 +182,7 @@ function jumpurl(url){
                     </dl>
                 </div>
                 <div class="pb_5 pl_10 pr_10">
-<form id="form1" action="javascript:submit();" method="post" >
+<form id="form1" action="javascript:;" method="post" >
                         <input type="hidden" name="wecha_id" id="wecha_id" value="{vifnn:$wecha_id}" />
                         <input type="hidden" name="rid" id="rid" value="{vifnn:$reser['id']}" />
                         <!--input type="hidden" name="aid" id="aid" value="3453" /-->
@@ -246,7 +246,7 @@ function jumpurl(url){
                             </dd>
                         </dl>
                         <div style="margin:10px;text-align: center;">
-                            <input type="submit" value="提交订单" class="btn_submit"  style="margin:10px auto;text-align: center;cursor:pointer">
+                            <input type="button" value="提交订单" class="btn_submit"  style="margin:10px auto;text-align: center;cursor:pointer" onclick="submittt();" />
                         </div>
 </form>
                 </div>

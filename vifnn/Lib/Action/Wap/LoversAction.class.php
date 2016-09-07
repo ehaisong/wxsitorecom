@@ -7,13 +7,16 @@ class LoversAction extends LotteryBaseAction{
 		if(!$id) $this->error('不存在的活动');
 		$wecha_id	= $this->wecha_id;
 		$token		= $this->_get('token');
-		$Lottery 	= M('Lottery')->field('statdate,enddate,canrqnums,aginfo,title')->where(array('id'=>$id,'token'=>$token,'type'=>8))->find();
+		$Lottery 	= M('Lottery')->field('statdate,enddate,canrqnums,aginfo,title,status"')->where(array('id'=>$id,'token'=>$token,'type'=>8))->find();
 		if(!$Lottery) $this->error('不存在的活动');
 		$record 	= M('Lottery_record')->field('usenums')->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id))->find();
 
 		if ($Lottery['statdate'] > time()) {
 			//活动未开始
 			$this->error('活动未开始，请在'.date('Y-m-d H:i:s',$Lottery['statdate']).'后再来参加活动!');
+		}
+		if (($Lottery["enddate"] < time()) || ($Lottery["status"] == 0)) {
+			$this->error("活动已结束");
 		}
 		$mpName = M('Wxuser')->where(array('token'=>$token))->getField('weixin');
 		$keyword = M('Keyword')->where(array('token'=>$token,'module'=>'Lottery','pid'=>$id))->getField('keyword');
@@ -76,6 +79,27 @@ class LoversAction extends LotteryBaseAction{
 			}
 			$prizeStr.='</p>';
 		}
+		if ($Lottery['four']){
+			$prizeStr.='<p>四等奖: '.$Lottery['four'];
+			if ($Lottery['displayjpnums']){
+				$prizeStr.='奖品数量:'.$Lottery['fournums'];
+			}
+			$prizeStr.='</p>';
+		}
+		if ($Lottery['five']){
+			$prizeStr.='<p>五等奖: '.$Lottery['five'];
+			if ($Lottery['displayjpnums']){
+				$prizeStr.='奖品数量:'.$Lottery['fivenums'];
+			}
+			$prizeStr.='</p>';
+		}
+		if ($Lottery['six']){
+			$prizeStr.='<p>六等奖: '.$Lottery['six'];
+			if ($Lottery['displayjpnums']){
+				$prizeStr.='奖品数量:'.$Lottery['sixnums'];
+			}
+			$prizeStr.='</p>';
+		}
 		$this->assign('prizeStr',$prizeStr);
 		
 		$this->assign('linfo',$Lottery);
@@ -94,8 +118,7 @@ class LoversAction extends LotteryBaseAction{
 		$record 	= $redata->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id))->find();
 		$Lottery 	= M('Lottery')->where(array('id'=>$id,'token'=>$token,'type'=>8))->find();
 		if(!empty($wecha_id)){
-			if ( $Lottery['needreg'] && !$_SESSION['checkInfo'] ){
-				session('checkInfo','1');
+			if ( $Lottery['needreg'] && $this->fans['tel'] == ''){
 				$this->success('请先核实您的个人资料再参加活动',U('Userinfo/index',array('token'=>$this->token,'wecha_id'=>$this->wecha_id,'redirect'=>MODULE_NAME.'/index|id:'.intval($id))));
 				die;
 			}

@@ -637,6 +637,81 @@ class PintuanAction extends UserAction{
 			exit();
 		}
 	}
+
+	public function exportorder()
+	{
+		$team_name = trim($_GET["team_name"]);
+		$filename = $team_name . "_参团记录_" . time();
+		$tid = (int) $_GET["tid"];
+		header("Content-type:application/octet-stream");
+		header("Accept-Ranges:bytes");
+		header("Content-type:application/vnd.ms-excel");
+		header("Content-Disposition:attachment;filename=" . $filename . ".xls");
+		header("Pragma: no-cache");
+		header("Expires: 0");
+		$title = array("拼团名称", "拼团类型", "职位", "开团时间", "姓名", "电话", "地址", "购买数量", "实付(元)", "拼团状态", "下单时间");
+		$teamlist = M("pintuan_team")->where(array("tid" => $tid, "token" => $this->token))->select();
+		$export = array();
+		$orderlist = M("pintuan_order")->where(array("token" => $this->token, "tid" => $tid, "paid" => 1))->select();
+
+		if (!empty($orderlist)) {
+			foreach ($orderlist as $k => $v ) {
+				$team = M("pintuan_team")->where(array("id" => $v["team_id"], "token" => $v["token"]))->find();
+
+				if (0 < $team["type"]) {
+					$type = "最优开团";
+					$guize = M("pintuan_guize")->where(array("token" => $team["token"], "id" => $team["guize_id"]))->find();
+				}
+				else {
+					$type = "人缘开团";
+					$guize = M("pintuan_guize")->where(array("token" => $team["token"], "tid" => $team["tid"]))->order("discount DESC")->find();
+				}
+
+				if ($guize["number"] <= $team["count"]) {
+					$status = "拼团成功";
+				}
+				else {
+					$status = "拼团失败";
+				}
+
+				$export[$k]["team_name"] = $team_name;
+				$export[$k]["type"] = $type;
+				$export[$k]["ishead"] = ($v["ishead"] == 1 ? "团长" : "团员");
+				$export[$k]["createtime"] = date("Y-m-d H:i:s", $team["addtime"]);
+				$export[$k]["user_name"] = trim($v["user_name"]);
+				$export[$k]["user_tel"] = trim($v["user_tel"]);
+				$export[$k]["user_address"] = trim($v["user_address"]);
+				$export[$k]["num"] = $v["num"];
+				$export[$k]["price"] = $v["price"];
+				$export[$k]["status"] = $status;
+				$export[$k]["addtime"] = date("Y-m-d H:i:s", $v["addtime"]);
+			}
+		}
+		else {
+			$this->error("没有需要导出的记录");
+		}
+
+		if (!empty($title)) {
+			foreach ($title as $k => $v ) {
+				$title[$k] = iconv("UTF-8", "GBK//IGNORE", $v);
+			}
+
+			$title = implode("\t", $title);
+			echo "{$title}\n";
+		}
+
+		if (!empty($export)) {
+			foreach ($export as $key => $val ) {
+				foreach ($val as $ck => $cv ) {
+					$export[$key][$ck] = iconv("UTF-8", "GBK//IGNORE", $cv);
+				}
+
+				$export[$key] = implode("\t", $export[$key]);
+			}
+
+			echo implode("\n", $export);
+		}
+	}
 }
 
 ?>

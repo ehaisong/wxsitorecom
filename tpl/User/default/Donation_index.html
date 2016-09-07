@@ -43,6 +43,8 @@
 					<td>{vifnn:$o.starttime|date="Y-m-d H:i",###}<br/>{vifnn:$o.endtime|date="Y-m-d H:i",###}</td>
 					<td>{vifnn:$o['status']}</td>
 					<td class="norightborder">
+						<if condition="$Think.session.is_syn eq 2">
+						<if condition="$usertplid neq 2">
 							<script type="text/javascript">
 						   $(document).ready(function(){
 							  var bheight=document.body.clientHeight;
@@ -68,8 +70,6 @@
 						   <div id="close{vifnn:$o.id}">您想关闭就点我吧</div>
 						   <div id="testdiv{vifnn:$o.id}"><img src="{vifnn:$Think.session.source_domain}/wap.php?c=Wxapp&a=qrcode&id={vifnn:$o.id}&modle=Donation" width="300" height="300" class="cateimg_small"></div>
 						 </div>
-						<if condition="$Think.session.is_syn eq 2">
-						<if condition="$usertplid neq 2">
 						   <a id="lay{vifnn:$o.id}" style="width:191px;">查看二维码</a><br>
 						</if>
 						</if>
@@ -77,6 +77,9 @@
 						<a href="{vifnn::U('Donation/dynamic', array('did' => $o['id']))}">动态列表</a> 
 						<a href="{vifnn::U('Donation/set', array('did' => $o['id']))}">活动设置</a> 
 						<a href="{vifnn::U('Donation/order', array('did' => $o['id']))}">捐款详情</a>
+						<eq name="tj_status" value="1">
+							<a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'donation','act_id'=>$o['id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>
+						</eq>
 						<if condition="empty($o['is_delete'])">
 						<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('Donation/deldonation', array('id' => $o['id']))}');">删除</a> 
 						</if>

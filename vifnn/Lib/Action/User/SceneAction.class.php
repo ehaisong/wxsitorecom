@@ -86,6 +86,7 @@ class SceneAction extends UserAction{
 		$info['wxuser'] 	= M('wxuser')->where(array('token'=>$this->token))->getField('weixin');
 		$this->info = $info;
 		$this->assign('info',$info);
+		$_GET["type"] = ($_GET["type"] != "" ? trim($_GET["type"]) : ACTION_NAME);
 		if(ACTION_NAME == 'wall'){
 			$this->assign('join_count',M('Wall_message')->where(array('token'=>$this->token,'wallid'=>$this->info['id'],'is_scene'=>'1','is_check'=>1,'type'=>array('neq','event')))->count());
 			$this->assign('join_title','条消息');
@@ -463,6 +464,7 @@ class SceneAction extends UserAction{
 
 	/*ajax加载消息*/
 	public function ajaxWall(){
+		//echo sssssssssssssssssssssseffffffffffffffffffffffffffffffffffffffffff;
 		$sceneid = $this->_get('sceneid','intval');
 		$lastidd = $this->_get('lastidd', 'intval');
 		$where = array(
@@ -472,6 +474,8 @@ class SceneAction extends UserAction{
 			'check_time' => array('egt', $this->_get('lastid'))
 			);
 		$data 	= $this->_getWallList($where,'check_time asc,time asc','',$sceneid,'msg');
+		//dump($data);
+		file_put_contents('./SCE.TXT',$where,FILE_APPEND);
 		$result = array();
 		if($data){
 			$result['err'] 	= 0;
@@ -1528,7 +1532,7 @@ class SceneAction extends UserAction{
 		$now 		= time();
 		$vote_info 	= M('Vote')->where(array('token'=>$this->token,'id'=>$vote_id))->find();
 		if($vote_info){
-			$res 	= M('Vote_item')->where(array('vid'=>$vote_info['id']))->order('id ASC, vcount desc')->limit(15)->select();
+			$res 	= M('Vote_item')->where(array('vid'=>$vote_info['id']))->order('vcount desc,id ASC')->limit(15)->select();
 			$percent 	= M('Vote_item')->field('SUM(vcount) AS total')->where(array('vid'=>$vote_info['id']))->find();
 		}
 		$data = $info = array();
@@ -1815,120 +1819,145 @@ class SceneAction extends UserAction{
 		}
 	
 		$idArr 		= explode(',', $mid);
-		$where 		= array('token'=>$this->token,'wallid'=>$wallid,'id'=>array('in',$idArr));
-	
-		$msg_info 	= M('Wall_message')->where($where)->field('time,check_time')->find();
-		$update 	= array('is_check'=>$checked);
-	
-		if($checked == 1 && $msg_info['time'] == $msg_info['check_time']){
-			$update['check_time'] 	= time();
+		$where = array(
+			"token"  => $this->token,
+			"wallid" => $wallid,
+			"id"     => array("in", $idArr)
+			);
+		$msg_info = M("Wall_message")->where($where)->field("time,check_time")->find();
+		$update = array("is_check" => $checked);
+		if (($checked == 1) && ($msg_info["time"] == $msg_info["check_time"])) {
+			$update["check_time"] = time();
 		}
-	
-		if(M('Wall_message')->where($where)->save($update)) {
-			$result['err'] 	= 0;
-			$result['info'] = '';
+
+		if (M("Wall_message")->where($where)->save($update)) {
+			$result["err"] = 0;
+			$result["info"] = "";
 			echo json_encode($result);
 			exit();
 		}
-	
 	}
-	
-	function del_msg(){
-		$wallid = $this->_get('id','intval');
-		$mid 	= $this->_get('mid','intval');
-	
-		$where 	= array('token'=>$this->token,'wallid'=>$wallid,'id'=>$mid);
-	
-		if(M('Wall_message')->where($where)->delete()){
+
+	public function del_msg()
+	{
+		$wallid = $this->_get("id", "intval");
+		$mid = $this->_get("mid", "intval");
+		$where = array("token" => $this->token, "wallid" => $wallid, "id" => $mid);
+
+		if (M("Wall_message")->where($where)->delete()) {
 			echo true;
 		}
 	}
 
 	private function join_count()
 	{
-		$id = intval($this->_request('id'));
-		$where = array('token'=>$this->token,'act_id'=>$id,'act_type'=>'3');
-		return M('Wall_member')->where($where)->count();
+		$id = intval($this->_request("id"));
+		$where = array("token" => $this->token, "act_id" => $id, "act_type" => "3");
+		return M("Wall_member")->where($where)->count();
 	}
 
 	public function join_count_ajax()
 	{
-		if(in_array($_GET['this_a'],array('signin','lottery','supperzzle'))){
-			$data['totalname'] = '人参与';
-			$data['count'] = $this->join_count();
-		}elseif($_GET['this_a'] == 'wall'){
-			$count = M('Wall_message')->where(array('token'=>$this->token,'wallid'=>$this->info['id']))->count();
-			$data['count'] = $count;
-			$data['totalname'] = '条消息';
+		$_GET["type"] = ($_GET["type"] != "" ? trim($_GET["type"]) : $_GET["this_a"]);
+		if (in_array($_GET["this_a"], array("signin", "lottery", "supperzzle"))) {
+			$data["totalname"] = "人参与";
+			$data["count"] = $this->join_count();
 		}
-		if($_GET['this_a'] == 'wall'){
-			$data['count'] = M('Wall_message')->where(array('token'=>$this->token,'wallid'=>$this->info['id'],'is_scene'=>'1','is_check'=>1,'type'=>array('neq','event')))->count();
-			$data['totalname'] = '条消息';
-		}elseif(($_GET['this_a'] == 'hudong' && $_GET['type'] == 'red_packet') || $_GET['this_a'] == 'red_packet'){
-			$data['count'] = M('shakelottery_users')->where(array('token'=>$this->token,'aid'=>$this->info['red_packet_id']))->count();
-			$data['count'] = M('scene_active')->where(array('token'=>$this->token,'active_id'=>$this->info[$_GET['type'].'_id'],'scene_id'=>$this->info['id'],'type'=>$_GET['type']))->count();
-			$data['totalname'] = '人摇红包';
-		}elseif(($_GET['this_a'] == 'hudong' && $_GET['type'] == 'jiugongge') || $_GET['this_a'] == 'jiugongge'){
-			$player = M('lottery_record')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'lid'=>$this->info['jiugongge_id']))->select();
-			$data['count'] = count($player);
-			$data['count'] = M('scene_active')->where(array('token'=>$this->token,'active_id'=>$this->info[$_GET['type'].'_id'],'scene_id'=>$this->info['id'],'type'=>$_GET['type']))->count();
-			$data['totalname'] = '人抽奖';
-		}elseif(($_GET['this_a'] == 'hudong' && $_GET['type'] == 'zajindan') || $_GET['this_a'] == 'zajindan'){
-			$player = M('lottery_record')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'lid'=>$this->info['zajindan_id']))->select();
-			$data['count'] = count($player);
-			$data['count'] = M('scene_active')->where(array('token'=>$this->token,'active_id'=>$this->info[$_GET['type'].'_id'],'scene_id'=>$this->info['id'],'type'=>$_GET['type']))->count();
-			$data['totalname'] = '人砸金蛋';
-		}elseif(($_GET['this_a'] == 'hudong' && $_GET['type'] == 'shuiguoji') || $_GET['this_a'] == 'shuiguoji'){
-			$player = M('lottery_record')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'lid'=>$this->info['shuiguoji_id']))->select();
-			$data['count'] = count($player);
-			$data['count'] = M('scene_active')->where(array('token'=>$this->token,'active_id'=>$this->info[$_GET['type'].'_id'],'scene_id'=>$this->info['id'],'type'=>$_GET['type']))->count();
-			$data['totalname'] = '人抽奖';
-		}elseif(($_GET['this_a'] == 'hudong' && $_GET['type'] == 'guaguaka') || $_GET['this_a'] == 'guaguaka'){
-			$player = M('lottery_record')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'lid'=>$this->info['guaguaka_id']))->select();
-			$data['count'] = count($player);
-			$data['count'] = M('scene_active')->where(array('token'=>$this->token,'active_id'=>$this->info[$_GET['type'].'_id'],'scene_id'=>$this->info['id'],'type'=>$_GET['type']))->count();
-			$data['totalname'] = '人刮卡';
-		}elseif(($_GET['this_a'] == 'hudong' && $_GET['type'] == 'dazhuanpan') || $_GET['this_a'] == 'dazhuanpan'){
-			$player = M('lottery_record')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'lid'=>$this->info['dazhuanpan_id']))->select();
-			$data['count'] = count($player);
-			$data['count'] = M('scene_active')->where(array('token'=>$this->token,'active_id'=>$this->info[$_GET['type'].'_id'],'scene_id'=>$this->info['id'],'type'=>$_GET['type']))->count();
-			$data['totalname'] = '人抽奖';
-		}elseif($_GET['this_a'] == 'vote' || $_GET['this_a'] == 'vote_countdown'){
-			$player = M('vote_record')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'vid'=>$this->info['vote_id']))->select();
-			$data['count'] = count($player);
-			$data['totalname'] = '人投票';
-		}elseif($_GET['this_a'] == 'shake_active' || $_GET['this_a'] == 'shake'){
-			$player = M('shake_rt')->Distinct(true)->field('wecha_id')->where(array('token'=>$this->token,'shakeid'=>$this->info['shake_id']))->select();
-			$data['count'] = count($player);
-			$data['totalname'] = '人摇一摇';
-		}elseif($_GET['this_a'] == 'signin'){
-			$data['count'] = $this->join_count();
-			$data['totalname'] = '人签到';
-		}else{
-			$data['count'] = $this->join_count();
-			$data['totalname'] = '人参与';
+		else if ($_GET["this_a"] == "wall") {
+			$count = M("Wall_message")->where(array("token" => $this->token, "wallid" => $this->info["id"]))->count();
+			$data["count"] = $count;
+			$data["totalname"] = "条消息";
 		}
-		$this->ajaxReturn($data,'JSON');
+
+		if ($_GET["this_a"] == "wall") {
+			$data["count"] = M("Wall_message")->where(array(
+	"token"    => $this->token,
+	"wallid"   => $this->info["id"],
+	"is_scene" => "1",
+	"is_check" => 1,
+	"type"     => array("neq", "event")
+	))->count();
+			$data["totalname"] = "条消息";
+		}
+		else {
+			if ((($_GET["this_a"] == "hudong") && ($_GET["type"] == "red_packet")) || ($_GET["this_a"] == "red_packet")) {
+				$data["count"] = M("shakelottery_users")->where(array("token" => $this->token, "aid" => $this->info["red_packet_id"]))->count();
+				$data["count"] = M("scene_active")->where(array("token" => $this->token, "active_id" => $this->info[$_GET["type"] . "_id"], "scene_id" => $this->info["id"], "type" => $_GET["type"]))->count();
+				$data["totalname"] = "人摇红包";
+			}
+			else {
+				if ((($_GET["this_a"] == "hudong") && ($_GET["type"] == "jiugongge")) || ($_GET["this_a"] == "jiugongge")) {
+					$player = M("lottery_record")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "lid" => $this->info["jiugongge_id"]))->select();
+					$data["count"] = count($player);
+					$data["count"] = M("scene_active")->where(array("token" => $this->token, "active_id" => $this->info[$_GET["type"] . "_id"], "scene_id" => $this->info["id"], "type" => $_GET["type"]))->count();
+					$data["totalname"] = "人抽奖";
+				}
+				else {
+					if ((($_GET["this_a"] == "hudong") && ($_GET["type"] == "zajindan")) || ($_GET["this_a"] == "zajindan")) {
+						$player = M("lottery_record")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "lid" => $this->info["zajindan_id"]))->select();
+						$data["count"] = count($player);
+						$data["count"] = M("scene_active")->where(array("token" => $this->token, "active_id" => $this->info[$_GET["type"] . "_id"], "scene_id" => $this->info["id"], "type" => $_GET["type"]))->count();
+						$data["totalname"] = "人砸金蛋";
+					}
+					else {
+						if ((($_GET["this_a"] == "hudong") && ($_GET["type"] == "shuiguoji")) || ($_GET["this_a"] == "shuiguoji")) {
+							$player = M("lottery_record")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "lid" => $this->info["shuiguoji_id"]))->select();
+							$data["count"] = count($player);
+							$data["count"] = M("scene_active")->where(array("token" => $this->token, "active_id" => $this->info[$_GET["type"] . "_id"], "scene_id" => $this->info["id"], "type" => $_GET["type"]))->count();
+							$data["totalname"] = "人抽奖";
+						}
+						else {
+							if ((($_GET["this_a"] == "hudong") && ($_GET["type"] == "guaguaka")) || ($_GET["this_a"] == "guaguaka")) {
+								$player = M("lottery_record")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "lid" => $this->info["guaguaka_id"]))->select();
+								$data["count"] = count($player);
+								$data["count"] = M("scene_active")->where(array("token" => $this->token, "active_id" => $this->info[$_GET["type"] . "_id"], "scene_id" => $this->info["id"], "type" => $_GET["type"]))->count();
+								$data["totalname"] = "人刮卡";
+							}
+							else {
+								if ((($_GET["this_a"] == "hudong") && ($_GET["type"] == "dazhuanpan")) || ($_GET["this_a"] == "dazhuanpan")) {
+									$player = M("lottery_record")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "lid" => $this->info["dazhuanpan_id"]))->select();
+									$data["count"] = count($player);
+									$data["count"] = M("scene_active")->where(array("token" => $this->token, "active_id" => $this->info[$_GET["type"] . "_id"], "scene_id" => $this->info["id"], "type" => $_GET["type"]))->count();
+									$data["totalname"] = "人抽奖";
+								}
+								else {
+									if (($_GET["this_a"] == "vote") || ($_GET["this_a"] == "vote_countdown")) {
+										$player = M("vote_record")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "vid" => $this->info["vote_id"]))->select();
+										$data["count"] = count($player);
+										$data["totalname"] = "人投票";
+									}
+									else {
+										if (($_GET["this_a"] == "shake_active") || ($_GET["this_a"] == "shake")) {
+											$player = M("shake_rt")->Distinct(true)->field("wecha_id")->where(array("token" => $this->token, "shakeid" => $this->info["shake_id"]))->select();
+											$data["count"] = count($player);
+											$data["totalname"] = "人摇一摇";
+										}
+										else if ($_GET["this_a"] == "signin") {
+											$data["count"] = $this->join_count();
+											$data["totalname"] = "人签到";
+										}
+										else {
+											$data["count"] = $this->join_count();
+											$data["totalname"] = "人参与";
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		$this->ajaxReturn($data, "JSON");
 	}
 
-
-
-	private function other_source_condition( $data )
+	private function other_source_condition($data)
 	{
-		$data['other_source'] = 'scene';
+		$data["other_source"] = "scene";
 		return $data;
 	}
-
-
-
-
-
-
-
-
 }
-
-
 
 
 ?>

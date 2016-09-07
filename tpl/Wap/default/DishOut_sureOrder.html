@@ -52,8 +52,8 @@
 		</ul>
 
 	<ul class="menu_list order_list" id="orderList">
-	 <if condition="!empty($ordish)">
-	  <vifnnlist array="ordish" key="dk" foreach="ditem">
+	 <if condition="!empty($_info['list'])">
+	  <vifnnlist array="_info['list']" key="dk" foreach="ditem">
 		<li>
 			<div style="position: relative;">
 			<if condition="!empty($ditem['image'])">
@@ -63,20 +63,30 @@
 			<span class="ishot" style="left: -5px;">{vifnn:$discount}折</span>
 			</if>
 			</div>
-			<div>
+			<div class="pro_item">
 				<h3>{vifnn:$ditem['name']}</h3>
 				<div>
-					<div class="fr" <if condition="$kconoff eq 1"> max="{vifnn:$ditem['instock']}" <else/>max="-1"</if>>
+					<div class="fr" <if condition="$kconoff eq 1"> max="{vifnn:$ditem['last_inventory']}" <else/>max="-1"</if>>
 					<a href="javascript:void(0);" class="btn add active"></a>
 					</div>
-					<input autocomplete="off" class="number" type="hidden" name="dish[{vifnn:$ditem['id']}][num]" value="{vifnn:$ditem['ornum']}">
-					<input autocomplete="off"  type="hidden" name="dish[{vifnn:$ditem['id']}][price]" value="{vifnn:$ditem['price']}">
-					<input autocomplete="off"  type="hidden" name="dish[{vifnn:$ditem['id']}][name]" value="{vifnn:$ditem['name']}">
-					<input autocomplete="off"  type="hidden" name="dish[{vifnn:$ditem['id']}][discount]" <if condition="$isMember AND $discount gt 0 AND $ditem['isdiscount']">value="{vifnn:$discount}"<else/>value="0"</if>>
-					<span class="count">{vifnn:$ditem['ornum']}</span>
-					<strong>￥<span class="unit_price">{vifnn:$ditem['price']}<input type="hidden" class="tureunit_price" <if condition="isset($ditem['zkprice']) AND $ditem['zkprice'] gt 0">value="{vifnn:$ditem['zkprice']}"<else/>value="{vifnn:$ditem['price']}"</if>></span><if condition="!empty($ditem['unit'])">/{vifnn:$ditem['unit']}</if></strong>
+				<input type="hidden" class="is_meal" value="{vifnn:$ditem['is_meal']}" />
+				<input type="hidden" name="pro_ids[]" value="{vifnn:$ditem['id']}" />
+				<input type="hidden" name="pro_spec[]" value="{vifnn:$ditem['spec']}" />
+				<input type="hidden" name="pro_attr[]" value="{vifnn:$ditem['attr']}" />
+					<input autocomplete="off" class="number" type="hidden" name="pro_num[]" value="{vifnn:$ditem['num']}">
+					<input autocomplete="off"  type="hidden" value="{vifnn:$ditem['price']}">
+					<input autocomplete="off"  type="hidden" value="{vifnn:$ditem['name']}">
+					<input autocomplete="off"  type="hidden" <if condition="$isMember AND $discount gt 0 AND $ditem['isdiscount']">value="{vifnn:$discount}"<else/>value="0"</if>>
+					<span class="count">{vifnn:$ditem['num']}</span>
+					<strong>￥<span class="unit_price">{vifnn:$ditem['price']}
+						<input type="hidden" class="lis_price" value="{vifnn:$ditem['price']}" />
+						<input type="hidden" class="tureunit_price" value="{vifnn:$ditem['dis_price']}" />
+					</span><if condition="!empty($ditem['unit'])">/{vifnn:$ditem['unit']}</if></strong>
 				</div>
-				<if condition="$kconoff eq 1"><p style="line-height: 8px;">库存：{vifnn:$ditem['instock']}</p></if>
+				<if condition="$kconoff eq 1"><p style="line-height: 8px;">
+					<notempty name="ditem['spec']">{vifnn:$ditem['spec']}</notempty>
+					<notempty name="ditem['attr']"> / {vifnn:$ditem['attr']}</notempty>
+					库存：{vifnn:$ditem['last_inventory']}</p></if>
 			</div>
 	  </li>
 	 </vifnnlist>
@@ -86,19 +96,19 @@
 	<footer class="order_fixed">
 		<div class="fixed">
 		  <p>
-			<span style="display:block">计　费：<strong>￥<span id="totalPrice"></span></strong> / <span id="cartNum" class="has_num"></span> 份</span>
+			<span style="display:block">菜　价：<strong>￥<span id="totalPrice"></span></strong> / <span id="cartNum" class="has_num"></span> 份</span>
 			<?php if($delivery_fee > 0){?><span style="display:block">配送费：<strong>￥<span>{vifnn:$delivery_fee}</span></strong></span><?php }?>
+			  <span class="mealBox" style="display:block">餐盒费：<strong>￥<span id="mealFee">0</span></strong></span>
+			  <span class="discountBox">会员折扣：<strong>-<span id="discountFee"></span></strong></span>
 		  </p>
-		   	<div><span class="comm_btn disabled">还差￥ <span id="sendCondition"><if condition="$stype eq 1">{vifnn:$pricing}<else/>0</if></span> 起送</span>
+		   	<div><span class="comm_btn disabled">还差￥ <span id="sendCondition">{vifnn:$pricing}</span> 起送</span>
 			<a href="javascript:;" class="comm_btn" id="submit_order">订单确认</a></div>
-			<if condition="$stype eq 2">
-			<p style="padding:10px;color: #ff510c;"><span>温馨提示：</span>商家设定了外送起步价为{vifnn:$pricing}元，订单金额不超过{vifnn:$pricing}元的将按{vifnn:$pricing}元收取</p>
-			</if>
 		</div>
 	</footer>
 	<div style="display:none;">
 	  <input type="hidden" name="mycid" value="{vifnn:$cid}">
 	  <input class="hidden" id="totalmoney" name="totalmoney" value="0">
+		<input class="hidden" id="totalMealFee" name="totalMealFee" value="0">
 	  <input class="hidden" id="totalnum" name="totalnum" value="0">
 	  <input class="hidden" id="delivery_fee" name="delivery_fee" value="<?php echo $delivery_fee?$delivery_fee:0;?>">
 	  <input class="hidden" id="ouserName" name="ouserName" <if condition="$contact">value="{vifnn:$contact['youname']}"<else/>value=""</if> >
@@ -130,17 +140,9 @@
 
 		<div id="timeBox" class="timeBox" style="overflow-y: auto;">
 			<div>
-				<a href="javascript:void(0);">尽快送出</a>
-				<if condition="!empty($timearr)">
-				<vifnnlist array="timearr" key="tk" foreach="tv">
-				<a href="javascript:void(0);">{vifnn:$tv}</a>
-				</vifnnlist>
-				</if>
-				<if condition="!empty($tomorrowtime)">
-				<vifnnlist array="tomorrowtime" key="ttk" foreach="ttv">
-				<a href="javascript:void(0);">{vifnn:$tomorrowday} {vifnn:$ttv}</a>
-				</vifnnlist>
-				</if>
+				<volist name="open_times" id="time">
+					<a href="javascript:void(0);">{vifnn:$time}</a>
+				</volist>
 			</div>
 		</div>
 
@@ -155,6 +157,10 @@
 	</div>
 </div>
 <script type="text/javascript">
+$.get("{vifnn::U('DishOut/checknew',array('token' => $token,'cid'=>$cid,'verb'=>time()))}",function(ret){
+      
+});
+
 var config  = {isForeign: false};
 var addressBox = {
 	init: function(){
@@ -282,8 +288,10 @@ $(function(){
 			$(this).addClass('disabled');
 			var money=$.trim($('#totalPrice').text());
 			var tnum=$.trim($('#cartNum').text());
+			var mealFee=$.trim($('#mealFee').text());
 			money=parseFloat(money);
 			tnum=parseInt(tnum);
+			mealFee=parseInt(mealFee);
 			if(!(money>0)||!(tnum>0)){
 				alert("您还没有点菜，请至少点一道菜啊");
 				return false;
@@ -300,6 +308,7 @@ $(function(){
 				return false;
 			}
 			$('#totalmoney').val(money);
+			$('#totalMealFee').val(mealFee);
 			$('#totalnum').val(tnum);
 			$('#ouserName').val(wo_user_name);
 			$('#ouserTel').val(wo_receiver_mobile);
@@ -323,11 +332,8 @@ $(function(){
 });
 </script>
 <script type="text/javascript">
- <if condition="$stype eq 1">
-   var Pricing="{vifnn:$pricing}";
-   <else/>
-   var Pricing="0";
- </if>
+	var Pricing="{vifnn:$pricing}";
+ var mealFee=parseFloat('{vifnn:$meal_fee}');
 
 $(function(){
 	var amountCb = $.amountCb();
@@ -352,6 +358,7 @@ $(function(){
 		"tTitle": "{vifnn:$metaTitle}",
 		"tContent": "{vifnn:$metaTitle}"
      };
+
 </script>
 </body>
 {vifnn:$shareScript}

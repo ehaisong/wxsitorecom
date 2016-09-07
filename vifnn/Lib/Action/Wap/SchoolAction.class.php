@@ -197,6 +197,7 @@ class SchoolAction extends  WapAction{
                 $market[$k]['sd_name'] = $t_s_classify->where(array('sid'=>$val['sd_id'],'token'=>$token))->getField('sname');
             }
             $this->assign('market',$market);
+	    $this->assign("readtype", $type);
             $this->display('curriculum');
             exit;
         }
@@ -211,19 +212,45 @@ class SchoolAction extends  WapAction{
         $this->assign('readtype',$type);
         $this->assign('count',$count);
         $this->assign('page',$show);
+		$this->assign("cid", $cid);
         $this->assign('infolist',$infolist);
         $this->display();
     }
 
+	public function companyMap()
+	{
+		if (C("baidu_map")) {
+			$isamap = 0;
+		}
+		else {
+			$isamap = 1;
+		}
+
+		$infolist = M("Reservation")->where(array("id" => intval($this->_get("shcid")), "token" => $this->token, "type" => "course"))->find();
+		$this->apikey = C("baidu_map_api");
+		$this->assign("apikey", $this->apikey);
+		$this->assign("thisCompany", $infolist);
+
+		if (!$isamap) {
+			$this->display();
+		}
+		else {
+			$this->amap = new amap();
+			$link = $this->amap->getPointMapLink($infolist["lng"], $infolist["lat"], $infolist["address"]);
+			header("Location:" . $link);
+		}
+	}
     public function readview(){
         $id         = filter_var($this->_get('id'),FILTER_VALIDATE_INT);
         $token      = filter_var($this->_get('token'),FILTER_SANITIZE_STRING);
         $readtype   = filter_var($this->_get('readtype'),FILTER_SANITIZE_STRING);
+		$this->assign("rid", $id);
         if(isset($readtype) && $readtype == 'school'){
            $t_recipe= M('recipe');
            $where2  = array('token'=>$token,'type'=>'school','ishow'=>1,'id'=>$id);
            $infolist= $t_recipe->where($where2)->find();
            $this->assign('recipe', $infolist);
+			$this->assign("readtype", $readtype);
            $this->display('recipe');
             exit;
         }elseif(isset($readtype) && $readtype == 'course'){
@@ -347,6 +374,8 @@ class SchoolAction extends  WapAction{
         $infolist   = $t_book->where($where)->limit($Page->firstRow.','.$Page->listRows)->order('booktime DESC')->select();
         $this->assign('count',$count);
         $this->assign('page',$show);
+		$this->assign("where", $where);
+		$this->assign("check", $check);
         $this->assign('books',$infolist);
 
       $this->display();
@@ -399,6 +428,8 @@ class SchoolAction extends  WapAction{
         }
         $this->assign('countshow',$count);
         $this->assign('market',$market);
+		$this->assign("sid", $sid);
+		$this->assign("check", $check);
         $this->display();
     }
 
@@ -417,3 +448,4 @@ class SchoolAction extends  WapAction{
         $this->display();
     }
 }
+?>

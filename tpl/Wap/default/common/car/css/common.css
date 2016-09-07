@@ -182,9 +182,6 @@ ol{
 
 
 /*************************************/
-.body>section{
-	padding-bottom:50px;
-}
 .nav_footer {
 	height:45px;
 	line-height:45px;
@@ -581,10 +578,12 @@ body{
 }
 .logo{
 	padding:5px;
-	text-align: center;
+	text-align: right;
 }
-.copyright{padding:8px;text-align:center;font-size:14px;color:#666;}
-.copyright a{color:#666;}
+.copyright{
+	padding:20px 0;
+	text-align:center;
+}
 
 .gradient_h_wbw {
 	height: 1px;

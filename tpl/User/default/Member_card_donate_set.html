@@ -13,7 +13,7 @@
           <a href="javascript:history.go(-1);" class="right btnGrayS vm" style="margin-top:-27px">返回</a>
         </div>
 		<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
-			注意：设置冲值区间请不要重叠，以免出现赠送金额不准确。赠送公式为：最小充值---(大于)--->赠送金额<---(小于或者等于)---最大冲值金额
+			注意：设置充值区间请不要重叠，以免出现赠送金额不准确。赠送公式为：最小充值---(大于)--->赠送金额<---(小于或者等于)---最大充值金额
 		</div>
         <form method="post" action="">
           <div class="msgWrap form">
@@ -24,8 +24,8 @@
 					<td>
 						<input type="input" class="px" value="{vifnn:$set.min_price}" name="min_price" placeholder="最小充值" style="width:55px;"> 
 						-
-						<input type="input" class="px" value="{vifnn:$set.max_price}" name="max_price" placeholder="最大冲值" style="width:55px;">
-						&nbsp;&nbsp;冲值区间不限制请设置为“0”，如：冲值900以上赠送100，设置最小冲值位“900”，最大冲值为“0”
+						<input type="input" class="px" value="{vifnn:$set.max_price}" name="max_price" placeholder="最大充值" style="width:55px;">
+						&nbsp;&nbsp;充值区间不限制请设置为“0”，如：充值900以上赠送100，设置最小充值位“900”，最大充值为“0”
 						</td>
 				</tr>           		
 				<tr>
@@ -35,18 +35,19 @@
 						&nbsp;&nbsp;设置达到赠送区间赠送的金额
 					</td>
 				</tr> 
-				
-				<!--
+				<vifnnif where="$grades">
 				<tr>
-					<th>活动持续时间：</th>
+					<th>会员卡升级到：</th>
 					<td>	
-						<input type="input" class="px" value="<if condition="$set.start eq ''">{vifnn:$startdate}<else/>{vifnn:$set.start|date='Y-m-d',###}</if>" name="start" onClick="WdatePicker()">
-						-
-						<input type="input" class="px" value="<if condition="$set.end eq ''">{vifnn:$enddate}<else/>{vifnn:$set.end|date='Y-m-d',###}</if>" name="end"   onClick="WdatePicker()">
+						<select name="gradeid" class="pt" style="width:138px;">
+							<option value="0">级别无改动</option>
+							<volist name="grades" id="vo">
+								<option value="{vifnn:$vo.id}" <if condition="$vo['id'] eq $set['gradeid']">selected="selected"</if>>{vifnn:$vo.grade_name}</option>
+							</volist>
+						</select>&nbsp;&nbsp;&nbsp;&nbsp;充值达到赠送区间时可以升级会员卡
 					</td>
 				</tr>
-				-->
-				
+				</vifnnif>
 				<tr>
 					<th>状态：</th>
 					<td>

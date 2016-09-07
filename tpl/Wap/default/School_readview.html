@@ -101,3 +101,15 @@
 
 </body>
 </html>
+<script type="text/javascript">
+window.shareData = {
+	"moduleName":"School",
+	"moduleID":"0",
+	"imgUrl": "{vifnn:$info['head_url']}",
+	"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('School/readview',array('id'=>$rid,'readtype'=>$readtype,'token'=>$token))}",
+	"tTitle": "{vifnn:$info['title']|shareFilter}",
+	"tContent": "{vifnn:$info['info']|shareFilter}",
+	"fTitle": "{vifnn:$info['title']|shareFilter}",
+};
+</script>
+{vifnn:$shareScript}

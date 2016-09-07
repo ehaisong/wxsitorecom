@@ -8,6 +8,7 @@ class MicroBrokerAction extends WapAction {
 
         $this->bid = $this->_get('bid') ? intval($this->_get('bid', 'trim')) : 0;
         parent::_initialize();
+		
         if (!$this->wecha_id) {
             $this->wecha_id = '';
             $_SESSION['token_openid_' . $this->token] = '';
@@ -23,6 +24,9 @@ class MicroBrokerAction extends WapAction {
 		if($this->owndomain && ($this->rget==3) && ($tmpuserid>0)){
 		  $this->loginuserid=$tmpuserid;
 		}
+		$where = array("token" => $this->token, "id" => $this->bid);
+		$brokertitle = M("Broker")->where($where)->getField("title");
+		$this->assign("metaTitle", !empty($brokertitle) ? $brokertitle : "全民经纪人");
 		$bgimg=$_SESSION['MicroBroker_bgimg' . $this->bid];
         $this->assign('loginuserid', $this->loginuserid);
         $this->assign('wecha_id', $this->wecha_id);
@@ -503,6 +507,10 @@ class MicroBrokerAction extends WapAction {
                 $userarr = $this->getUserinfo($client['verifyuid']);
                 $client['zygwname'] = is_array($userarr) ? $userarr['username'] : ''; //置业顾问名字
                 $client['zygwtel'] = is_array($userarr) ? $userarr['tel'] : '';
+				$usertjrarr = $this->getUserinfo($client["tjuid"]);
+				$client["tjrname"] = (is_array($usertjrarr) ? $usertjrarr["username"] : "");
+				$client["tjrtel"] = (is_array($usertjrarr) ? $usertjrarr["tel"] : "");
+				unset($usertjrarr);
             }
             $opts = M('broker_commission')->where(array('clientid' => $client['id'], 'bid' => $this->bid))->select();
 
@@ -512,7 +520,7 @@ class MicroBrokerAction extends WapAction {
                 }
             }
         }
-        $statusarr = array(0 => '推荐', 1 => '已跟进', 2 => '已到访', 3 => '已认筹', 4 => '已认购', 5 => '已签约', 6 => '已回款', 7 => '完成');
+		$statusarr = array("推荐", "已跟进", "已到访", "已认筹", "已认购", "已签约", "已回款", "完成");
         $this->assign('statusarr', $statusarr);
         $this->assign('is_verify', $is_verify); //自己是置业顾问
         $this->assign('client', $client);

@@ -1,0 +1,72 @@
+<include file="Public:head"/>  
+<script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
+<script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
+<script src="{vifnn::RES}/js/cart/jscolor.js" type="text/javascript"></script>
+<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/card/css/card_dispel.css"/>
+<div class="content">
+<div class="cLineB">
+<h4 class="left">会员卡等级</h4>
+<div class="searchbar right">
+</div>
+<div class="clr"></div>
+</div>
+<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
+	注意：会员卡级别是按照添加的先后顺序判定的而不是根据会员卡名称，越后添加级别越高。
+</div>
+<div class="cLine">
+<div class="pageNavigator left"> 
+<a href='/index.php?g=User&m=Member_card&a=setgrade&token={vifnn:$token}' title='新增会员卡等级' class='btnGrayS vm bigbtn'>
+	<if condition="$usertplid eq 2">
+	<i class="fa fa-hand-o-right"></i>
+	<else />
+	<img class="vm" src="./tpl/User/default/common/images/product/add.png">
+	</if>
+	添加会员卡等级</a>
+</div>
+<div class="clr"></div>
+</div>
+<div class="msgWrap">
+<form method="post"  action="" id="info" >
+<TABLE class="ListProduct" border="0" cellSpacing="0" cellPadding="0" width="100%">
+<THEAD>
+<tr>
+<th width="100">等级ID</th>
+<th width="300">等级名称</th>
+<th width="200">开启状态</th>
+<th class="norightborder">操作</th>
+</tr>
+</THEAD>
+<TBODY>
+<TR></TR>
+<volist id="vo" name="list">
+<TR>
+<TD>{vifnn:$vo.id}</TD>
+<TD>{vifnn:$vo.grade_name}</TD>
+<TD> 
+<if condition="$vo.status eq '1'">
+<span style="color:green;">开启</span>
+<else/>
+<span style="color:red;">关闭</span>
+</if>
+</TD>
+<TD class="norightborder">
+<a href="{vifnn::U('Member_card/setgrade', array('token'=>$token,'gradeid'=>$vo['id']))}">修改</a> 
+|
+<a href="javascript:drop_confirm('您确定要删除吗?', '/index.php?g=User&m=Member_card&a=del&token={vifnn:$token}&gradeid={vifnn:$vo.id}');">删除</a>
+</TD>
+</TR>
+</volist>
+</TBODY>
+</TABLE>
+</form>
+
+</div>
+<div class="cLine">
+<div class="pageNavigator right">
+<div class="pages"></div>
+</div>
+<div class="clr"></div>
+</div>
+</div>  
+<div class="clr"></div>
+<include file="Public:footer"/>

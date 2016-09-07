@@ -34,7 +34,13 @@
 
             document.addEventListener('DOMContentLoaded', loaded, false);
         </script>
+	<style type="text/css">
 
+	<php>if(MODULE_NAME=='Business' && ACTION_NAME == 'index'){</php>
+    .menuimg{background-color: #26B28C;}
+	<php>}</php>
+
+</style>
     </head>
 
     <body id="cate1">
@@ -42,6 +48,7 @@
     <if condition="$homeInfo['musicurl'] neq false">
 <include file="Index:music"/>
 </if>
+  <php>if($tplinfo['tpltypeid']!=1 && $thisClassInfo['tpid'] != 1){</php>
     <if condition="$homeInfo['switch'] eq 0">
 	   <div class="banner">
 		<div id="wrapper">
@@ -68,8 +75,7 @@
     <else />
         <include file="Index:bannerstyle"/>
     </if>
-
-
+	<php>}</php>
         <div id="insert1"></div>
         <ul class="mainmenu">
 
@@ -123,7 +129,10 @@
 {vifnn:$siteCopyright}
 </if>
 </div>
-<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/> 
+<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>
+<if condition="$state eq 1">
+<include file="Index:fudong"/>
+</if>
 <!-- share -->
 <include file="Index:share" />
 

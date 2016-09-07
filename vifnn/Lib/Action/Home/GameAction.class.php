@@ -5,6 +5,7 @@ class GameAction extends BaseAction
 	public $token;
 	public $gameConfig;
 	public $uid;
+	public $cbuid;
 
 	public function _initialize()
 	{
@@ -12,6 +13,7 @@ class GameAction extends BaseAction
 		$this->uid = intval($_GET['uid']);
 		$this->gameConfig = M('Game_config')->where(array('uid' => $this->uid))->find();
 		$this->token = $this->gameConfig['token'];
+		$this->cbuid = M("wxuser")->where(array("token" => $this->token))->getField("uid");
 	}
 
 	public function gamearr()
@@ -210,6 +212,54 @@ class GameAction extends BaseAction
 		}
 		else {
 			$result["url"] = $newQrImg["show"];
+		}
+
+		echo json_encode($result);
+	}
+
+	public function getFollowText()
+	{
+		$result["text"] = $this->gameConfig["attentionText"];
+		echo json_encode($result);
+	}
+
+	public function getTongJiSta()
+	{
+		$ugameid = $_POST["ugameid"];
+		$tongjiModel = M("tongji");
+		$result = $tongjiModel->where(array("act_token" => $this->token, "act_name" => "game", "act_id" => $ugameid, "uid" => $this->cbuid))->find();
+		echo json_encode($result);
+	}
+
+	public function getTongJiConfig()
+	{
+		$result = array("config" => "", "mark" => "");
+		$wechatId = $_POST["wechatId"];
+		$config = M("users")->where(array("id" => $this->cbuid))->getField("tongji_config");
+
+		if (!empty($config)) {
+			$result["config"] = json_decode($config, 1);
+		}
+
+		$tongjiUser = D("TongjiUser");
+		$mark = $tongjiUser->getMark($this->token, $wechatId);
+
+		if (!empty($mark)) {
+			$result["mark"] = $mark;
+		}
+
+		echo json_encode($result);
+	}
+
+	public function getTongJiMark()
+	{
+		$result = array("mark" => "");
+		$wechatId = $_POST["wechatId"];
+		$tongjiUser = D("TongjiUser");
+		$mark = $tongjiUser->getMark($this->token, $wechatId);
+
+		if (!empty($mark)) {
+			$result["mark"] = $mark;
 		}
 
 		echo json_encode($result);

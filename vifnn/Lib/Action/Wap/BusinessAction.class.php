@@ -9,6 +9,7 @@ class BusinessAction extends WapAction{
     private $info;
     public $weixinUser;
     public $homeInfo;
+	public $busines;
     public function _initialize() {
         parent::_initialize();
         $this->token    = filter_var($this->_get('token'),FILTER_SANITIZE_STRING);
@@ -21,7 +22,7 @@ class BusinessAction extends WapAction{
             $this->error('抱歉,您的参数不合法!',U('Index/index',array('token'=>$this->token,'wecha_id'=>$this->wecha_id)));
         }
         $where   = array('token'=>$this->token,'type'=>$this->type,'bid'=>$this->bid);
-        $busines = M('busines')->where($where)->find();
+		$busines = $this->busines = M("busines")->where($where)->find();
         $this->assign('busines',$busines);
         $this->assign('picurl',$busines['picurl']);
         $this->assign('title',$busines['title']);
@@ -55,21 +56,31 @@ class BusinessAction extends WapAction{
         $pic     = M('busines_pic')->where(array('bid_id'=>$busines['bid'],'token'=>$token,'type'=>$type))->find();
         $flashbg[0]['img'] = $pic['picurl_1'];
         $flash[0]['img'] = $pic['picurl_1'];
-        if($pic['picurl_2'] <> ''){
+		$flash[0]["url"] = "javascript:;";
+		$flash[0]["info"] = "海报图1";
+        if($pic['picurl_2'] != ''){
             $flashbg[1]['img'] = $pic['picurl_2'];
             $flash[1]['img'] = $pic['picurl_2'];
+			$flash[1]["url"] = "javascript:;";
+			$flash[1]["info"] = "海报图2";
         }
-        if($pic['picurl_3'] <> ''){
+        if($pic['picurl_3'] != ''){
             $flashbg[2]['img'] = $pic['picurl_3'];
             $flash[2]['img'] = $pic['picurl_3'];
+			$flash[2]["url"] = "javascript:;";
+			$flash[2]["info"] = "海报图3";
         }
-        if($pic['picurl_4'] <> ''){
+        if($pic['picurl_4'] != ''){
             $flashbg[3]['img'] = $pic['picurl_4'];
             $flash[3]['img'] = $pic['picurl_4'];
+			$flash[3]["url"] = "javascript:;";
+			$flash[3]["info"] = "海报图4";
         }
-        if($pic['picurl_5'] <> ''){
+        if($pic['picurl_5'] != ''){
             $flashbg[4]['img'] = $pic['picurl_5'];
             $flash[4]['img'] = $pic['picurl_5'];
+			$flash[4]["url"] = "javascript:;";
+			$flash[4]["info"] = "海报图5";
         }
 
         $this->assign('busines',$busines);
@@ -78,6 +89,7 @@ class BusinessAction extends WapAction{
             $where_2 = array('token'=>$token,'type'=>$type,'bid_id'=>$busines['bid']);
             $b_main = D('busines_main')->where($where_2)->select();
             $this->assign('b_main',$b_main);
+	    $this->assign("show", $show);
             $this->display('intro');
             exit;
         }
@@ -240,7 +252,6 @@ switch($busines['type']){
 
         $this->assign('flash',$flash);
         $this->assign('info',$info);   // 菜单相关,url(连接),img(菜单背景图),name(菜单名)
-        //$this->assign('num',$count);
         $this->assign('flashbg',$flashbg);  //背景轮播图 img(图片地址)
         $this->assign('tpl',$this->tpl);
 		$this->homeInfo['title'] = $busines['mtitle'];
@@ -256,10 +267,30 @@ switch($busines['type']){
         }else{
             $this->display('Index:'.$tplinfo['tpltypename']);
         }
+	}
 
-    }
+	public function companyMap()
+	{
+		if (C("baidu_map")) {
+			$isamap = 0;
+		}
+		else {
+			$isamap = 1;
+		}
 
+		$this->apikey = C("baidu_map_api");
+		$this->assign("apikey", $this->apikey);
+		$this->assign("thisCompany", $this->busines);
 
+		if (!$isamap) {
+			$this->display();
+		}
+		else {
+			$this->amap = new amap();
+			$link = $this->amap->getPointMapLink($this->busines["longitude"], $this->busines["latitude"], $this->busines["mtitle"]);
+			header("Location:" . $link);
+		}
+	}
 
     public function classify(){
         //Load('extend');
@@ -351,6 +382,7 @@ switch($busines['type']){
              $_POST['orderid']    = self::generateOrderSn();
              $_POST['paid']       = 0;
              $_POST['booktime']   = time();
+			empty($_POST["bid"]) && !empty($bid) && ($_POST["bid"] = $bid);
             $where_stork          = array('token'=>$_POST['token'],'type'=>$_POST['type'],'sid'=>$_POST['sid']);
             $checkdata            = $data->where($where_stork)->find();
             if($_POST['wecha_id'] == '' || $_POST['token'] =='' || $_POST['truename'] == ''){
@@ -373,6 +405,62 @@ switch($busines['type']){
             $_POST['rid']         = filter_var($this->_post('sid'),FILTER_VALIDATE_INT);
             $insertdata           = $tb_resbook->data($_POST)->add();
             if($insertdata){
+//VIFNN增加邮件通知				
+			$info=M('deliemail')->where(array('token'=>$_POST['token']))->find();
+			$mail->CharSet    = 'UTF-8'; //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置，否则乱码
+			$emailstatus=$info[$_POST['type']];
+			$emailreceive=$info['receive'];
+			$content = $this->sms();
+			if($info['type'] == 1){
+			$emailsmtpserver=$info['smtpserver'];
+			$emailport=$info['port'];
+			$emailsend=$info['name'];
+			$emailpassword=$info['password'];
+			}else{
+			$emailsmtpserver=C('email_server');
+			$emailport=C('email_port');
+			$emailsend=C('email_user');
+			$emailpassword=C('email_pwd');
+			}
+			$emailuser=explode('@', $emailsend);
+			$emailuser=$emailuser[0];
+			if ($emailstatus == 1) {
+				if ($content) {
+					date_default_timezone_set('PRC');
+					require("class.phpmailer.php");
+					$mail = new PHPMailer();
+					$mail->IsSMTP();                                      // set mailer to use SMTP
+					$mail->Host = "$emailsmtpserver";  // specify main and backup server
+					$mail->SMTPAuth = true;     // turn on SMTP authentication
+					$mail->Username = "$emailuser"; // SMTP username
+					$mail->Password = "$emailpassword"; // SMTP password
+					$mail->From = $emailsend;
+					$mail->FromName = C('site_name');
+					$mail->AddAddress("$emailreceive", "商户");
+					//$mail->AddAddress("ellen@example.com");                  // name is optional
+					$mail->AddReplyTo($emailsend, "Information");
+
+					$mail->WordWrap = 50;                                 // set word wrap to 50 characters
+					//$mail->AddAttachment("/var/tmp/file.tar.gz");         // add attachments
+					//$mail->AddAttachment("/tmp/image.jpg", "new.jpg");    // optional name
+					$mail->IsHTML(false);                                  // set email format to HTML
+
+					$mail->Subject = '您有新的订单';
+					$mail->Body    = $content;
+					$mail->AltBody = "";
+
+					if(!$mail->Send())
+					{
+					   echo "Message could not be sent. <p>";
+					   echo "Mailer Error: " . $mail->ErrorInfo;
+					   exit;
+					}
+					//echo "Message has been sent";    
+				}
+			}
+						
+			
+//VIFNN增加邮件通知				
                 $data->where(array('sid'=>$_POST['sid'],'type'=>$_POST['type'],'token'=>$_POST['token']))->setDec('googsnumber');
                 if($checkdata['oneprice'] <= 0){
                 //if(is_numeric($checkdata['oneprice']) <= 0){
@@ -400,16 +488,10 @@ switch($busines['type']){
 					MessageFactory::method($params, 'SiteMessage');
 
                     Sms::sendSms($_POST['token'], "尊敬的 {$_POST['truename']},您对{$_POST['orderName']}进行了下单,订单号为{$_POST['orderid']} 。 ". date('Y-m-d H:i:s',time()),$_POST['tel']);
-
-                    self::mylist();
-                    echo "<script type='text/javascript'>parent.location.reload();</script>";
+					header("Location: " . U("Business/mylist", array("token" => $_POST["token"], "type" => $_POST["type"])));
                     exit;
                 }else{
-                    header("Content-type: text/html; charset=utf-8");
-                    $this->redirect('Alipay/pay/', array('from' => 'Business','orderName'=>urlencode($checkdata['name']),
-                                                'price'=>trim($checkdata['oneprice']),'orderid'=>$_POST['orderid'],'token'=>$_POST['token'],
-                                                'wecha_id'=>$_POST['wecha_id'],'type'=>$_POST['type'],'bid'=>$_POST['bid'],
-                                                'sid'=>$_POST['sid']), 3, '您好,准备跳转到支付页面,请不要重复刷新页面,请耐心等待...');
+		       header("Location: " . U("Alipay/pay/", array("from" => "Business", "orderName" => urlencode($checkdata["name"]), "price" => trim($checkdata["oneprice"]), "orderid" => $_POST["orderid"], "token" => $_POST["token"], "wecha_id" => $_POST["wecha_id"], "type" => $_POST["type"], "bid" => $_POST["bid"], "sid" => $_POST["sid"])));
                 }
 
 
@@ -456,7 +538,7 @@ switch($busines['type']){
 				MessageFactory::method($params, 'SiteMessage');
 				
                 Sms::sendSms($checkOrder['token'], "尊敬的 {$checkOrder['truename']},您购买的{$checkOrder['orderName']} 已经付款成功,金额为{$checkOrder['payprice']},订单号为{$checkOrder['orderid']}。 ". date('Y-m-d H:i:s',time()),$checkOrder['tel']);
-				redirect(U('Business/mylist',array('type'=>$checkOrder['type'],'token'=>$checkOrder['token'])));
+				redirect(U('Business/mylist',array('type'=>$checkOrder['type'],'token'=>$checkOrder['token'], "bid" => $checkOrder["bid"])));
                 //self::mylist();
                 exit;
             }else{
@@ -467,7 +549,7 @@ switch($busines['type']){
 			$params['site'] = array('token'=>$checkOrder['token'], 'from'=>'行业应用消息','content'=>"您的会员 {$checkOrder['truename']},已经购买了{$checkOrder['orderName']},订单号为{$checkOrder['orderid']}，他选择的是货到付款，请注意查看");
 			MessageFactory::method($params, 'SiteMessage');
 			//货到付款、店到支付直接跳转
-			redirect(U('Business/mylist',array('type'=>$checkOrder['type'],'token'=>$checkOrder['token'])));
+			redirect(U('Business/mylist',array('type'=>$checkOrder['type'],'token'=>$checkOrder['token'], "bid" => $checkOrder["bid"])));
             }
 
        }else{
@@ -481,7 +563,7 @@ switch($busines['type']){
         $tb_resbook = D('reservebook');
         $type       = filter_var($this->_get('type'),FILTER_SANITIZE_STRING);
         $token      = filter_var($this->_get('token'),FILTER_SANITIZE_STRING);
-        $wecha_id   = filter_var($this->wecha_id,FILTER_SANITIZE_STRING);
+	$wecha_id = $this->wecha_id;
         $where      = array('token'=>$token,'type'=>$type,'wecha_id'=>$wecha_id);
 
         $count      = $tb_resbook->where($where)->count();
@@ -522,9 +604,19 @@ switch($busines['type']){
         $token      = filter_var($this->_get('token'),FILTER_SANITIZE_STRING);
         $bid        = filter_var($this->_get('bid'),FILTER_VALIDATE_INT);
         $type       = filter_var($this->_get('type'),FILTER_SANITIZE_STRING);
-        $get_id     = M('busines_pic')->field('bid_id,type,ablum_id')->where(array('bid_id'=>$bid,'token'=>$token,'type'=>$type))->find();
+	$get_id = M("busines_pic")->where(array("bid_id" => $bid, "token" => $token, "type" => $type))->find();
         $info=M('Photo')->field('title,picurl,id')->where(array('token'=>$token,'id'=>$get_id['ablum_id']))->find();
     $photo_list=M('Photo_list')->where(array('token'=>$token,'pid'=>$get_id['ablum_id'],'status'=>1))->order('sort desc')->select();
+		if (empty($photo_list)) {
+			$photo_list = array();
+		}
+		if (!empty($get_id)) {
+			!empty($get_id["picurl_1"]) && ($photo_list[] = array("id" => 1, "token" => $this->token, "pid" => $get_id["ablum_id"], "title" => "", "sort" => 1, "picurl" => $get_id["picurl_1"], "info" => "", "status" => 1));
+			!empty($get_id["picurl_2"]) && ($photo_list[] = array("id" => 2, "token" => $this->token, "pid" => $get_id["ablum_id"], "title" => "", "sort" => 2, "picurl" => $get_id["picurl_2"], "info" => "", "status" => 1));
+			!empty($get_id["picurl_3"]) && ($photo_list[] = array("id" => 3, "token" => $this->token, "pid" => $get_id["ablum_id"], "title" => "", "sort" => 3, "picurl" => $get_id["picurl_3"], "info" => "", "status" => 1));
+			!empty($get_id["picurl_4"]) && ($photo_list[] = array("id" => 4, "token" => $this->token, "pid" => $get_id["ablum_id"], "title" => "", "sort" => 4, "picurl" => $get_id["picurl_4"], "info" => "", "status" => 1));
+			!empty($get_id["picurl_5"]) && ($photo_list[] = array("id" => 5, "token" => $this->token, "pid" => $get_id["ablum_id"], "title" => "", "sort" => 5, "picurl" => $get_id["picurl_5"], "info" => "", "status" => 1));
+		}
         $this->assign('info',$info);
         $this->assign('photo',$photo_list);
         $this->display();
@@ -584,7 +676,69 @@ switch($busines['type']){
         }
         return $return;
     }
+//VIFNN增加邮件通知			
+public function sms(){
+	
+		$this->Business_order=M('reservebook');
+		$this->Business_info=M('busines_second');
+		$this->Business_dian=M('busines_main');
+		$orders=$this->Business_order->where(array('token'=>$_GET['token'],'type'=> $_GET['type']))->order('date desc')->limit(0,1)->find();
+		$info=$this->Business_info->where(array('token'=>$_GET['token'],'type'=> $_GET['type'],'sid'=>$this->_get('sid')))->find();
+		$dian=$this->Business_dian->where(array('token'=>$_GET['token'],'type'=> $_GET['type'],'bid'=>$this->_get('bid')))->find();
+		
 
+		 if ($orders){
+			$thisOrder=$_GET['type'];
+			switch ($_GET['type']){
+				case 'beauty':
+					$orderType='微美容';
+					break;
+				case 'fitness':
+					$orderType='健微身';
+					break;
+				case 'gover':
+					$orderType='微政务';
+					break;
+				case 'food':
+					$orderType='微食品';
+					break;
+				case 'travel':
+					$orderType='微旅游';
+					break;
+				case 'flower':
+					$orderType='微花店';
+					break;
+				case 'property':
+					$orderType='微物业';
+					break;	
+				case 'bar':
+					$orderType='微酒吧';
+					break;	
+				case 'fitment':
+					$orderType='微装修';
+					break;
+				case 'wedding':
+					$orderType='微婚庆';
+					break;	
+				case 'affections':
+					$orderType='微宠物';
+					break;		
+				case 'housekeeper':
+					$orderType='微家政';
+					break;	
+				case 'lease':
+					$orderType='微租赁';
+					break;				
+			}}
+			
+			$str="\r\n订单类型：".$orderType."\r\n所属门店：".$dian['name']."\r\n价格：".$info['oneprice']."\r\n姓名：".$orders['truename']."\r\n电话：".$orders['tel']."\r\n地址：".$orders['address']."\r\n备注：".$orders['info']."\r\n下单时间：".$orders['date']."\r\n";
+			
+			
+			
+			return $str;
+		
+	}	
+//VIFNN增加邮件通知	
 
 }
 ?>

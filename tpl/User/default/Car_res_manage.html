@@ -23,10 +23,11 @@
             <table class="ListProduct" border="0" cellspacing="0" cellpadding="0" width="100%">
               <thead>
                     <tr>
-                      <th width="20">序号</th>
+                      <th width="50">序号</th>
                     <th width="60">真实姓名</th>
                     <th class="85">电话</th>
                     <th class="85">预约项目</th>
+					<th class="85">预约车型</th>
                     <th width="160">预定日期</th>
                     <th class="60">订单状态</th>
                     <th width="150" class="norightborder">操作</th>
@@ -40,6 +41,7 @@
                         <td>{vifnn:$o.truename}</td>
                         <td>{vifnn:$o.tel}</td>
                         <td>{vifnn:$o.housetype}  <if condition="$o['type'] eq 'drive'">－预约试驾<elseif condition="$o['type'] eq  'maintain'"/>- 预约保养</if> </td>
+						 <td>{vifnn:$o.choose}</td>
                         <td>{vifnn:$o.dateline}/{vifnn:$o.timepart}</td>
                         <td><if condition="$o.remate eq 0">待回复<elseif condition="$o.remate eq 1"/>确认<elseif condition="$o.remate eq 2"/>拒绝</if></td>
 
@@ -55,7 +57,7 @@
           </div>
            <script>
             function showIntroDetail(id){
-                art.dialog.open('{vifnn::U('Car/reservation_uinfo',array('token'=>$token))}&id='+id,{lock:false,title:'预约订单详情',width:700,height:420,yesText:'关闭',background: '#000',opacity: 0.87});
+                art.dialog.open('{vifnn::U('Car/reservation_uinfo',array('token'=>$token))}&id='+id,{lock:false,title:'预约订单详情',width:600,height:500,yesText:'关闭',background: '#000',opacity: 0.87,close: function(){location.reload();}});
             }
         </script>
 

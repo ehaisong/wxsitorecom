@@ -107,7 +107,7 @@ items : [
 });
 });
 </script>
-  <form class="form" method="post" action="" target="" enctype="multipart/form-data">
+  <form class="form" method="post" action="" target=" " enctype="multipart/form-data">
         <div class="content">
 
 <div class="cLineB">
@@ -227,7 +227,22 @@ document.getElementById("tishi").innerHTML=document.getElementById("tishi2").val
 <input type="radio" class="px" name="is_jfdhhb" value="2" <if condition="$card.is_jfdhhb eq 2">checked</if>>开启&nbsp;&nbsp;&nbsp;(开启积分兑换红包后，可设置积分兑换红包选项)
 </td>
 </tr>
-
+<vifnnif where="$grades">
+<tr>
+<td colspan="2">会员卡等级：
+<select name="gradeid" class="pt" style="width:210px;">
+	<option value="0">无级别</option>
+	<volist name="grades" id="vo">
+	<option value="{vifnn:$vo.id}" <if condition="$vo['id'] eq $card['gradeid']"> selected="selected"</if>>{vifnn:$vo.grade_name}</option>
+	</volist>
+</select>
+</td>
+</tr>
+</vifnnif>
+<tr>
+<td colspan="2">会员折扣：
+<input type="text" name="discount" id="discount" value="{vifnn:$card.discount}" class="px" style="width:100px;">  折&nbsp;&nbsp;&nbsp;&nbsp;(保留一位小数)</td>
+</tr>
 <tr>
 <td colspan="2">
 会员卡使用说明：<br />

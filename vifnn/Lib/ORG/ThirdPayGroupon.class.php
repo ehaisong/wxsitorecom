@@ -41,6 +41,7 @@ class ThirdPayGroupon
 				$product_cart_model->save($order);								
 			} else {
 				M('Product')->where(array('id'=>$order['productid']))->setDec('groupon_num', $order['total']);
+				M("Product")->where(array("id" => $order["productid"]))->setInc("salecount", $order["total"]);
 			}
 			
 			/************************************************/

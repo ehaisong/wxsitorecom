@@ -85,6 +85,9 @@ th,td{text-align:center;}
 		|
 		<a href="{vifnn::U('CoinTree/add_action',array('token'=>$list['token'],'id'=>$list['id']))}">编辑</a>
 		|
+        <eq name="tj_status" value="1">
+            <a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'cointree','act_id'=>$list['id'],'act_token'=>$token))}" class="btnGreen">传播分析</a>|
+        </eq>
 		<a href="javascript:drop_confirm('您确定要删除吗?', '{vifnn::U('CoinTree/del_action',array('token'=>$token,'id'=>$list['id']))}');">删除</a>
     </td>
 </tr>

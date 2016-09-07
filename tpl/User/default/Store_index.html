@@ -46,6 +46,12 @@
 <div class="pageNavigator left"> 
 <a href="{vifnn::U('Store/catAdd', array('token' => $token, 'cid' => $cid, 'parentid' => $parentid))}" title="新增分类" class="btnGrayS vm bigbtn"><if condition="$usertplid eq 2"><i class="fa fa-hand-o-right"></i><else /><img src="{vifnn::RES}/images/product/add.png" class="vm" /></if> 新增分类</a>
 </div>
+<div class="searchbar left" style="margin-left:508px;margin-top:10px;">
+<form method="post" action="{vifnn::U('Store/product',array('token'=>$token))}">
+<input type="text" id="msgSearchInput" class="txt left" placeholder="输入商品名称或关键词搜索" name="searchkey" value="{vifnn:$searchkey}" style="padding:6px;width:155px;">
+<input type="submit" value="搜索" id="msgSearchBtn" href="" class="btnGrayS" title="搜索">
+</form>
+</div>
 <if condition="$parentid gt 0">
 <div class="pageNavigator right">
 <a href="{vifnn::U('Store/index',array('token'=>$token, 'cid' => $cid, 'parentid' => $parentCat['parentid']))}" class="btnGrayS vm bigbtn">返回上级分类</a>

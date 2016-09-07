@@ -1,145 +1,489 @@
-<include file="DishOut:header" />
-<script>var wecha_idd="{vifnn:$wecha_id}"</script>
-<script type="text/javascript" src="{vifnn:$staticPath}/tpl/static/dishout/js/scroller.js"></script>
-
-<style type="text/css">
-#mymenu_lists .dztj_c{display:none}
-#mymenu_lists .nodztj_c{display:block}
-#mymenu_lists img{height:60px}
-#mymenu_lists .ishot{
-    font-size: 10px;
-    display: inline-block;
-    width: 35px;
-    height: 30px;
-    background: url("{vifnn:$staticPath}/tpl/static/repastnew/image/popular.png") no-repeat center center;
-    -webkit-background-size: 100% auto;
-    background-size: 100% auto;
-    position: absolute;
-    left: 7px;
-    top: 0px;
-    color: #fff;
-    line-height: 22px;
-    font-size: 12px;
-    text-align: center;
-}
-</style>
-<body onselectstart="return true;" ondragstart="return false;">
-<div class="container">
-	<header class="nav menu">
-		<div>
-			<a href="javascript:;" class="on">菜单</a>
-			<a href="{vifnn::U('DishOut/MyShop',array('token' => $token,'cid'=>$cid,'wecha_id' => $wecha_id))}">门店详情</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>{vifnn:$company['name']}-菜单</title>
+	<meta charset="utf-8">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="yes" name="apple-touch-fullscreen">
+	<meta content="telephone=no,email=no" name="format-detection">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<style>
+		.open_tip{
+			background-color: #fffaf2;
+			color: #f19100;
+			border: solid 1px #ffdca8;
+			font-size: 12px;
+			padding: 5px 10px;
+			line-height: 20px;
+			margin: 5px;
+			text-align: center;
+		}
+		.none_tip{
+			width: 40%;
+			position: absolute;
+			left: 50%;
+			margin-left:-20%;
+			box-sizing: border-box;
+			margin-top: 40px;
+		}
+		.none_tip_icon{
+			width: 80%;
+			margin-left: 10%;
+		}
+		.none_tip_icon img{
+			max-width: 100%;
+			display: block;
+			margin: 0px;
+			border: none;
+		}
+		.none_tip p{
+			font-size: 14px;
+			color: #777;
+			margin-top: 10px;
+			text-align: center;
+			display: block;
+		}
+		.itemDetail .thumb
+		{
+			margin-top: 5px;
+		}
+		.itemDetail .thumb img
+		{
+			max-width: 100%;
+			border-radius: 5px;
+			display: block;
+			margin: 0px auto;
+		}
+		.itemDetail .intro
+		{
+			margin-top: 5px;
+		}
+	</style>
+	<link rel="stylesheet" href="{vifnn:$staticPath}/tpl/static/dishout_v1/css/wmStyle.css">
+	<script>
+		var data ={vifnn:$_json};
+		//console.log(data);
+		var fee = parseFloat('{vifnn:$delivery_fee}'); //配送费
+		var packing =parseFloat('{vifnn:$meal_fee}'); //餐盒费
+		var catalog; //分类
+		var yTotalPrice = 0; //总费用
+		var parentFindId;
+		var delivery = parseFloat('{vifnn:$pricing}'); //达到多少开始派送
+		var inventoryLimit='{vifnn:$kconoff}';
+	</script>
+</head>
+<body>
+<div class="lodingCover">
+	<div class="spinner">
+		<div class="rect1"></div>
+		<div class="rect2"></div>
+		<div class="rect3"></div>
+		<div class="rect4"></div>
+		<div class="rect5"></div>
+	</div>
+</div>
+<header class="nav">
+	<div>
+		<a href="{vifnn::U('DishOut/dishMenu',array('token' => $token,'cid'=>$cid))}" class="on">菜单</a>
+		<a href="{vifnn::U('DishOut/MyShop',array('token' => $token,'cid'=>$cid))}">门店详情</a>
+	</div>
+</header>
+<section class="scrollNews">
+	<div class="warp">
+		<i class="fr arrow"></i>
+		<i class="notificationIcon fl"></i>
+		<div class="scrollText" id="marqueen">
+			<ul>
+				<li id="marqueenText"><marquee scrolldelay="100">{vifnn:$outset.announcement|default='暂无公告'|short=75}</marquee></li>
+			</ul>
 		</div>
-	</header>
-	<form name="cart_form" action="{vifnn::U('DishOut/sureOrder',array('token' => $token,'wecha_id' => $wecha_id))}" method="post">
-	<section class="menu_wrap" id="menuWrap">
-	<div id="menuNav" class="menu_nav">
-		 <div class="ico_menu_wrap clearfix"><span class="ico_menu" id="icoMenu"><i></i></span></div>
-			<div class="side_nav" id="sideNav" style="overflow-y:scroll;padding-bottom: 10px;height: 666px;">
+	</div>
+</section>
+
+<neq name="isOpen" value="1">
+	<div class="open_tip">很抱歉，暂停营业,商家正在休息中</div>
+</neq>
+
+<section class="searchBox">
+	<div class="wrap">
+    <span class="fl">
+        <i class=""></i>
+    </span>
+		<div class="ofh">
+			<form action="" autocomplete="off" id="search_form">
+			<input id="search_input" type="search" placeholder="搜索店内商品" value="{vifnn::I('get.keyword')}" />
+				</form>
+		</div>
+	</div>
+</section>
+
+<notempty name="_groupList">
+	<section  class="scrollNav" id="scrollNav">
+		<div class="ot-menu" id="segmentedControls">
+			<volist name="_group" id="gp">
+				<a data-index="{vifnn:$key}" id="dataIndex{vifnn:$key}" style="display: {vifnn::($gp['total']<=0)?'none':'block'};" >{vifnn:$gp.name} <i>0</i></a>
+			</volist>
+		</div>
+	</section>
+
+	<section class="rightMainList" id="segmentedControlContents">
+		<volist name="_groupList" id="gl">
+			<div class="ctrlContent" id="{vifnn:$key}">
+				<section class="categoryTitles">
+					<h2>{vifnn:$gl.group_name}</h2>
+				</section>
 				<ul>
-				<if condition="!empty($fenleiarr)">
-				 <vifnnlist array="fenleiarr" key="ik" foreach="item">
-				<li><a href="javascript:void(0);" title="{vifnn:$ik}">{vifnn:$item}</a></li>
-				</vifnnlist>
-				<if condition="$dz_tj">
-				<li><a href="javascript:void(0);" title="dztj" class="dztj_a">店长推荐</a></li>
-				</if>
-				</if>
+					<volist name="gl['list']" id="vo">
+						<li class="clearfix">
+							<div class="i-pic fl show_detail" data-id="{vifnn:$vo.id}" data-thumb="{vifnn::img_url($vo['image'],'','dish_thumb')}">
+								<img src="{vifnn::img_url($vo['image'],'','dish_thumb')}"/>
+							</div>
+							<div class="descText ofh">
+								<h3>{vifnn:$vo.name}</h3>
+								<p class="subTit">
+									<span>月销:{vifnn:$vo.m_sales}</span>
+									<eq name="kconoff" value="1">
+										<span class="stock" data="{vifnn:$vo.instock}">库存:{vifnn:$vo.instock}</span>
+									</eq>
+								</p>
+								<p class="tags">
+									<if condition="($vo['isdiscount'] eq 1) AND ($discount gt 0) AND $isMember=='1'">
+										<i class="tag-a" data="{vifnn:$discount/10}">{vifnn:$discount}折</i>
+									</if>
+									<eq name="vo['ishot']" value="1"><i class="tag-b">推荐</i></eq>
+								</p>
+								<p class="price" data-packing="{vifnn::$vo['is_meal']=='1'?($meal_fee):0}">￥<em>{vifnn:$vo.price}</em><notempty name="vo['spec']"><i>起</i></notempty></p>
+								<div class="setDiv quantity">
+									<notempty name="vo['spec']">
+										<span class="oBtn {vifnn::$isOpen!='1'?'disabled':''}" data="pro_{vifnn:$vo.id}">选规格</span>
+										<else/>
+										<span class="minus reduceFromCart {vifnn::$isOpen!='1'?'disabled':''}"><i></i></span><span class="num">0</span><span class="plus addToCart {vifnn::$isOpen!='1'?'disabled':''}"><i></i></span>
+									</notempty>
+								</div>
+							</div>
+							<input type="hidden" class="pro_id"  value="{vifnn:$vo.id}">
+							<input type="hidden" name="item{vifnn:$vo.id}" class="item{vifnn:$vo.id} items"  value="">
+						</li>
+					</volist>
 				</ul>
 			</div>
-		 </div>
-		
-	 <div class="menu_container" id="mymenu_lists">
-	 <if condition="!empty($disharr)">
-		<vifnnlist array="disharr" key="dk" foreach="ditem">
-		 <if condition="$key eq 'dztj' AND !empty($ditem)">
-		  <php>$dztj=true;</php>
-			<div class="menu_tt dztj_c">
-			<h2>店长推荐</h2></div>
-			<ul class="menu_list dztj_c">
-		   <else/>
-		   <php>$dztj=false;</php>
-			<div class="menu_tt nodztj_c">
-			<h2>{vifnn:$ditem['0']['sortname']}</h2></div>
-			<ul class="menu_list nodztj_c">
-		   </if>
-			<vifnnlist array="ditem" key="ddk" foreach="dditem">
-			<li>
-				<div style="position: relative;">
-					<if condition="!empty($dditem['image'])">
-					<img src="{vifnn:$dditem['image']}" alt="" url="{vifnn:$dditem['image']}">
-					</if>
-					<if condition="$isMember AND $discount gt 0 AND $dditem['isdiscount']">
-					<span class="ishot" style="left: -5px;">{vifnn:$discount}折</span>
-					</if>
-				</div>
-				<div>
-					<h3>{vifnn:$dditem['name']}</h3>
-					<p class="salenum">月售：<span class="sale_num">{vifnn:$dditem['m_sale']}</span><span class="theunit" style="display:none"><if condition="!empty($dditem['unit'])">{vifnn:$dditem['unit']}<else/>份</if></span>
-					<if condition="$kconoff eq 1"></br>库存：{vifnn:$dditem['instock']}</if>
-					<!--<span class="sales"><strong class="sale_8"></strong></span>--></p>
-					<div class="info">{vifnn:$dditem['des']|htmlspecialchars_decode=ENT_QUOTES}</div>
-				</div>
-				<div class="price_wrap" style="width:100px">
-					<strong>￥<span class="unit_price">{vifnn:$dditem['price']}<input type="hidden" class="tureunit_price" <if condition="isset($dditem['zkprice']) AND $dditem['zkprice'] gt 0">value="{vifnn:$dditem['zkprice']}"<else/>value="{vifnn:$dditem['price']}"</if>></span><if condition="!empty($dditem['unit'])">/{vifnn:$dditem['unit']}</if></strong>
-					<div class="fr" <if condition="$kconoff eq 1"> max="{vifnn:$dditem['instock']}" <else/>max="-1"</if>>
-				    <if condition="$kconoff eq 0 OR $dditem['instock'] gt 0">
-					 <a href="javascript:void(0);" class="btn add" <php> if(isset($dditem['ornum']) && !empty($dditem['ornum'])) echo "data-num=".$dditem['ornum']; else echo "data-num=''";</php>></a>
-					</if>
-					</div>
-					<if condition="$dztj">
-					<input autocomplete="off" class="number" type="hidden" name="dzdish[{vifnn:$dditem['id']}]" value="">
-					<else/>
-					<input autocomplete="off" class="number" type="hidden" name="dish[{vifnn:$dditem['id']}]" value="">
-					</if>
-				</div>
-			</li>
-			</vifnnlist>
-			</ul>
-		</vifnnlist>
-
-	 </if>
-	</div>
+		</volist>
 	</section>
-	<input type="hidden" name="mycid" value="{vifnn:$cid}">
-	<footer class="shopping_cart">
-		<div class="fixed">
-			<div class="cart_bg">
-			<span class="cart_num" id="cartNum"></span></div>
-			<div>￥<span id="totalPrice">0</span><?php if($delivery_fee > 0){?><br><span id="delivery_fee" style="color:#888;font-size:13px">配送费￥{vifnn:$delivery_fee}</span><?php }?></div>
-			<div><span class="comm_btn disabled">还差 <span id="sendCondition"><if condition="$stype eq 1">{vifnn:$pricing}<else/>0</if></span> 起送</span>
-			<a id="settlement" href="javascript:document.cart_form.submit();" class="comm_btn" style="display: none;">去结算</a></div>
-			<if condition="$stype eq 2">
-			<p style="padding:10px;"><span>温馨提示：</span>商家设定了外送起步价为{vifnn:$pricing}元，订单金额不超过{vifnn:$pricing}元的将按{vifnn:$pricing}元收取</p>
-			</if>
-		</div>
-	</footer>
-	</form>
+	<else/>
+	<div class="none_tip">
+		<div class="none_tip_icon"><img src="{vifnn:$staticPath}/tpl/static/dishout_v1/images/none.png" /></div>
+		<p>
+			抱歉！没有搜索到结果<br>
+			<span style="font-size: 12px">换个关键词试试吧</span>
+		</p>
+	</div>
+</notempty>
 
-	<div class="menu_detail" id="menuDetail">
-		<img style="display: none;">
-		<div class="nopic"></div>
-		<a href="javascript:void(0);" class="comm_btn" id="detailBtn">来一份</a>
-		<dl>
-			<dt>价格：</dt>
-			<dd class="highlight">￥<span class="price"></span></dd>
-		</dl>
-		<p class="sale_desc">月售<span class="sale_num"></span>份</p>
-		<dl>
-			<dt>介绍：</dt>
-			<dd class="info"></dd>
-		</dl>
+
+<div class="cartDetail pa">
+	<div class="hd">
+		<div class="wrap clearfix">
+			<a class="delete fr" href="javascript:;"><i></i>清空</a>
+			<strong>购物车</strong>
+		</div>
 	</div>
 
+	<div class="bd">
+		<form id="order_form" action="{vifnn::U('sureOrder')}" method="post">
+			<div class="wrap" id="shopping_list"></div>
+			<input type="hidden" name="mycid" value="{vifnn:$cid}" />
+		</form>
+	</div>
 </div>
-<script type="text/javascript" src="./tpl/static/dishout/js/menu.js"></script>
-<script type="text/javascript">
- <if condition="$stype eq 1">
-   var Pricing="{vifnn:$pricing}";
-   <else/>
-   var Pricing="0";
- </if>
+<footer class="cart pr">
+	<div class="fl leftInfo">
+		<div class="dis-cell">
+			<div class="b-flex dib cartIcon pr"><i class=""></i> <sup class="pa">0</sup></div> <span class="money b-flex">￥<em>0</em></span>
+			<div class="note dib b-flex">
+				<p>另需配送费￥{vifnn:$delivery_fee}</p>
+				<p class="packing_p">餐盒费￥<span class="packing">0</span></p>
+			</div>
+		</div>
+	</div>
+	<a href="javascript:;" class="buyTextTip fr">
+		￥{vifnn:$pricing}起送
+	</a>
+	<a href="javascript:;" id="buyNow" class="buyNow fr">去结算</a>
+</footer>
+<div id="flyItem" class="fly_item"><img src="{vifnn:$staticPath}/tpl/static/dishout_v1/images/placeholder/140.png" width="50" height="50" /></div>
+<section class="fullBg"></section>
+<section class="window itemInfo">
+	<div class="autoWidth">
+		<div class="wrap">
+			<div class="hd pr">
+				<h2></h2><a href="javascript:;" class="windowXclosed pa"></a>
+			</div>
+			<div class="bd">
+				<div class="tags">
+					<div class="cell">
+						<h4>规格</h4>
+						<div class="t-list gg">
 
+						</div>
+					</div>
+					<div class="cell">
+						<h4>标签</h4>
+						<div class="t-list sx">
+
+						</div>
+					</div>
+				</div>
+
+				<div class="calculate  quantity quantity-row">
+					<div class="fr">
+						<span class="minus"><i></i></span><span class="num">0</span><span class="plus"><i></i></span>
+					</div>
+					<strong>商品数量</strong>
+				</div>
+				<div class="calculate  price price-row">
+					<div class="fr">
+						￥<span>0</span>
+					</div>
+					<strong>商品价格</strong>
+				</div>
+
+				<div class="intro">
+					<h4>介绍</h4>
+					<div class="desc"><p></p></div>
+				</div>
+
+			</div>
+			<div class="btn">
+				<a href="javascript:;">加入购物车</a>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<section class="window itemDetail">
+	<div class="autoWidth">
+		<div class="wrap">
+			<div class="hd pr">
+				<h2 class="itemDetail_title"></h2><a href="javascript:;" class="windowXclosed pa"></a>
+			</div>
+			<div class="bd">
+				<div class="thumb"><img class="itemDetail_img" src="" /></div>
+				<div class="intro">
+					<div class="desc"><p class="itemDetail_desc"></p></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+<section class="window itemNews">
+	<div class="autoWidth">
+		<div class="wrap">
+			<div class="hd pr">
+				<h2>公告</h2><a href="javascript:;" class="windowXclosed pa"></a>
+			</div>
+			<div class="bd">
+				<div class="pp">
+					<p>{vifnn:$outset.announcement|default='欢迎光临本店'}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="{vifnn:$staticPath}/tpl/static/dishout_v1/js/zepto.min.js"></script>
+<script src="{vifnn:$staticPath}/tpl/static/dishout_v1/js/common.js"></script>
+
+<neq name="isOpen" value="1">
+	<script>
+		$('.scrollNav').css({'top':parseInt($('.scrollNav').css('top'))+42});
+		$('.rightMainList').css({'top':parseInt($('.rightMainList').css('top'))+42});
+	</script>
+</neq>
+
+<script>
+	$(function(){
+
+//    setInterval(function(){
+//        $('#scrollNews li').last().css({'height':'0px','opacity': '0'}).insertBefore('#scrollNews li:nth-child(1)').animate({'height':'40px','opacity': '1'}, function() {
+//            $(this).removeAttr('style');
+//        },300,'ease-in');
+//    },3000);
+
+		$(".cart .leftInfo").on("tap",function(){
+			if($(".cart").hasClass("clicked")){
+				if($(this).hasClass("on")){
+					$(".cartDetail").hide();
+					$(this).removeClass("on");
+					$(".fullBg").hide();
+					$(".rightMainList").css('overflow','auto');
+					$(".window").hide();
+				}else{
+					$(this).addClass("on");
+					$(".fullBg").show();
+					$(".rightMainList").css('overflow','hidden');
+					$(".cartDetail").show();
+					$(".window").hide();
+				}
+
+			}else{
+				return false;
+			}
+		});
+
+		$(".show_detail").on("tap",function(){
+
+			var thumb=$(this).attr('data-thumb');
+			var id=$(this).attr('data-id');
+			$('.itemDetail').find('.itemDetail_img').prop('src',thumb);
+			if(typeof data['pro_'+id]!='undefined'){
+				var tit=data['pro_'+id]['tit'];
+				var desc=data['pro_'+id]['desc'];
+				$('.itemDetail').find('.itemDetail_title').text(tit);
+				if(desc&&desc!=''){
+					$('.itemDetail').find('.intro').show();
+					$('.itemDetail').find('.itemDetail_desc').text(desc);
+				}else{
+					$('.itemDetail').find('.intro').hide();
+				}
+			}
+			showWindow(".itemDetail");
+			topWindow(".itemDetail");
+		});
+
+		$(".rightMainList li .oBtn").on("tap",function(){
+			if($(this).hasClass("disabled"))return false;
+			showWindow(".itemInfo");
+			topWindow(".itemInfo");
+		});
+		$(".scrollNews .scrollText li").on("tap",function(){
+			showWindow(".itemNews");
+			topWindow(".itemNews");
+		});
+		$("a.windowXclosed,.fullBg").on("tap",function(){
+			$(".fullBg").hide();
+			$(".window").hide();
+			$(".cartDetail").hide();
+			$(".rightMainList").css('overflow','auto');
+		});
+
+		function topWindow(obj){
+			var h=$(window).height();
+			var objH=$(obj).height();
+			var top=(h-objH)/2;
+			$(obj).css('top',top+'px');
+		}
+
+		function showWindow(obj){
+			$(".fullBg").show();
+			$(obj).show();
+		}
+	});
+</script>
+<script type="text/javascript">
+	var controls = document.getElementById("segmentedControls");
+	var contents = document.getElementById("segmentedControlContents");
+	//默认选中第一个
+	if(contents){
+		controls.querySelector('a').classList.add('active');
+	}
+	(function() {
+		var controlsElem = document.getElementById("segmentedControls");
+		var contentsElem = document.getElementById("segmentedControlContents");
+		if(!controlsElem){
+			return false;
+		}
+		var controlListElem = controlsElem.querySelectorAll('a');
+		var contentListElem = contentsElem.querySelectorAll('.ctrlContent');
+		var controlWrapperElem = controlsElem.parentNode;
+		var controlWrapperHeight = controlWrapperElem.offsetHeight;
+		var controlMaxScroll = controlWrapperElem.scrollHeight - controlWrapperHeight;//左侧类别最大可滚动高度
+		var maxScroll = contentsElem.scrollHeight - contentsElem.offsetHeight;//右侧内容最大可滚动高度
+		var controlHeight = controlListElem[0].offsetHeight;//左侧类别每一项的高度
+		var controlTops = []; //存储control的scrollTop值
+		var contentTops = [0]; //存储content的scrollTop值
+		var length = contentListElem.length;
+		for (var i = 0; i < length; i++) {
+			controlTops.push(controlListElem[i].offsetTop + controlHeight);
+		}
+		for (var i = 1; i < length; i++) {
+			var offsetTop = contentListElem[i].offsetTop;
+			if (offsetTop + 100 >= maxScroll) {
+				var height = Math.max(offsetTop + 100 - maxScroll, 100);
+				var totalHeight = 0;
+				var heights = [];
+				for (var j = i; j < length; j++) {
+					var offsetHeight = contentListElem[j].offsetHeight;
+					totalHeight += offsetHeight;
+					heights.push(totalHeight);
+				}
+				for (var m = 0, len = heights.length; m < len; m++) {
+					contentTops.push(parseInt(maxScroll - (height - heights[m] / totalHeight * height)));
+				}
+				break;
+			} else {
+				contentTops.push(parseInt(offsetTop));
+			}
+		}
+		contentsElem.addEventListener('scroll', function() {
+			var scrollTop = contentsElem.scrollTop;
+			for (var i = 0; i < length; i++) {
+				var offsetTop = contentTops[i];
+				var offset = Math.abs(offsetTop - scrollTop);
+//						console.log("i:"+i+",scrollTop:"+scrollTop+",offsetTop:"+offsetTop+",offset:"+offset);
+				if (scrollTop < offsetTop) {
+					if (scrollTop >= maxScroll) {
+						onScroll(length - 1);
+					} else {
+						onScroll(i - 1);
+					}
+					break;
+				} else if (offset < 20) {
+					onScroll(i);
+					break;
+				}else if(scrollTop >= maxScroll){
+					onScroll(length - 1);
+					break;
+				}
+			}
+		});
+		var lastIndex = 0;
+		//监听content滚动
+		var onScroll = function(index) {
+			if (lastIndex !== index) {
+				lastIndex = index;
+				var lastActiveElem = controlsElem.querySelector('.active');
+				lastActiveElem && (lastActiveElem.classList.remove('active'));
+				var currentElem = controlsElem.querySelector('a:nth-child(' + (index + 1) + ')');
+				currentElem.classList.add('active');
+				//简单处理左侧分类滚动，要么滚动到底，要么滚动到顶
+				var controlScrollTop = controlWrapperElem.scrollTop;
+				if (controlScrollTop + controlWrapperHeight < controlTops[index]) {
+					controlWrapperElem.scrollTop = controlMaxScroll;
+				} else if (controlScrollTop > controlTops[index] - controlHeight) {
+					controlWrapperElem.scrollTop = 0;
+				}
+			}
+		};
+		//滚动到指定content
+		var scrollTo = function(index) {
+			contentsElem.scrollTop = contentTops[index];
+		};
+		[].forEach.call(document.querySelectorAll('.ot-menu  a'), function (el) {
+			el.addEventListener('click', function() {
+				scrollTo(this.getAttribute('data-index'));
+				return false;
+			}, false);
+		});
+	})();
+
+	document.body.addEventListener('touchstart', function () { });
+		window.setTimeout(function(){
+			$(".lodingCover").remove();
+		},600);
 	window.shareData = {  
 		"moduleName":"DishOut",
 		"moduleID":"{vifnn:$company['id']}",
@@ -148,7 +492,26 @@
 		"tTitle": "{vifnn:$metaTitle}",
 		"tContent": "{vifnn:$metaTitle}"
      };
+
+	document.getElementById('search_form').addEventListener('submit',function(event){
+		event.preventDefault();
+		var url=location.href;
+		var val=document.getElementById('search_input').value;
+		if(/keyword\=/.test(url)){
+			url=url.replace(/keyword\=[^&]*/,'keyword='+val);
+		}else{
+			url=url.indexOf('?')>-1?(url+'&keyword='+val):(url+'?keyword='+val);
+		}
+		if(url!=location.href){
+			location.href=url;
+		}
+	});
+
+	var mycid='{vifnn:$cid}';
+	$('#buyNow').click(function(){
+		$('#order_form').submit();
+	});
 </script>
-</body>
 {vifnn:$shareScript}
+</body>
 </html>

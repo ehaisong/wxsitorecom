@@ -8,6 +8,9 @@
 <script src="{vifnn:$staticPath}/tpl/static/donation/js/index.js"></script>
 <script src="/tpl/static/alert.js"></script>
 <title>{vifnn:$donation['name']}</title>
+<style>
+.desc img{width:100%;}
+</style>
 </head>
 <body>
 <if condition="$memberNotice neq ''">{vifnn:$memberNotice}</if>
@@ -167,5 +170,6 @@ window.shareData = {
 };
 </script>
 {vifnn:$shareScript}
+<include file="Public:tongji" />
 </body>
 </html>

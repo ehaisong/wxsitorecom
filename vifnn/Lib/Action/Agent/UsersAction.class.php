@@ -72,6 +72,10 @@ class UsersAction extends AgentAction
 				$this->validateGid($_POST['gid'], $this->agentWhere['agentid']);
 			}
 
+			if (!isset($_POST["usertplid"])) {
+				$_POST["usertplid"] = get_default_tplid();
+			}
+
 			if ($users_db->create()) {
 				$user_id = $users_db->add();
 
@@ -304,6 +308,7 @@ class UsersAction extends AgentAction
 			$this->error('您没有权限自定义套餐');
 		}
 
+		$is_tongji = ($this->thisAgent ? $this->thisAgent["is_tongji"] : "1");
 		$user_group_db = M('User_group');
 		$agent_function_db = M('Function');
 		$where = array_merge($this->agentWhere, array('status' => 1));
@@ -312,6 +317,39 @@ class UsersAction extends AgentAction
 
 		if (IS_POST) {
 			if (isset($_POST['id'])) {
+				if ($is_tongji != "1") {
+					unset($_POST["tj_status"]);
+				}
+				else {
+					$info = $user_group_db->where(array("id" => $_POST["id"]))->find();
+					if (($info["tj_status"] == "1") && ($_POST["tj_status"] == "0")) {
+						$ids = array();
+						$tmp = M("users")->where(array("gid" => $info["id"], "_string" => "tongji_config !=''"))->field("id")->select();
+
+						foreach ($tmp as $item ) {
+							$ids[] = $item["id"];
+						}
+
+						if (!empty($ids)) {
+							$tongjiList = M("tongji")->where(array(
+	"uid"    => array("in", $ids),
+	"status" => "1"
+	))->field("id,act_token,act_name,act_id")->select();
+							$tjIds = array();
+
+							foreach ($tongjiList as $value ) {
+								$tjIds[] = $value["id"];
+								S("tongji_" . $value["act_token"] . "_" . $value["act_name"] . "_" . $value["act_id"], NULL);
+							}
+
+							if (!empty($tjIds)) {
+								M("tongji")->where(array(
+	"id" => array("in", $tjIds)
+	))->save(array("status" => "0"));
+							}
+						}
+					}
+				}
 				$_POST['func'] = join(',', $_REQUEST['func']);
 
 				if ($user_group_db->create()) {
@@ -319,11 +357,17 @@ class UsersAction extends AgentAction
 					$this->success('修改成功！', U('Users/groups'));
 				}
 			}
-			else if ($user_group_db->create()) {
-				$_POST['func'] = join(',', $_REQUEST['func']);
-				$_POST['agentid'] = intval($this->thisAgent['id']);
-				$user_group_db->add($_POST);
-				$this->success('添加成功！', U('Users/groups'));
+			else {
+				if ($is_tongji != "1") {
+					$_POST["tj_status"] = "0";
+				}
+
+				if ($user_group_db->create()) {
+					$_POST["func"] = join(",", $_REQUEST["func"]);
+					$_POST["agentid"] = intval($this->thisAgent["id"]);
+					$user_group_db->add($_POST);
+					$this->success("添加成功！", U("Users/groups"));
+				}
 			}
 		}
 		else {
@@ -332,6 +376,7 @@ class UsersAction extends AgentAction
 				$this->assign('info', $thisGroup);
 			}
 
+			$this->assign("is_tongji", $is_tongji);
 			$this->display();
 		}
 	}

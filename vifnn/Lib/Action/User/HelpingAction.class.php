@@ -288,7 +288,6 @@ class HelpingAction extends UserAction {
 		$helping = M('Helping')->where(array('token' => $this->token, 'id' => $id, 'is_open' => 1))->find();
 		$where = array('a.token' => $this->token, 'a.pid' => $id, 'a.is_join2' => 1, 'a.help_count' => array('gt', 0));
 		if ($helping['is_reg'] == 1) {
-			$where['b.tel'] = array('neq', "");
 		}
 		$sns = M('Helping_user')->alias('a')->field('a.*,b.wechaname,b.truename,b.tel info_tel')->join(' __USERINFO__ b ON a.token = b.token and a.wecha_id = b.wecha_id ')->where($where)->group('a.id')->order('a.help_count desc,a.share_num desc')->select();
 		//$sns = M('Helping_user')->where(array('token' => $this->token, 'pid' => $id, 'is_join2' => 1, 'help_count' => array('gt', 0)))->order('help_count desc,share_num desc')->select();
@@ -320,6 +319,7 @@ class HelpingAction extends UserAction {
 					break;
 				case 'nickname':
 					$fieldValue = iconv('utf-8', 'gbk//IGNORE', $fieldValue);
+					$fieldValue = str_replace("\"", "", $fieldValue);
 					break;
 				case 'mobile':
 					$fieldValue = iconv('utf-8', 'gbk', $fieldValue);

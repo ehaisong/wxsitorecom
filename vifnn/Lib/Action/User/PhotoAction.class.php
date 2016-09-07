@@ -83,8 +83,8 @@ class PhotoAction extends UserAction{
 		}
 	}
 	public function list_add(){
-		
-		$checkdata=M('Photo')->where(array('token'=>$_SESSION['token'],'pid'=>$this->_get('pid')))->find();
+		//dump($this->_get('id'));
+		$checkdata=M('Photo')->where(array('token'=>$_SESSION['token'],'id'=>$this->_get('id')))->find();
 		if($checkdata==false){$this->error('相册不存在');}
 		if(IS_POST){
 			unset($_POST['s']);
@@ -117,10 +117,10 @@ class PhotoAction extends UserAction{
 			
 		}else{
 			$data=M('Photo_list');
-			$count      = $data->where(array('token'=>$_SESSION['token'],'pid'=>$this->_get('pid')))->count();
+			$count      = $data->where(array('token'=>$this->token,'pid'=>$this->_get('pid')))->count();
 			$Page       = new Page($count,120);
 			$show       = $Page->show();
-			$list = $data->where(array('token'=>$_SESSION['token'],'pid'=>$this->_get('id')))->order('sort desc')->limit($Page->firstRow.','.$Page->listRows)->select();	
+			$list = $data->where(array('token'=>$this->token,'pid'=>$this->_get('id')))->order('sort desc')->limit($Page->firstRow.','.$Page->listRows)->select();	
 		//upyun多文件上传
 		
 			$bucket = UNYUN_BUCKET;

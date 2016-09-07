@@ -77,12 +77,14 @@ class WeixinAction extends BaseAction
 		$unifiedOrder = new UnifiedOrder_pub($this->payConfig['new_appid'], $this->payConfig['mchid'], $this->payConfig['key'], $this->payConfig['appsecret']);
 		if ($weixinPay['status'] && $wxuser['merchant_id']) {
 			if ($wxuser['winxintype'] != 3) {
-				$unifiedOrder->setParameter('sub_appid', C('appid'));
+				if ($weixinPay["appid"] != C("appid")) {
+				   $unifiedOrder->setParameter('sub_appid', C('appid'));
+				}
 			} else {
 				$unifiedOrder->setParameter('sub_appid', $wxuser['appid']);
 			}
 			$unifiedOrder->setParameter('sub_mch_id', $wxuser['merchant_id']);
-			$unifiedOrder->setParameter('sub_openid', $pay_openid);
+			//$unifiedOrder->setParameter('sub_openid', $pay_openid);
 		}
 		$unifiedOrder->setParameter('body', $orderName);
 		if ($this->_issystem == 1) {
@@ -156,12 +158,19 @@ class WeixinAction extends BaseAction
 			$is_sub = 0;
 			if ($weixinPay['status'] && $wxuser['merchant_id']) {
 				if ($wxuser['winxintype'] != 3) {
-					$unifiedOrder->setParameter('sub_appid', C('appid'));
+					if ($weixinPay["appid"] != C("appid")) {
+						$unifiedOrder->setParameter("sub_appid", C("appid"));
+						$unifiedOrder->setParameter("sub_openid", $pay_openid);
+                                        }
+					else {
+						$unifiedOrder->setParameter("openid", $pay_openid);
+					}
 				} else {
-					$unifiedOrder->setParameter('sub_appid', $wxuser['appid']);
+					$unifiedOrder->setParameter("sub_appid", $wxuser["appid"]);
+					$unifiedOrder->setParameter("sub_openid", $this->wecha_id);
 				}
 				$unifiedOrder->setParameter('sub_mch_id', $wxuser['merchant_id']);
-				$unifiedOrder->setParameter('sub_openid', $pay_openid);
+				//$unifiedOrder->setParameter('sub_openid', $pay_openid);
 				$is_sub = 1;
 			} else {
 				$unifiedOrder->setParameter('openid', $this->wecha_id);

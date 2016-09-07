@@ -4,6 +4,8 @@
 	{
 		public $config;
 		public $cats;
+		public $industyCats;
+	public $industyCatInfo;
 		public $game;
 
 		/**
@@ -12,46 +14,61 @@
 		 */
 		public function _initialize ()
 		{
+			//进入时初始化 @by linduwu
+			if (C('IS_MEIHUA')) {
+				$id = $this->_get('id', 'intval');
+				if ($id && (ACTION_NAME == 'gameLibrary')) {
+					$info = M('Wxuser')->find($id);
+					$token = $this->_get('token', 'trim');
+					if (empty($info) || $info['token'] != $token) {
+						$this->error('非法操作', U('Home/Index/index'));
+					}
+					session('token', $token);
+					session('wxid', $info['id']);
+					session('companyid', NULL);
+					$this->token = $token;
+				}
+			}
 			parent::_initialize();
 			$this->canUseFunction('Gamecenter');
 			$this->game = new game();
 			$this->cats = $this->game->gameCats();
-			$this->assign('cats', $this->cats);
+			$this->industyCats = $this->game->gameIndustyCats();
+		$this->industyCatInfo = $this->game->gameIndustyCatInfo();
+			$this->industyCats[0] = array('name' => '全部');
+			ksort($this->industyCats);
 			$this->staticPath = 'http://s.404.cn';
-			$this->assign('staticPath', $this->staticPath);
-			
+            $this->assign('staticPath', $this->staticPath);
+		$this->assign("cats", $this->industyCats);
 		}
 
 		/**
-		 * set the user game config into vifnncms and game database
+		 * set the user game config into vifnn and game database
 		 */
+	private function saveConfig($config, $data)
+	{
+		if (!$config) {
+			D("Game_config")->add($data);
+		}
+		else {
+			D("Game_config")->where(array("id" => $config["id"]))->save($data);
+		}
+
+		$data["link"] = $this->convertLink($data["link"]);
+		$userType = (C("IS_MEIHUA") ? 1 : 0);
+		$rt = $this->game->config($this->token, $data["wxname"], $data["wxid"], $data["wxlogo"], $data["link"], $data["attentionText"], $userType);
+		D("Game_config")->where(array("token" => $this->token))->save(array("uid" => $rt["id"], "key" => $rt["key"]));
+	}
+
+		 
 		public function config ()
 		{
 			$config = M('Game_config')->where(array('token' => $this->token))->find();
 			if (IS_POST) {
-				// init the normal config data
-				$data = array(
-					'token'         => $this->token,
-					'wxid'          => $this->_post('wxid'),
-					'wxname'        => $this->_post('wxname'),
-					'wxlogo'        => $this->_post('wxlogo'),
-					'link'          => $this->_post('link'),
-					'attentionText' => $this->_post('attentionText'),
-				);
-
-				// check if has set the game config
-				if (!$config) {
-					D('Game_config')->add($data);
-				} else {
-					D('Game_config')->where(array('id' => $config['id']))->save($data);
-				}
-				$data['link'] = $this->convertLink($data['link']);
-
-				// save the user game config into game database
-				$rt = $this->game->config($this->token, $data['wxname'], $data['wxid'], $data['wxlogo'], $data['link'], $data['attentionText']);
-
-				D('Game_config')->where(array('token' => $this->token))->save(array('uid' => $rt['id'], 'key' => $rt['key']));
-				$this->success('设置成功');
+			$data = array("token" => $this->token, "wxid" => $this->_post("wxid"), "wxname" => $this->_post("wxname"), "wxlogo" => $this->_post("wxlogo"), "link" => $this->_post("link"), "attentionText" => $this->_post("attentionText"));
+			$this->saveConfig($config, $data);
+			$this->success("设置成功");
+				
 			} else {
 				if (!$config) {
 					$config = $this->wxuser;
@@ -60,7 +77,23 @@
 				$this->assign('info', $config);
 				$this->display();
 			}
+	}
+
+	public function mhQuick()
+	{
+		$qrImg = $this->wxuser["qr"];
+		$quickUrl = $this->wxuser["hurl"];
+
+		if (IS_POST) {
+			$qrImg = $_POST["qr_img"];
+			$quickUrl = $_POST["quick_url"];
+			M("wxuser")->where(array("token" => $this->token))->save(array("qr" => $qrImg, "hurl" => $quickUrl));
 		}
+
+		$this->assign("qrImg", $qrImg);
+		$this->assign("quickUrl", $quickUrl);
+		$this->display();
+	}
 
 		public function index ()
 		{
@@ -71,8 +104,8 @@
 			$count = M('Games')->where($where)->count();
 			$Page = new Page($count, 15);
 			$list = M('Games')->where($where)->order('id desc')->limit($Page->firstRow . ',' . $Page->listRows)->select();
-		        $wxUser = M("Game_config")->where(array("token" => $this->token))->find();
-		        $this->assign("wxUser", $wxUser);
+			$wxUser = M('Game_config')->where(array('token' => $this->token))->find();
+			$this->assign('wxUser', $wxUser);
 			$this->assign('count', $count);
 			$this->assign('page', $Page->show());
 			$this->assign('list', $list);
@@ -89,7 +122,12 @@
 
 				$totalStatistics[$game['id']] = $this->game->statistics($data);
 
-				$gameSet = $this->game->gameSet($config['uid'], $game['gameid'], $game['id'], $config['key']);
+				$gameSet = S("game_index_game_set_" . $config['uid'] . '_' . $game['gameid'] . '_' . $game['id']);
+				if (empty($gameSet)) {
+					$gameSet = $this->game->gameSet($config['uid'], $game['gameid'], $game['id'], $config['key']);
+
+					S("game_index_game_set_" . $config['uid'] . '_' . $game['gameid'] . '_' . $game['id'], $gameSet);
+				}
 
 				$isShare[$game['id']] = 0;
 				if ($game['is_share'] == 1) {
@@ -125,7 +163,10 @@
 			$this->assign('sendType', $sendType);
 			$this->assign('isShare', $isShare);
 			$this->assign('isNewGame', $isNewGame);
-
+		$showId = (isset($_GET["showId"]) ? intval($_GET["showId"]) : 0);
+		$this->assign("showId", $showId);
+		$showReleaseId = (isset($_GET["showReleaseId"]) ? intval($_GET["showReleaseId"]) : 0);
+		$this->assign("showReleaseId", $showReleaseId);
 			$this->display();
 		}
 
@@ -157,7 +198,13 @@
 			}
 			$config = $this->_toConfig();
 			$thisGame = $this->game->getGame(intval($gameid));
+		//	dump($thisGame);
+		//	dump(unserialize($thisGame["time_set"])["type"]);
 			$gameSet = $this->game->gameSet($config['uid'], $thisGame['id'], $id, $config['key']);
+
+			$this->assign('gameCate', $thisGame['catid']);
+		    $this->assign("timeSet", unserialize($thisGame["time_set"])["type"]);
+
 			if ($gameSet) {
 				$thisItem['rule'] = htmlspecialchars_decode(base64_decode($gameSet['rule']));
 				$thisItem['awards'] = htmlspecialchars_decode(base64_decode($gameSet['awards']));
@@ -176,20 +223,78 @@
 				$thisItem['join_set'] = $gameSet['join_set'];
 				$thisItem['office_value'] = $gameSet['office_value'];
 				$thisItem['notice_set'] = $gameSet['notice_set'];
+			$thisItem["time_set"] = $gameSet["time_set"];
 				$thisItem['bg_music'] = $gameSet['bg_music'];
 				$thisItem['bg_music_value'] = $gameSet['bg_music_value'];
+			$thisItem["game_rank"] = $gameSet["game_rank"];
+				$thisItem['game_playing'] = $gameSet['game_playing'];
+				$thisItem['game_over'] = $gameSet['game_over'];
+				$thisItem['game_result'] = $gameSet['game_result'];
 			}
+
+			$hasGameRank = $thisGame['game_rank'];
+			$this->assign('hasGameRank', $hasGameRank);
+
+			$hasGamePlaying = 0;
+			if ($thisGame['game_playing'] == 1) {
+				$hasGamePlaying = 1;
+
+				$gamePlayingSet = S("game_index_game_playing_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $id);
+
+				if (empty($gamePlayingSet)) {
+					$gamePlayingSet = $this->game->gamePlayingSet($config['uid'], $thisGame['id'], $id);
+
+					S("game_index_game_playing_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $id, $gamePlayingSet);
+				}
+
+				$gamePlayingSet['prize_value'] = unserialize($gamePlayingSet['prize_value']);
+				$gamePlayingSetAwardsValues = $gamePlayingSet['prize_value']['awards_values'];
+
+				$this->assign('gamePlayingSet', $gamePlayingSet);
+				$this->assign('playingAwardsValues', $gamePlayingSetAwardsValues);
+			}
+			$this->assign('hasGamePlaying', $hasGamePlaying);
+
+			$hasGameOver = 0;
+			if ($thisGame['game_over'] == 1) {
+				$hasGameOver = 1;
+
+				$gameOverSet = S("game_index_game_over_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $id);
+
+				if (empty($gameOverSet)) {
+					$gameOverSet = $this->game->gameOverSet($config['uid'], $thisGame['id'], $id);
+
+					S("game_index_game_over_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $id, $gameOverSet);
+				}
+
+				$gameOverSet['prize_value'] = unserialize($gameOverSet['prize_value']);
+				$gameOverSetAwardsValues = $gameOverSet['prize_value']['awards_values'];
+
+				$this->assign('gameOverSet', $gameOverSet);
+				$this->assign('overAwardsValues', $gameOverSetAwardsValues);
+			}
+			$this->assign('hasGameOver', $hasGameOver);
+
+			$hasGameShare = $thisGame['game_share'];
+			$this->assign('hasGameShare', $hasGameShare);
 
 			$selfs = $this->game->gameSelfs($thisGame['id'], $config['uid'], $id, $config['key']);
 			if (IS_POST) {
-				$wxtype = M('wxuser')->field("`winxintype`,`qr`")->where(array('token' => $this->token))->find();
+			$wxtype = M("wxuser")->field("`winxintype`,`qr`, `is_syn`, `encode`")->where(array("token" => $this->token))->find();
 				if ($wxtype['winxintype'] == 3) {
 					$gameqr = $this->getQrcode($this->_post('keyword'));
 				} else {
-					if (empty($wxtype['qr'])) {
-						$this->error('请在编辑公众号里，上传您的二维码', U('Index/index', array('id' => session('wxid'))));
-					} else {
-						$gameqr = $wxtype['qr'];
+					if ($wxtype['is_syn'] != 2) {
+						if (empty($wxtype['qr'])) {
+					             if (C("IS_MEIHUA") && ($wxtype["encode"] == 0)) {
+						        $this->error("请在编辑公众号里，上传您的二维码", U("Game/mhQuick", array("token" => $this->token)));
+				       	             }
+					              else {
+						         $this->error("请在编辑公众号里，上传您的二维码", U("Index/index", array("id" => session("wxid"))));
+					             }
+						} else {
+							$gameqr = $wxtype['qr'];
+						}
 					}
 				}
 				$data = array(
@@ -261,10 +366,15 @@
 				$gameSet['share_callback'] = $this->_post('share_callback');
 				$gameSet['share_value'] = isset($_POST['share']) ? serialize($_POST['share']) : '';
 				$gameSet['is_share'] = $_POST['is_share'];
+			$gameSet["game_rank"] = $_POST["game_rank"];
+				$gameSet['game_playing'] = $_POST['game_playing'];
+				$gameSet['game_over'] = $_POST['game_over'];
+				$gameSet['game_result'] = $_POST['game_result'];
 				$gameSet['bg_music'] = $_POST['bg_music'];
 				$gameSet['bg_music_value'] = isset($_POST['bg_music_value']) ? serialize($_POST['bg_music_value']) : '';
 				$gameSet['join_set'] = isset($_POST['join_set']) ? serialize($_POST['join_set']) : '';
 				$gameSet['wechat_set'] = isset($_POST['wechat_set']) ? serialize($_POST['wechat_set']) : '';
+			$gameSet["time_set"] = (isset($_POST["time_set"]) ? serialize($_POST["time_set"]) : "");
 				$gameSet['rank_limit'] = intval($_POST['rank_limit']);
 				$gameSet['office_value'] = isset($_POST['office_value']) ? serialize($_POST['office_value']) : '';
 				$gameSet['notice_set'] = isset($_POST['notice_set']) ? serialize($_POST['notice_set']) : '';
@@ -279,9 +389,86 @@
 				$this->handleKeyword($usergameid, 'Game', $data['keyword'], $precisions = 0, $delete = 0);
 				$this->game->gameSelfSet($config['uid'], $thisGame['id'], $usergameid, 'game', $config['key'], $selfValues);
 
-				$this->success('设置成功', U('Game/index'));
-				//
-			} else {
+				// 更新游戏过程中中奖信息
+				if ($hasGamePlaying && $_POST['game_playing'] == 1 && isset($_POST['game_playing_set'])) {
+					$data = array();
+					$data['prize_pic'] = $_POST['game_playing_set']['prize_pic'];
+					$data['prize_limit'] = $_POST['game_playing_set']['prize_limit'];
+					$data['prize_total_limit'] = $_POST['game_playing_set']['prize_total_limit'];
+					$data['prize_percent'] = $_POST['game_playing_set']['prize_percent'] / 100;
+					$data['prize_type'] = '';
+					$data['prize_value'] = isset($_POST['game_playing_set']['prize_value']) ? serialize($_POST['game_playing_set']['prize_value']) : '';
+
+					if (isset($_POST['game_playing_set']['prize_value'])) {
+						$prizeType = array();
+						$prizeCount = $_POST['game_playing_set']['prize_value']['awards_count'];
+
+						for ($i = 0; $i < $prizeCount; $i++) {
+							$prizeValueType = $_POST['game_playing_set']['prize_value']['awards_values'][$i]['awards_cate'];
+
+							if (!in_array($prizeValueType, $prizeType)) {
+								array_push($prizeType, $prizeValueType);
+							}
+						}
+
+						$data['prize_type'] = serialize($prizeType);
+					}
+
+					$this->game->gamePlayingSet($config['uid'], $thisGame['id'], $usergameid, $data);
+
+					S("game_index_game_playing_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $usergameid, NULL);
+				}
+
+				// 更新游戏结束后抽奖中奖信息
+				if ($hasGameOver && $_POST['game_over'] == 1 && isset($_POST['game_over_set'])) {
+					$data = array();
+					$data['prize_pic'] = $_POST['game_over_set']['prize_pic'];
+					$data['prize_limit'] = $_POST['game_over_set']['prize_limit'];
+					$data['prize_total_limit'] = $_POST['game_over_set']['prize_total_limit'];
+				        $data["prize_one_limit"] = $_POST["game_over_set"]["prize_one_limit"];
+					$data['prize_percent'] = $_POST['game_over_set']['prize_percent'] / 100;
+					$data['prize_type'] = '';
+					$data['prize_value'] = isset($_POST['game_over_set']['prize_value']) ? serialize($_POST['game_over_set']['prize_value']) : '';
+					$data['prize_min_score'] = $_POST['game_over_set']['prize_min_score'];
+
+					if (isset($_POST['game_over_set']['prize_value'])) {
+						$prizeType = array();
+						$prizeCount = $_POST['game_over_set']['prize_value']['awards_count'];
+
+						for ($i = 0; $i < $prizeCount; $i++) {
+							$prizeValueType = $_POST['game_over_set']['prize_value']['awards_values'][$i]['awards_cate'];
+
+							if (!in_array($prizeValueType, $prizeType)) {
+								array_push($prizeType, $prizeValueType);
+							}
+						}
+
+						$data['prize_type'] = serialize($prizeType);
+					}
+
+					$this->game->gameOverSet($config['uid'], $thisGame['id'], $usergameid, $data);
+
+					S("game_index_game_over_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $usergameid, NULL);
+				}
+
+				// 清空游戏缓存
+				S("game_index_game_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $usergameid, NULL);
+
+			if (isset($thisItem)) {
+				$isRelease = $thisItem["is_release"] == 1;
+			}
+			else {
+				$isRelease = false;
+			}
+
+			if ($isRelease) {
+				$this->success("设置成功", U("Game/index", array("token" => $this->token)));
+			}
+			else {
+				$this->success("设置成功", U("Game/index", array("token" => $this->token, "showReleaseId" => $usergameid)));
+			}
+		}
+		else {
 				$url = $_SERVER['SERVER_NAME'];
 				$this->assign('url', $url);
 				$this->assign('thisGame', $thisGame);
@@ -298,10 +485,12 @@
 					$thisItem['title'] = $thisGame['title'];
 					$thisItem['intro'] = $thisGame['intro'];
 					$thisItem['keyword'] = $thisGame['title'];
-					$thisItem['rule'] = '活动结束后，会根据排行榜成绩进行派奖。';
+					$thisItem['rule'] = $thisGame['catid'] != 4 ? '活动结束后，会根据排行榜成绩进行派奖。' : '每人只有一次竞猜机会。活动结束后，系统将自动匹配出答对者，答对者将获得随机抽奖的机会。';
 					$thisItem['picurl'] = $thisGame['picurl'];
+				$thisItem["time_set"] = $thisGame["time_set"];
 					$thisItem['is_release'] = 0;
 					$thisItem['awards_value'] = unserialize($gameSet['awards_value']);
+				$thisItem["game_rank"] = ($hasGameRank == 1 ? 1 : 0);
 				}
 
 				if ($id) {
@@ -374,9 +563,13 @@
 				//游戏分享回调选项
 				$share_options[3] = "送积分";
 				$share_options[4] = "送次数";
+			$meihuaServerType = 0;
+			if (C("IS_MEIHUA") && ($account_type["encode"] == 0)) {
+				$meihuaServerType = 1;
+			}
 
-				//微信卡券
-				$coupon = M('Member_card_coupon')->where(array('is_delete' => 0, 'is_weixin' => 1))->select();
+			$this->assign("meihuaServerType", $meihuaServerType);
+				$coupon = M('Member_card_coupon')->where(array('token' => $this->token, 'is_delete' => 0, 'is_weixin' => 1))->select();
 
 				//获取支付配置
 				$pay_config = M('Alipay_config')->where(array('token' => $this->token))->find();
@@ -411,7 +604,7 @@
 				$thisItem['wechat_set'] = unserialize($thisItem['wechat_set']);
 				$thisItem['office_value'] = unserialize($thisItem['office_value']);
 				$thisItem['notice_set'] = unserialize($thisItem['notice_set']);
-
+			$thisItem["time_set"] = unserialize($thisItem["time_set"]);
 				$this->assign('selfs', $selfs);
 				$this->assign('info', $thisItem);
 				$this->assign('awardsValues', $thisItem['awards_value']['awards_values']);
@@ -440,7 +633,11 @@
 			$config = $this->_toConfig();
 			$thisGame = $this->game->getGame(intval($gameid));
 			$gameSet = $this->game->gameSet($config['uid'], $thisGame['id'], $id, $config['key']);
-
+		    $hasGameRank = $thisGame["game_rank"];
+		    $this->assign("hasGameRank", $hasGameRank);
+			$this->assign('gameCate', $thisGame['catid']);
+		    $this->assign("timeSet", unserialize($thisGame["time_set"])["type"]);
+            $this->assign("rankUnit", $thisGame["unit"]);
 			if ($gameSet) {
 				$thisItem['rule'] = htmlspecialchars_decode(base64_decode($gameSet['rule']));
 				$thisItem['awards'] = htmlspecialchars_decode(base64_decode($gameSet['awards']));
@@ -459,8 +656,12 @@
 				$thisItem['join_set'] = $gameSet['join_set'];
 				$thisItem['office_value'] = $gameSet['office_value'];
 				$thisItem['notice_set'] = $gameSet['notice_set'];
+			$thisItem["time_set"] = $gameSet["time_set"];
 				$thisItem['bg_music'] = $gameSet['bg_music'];
 				$thisItem['bg_music_value'] = $gameSet['bg_music_value'];
+			$thisItem["game_rank"] = $gameSet["game_rank"];
+				$thisItem['game_playing'] = $gameSet['game_playing'];
+				$thisItem['game_over'] = $gameSet['game_over'];
 			}
 
 			$selfs = $this->game->gameSelfs($thisGame['id'], $config['uid'], $id, $config['key']);
@@ -470,8 +671,10 @@
 				$thisItem['title'] = $thisGame['title'];
 				$thisItem['intro'] = $thisGame['intro'];
 				$thisItem['keyword'] = $thisGame['title'];
-				$thisItem['rule'] = $thisGame['rule'];
+			$thisItem["time_set"] = $thisGame["time_set"];
+				$thisItem['rule'] = '活动结束后，会根据排行榜成绩进行派奖。';
 				$thisItem['awards_value'] = unserialize($gameSet['awards_value']);;
+			$thisItem["game_rank"] = ($hasGameRank == 1 ? 1 : 0);
 			}
 
 			if ($id) {
@@ -536,6 +739,45 @@
 			$thisItem['wechat_set'] = unserialize($thisItem['wechat_set']);
 			$thisItem['office_value'] = unserialize($thisItem['office_value']);
 			$thisItem['notice_set'] = unserialize($thisItem['notice_set']);
+		$thisItem["time_set"] = unserialize($thisItem["time_set"]);
+			$hasGamePlaying = 0;
+			if ($thisGame['game_playing'] == 1) {
+				$hasGamePlaying = 1;
+
+				$gamePlayingSet = S("game_index_game_playing_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $id);
+
+				if (empty($gamePlayingSet)) {
+					$gamePlayingSet = $this->game->gamePlayingSet($config['uid'], $thisGame['id'], $id);
+				}
+
+				$gamePlayingSet['prize_value'] = unserialize($gamePlayingSet['prize_value']);
+				$gamePlayingSetAwardsValues = $gamePlayingSet['prize_value']['awards_values'];
+
+				$this->assign('gamePlayingSet', $gamePlayingSet);
+				$this->assign('playingAwardsValues', $gamePlayingSetAwardsValues);
+			}
+			$this->assign('hasGamePlaying', $hasGamePlaying);
+
+			$hasGameOver = 0;
+			if ($thisGame['game_over'] == 1) {
+				$hasGameOver = 1;
+
+				$gameOverSet = S("game_index_game_over_set_" . $config['uid'] . '_' . $thisGame['id'] . '_' . $id);
+
+				if (empty($gameOverSet)) {
+					$gameOverSet = $this->game->gameOverSet($config['uid'], $thisGame['id'], $id);
+				}
+
+				$gameOverSet['prize_value'] = unserialize($gameOverSet['prize_value']);
+				$gameOverSetAwardsValues = $gameOverSet['prize_value']['awards_values'];
+
+				$this->assign('gameOverSet', $gameOverSet);
+				$this->assign('overAwardsValues', $gameOverSetAwardsValues);
+			}
+			$this->assign('hasGameOver', $hasGameOver);
+
+			$hasGameShare = $thisGame['game_share'];
+			$this->assign('hasGameShare', $hasGameShare);
 
 			$this->assign('selfs', $selfs);
 			$this->assign('info', $thisItem);
@@ -560,19 +802,100 @@
 		public function gameLibrary ()
 		{
 			$catid = isset($_GET['catid']) ? intval($_GET['catid']) : 1;
-			$games = $this->game->gameList($catid);
+			$search = '';
+			if (IS_POST) {
+				$search = $_POST['search'];
+			}
 
-			$this->assign('games', $games);
+			$this->assign('search', $search);
+			$games = $this->game->gameList($catid, $search);
+
+			// 分页计算逻辑
+			$count = count($games);
+			$ps = $this->_get('p', 'intval');
+			if ($ps < 1) {
+				$ps = 1;
+			}
+
+			// 每页显示的信息数
+			$num = 8;
+
+			//当前页数显示内容
+			if ($this->_get('p') > 0) {
+				$star = ($this->_get('p') - 1) * $num;
+				$gameList = array_slice($games, $star, $num);
+			} else {
+				$gameList = array_slice($games, 0, $num);
+			}
+
+			foreach ($gameList as $key => $value) {
+				if (!empty($value['intropic'])) {
+					$intropic = explode(",", $value['intropic']);
+					foreach ($intropic as $k => $v) {
+						$value['rule_pic'] .= '<img src="' . $v . '" style="width:48%;margin-right:1%;float:left;margin-top:10px;height: 500px;">';
+					}
+				}
+
+			$value["cat_id"] = $this->addCatInfoList($value, 6, $catId);
+				$gameList[$key] = $value;
+			}
+
+			$Page = new Page($count, $num);
+			$this->assign('page', $Page->show());
+
+			$this->assign('games', $gameList);
 			$this->assign('catid', $catid);
 			$this->display();
+	}
+	private function addCatInfoList($value, $dep, $industryType)
+	{
+		$industryCatInfo = $this->industyCatInfo;
+		$industryCatInfo = $industryCatInfo["info"];
+		$temArr = explode(",", $value["industry_cate_info"]);
+		$iCatsArr = array();
+		$i = 0;
+
+		foreach ($temArr as $k => $v ) {
+			if ($v && ($i < $dep)) {
+				array_push($iCatsArr, $industryCatInfo[$v]["name"]);
+				$i++;
+			}
 		}
+
+		if (empty($iCatsArr)) {
+			if ($industryType == 0) {
+				$temArr = explode(",", $value["industry_cate"]);
+				$i = 0;
+
+				foreach ($temArr as $k => $v ) {
+					if ($v && ($i < $dep)) {
+						array_push($iCatsArr, $this->industyCats[$v]["name"]);
+						$i++;
+					}
+				}
+			}
+			else {
+				array_push($iCatsArr, $this->industyCats[$industryType]["name"]);
+			}
+		}
+
+		return $iCatsArr;
+	}
 
 		function _toConfig ()
 		{
 			$config = M('Game_config')->where(array('token' => $this->token))->find();
 			if (!$config) {
-				$this->success('请先配置游戏相关信息', U('Game/config'));
+ 	                     if (C("IS_MEIHUA")) {
+				$data = array("token" => $this->token, "wxid" => $this->wxuser["wxid"], "wxname" => $this->wxuser["wxname"], "wxlogo" => $this->wxuser["headerpic"], "link" => "", "attentionText" => "");
+				$this->saveConfig($config, $data);
+				$this->_toConfig();
+			    }
+			     else {
+				$this->success("请先配置游戏相关信息", U("Game/config"));
 				exit();
+			    }
+		
 			} else {
 				return $config;
 			}
@@ -583,22 +906,18 @@
 		{
 			$uGameId = $this->_get('id', 'intval');
 			$gameId = $this->_get('gid', 'intval');
-			$where = array('token' => $this->token, 'u_game_id' => $uGameId);
-
-			$ranking = M('Game_records')->where($where)->find();
-			if (empty($ranking)) {
-		  	        $where = array("token" => $this->token, "gameid" => $uGameId);
-				$ranking = M('Game_records')->where($where)->find();
-			}
-
+		$config = $this->_toConfig();
 		        $thisItem = M("games")->where(array("id" => $uGameId, "token" => $this->token))->find();
-			$thisItem['share_value'] = unserialize($thisItem['share_value']);
-
-			$config = $this->_toConfig();
-			$gameSet = $this->game->gameSet($ranking['uid'], $gameId, $uGameId, $config['key']);
+		$thisItem["share_value"] = unserialize($thisItem["share_value"]);
+			$gameSet = $this->game->gameSet($config['uid'], $gameId, $uGameId, $config['key']);
 			$isPhone = $gameSet['is_phone'];
 
-			$data['uid'] = $ranking['uid'];
+			$thisGame = $this->game->getGame($gameId);
+			$this->assign('gameCate', $thisGame['catid']);
+
+
+			$data['uid'] = $config['uid'];
+			$data['id'] = $gameId;
 			$data['gid'] = $uGameId;
 			$list = $this->game->RankingList($data);
 	  	        $fansIdData = array(
@@ -617,7 +936,7 @@
 
 			// 获取粉丝成绩信息
 			$data = $fansIdData;
-			$data['uid'] = $ranking['uid'];
+			$data['uid'] = $config['uid'];
 			$data['game_id'] = $gameId;
 			$data['u_game_id'] = $uGameId;
 			$scoreData = $this->game->getUserScoreData($data);
@@ -670,10 +989,10 @@
 				$pageStar = 1;
 				$pageEnd = $gamePage;
 			}
-
-		        $this->assign("id", $uGameId);
-		        $this->assign("gid", $gameId);
+			$this->assign('id', $uGameId);
+			$this->assign('gid', $gameId);
 			$this->assign('ps', $ps);
+		        $this->assign("num", $num);
 			$this->assign('pageStar', $pageStar);
 			$this->assign('pageEnd', $pageEnd);
 
@@ -692,15 +1011,22 @@
 
 		function record_del ()
 		{
+			$config = $this->_toConfig();
 			$wecha_id = $this->_get('wecha');
-			$uid = $this->_get('uid');
-			$gid = $this->_get('rid');
-			$data['wecha_id'] = $wecha_id;
+			$uid = $config['uid'];
+			$gid = $this->_get('gid');
+			$uGameId = $this->_get('ugid');
+			$fansId = $this->_get('fansid');
+			$scoreId = $this->_get('id');
+
+			$data['game_id'] = $gid;
 			$data['uid'] = $uid;
-			$data['gid'] = $gid;
+			$data['u_game_id'] = $uGameId;
+			$data['fans_id'] = $fansId;
+			$data['score_id'] = $scoreId;
 			$this->game->scoredel($data);
-			M('Game_records')->where(array('game' => $gid, 'wecha_id' => $wecha_id, 'token' => $this->token))->delete();
-			$this->success('删除成功', U('Game/record', array('token' => $this->token, 'id' => $this->_get('rid', 'intval'))));
+//			M('Game_records')->where(array('game' => $gid, 'wecha_id' => $wecha_id, 'token' => $this->token))->delete();
+			$this->success('删除成功', U('Game/record', array('token' => $this->token, 'id' => $uGameId, 'gid' => $gid)));
 
 		}
 
@@ -716,8 +1042,9 @@
 			if (!empty($game)) {
 				if ($game['is_release'] == 1) {
 				       $this->error("游戏已发布，请勿重复发布！", U("Game/index", array("token" => $this->token)));
-				} elseif ($game['start_time'] > $now) {
-				       $this->error("未到游戏开始时间，暂不能发布！", U("Game/index", array("token" => $this->token)));
+			
+				} elseif ($game['end_time'] <= $now) {
+					$this->error('游戏结束时间应大于当前时间，暂不能发布！', U('Game/index', array('token' => $this->token)));
 				} else {
 					$uid = $config['uid'];
 					$uGameId = $id;
@@ -730,9 +1057,9 @@
 						if ($status['status']) {
 							// 营销端
 						M("games")->where(array("id" => $id, "token" => $this->token))->save(array("is_release" => 1));
-						M("Game_records")->where(array("gameid" => $id, "token" => $this->token, "uid" => $uid))->delete();
+						M("Game_records")->where(array("gameid" => $gameId, "token" => $this->token, "uid" => $uid, 'u_game_id' => $uGameId))->delete();
 
-						$this->error("游戏发布成功！", U("Game/index", array("token" => $this->token)));
+						$this->success("游戏发布成功！", U("Game/index", array("token" => $this->token)));
 						} else {
 						$this->error($status["msg"], U("Game/index", array("token" => $this->token)));
 						}
@@ -752,161 +1079,245 @@
 		function convert ()
 		{
 			$uGameId = $this->_get('id', 'intval');
-		$thisItem = M("games")->where(array("id" => $uGameId, "token" => $this->token))->find();
+		$gameId = $this->_get("gid", "intval");
+			$convertType = $this->_get('convert_type', 'intval');
+			$thisItem = M('games')->where(array('id' => $uGameId, 'token' => $this->token))->find();
 
-			// 判断活动是否结束
-			if ($thisItem['end_time'] < time()) {
-				$this->assign('finish', 1);
-				$this->assign('id', $uGameId);
+			$gameId = intval($thisItem['gameid']);
+			$this->assign('gameId', $gameId);
 
-				$gameId = intval($thisItem['gameid']);
-				$this->assign('gameId', $gameId);
+			$thisGame = $this->game->getGame($gameId);
+			$this->assign('gameCate', $thisGame['catid']);
+			if ($thisGame['catid'] == 4) {
+				$convertType = 2;
+			}
 
-				$config = $this->_toConfig();
-				$uid = $config['uid'];
-				$this->assign('uid', $uid);
-				$this->assign('key', $config['key']);
+			$config = $this->_toConfig();
+			$uid = $config['uid'];
+			$this->assign('uid', $uid);
+		$this->assign("id", $uGameId);
+		$this->assign("gid", $gameId);
+			$this->assign('convertType', $convertType);
 
-				$thisGame = $this->game->getGame(intval($gameId));
-				$gameSet = $this->game->gameSet($config['uid'], $thisGame['id'], $uGameId, $config['key']);
+			$gameSet = $this->game->gameSet($uid, $gameId, $uGameId, $config['key']);
+			$hasGamePlaying = $gameSet['game_playing'];
+			$hasGameOver = $gameSet['game_over'];
+			$this->assign('hasGamePlaying', $hasGamePlaying);
+			$this->assign('hasGameOver', $hasGameOver);
 
-				// 获取活动奖品信息
-				$awardsData = unserialize($gameSet['awards_value']);
-				$awardsValue = $awardsData['awards_values'];
-				$awardsCount = $awardsData['awards_count'];
+			// 获得排名获奖的获奖信息
+			if ($convertType == 0) {
+				// 判断活动是否结束
+				if ($thisItem['end_time'] < time()) {
+					$this->assign('finish', 1);
+					$this->assign('userKey', $config['key']);
 
-				$this->assign('awardsValue', $awardsValue);
-				$this->assign('awardsCount', $awardsCount);
+					$thisGame = S('game_convert_game_' . $uid . '_' . $gameId . '_' . $uGameId);
+					if (empty($thisGame)) {
+						$thisGame = $this->game->getGame(intval($gameId));
 
-				$convertCodeData = D('Game_convert')->getConvertUseData($uid, $uGameId);
+						S('game_convert_game_' . $uid . '_' . $gameId . '_' . $uGameId, $thisGame);
+					}
 
-				$this->assign('codeData', $convertCodeData);
-		  	        $where = array("uid" => $uid, "u_game_id" => $uGameId);
-				$searchType = 0;
-				$useType = 2;
-				$awardsType = 0;
-				$keyword = '';
-				if (IS_POST) {
-					$searchType = $this->_POST('type', 'intval');
-					$useType = $this->_POST('use_type', 'intval');
-					$awardsType = $this->_POST('awards_type', 'intval');
-					$keyword = htmlspecialchars(trim($_POST['keyword']));
-				}
+					$gameSet = S('game_convert_game_set_' . $uid . '_' . $gameId . '_' . $uGameId);
+					if (empty($gameSet)) {
+						$gameSet = $this->game->gameSet($config['uid'], $thisGame['id'], $uGameId, $config['key']);
 
-				$this->assign('type', $searchType);
-				$this->assign('keyword', $keyword);
-				$this->assign('useType', $useType);
-				$this->assign('awardsType', $awardsType);
+						S('game_convert_game_set_' . $uid . '_' . $gameId . '_' . $uGameId, $gameSet);
+					}
 
-				if ($useType != 2) {
-					$where['is_use'] = $useType;
-				}
+					// 获取活动奖品信息
+					$awardsData = unserialize($gameSet['awards_value']);
+					$awardsValue = $awardsData['awards_values'];
+					$awardsCount = $awardsData['awards_count'];
 
-				if ($awardsType != 0) {
-					$where['awards_level'] = $awardsType;
-				}
+					$this->assign('awardsValue', $awardsValue);
+					$this->assign('awardsCount', $awardsCount);
+				$convertCodeData = D("Game_convert")->getConvertUseData($uid, $uGameId);
+				if (empty($convertCodeData) && ($gameSet["end_time"] < time())) {
+					$convertEnd = 0;
 
-				if ($searchType == 0 && !empty($keyword)) {
-					$where['convert_code'] = $keyword;
-				}
+					for ($i = 0; $i < $awardsCount; $i++) {
+						$convertEnd += $awardsValue[$i]["awards_num"];
+					}
 
-				if ($searchType == 1 && !empty($keyword)) {
-				        $fansIds = $this->game->getFansIdsByName(array("name" => $keyword));
-					if ($fansIds) {
-					       $where["fans_id"] = array("in", $fansIds);
-					} else {
-						$this->assign('empty', 1);
+					$data = array("uid" => $uid, "game_id" => $gameId, "u_game_id" => $uGameId, "convert_end" => $convertEnd);
+					$convertCodeStatus = $this->game->getConvertDataFromCms($data);
 
-						$this->display();
-
-						return false;
+					if ($convertCodeStatus["status"] == 200) {
+						$convertCodeData = D("Game_convert")->getConvertUseData($uid, $uGameId);
 					}
 				}
 
-				$convertData = D('Game_convert')->where($where)->select();
+					$this->assign('codeData', $convertCodeData);
+		  	        $where = array("uid" => $uid, "u_game_id" => $uGameId);
+					$searchType = 0;
+					$useType = 2;
+					$awardsType = 0;
+					$keyword = '';
+					if (IS_POST) {
+						$searchType = $this->_POST('type', 'intval');
+						$useType = $this->_POST('use_type', 'intval');
+						$awardsType = $this->_POST('awards_type', 'intval');
+						$keyword = htmlspecialchars(trim($_POST['keyword']));
+					}
 
-				if (!empty($convertData)) {
+					$this->assign('type', $searchType);
+					$this->assign('keyword', $keyword);
+					$this->assign('useType', $useType);
+					$this->assign('awardsType', $awardsType);
+
+					if ($useType != 2) {
+						$where['is_use'] = $useType;
+					}
+
+					if ($awardsType != 0) {
+						$where['awards_level'] = $awardsType;
+					}
+
+					if ($searchType == 0 && !empty($keyword)) {
+						$where['convert_code'] = $keyword;
+					}
+
+					if ($searchType == 1 && !empty($keyword)) {
+						$fansIds = S('game_convert_search_' . $keyword . '_' . $uid . '_' . $gameId . '_' . $uGameId);
+
+						if (empty($fansIds)) {
+				        $fansIds = $this->game->getFansIdsByName(array("name" => $keyword));
+							S('game_convert_search_' . $keyword . '_' . $uid . '_' . $gameId . '_' . $uGameId, $fansIds);
+						}
+
+						if ($fansIds) {
+					       $where["fans_id"] = array("in", $fansIds);
+						} else {
+							$this->assign('empty', 1);
+
+							$this->display();
+
+							return false;
+						}
+					}
+
+					$convertData = D('Game_convert')->where($where)->order('awards_level ASC, id ASC')->select();
+
+					if (!empty($convertData)) {
 				       $fansIdData = array(
 					     "fansId" => array()
 				      	    );
 
-					foreach ($convertData as $convert) {
-						array_push($fansIdData['fansId'], $convert['fans_id']);
-					}
+						foreach ($convertData as $convert) {
+							array_push($fansIdData['fansId'], $convert['fans_id']);
+						}
 
-					$fansIdData['fansId'] = implode(', ', $fansIdData['fansId']);
+						$fansString = implode('_', $fansIdData['fansId']);
+						$fansIdData['fansId'] = implode(', ', $fansIdData['fansId']);
 
-					// 获取粉丝信息
-					$fansData = $this->game->getUserInfo($fansIdData);
-					$fansData = $this->valtokey($fansData, 'id');
+						// 获取粉丝信息
+						$fansData = S('game_convert_fans_data_' . $uid . '_' . $gameId . '_' . $uGameId . '_' . $fansString);
+						if (empty($fansData)) {
+							$fansData = $this->game->getUserInfo($fansIdData);
+							$fansData = $this->valtokey($fansData, 'id');
 
-					// 获取粉丝成绩信息
-					$data = $fansIdData;
-					$data['uid'] = $uid;
-					$data['game_id'] = $gameId;
-					$data['u_game_id'] = $uGameId;
-					$scoreData = $this->game->getUserScoreData($data);
-					$scoreData = $this->valtokey($scoreData, 'fans_id');
+							S('game_convert_fans_data_' . $uid . '_' . $gameId . '_' . $uGameId . '_' . $fansString, $fansData);
+						}
 
-					// 分页计算逻辑
-					$count = count($convertData);
-					$ps = $this->_get('p', 'intval');
-					if ($ps < 1) {
-						$ps = 1;
-					}
+						// 获取粉丝成绩信息
+						$scoreData = S('game_convert_score_data_' . $uid . '_' . $gameId . '_' . $uGameId . '_' . $fansString);
+						if (empty($scoreData)) {
+							$data = $fansIdData;
+							$data['uid'] = $uid;
+							$data['game_id'] = $gameId;
+							$data['u_game_id'] = $uGameId;
+							$scoreData = $this->game->getUserScoreData($data);
+							$scoreData = $this->valtokey($scoreData, 'fans_id');
 
-					// 每页显示的信息数
-					$num = 10;
+							S('game_convert_score_data_' . $uid . '_' . $gameId . '_' . $uGameId . '_' . $fansString, $scoreData);
+						}
 
-					//页数
-					if (is_int($count / $num)) {
-						$gamePage = $count / $num;
-					} else {
-						$gamePage = floor($count / $num + 1);
-					}
+						// 分页计算逻辑
+						$count = count($convertData);
+						$ps = $this->_get('p', 'intval');
+						if ($ps < 1) {
+							$ps = 1;
+						}
 
-					//当前页数显示内容
-					if ($this->_get('p') > 0) {
-						$star = ($this->_get('p') - 1) * $num;
-						$dataList = array_slice($convertData, $star, $num);
-					} else {
-						$dataList = array_slice($convertData, 0, $num);
-					}
+						// 每页显示的信息数
+						$num = 10;
 
-					// 页面底部页码显示逻辑
-					if ($gamePage > 9) {
-						if ($ps < 5) {
-							$pageStar = 1;
-							$pageEnd = 10;
+						//页数
+						if (is_int($count / $num)) {
+							$gamePage = $count / $num;
 						} else {
-							$pageStar = $ps - 4;
-							$pageEnd = $ps + 5;
+							$gamePage = floor($count / $num + 1);
 						}
-						if ($pageEnd > $gamePage) {
+
+						//当前页数显示内容
+						if ($this->_get('p') > 0) {
+							$star = ($this->_get('p') - 1) * $num;
+							$dataList = array_slice($convertData, $star, $num);
+						} else {
+							$dataList = array_slice($convertData, 0, $num);
+						}
+
+						// 页面底部页码显示逻辑
+						if ($gamePage > 9) {
+							if ($ps < 5) {
+								$pageStar = 1;
+								$pageEnd = 10;
+							} else {
+								$pageStar = $ps - 4;
+								$pageEnd = $ps + 5;
+							}
+							if ($pageEnd > $gamePage) {
+								$pageEnd = $gamePage;
+								$pageStar = $pageEnd - 9;
+							}
+						} else {
+							$pageStar = 1;
 							$pageEnd = $gamePage;
-							$pageStar = $pageEnd - 9;
 						}
+
+						$this->assign('empty', 0);
+
+						$this->assign('converts', $dataList);
+						$this->assign('fans', $fansData);
+						$this->assign('scores', $scoreData);
+					        $this->assign("ps", $ps);
+					        $this->assign("p", $this->_get("p"));
+						$this->assign('num', $num);
+						$this->assign('pageStar', $pageStar);
+						$this->assign('pageEnd', $pageEnd);
+						$this->assign('gamePage', $gamePage);
 					} else {
-						$pageStar = 1;
-						$pageEnd = $gamePage;
+						$this->assign('empty', 1);
 					}
-
-					$this->assign('empty', 0);
-
-					$this->assign('converts', $dataList);
-					$this->assign('fans', $fansData);
-					$this->assign('scores', $scoreData);
-
-					$this->assign('ps', $ps);
-					$this->assign('num', $num);
-					$this->assign('pageStar', $pageStar);
-					$this->assign('pageEnd', $pageEnd);
-					$this->assign('gamePage', $gamePage);
 				} else {
-					$this->assign('empty', 1);
+					$this->assign('finish', 0);
 				}
-			} else {
-				$this->assign('finish', 0);
+			}
+
+			// 获取游戏过程中获奖信息
+			if ($convertType == 1) {
+				$data = array(
+					'uid'       => $uid,
+					'game_id'   => $gameId,
+					'u_game_id' => $uGameId,
+				);
+				$playingPrizeData = $this->game->getGamePlayingPrize($data);
+
+				$this->assign('playingConverts', $playingPrizeData);
+			}
+
+			// 获取游戏结束后抽奖获奖信息
+			if ($convertType == 2) {
+				$data = array(
+					'uid'       => $uid,
+					'game_id'   => $gameId,
+					'u_game_id' => $uGameId,
+				);
+				$overPrizeData = $this->game->getGameOverPrize($data);
+
+				$this->assign('overConverts', $overPrizeData);
 			}
 
 			$this->display();
@@ -1048,14 +1459,14 @@
 				//				$objActSheet->mergeCells('G' . $start . ':G' . $end);
 
 				$rank = $key + 1;
-				$objActSheet->setCellValue('A' . $start, '#' . $rank);
+			$objActSheet->setCellValue("A" . $start, "# " . $rank . " ");
 				//				$objActSheet->setCellValue('B' . $start, $fansData[$convert['fans_id']]['portrait']);
-				$objActSheet->setCellValue('B' . $start, $fansData[$convert['fans_id']]['wechaname']);
+			$objActSheet->setCellValue("B" . $start, " " . $fansData[$convert["fans_id"]]["wechaname"] . " ");
 				$objActSheet->setCellValue('B' . $end, '玩了' . $scoreData[$convert['fans_id']]['counts'] . '次，' . $scoreData[$convert['fans_id']]['fraction'] . '分');
 				$objActSheet->setCellValue('C' . $start, $awardsValue[$convert['awards_level'] - 1]['awards_type'] . '：' . $awardsValue[$convert['awards_level'] - 1]['awards_name']);
 				$objActSheet->setCellValue('D' . $start, 'NO. ' . $convert['convert_code']);
 				$objActSheet->setCellValue('E' . $start, $convert['is_use'] == 0 ? '未兑换' : '已兑换');
-				$objActSheet->setCellValue('F' . $start, $convert['is_use'] == 0 ? '——' : $convert['convert_time']);
+			$objActSheet->setCellValue("F" . $start, $convert["is_use"] == 0 ? "——" : " " . $convert["convert_time"] . " ");
 
 				// 设置数据对齐方式
 				$objActSheet->getStyle('A' . $start)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -1092,24 +1503,366 @@
 		}
 
 		/**
+		 * @param $convertId
+		 * @param $openId
+		 * @param $totalMoney
+		 *
+		 * @return bool
+		 */
+		private function sendRedPacket ($convertId, $openId, $totalMoney)
+		{
+			$data = array(
+				'status' => false,
+				'msg'    => '',
+			);
+
+			$convertData = D('Game_convert')->where(array('id' => $convertId))->find();
+			$leftMoney = $totalMoney - $convertData['has_send'];
+
+			if ($leftMoney > 0) {
+				$needMore = false;
+				$sendMoney = $leftMoney;
+
+				if ($sendMoney > 200) {
+					$sendMoney = 200;
+					$needMore = true;
+				}
+
+				$has_send = $convertData['has_send'] + $sendMoney;
+
+				$options = $sendMoney . '#' . $sendMoney;
+
+				$wechaSend = new wechatSend();
+				$sendStatus = $wechaSend->sendRedPacket($this->token, $openId, $options);
+				if ($sendStatus['status']) {
+					$data['status'] = true;
+					D('Game_convert')->where(array('id' => $convertId))->save(array('has_send' => $has_send));
+
+					if ($needMore) {
+						$data = $this->sendRedPacket($convertId, $openId, $totalMoney);
+					}
+				} else {
+					$data['msg'] = $sendStatus['msg'];
+				}
+			} else {
+				$data['status'] = true;
+			}
+
+			return $data;
+		}
+
+		/**
 		 * 兑换
 		 */
 		public function useConvert ()
 		{
 			$id = $this->_get('id', 'intval');
+		        $p = $this->_get("p", "intval");
 			$convertId = $this->_get('convert_id', 'intval');
+			$convertCate = $this->_get('convert_cate', 'intval');
+			$errorMsg = '';
 
-		        if (D("Game_convert")->where(array("id" => $convertId))->save(array("is_use" => 1, "convert_time" => date("Y-m-d H:i:s", time())))) {
-			    $this->success("兑换成功", U("Game/convert", array("id" => $id, "token" => $this->token)));
-	     	        }
-		        else {
-			     $this->error("兑换失败", U("Game/convert", array("id" => $id, "token" => $this->token)));
-		        }
+			$convertData = D('Game_convert')->where(array('id' => $convertId))->find();
+			$isUse = $convertData['is_use'];
+
+			  if (!$isUse) {
+				$goConvert = true;
+				if ($convertCate == 1) {
+					$convertCounts = $_GET['convert_counts'];
+
+					$data = array('fans_id' => $convertData['fans_id'], 'token' => $this->token);
+					$openIdData = $this->game->getTokenFansInfo($data);
+					$openId = $openIdData['wecha_id'];
+
+					$sendStatus = $this->sendRedPacket($convertId, $openId, $convertCounts);
+					$goConvert = $sendStatus['status'];
+					$errorMsg = $sendStatus['msg'];
+				} elseif ($convertCate == 2) {
+					$cardId = $_GET['card_id'];
+
+					$data = array('fans_id' => $convertData['fans_id'], 'token' => $this->token);
+					$openIdData = $this->game->getTokenFansInfo($data);
+					$openId = $openIdData['wecha_id'];
+
+					$wechaSend = new wechatSend();
+				$sendStatus = $wechaSend->sendCard($this->token, $openId, $cardId);
+				$goConvert = $sendStatus["status"];
+				$errorMsg = $sendStatus["msg"];
+					}
+				} elseif ($convertCate == 3) {
+					$points = $_GET['points'];
+
+					$data = array('fans_id' => $convertData['fans_id'], 'token' => $this->token);
+					$openIdData = $this->game->getTokenFansInfo($data);
+					$openId = $openIdData['wecha_id'];
+
+					$wechaSend = new wechatSend();
+					if (!$wechaSend->sendScore($this->token, $openId, $points)) {
+						$goConvert = false;
+					}
+				}
+
+				if ($goConvert) {
+					if (D('Game_convert')->where(array('id' => $convertId))->save(array('is_use' => 1, 'convert_time' => date('Y-m-d H:i:s', time())))) {
+						$this->success('兑换成功', U('Game/convert', array('id' => $id, 'token' => $this->token, "p" => $p)));
+					} else {
+						$this->error('兑换失败', U('Game/convert', array('id' => $id, 'token' => $this->token, "p" => $p)));
+					}
+				} else {
+					$this->error('兑换失败 ' . $errorMsg, U('Game/convert', array('id' => $id, 'token' => $this->token, "p" => $p)));
+				}
+			
 		}
+
+		public function otherConvert ()
+		{
+		        $action = $_GET["act"];
+		        $p = $this->_get("p", "intval");
+			$uGameId = $this->_get('id', 'intval');
+			$fansId = $this->_get('fans_id', 'intval');
+			$prizeId = $this->_get('convert_id', 'intval');
+			$prizeType = $this->_get('type', 'intval');
+			$convertType = $this->_get('convert_type', 'intval');
+
+			$data = array(
+				'u_game_id'    => $uGameId,
+				'fans_id'      => $fansId,
+				'prize_id'     => $prizeId,
+				'prize_type'   => $prizeType,
+				'convert_type' => $convertType,
+			);
+			$result = $this->game->convertFansPrize($data);
+
+		if ($result["status"]) {
+			$this->success("兑换成功", U("Game/convert" . $action, array("id" => $uGameId, "token" => $this->token, "fans_id" => $fansId, "convert_type" => $convertType)));
+		}
+		else {
+			$this->error("兑换失败", U("Game/convert" . $action, array("id" => $uGameId, "token" => $this->token, "fans_id" => $fansId, "convert_type" => $convertType)));
+			}
+		}
+
+		public function qrConvert ()
+		{
+		$uGameId = $this->_get("id", "intval");
+		$gameId = $this->_get("gid", "intval");
+			$url = $_POST['url'];
+		$this->assign("id", $uGameId);
+		$this->assign("gid", $gameId);
+
+			if (!empty($url)) {
+				$url = htmlspecialchars_decode($url);
+				header('Location:' . $url);
+				exit;
+			} else {
+				$this->display();
+			}
+		}
+	public function refreshConvert()
+	{
+		$uGameId = $this->_get("id", "intval");
+		$config = $this->_toConfig();
+		$uid = $config["uid"];
+		$thisItem = M("games")->where(array("id" => $uGameId, "token" => $this->token))->find();
+
+		if (!empty($thisItem)) {
+			if ($thisItem["end_time"] < time()) {
+				$whereGet = array("uid" => $uid, "u_game_id" => $uGameId, "is_use" => 1);
+				$convertGet = D("Game_convert")->where($whereGet)->select();
+
+				if (!empty($convertGet)) {
+					$this->error("操作失败，该活动已有人兑换过奖品", U("Game/convert", array("id" => $uGameId, "token" => $this->token)));
+				}
+				else {
+					$where = array("uid" => $uid, "u_game_id" => $uGameId);
+					$back = D("Game_convert")->where($where)->delete();
+
+					if ($back == true) {
+						$this->success("操作成功", U("Game/convert", array("id" => $uGameId, "token" => $this->token)));
+					}
+					else {
+						$this->error("操作失败，请重新操作", U("Game/convert", array("id" => $uGameId, "token" => $this->token)));
+					}
+				}
+			}
+			else {
+				$this->error("活动还没有结束，不能操作", U("Game/convert", array("id" => $uGameId, "token" => $this->token)));
+			}
+		}
+		else {
+			$this->error("操作失败，该活动不存在", U("Game/convert", array("id" => $uGameId, "token" => $this->token)));
+		}
+	}
+
+		public function fansPrize ()
+		{
+			$fansPrizeList = array();
+			$uGameId = $this->_get('id', 'intval');
+			$fansId = $this->_get('fans_id', 'intval');
+
+			$thisItem = M('games')->where(array('id' => $uGameId, 'token' => $this->token))->find();
+
+			if (!empty($thisItem)) {
+				$gameId = $thisItem['gameid'];
+
+				$config = $this->_toConfig();
+				$uid = $config['uid'];
+
+				$data = array(
+					'uid'       => $uid,
+					'game_id'   => $gameId,
+					'u_game_id' => $uGameId,
+					'fans_id'   => $fansId,
+				);
+				$fansPrizeList = $this->game->getUserPrizeList($data);
+			}
+
+			$this->assign('id', $uGameId);
+			$this->assign('fansId', $fansId);
+			$this->assign('prizeList', $fansPrizeList);
+			$this->display();
+		}
+	public function blacklist()
+	{
+		$uGameId = $this->_get("id", "intval");
+		$gameId = $this->_get("gid", "intval");
+		$config = $this->_toConfig();
+		$uid = $config["uid"];
+		$thisItem = M("games")->where(array("id" => $uGameId, "token" => $this->token))->find();
+		$thisItem["share_value"] = unserialize($thisItem["share_value"]);
+		$gameSet = $this->game->gameSet($uid, $gameId, $uGameId, $config["key"]);
+		$isPhone = $gameSet["is_phone"];
+		$thisGame = $this->game->getGame($gameId);
+		$this->assign("gameCate", $thisGame["catid"]);
+		$blackData = array("uid" => $uid, "game_id" => $gameId, "u_game_id" => $uGameId);
+		$blacklistData = $this->game->blackList($blackData);
+		$fansIdData = array(
+			"fansId" => array()
+			);
+
+		foreach ($blacklistData as $blacklist ) {
+			array_push($fansIdData["fansId"], $blacklist["fans_id"]);
+		}
+
+		$fansIdData["fansId"] = implode(", ", $fansIdData["fansId"]);
+		$fansData = $this->game->getUserInfo($fansIdData);
+		$fansData = $this->valtokey($fansData, "id");
+		$data = $fansIdData;
+		$data["uid"] = $config["uid"];
+		$data["game_id"] = $gameId;
+		$data["u_game_id"] = $uGameId;
+		$scoreData = $this->game->getUserScoreData($data);
+		$scoreData = $this->valtokey($scoreData, "fans_id");
+		$shareData = $this->game->getShareData($data);
+		$prizeData = $this->game->getPrizeData($data);
+		$lastTimeData = $this->game->getLastTime($data);
+		$count = count($blacklistData);
+		$ps = $this->_get("p", "intval");
+
+		if ($ps < 1) {
+			$ps = 1;
+		}
+
+		$num = 15;
+
+		if (is_int($count / $num)) {
+			$gamePage = $count / $num;
+		}
+		else {
+			$gamePage = floor(($count / $num) + 1);
+		}
+
+		if (0 < $this->_get("p")) {
+			$star = ($this->_get("p") - 1) * $num;
+			$dataList = array_slice($blacklistData, $star, $num);
+		}
+		else {
+			$dataList = array_slice($blacklistData, 0, $num);
+		}
+
+		if (9 < $gamePage) {
+			if ($ps < 5) {
+				$pageStar = 1;
+				$pageEnd = 10;
+			}
+			else {
+				$pageStar = $ps - 4;
+				$pageEnd = $ps + 5;
+			}
+
+			if ($gamePage < $pageEnd) {
+				$pageEnd = $gamePage;
+				$pageStar = $pageEnd - 9;
+			}
+		}
+		else {
+			$pageStar = 1;
+			$pageEnd = $gamePage;
+		}
+
+		$this->assign("id", $uGameId);
+		$this->assign("gid", $gameId);
+		$this->assign("ps", $ps);
+		$this->assign("pageStar", $pageStar);
+		$this->assign("pageEnd", $pageEnd);
+		$this->assign("isPhone", $isPhone);
+		$this->assign("records", $dataList);
+		$this->assign("fans", $fansData);
+		$this->assign("shareData", $shareData);
+		$this->assign("prizeData", $prizeData);
+		$this->assign("lastTimeData", $lastTimeData);
+		$this->assign("game", $thisItem);
+		$this->assign("scores", $scoreData);
+		$this->assign("gamePage", $gamePage);
+		$this->display();
+	}
+
+	public function addToBlacklist()
+	{
+		$uGameId = $_POST["id"];
+		$gameId = $_POST["gid"];
+		$fansId = $_POST["fansId"];
+		$config = $this->_toConfig();
+		$uid = $config["uid"];
+		$thisItem = M("games")->where(array("id" => $uGameId, "token" => $this->token))->find();
+
+		if (!empty($thisItem)) {
+			if ($thisItem["end_time"] < time()) {
+				$whereGet = array("uid" => $uid, "u_game_id" => $uGameId, "is_use" => 1);
+				$convertGet = D("Game_convert")->where($whereGet)->select();
+
+				if (empty($convertGet)) {
+					$whereUser = array("uid" => $uid, "u_game_id" => $uGameId, "fans_id" => $fansId);
+					$cfin = D("Game_convert")->where($whereUser)->find();
+
+					if (!empty($cfin)) {
+						$where = array("uid" => $uid, "u_game_id" => $uGameId);
+						$back = D("Game_convert")->where($where)->delete();
+
+						if (!$back) {
+							exit(json_encode(array("status" => 41004)));
+						}
+					}
+				}
+			}
+		}
+
+		echo $this->game->addToBlacklist(array("uid" => $uid, "game_id" => $gameId, "u_game_id" => $uGameId, "fans_id" => $fansId));
+	}
+
+	public function deleteFromBlacklist()
+	{
+		$uGameId = $_POST["id"];
+		$gameId = $_POST["gid"];
+		$fansId = $_POST["fansId"];
+		$config = $this->_toConfig();
+		$uid = $config["uid"];
+		echo $this->game->deleteFromBlacklist(array("uid" => $uid, "game_id" => $gameId, "u_game_id" => $uGameId, "fans_id" => $fansId));
+	}
 
 		public function statistics ()
 		{
 			$uGameId = $this->_get('id', 'intval');
+		$gameId = $this->_get("gid", "intval");
 		        $thisItem = M("games")->where(array("id" => $uGameId, "token" => $this->token))->find();
 
 			$gameId = intval($thisItem['gameid']);
@@ -1118,9 +1871,14 @@
 			$uid = $config['uid'];
 
 			$thisGame = $this->game->getGame(intval($gameId));
-			$gameSet = $this->game->gameSet($uid, $thisGame['id'], $uGameId, $config['key']);
-
+			$gameSet = $this->game->gameSet($uid, $gameId, $uGameId, $config['key']);
+			$hasGamePlaying = $gameSet['game_playing'];
+			$hasGameOver = $gameSet['game_over'];
+			$this->assign('gameCate', $thisGame['catid']);
+			$this->assign('hasGamePlaying', $hasGamePlaying);
+			$this->assign('hasGameOver', $hasGameOver);
 			$this->assign('id', $uGameId);
+		$this->assign("gid", $gameId);
 			$this->assign('thisGame', $thisGame);
 			$this->assign('game', $gameSet);
 
@@ -1136,7 +1894,20 @@
 			$convertCodeData = D('Game_convert')->getConvertUseData($uid, $uGameId);
 
 			$this->assign('codeData', $convertCodeData);
-		        $data = array("uid" => $uid, "game_id" => $gameId, "u_game_id" => $uGameId);
+
+			// 获得过程中奖和随机抽奖的奖品信息
+			$data = array(
+				'uid'       => $uid,
+				'game_id'   => $gameId,
+				'u_game_id' => $uGameId,
+			);
+
+			if ($hasGamePlaying || $hasGameOver) {
+				$otherPrizeData = $this->game->getOtherPrize($data);
+				$this->assign('otherPrizeData', $otherPrizeData);
+			}
+
+			// 获取游戏统计数据
 			$totalStatistics = $this->game->statistics($data);
 			$this->assign('totalStatistics', $totalStatistics);
 
@@ -1240,12 +2011,13 @@
 			$apiOauth = new apiOauth();
 			$this->access_token = $apiOauth->update_authorizer_access_token($this->thisWxUser['appid']);
 			if ($recognis != '') {
-				if ($recognis['code_url'] == '') {
+				if ($recognis['code_url'] == '' || ($recognis['expire_seconds'] + $recognis['create_time']) < time()) {
 					$qrcode_url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $this->access_token;
-					$data['action_name'] = 'QR_LIMIT_SCENE';
+					$data['expire_seconds'] = 2592000;
+					$data['action_name'] = 'QR_SCENE';
 					$data['action_info']['scene']['scene_id'] = $recognis['id'];
 					$post = $this->api_notice_increment($qrcode_url, json_encode($data));
-					$recdb->where(array_merge(array('id' => $recognis['id'])))->save(array('code_url' => $post));
+					$recdb->where(array_merge(array('id' => $recognis['id'])))->save(array('code_url' => $post, 'expire_seconds' => 2592000));
 					$wxqr = ('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . $recognis['code_url']);
 				} else {
 					$wxqr = ('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . $recognis['code_url']);
@@ -1254,12 +2026,14 @@
 				$dataz['keyword'] = $kword;
 				$dataz['title'] = $kword;
 				$dataz['token'] = $this->token;
+				$dataz['create_time'] = time();
 				$xid = $recdb->add($dataz);
 				$qrcode_url = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=' . $this->access_token;
-				$data['action_name'] = 'QR_LIMIT_SCENE';
+				$data['expire_seconds'] = 2592000;
+				$data['action_name'] = 'QR_SCENE';
 				$data['action_info']['scene']['scene_id'] = $xid;
 				$post = $this->api_notice_increment($qrcode_url, json_encode($data));
-				$recdb->where(array_merge(array('id' => $xid)))->save(array('code_url' => $post));
+				$recdb->where(array_merge(array('id' => $xid)))->save(array('code_url' => $post, 'expire_seconds' => 2592000));
 				$wxqr = ('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . $post);
 			}
 
@@ -1274,7 +2048,7 @@
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-			curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch, CURLOPT_AUTOREFERER, 1);

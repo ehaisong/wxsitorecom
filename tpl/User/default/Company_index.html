@@ -67,7 +67,7 @@ function setlatlng(longitude,latitude){
 		    使用“微信门店导”入门店前请检查门店的“名称”、“行业”等信息设置完整。需要更新门店信息时候，请登陆您的公众号将已导入的门店信息清除，以免出现重复的门店信息。
 		</div-->
 	</if>
-	<if condition="$wxuser.winxintype eq 3">
+	<if condition="$wxuser.winxintype eq 3 OR $wxuser.winxintype eq 4">
 	<div style="background:#fefbe4;border:1px solid #f3ecb9;color:#993300;padding:10px;margin-top:5px;">
 温馨提示：1、新添加的门店将在5个工作日内审核完成，微信会通过下面填写的电话或者手机对您的门店进行确认，未接到电话会导致门店审核失败。
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -172,8 +172,8 @@ function setlatlng(longitude,latitude){
 						<tr> 
 							<th><span class="red">*</span>分支登陆密码：</th> 
 							<td><input type="password" id="password" name="password" value="" class="px require" style="width:200px;" />&nbsp;&nbsp;&nbsp;&nbsp;修改时如果不想修改密码请留空</td> 
-						</tr> 
-						<tr> 
+						</tr>
+							<tr>
 							<th><span class="red"></span>是否显示隐藏：</th> 
 							<td>
 								<input id="radio1" class="radio" type="radio" name="display" value="1"  <if condition="$set.display eq '1' or $set.display eq ''">checked</if>> <label for="radio1">显示</label>
@@ -258,7 +258,7 @@ function setlatlng(longitude,latitude){
 							<th valign="top"><label for="info">图文详细页内容：</label></th>
 							<td><textarea name="intro" id="intro"  rows="5" style="width:590px;height:360px">{vifnn:$set.intro}</textarea></td>
 						</tr>
-						<if condition="$set.id neq '' &&  $wxuser.winxintype eq 3">
+						<if condition="$set.id neq '' &&  ($wxuser.winxintype eq 3 OR $wxuser.winxintype eq 4)">
 						<tr>
 							<th valign="top"><label for="info">状态：</label></th>
 							<td><if condition="$set['available_state'] eq 2"><span style="color:red;">审核中</span><elseif condition="$set['available_state'] eq 3 || $set['available_state'] eq 0" /><span style="color:green;">审核通过</span><elseif condition="$set['available_state'] eq 4" /><span style="color:red;">审核驳回</span></if></td>
@@ -288,6 +288,16 @@ function setlatlng(longitude,latitude){
 </div>
 <script language="javascript">
 $(function(){
+
+	$('#add_fans').click(function(){
+		var token 	= '{vifnn:$token}';
+		var group 	= $('#group').val();
+		art.dialog.open('?g=User&m=Service&a=service_fans&token='+token+'&group='+group,{lock:true,title:'选择粉丝',width:600,height:400,yesText:'关闭',background: '#000',opacity: 0.45});
+	});
+	$('#clear_fans').click(function(){
+		$('#fans_id').val('');
+	});
+
   new PCAS("province","city","district","{vifnn:$set.province}","{vifnn:$set.city}","{vifnn:$set.district}");
 	$("#form").valid([
 	              	{ name:"name",simple:"门店名称",require:true},

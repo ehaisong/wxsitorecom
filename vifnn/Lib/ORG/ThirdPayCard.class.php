@@ -12,9 +12,15 @@ class ThirdPayCard {
 			$token = $order['token'];
 
 			if ($order['paid'] == 1) {
-				M('Member_card_pay_record')->where($where)->setField('paytime', time());
+				$paytime = time();
+				M('Member_card_pay_record')->where($where)->setField('paytime', $paytime);
 				if ($order['type'] == 1) {
-					M('Userinfo')->where("wecha_id = '$wecha_id' AND token = '$token'")->setInc('balance', self::_calculate($order['price'], $token, $order['cardid']));
+					$calculate = self::_calculate($order["price"], $token, $order["cardid"], $wecha_id, $orderid);
+					M("Userinfo")->where("wecha_id = '$wecha_id' AND token = '$token'")->setInc("balance", $calculate["price"]);
+					if ($calculate["is_donate"] == 1) {
+						$data = array("price" => $calculate["donate_price"], "cardid" => $order["cardid"], "token" => $token, "wecha_id" => $wecha_id, "createtime" => time(), "paytype" => "donate", "ordername" => $order["ordername"] . "赠送", "paid" => 1);
+						M("Member_card_pay_record")->add($data);
+					}
 				} else {
 					$lastid = M('Member_card_use_record')->where(array('token' => $token, 'wecha_id' => $wecha_id))->order('id DESC')->getField('id');
 					if ($this->_get('type') == 'coupon') {
@@ -68,6 +74,17 @@ class ThirdPayCard {
 						'remark' => '会员充值',
 					);
 					$model->sendTempMsg($dataKey, $dataArr);
+					$wechaname = M("userinfo")->where(array("token" => $token, "wecha_id" => $wecha_id))->getField("wechaname");
+					$msg = "";
+					$msg .= chr(10) . "昵称:" . ($wechaname != "" ? $wechaname : "匿名");
+					$msg .= chr(10) . "订单编号:" . $order["orderid"];
+					$msg .= chr(10) . "订单名称:" . $order["ordername"];
+					$msg .= chr(10) . "支付金额:" . $order["price"] . "元";
+					$msg .= chr(10) . "支付时间:" . date("YmdHis", $paytime);
+					$msg .= chr(10) . "*******************************";
+					$msg .= chr(10) . "感谢使用!";
+					$op = new orderPrint();
+					$op->printit($token, $order["company_id"], "Card", $msg, 1);
 					return true;
 				}
 
@@ -86,16 +103,51 @@ class ThirdPayCard {
 	 * @param number $price
 	 * @return number
 	 */
-	private function _calculate($price, $token, $cardid) {
+	private function _calculate($price, $token, $cardid, $wecha_id, $orderid) {
 		$where = "token='$token' AND cardid=$cardid AND is_open=1 AND ((min_price<$price AND max_price>=$price) OR (min_price<$price AND max_price=0))";
 		$models = M('MemberCardDonate')->where($where)->order('min_price DESC,max_price DESC')->find();
 		if (empty($models)) {
-			return $price;
+			return array("is_donate" => 0, "price" => $price);
 		} else {
-			return $price + $models['donate_price'];
+			self::_upgrade($token, $cardid, $wecha_id, $models, $orderid);
+			return array("is_donate" => 1, "price" => $price + $models["donate_price"], "donate_price" => $models["donate_price"]);
 		}
 	}
 
+	private function _upgrade($token, $cardid, $wecha_id, $donate, $orderid)
+	{
+		if (($token == "") || ($wecha_id == "") || $price) {
+			return false;
+		}
+
+		$currentcard = M("member_card_set")->where(array("id" => $cardid))->find();
+
+		if (empty($currentcard)) {
+			return false;
+		}
+
+		if (!empty($donate) && ($donate["gradeid"] != 0) && ($currentcard["gradeid"] < $donate["gradeid"])) {
+			$gradecard = M("member_card_set")->where(array("token" => $token, "gradeid" => $donate["gradeid"]))->order("id desc")->select();
+
+			foreach ($gradecard as $key => $value ) {
+				$freecard = M("Member_card_create")->field("id,number,cardid")->where("token='" . $token . "' and cardid=" . intval($value["id"]) . " and wecha_id = ''")->order("id ASC")->find();
+
+				if ($freecard) {
+					break;
+				}
+			}
+
+			if (empty($freecard)) {
+				return false;
+			}
+
+			M("Member_card_create")->where(array("token" => $token, "wecha_id" => $wecha_id))->delete();
+			M("Member_card_create")->where(array("id" => $freecard["id"]))->save(array("wecha_id" => $wecha_id));
+			M("Member_card_pay_record")->where(array("orderid" => $orderid))->setField("cardid", $freecard["cardid"]);
+		}
+
+		return true;
+	}
 }
 
 ?>

@@ -30,7 +30,8 @@ $(function(){
 		var error_id = new Array();
 		var error_i = 0;
 		var keyword = $('#keyword').val();
-		if(keyword == ''){
+		var is_syn = '{vifnn:$Think.session.is_syn}';
+		if(keyword == '' && parseInt(is_syn) <= 0){
 			is_error_msg += "请填写关键词！\n";
 			buterror("#keyword");
 			error_id[error_i] = "#keyword";
@@ -224,9 +225,9 @@ function pic_del(){
 	<div class="msgWrap bgfc">
 		<table class="userinfoArea" style=" margin:0;" border="0" cellSpacing="0" cellPadding="0" width="100%">
 			<tr>
-				<th valign="top"><span class="red">*</span>关键词：</th>
+				<th valign="top"><span class="red">*</span>商品名称：</th>
 				<td>
-					<input type="input" class="px" id="keyword" value="{vifnn:$set.keyword}" name="keyword" style="width:400px" />
+					<input type="input" class="px" id="name" value="{vifnn:$set.name}" name="name" style="width:400px" />
 				</td>
 				<td rowspan="4" valign="top">
 					<div style="margin-left:20px">
@@ -237,12 +238,14 @@ function pic_del(){
 					</div>
 				</td>
 			</tr>
+		<if condition="$Think.session.is_syn ELT 0">
 			<tr>
-				<th valign="top"><span class="red">*</span>商品名称：</th>
+				<th valign="top"><span class="red">*</span>关键词：</th>
 				<td>
-					<input type="input" class="px" id="name" value="{vifnn:$set.name}" name="name" style="width:400px" />
+					<input type="input" class="px" id="keyword" value="{vifnn:$set.keyword}" name="keyword" style="width:400px" />
 				</td>
 			</tr>
+		</if>
 			<tr>
 				<th valign="top"><span class="red">*</span>回复标题：</th>
 				<td>

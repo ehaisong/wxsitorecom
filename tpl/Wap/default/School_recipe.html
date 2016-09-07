@@ -54,7 +54,7 @@ background-color: transparent;
   h2{ font-size:18px; height:21px; line-height:21px;}
 .imgcss{width:100%!important;border: 1px rgb(226, 226, 226) dashed;}
 dl{ height: 148px; max-height: 160px;}
-dt{ width: 150px; float:left;}
+dt{ width: 150px; float:left;height: 115px;overflow: hidden;}
 dd{ width:230px;float:left; text-align:left;padding:3px;border-bottom:1px dashed rgb(151, 145, 99);margin-bottom:10px;}
 </style>
       <?php $monarr = @unserialize($recipe['monday']);?>
@@ -152,7 +152,7 @@ dd{ width:230px;float:left; text-align:left;padding:3px;border-bottom:1px dashed
                 <dt><img class="imgcss" src="{vifnn:$tuearr['tus_wc_pic']}"></dt>
                 <dd>
                   <h2>午餐</h2>
-                  <span>{vifnn:$monarr['tus_wc']}</span><br />
+                  <span>{vifnn:$tuearr['tus_wc']}</span><br />
                  </dd>
             </dl>
 <if condition="$tuearr['tus_zjc'] neq ''">
@@ -491,7 +491,17 @@ dd{ width:230px;float:left; text-align:left;padding:3px;border-bottom:1px dashed
 
    <!-- <script src="{vifnn::STATICS}/schools/js/zepto.min.js" type="text/javascript"></script>
     <script src="{vifnn::STATICS}/schools/js/plugmenu.js" type="text/javascript"></script> -->
-
-
 </body>
 </html>
+<script type="text/javascript">
+window.shareData = {
+	"moduleName":"School",
+	"moduleID":"0",
+	"imgUrl": "{vifnn:$info['head_url']}",
+	"sendFriendLink": "{vifnn:$f_siteUrl}{vifnn::U('School/readview',array('id'=>$rid,'readtype'=>$readtype,'token'=>$token))}",
+	"tTitle": "{vifnn:$info['title']|shareFilter}",
+	"tContent": "{vifnn:$info['info']|shareFilter}",
+	"fTitle": "{vifnn:$info['title']|shareFilter}",
+};
+</script>
+{vifnn:$shareScript}

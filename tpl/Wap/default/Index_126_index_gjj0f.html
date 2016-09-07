@@ -98,7 +98,10 @@
 </div>
     </div>
     
-<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/> 
+<include file="Index:styleInclude"/><include file="$cateMenuFileName"/> <include file="Index:kcdh"/>
+<if condition="$state eq 1">
+<include file="Index:fudong"/>
+</if>
 <!-- share -->
 <include file="Index:share" />
 </body></html>

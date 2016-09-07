@@ -437,9 +437,17 @@ class MessageAction extends UserAction{
 		if($group){
 			$where['g_id'] 	= $group;
 		}
-		if($name){
-			$where['nickname'] = array('like','%'.$name.'%');
-			$this->assign('name',$name);
+
+		if ($name != "") {
+			if (preg_match("/^([0-9]){6,}$/", $name)) {
+				$wecha_id = M("userinfo")->where(array("tel" => $name, "token" => $this->token))->getField("wecha_id");
+				$where["openid"] = $wecha_id;
+			}
+			else {
+				$where["nickname"] = array("like", "%" . $name . "%");
+			}
+
+			$this->assign("name", $name);
 		}
 		if($sex != '' && $sex != 3){
 			$where['sex'] = $sex;
@@ -463,7 +471,8 @@ class MessageAction extends UserAction{
 			}
 		}
 		$fans_ids = '';
-		$fans_ids .= S($this->token.'_logfans');
+		$cache_name = ($_REQUEST["cache_name"] ? $this->token . "_" . trim($_REQUEST["cache_name"]) : $this->token . "_logfans");
+		$fans_ids .= S($cache_name);
 		if($fans_ids != ""){
 			$this->assign('selected_nums',substr_count($fans_ids,','));
 			$this->assign('selected_fans',$fans_ids);
@@ -471,6 +480,7 @@ class MessageAction extends UserAction{
 		$this->assign('all_fans',$count);
 		$this->assign('list',$list);
 		$this->assign('page',$page->show());
+		$this->assign("cache_name", trim($_REQUEST["cache_name"]));
 		$this->display();
 	}
 	//已选粉丝弹框
@@ -485,9 +495,17 @@ class MessageAction extends UserAction{
 		if($group){
 			$where['g_id'] 	= $group;
 		}
-		if($name){
-			$where['nickname'] = array('like','%'.$name.'%');
-			$this->assign('name',$name);
+
+		if ($name != "") {
+			if (preg_match("/^([0-9]){6,}$/", $name)) {
+				$wecha_id = M("userinfo")->where(array("tel" => $name, "token" => $this->token))->getField("wecha_id");
+				$where["openid"] = $wecha_id;
+			}
+			else {
+				$where["nickname"] = array("like", "%" . $name . "%");
+			}
+
+			$this->assign("name", $name);
 		}
 		if($sex != '' && $sex != 3){
 			$where['sex'] = $sex;
@@ -502,7 +520,8 @@ class MessageAction extends UserAction{
 		$all_fans 	= M('Wechat_group_list')->where($where)->count();
 		$this->assign('all_fans',$all_fans);
 		$fans_ids = '';
-		$fans_ids .= trim(S($this->token.'_logfans'),',');
+		$cache_name = ($_REQUEST["cache_name"] ? $this->token . "_" . trim($_REQUEST["cache_name"]) : $this->token . "_logfans");
+		$fans_ids .= trim(S($cache_name), ",");
 		if($fans_ids == ''){
 			$this->assign('selected_nums',0);
 			$this->display();//缓存里面没有粉丝id时
@@ -528,8 +547,9 @@ class MessageAction extends UserAction{
 				$list[$key]['group_name'] 	= '未分组';
 			}
 		}
-		$this->assign('selected_nums',substr_count(S($this->token.'_logfans'),','));
+		$this->assign("selected_nums", substr_count(S($cache_name), ","));
 		$this->assign('list',$list);
+		$this->assign("cache_name", trim($_REQUEST["cache_name"]));
 		$this->assign('page',$page->show());
 		$this->display();
 	}
@@ -872,7 +892,8 @@ class MessageAction extends UserAction{
 	public function select_fans(){
 		$fansid = trim($_POST['openid']);
 		$token = trim($_POST['token']);
-		$cache_name = $token.'_logfans';
+		$cache_name = ($_POST["cache_name"] ? $token . "_" . trim($_POST["cache_name"]) : $token . "_logfans");
+
 		if(strpos(S($cache_name), $fansid) === false){
 			$cache_data = S($cache_name).','.$fansid;
 			S($cache_name,$cache_data);
@@ -886,7 +907,8 @@ class MessageAction extends UserAction{
 	public function cancel_select_fans(){
 		$fansid = trim($_POST['openid']);
 		$token = trim($_POST['token']);
-		$cache_name = $token.'_logfans';
+		$cache_name = ($_POST["cache_name"] ? $token . "_" . trim($_POST["cache_name"]) : $token . "_logfans");
+
 		if(strpos(S($cache_name), $fansid) !== false){
 			$cache_data = str_replace(','.$fansid, '', S($cache_name));
 			if($cache_data == ''){

@@ -27,7 +27,7 @@
 						<a href="{vifnn:$company['logourl']}" rel="lightbox">
 							<img src="{vifnn:$company['logourl']}" width="65" height="65">
 							<if condition="$count gt 0">
-								<span class="img-g-bg">{vifnn:$count}张</span>
+								<span class="img-g-bg">{vifnn:$count+1}张</span>
 								<volist name="imagelist" id="row">
 									<a href="{vifnn:$row.image}" rel="lightbox" title="{vifnn:$row['info']}"></a>
 								</volist>

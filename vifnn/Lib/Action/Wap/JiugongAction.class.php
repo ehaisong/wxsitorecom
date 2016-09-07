@@ -11,7 +11,7 @@ class JiugongAction extends LotteryBaseMoreAction{
 		}
 		$redata		= M('Lottery_record');
 		$where 		= array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id);
-		$record 	= $redata->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id,'islottery'=>1))->order('time desc')->select();
+		$record 	= $redata->where(array('token'=>$token,'wecha_id'=>$wecha_id,'lid'=>$id,'islottery'=>1))->order('prize asc,time desc')->select();
 		$record2 	= $redata->where($where)->order('id DESC')->find();
 		
 		$Lottery 	= M('Lottery')->where(array('id'=>$id,'token'=>$token,'type'=>10,'status'=>1))->find();
@@ -50,9 +50,8 @@ class JiugongAction extends LotteryBaseMoreAction{
 		$data['endinfo']=str_replace('&lt;br&gt;','<br>',$data['endinfo']);
 		$this->assign('Dazpan',$data);
 		$this->assign('record',$record);
-		$where_list = array('token'=>$token,'lid'=>$id);
-		$where_list['phone'] = array('neq','');
-		$record_list = $redata->where($where_list)->select();
+		$where_list = array('token'=>$token,'lid'=>$id, "islottery" => 1);
+		$record_list = $redata->where($where_list)->order("prize asc,time desc")->select();
 		$this->assign("record_list",$record_list);
 		$this->assign('siteUrl',$this->siteUrl);
 		$this->display();
@@ -117,3 +116,4 @@ class JiugongAction extends LotteryBaseMoreAction{
 		return $cache['type'] == 'jiugongge';
 	}
 }
+?>

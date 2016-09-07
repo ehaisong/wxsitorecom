@@ -10,11 +10,15 @@
             	<p><i class="icon icon-phone"></i>电话号码<span>{vifnn:$client['ctel']}</span></p>
                 <p><i class="icon icon-location"></i>产品项目<span>{vifnn:$client['xmname']}</span></p>
 				<if condition="$client['verifyuid'] gt 0">
-                <p><i class="icon icon-phone"></i>产品顾问<span>{vifnn:$client['zygwtel']}</span></p> 
+				  <if condition="$is_verify eq 1 AND $loginuserid eq $client['verifyuid']">
+                  <p><i class="icon icon-phone"></i>推荐人<span>{vifnn:$client['tjrtel']}</span></p>
+				  <else/>
+				   <p><i class="icon icon-phone"></i>产品顾问<span>{vifnn:$client['zygwtel']}</span></p> 
+				 </if>
 				</if>
 			</div>
 		</div>
-		<div class="call-to"><if condition="!empty($client['zygwtel'])"><a href="tel:{vifnn:$client['ctel']}">呼叫Ta</a><a href="tel:{vifnn::$client['zygwtel']}">呼叫产品顾问</a><else/><a href="tel:{vifnn:$client['ctel']}" style="width:100%;">呼叫Ta</a></if></div>
+		<div class="call-to"><if condition="!empty($client['zygwtel'])"><a href="tel:{vifnn:$client['ctel']}">呼叫Ta</a><if condition="$is_verify eq 1 AND $loginuserid eq $client['verifyuid']"><a href="tel:{vifnn::$client['tjrtel']}">呼叫推荐人</a><else/><a href="tel:{vifnn::$client['zygwtel']}">呼叫产品顾问</a></if><else/><a href="tel:{vifnn:$client['ctel']}" style="width:100%;">呼叫Ta</a></if></div>
 		<div class="client-time border-box fn-clear">
 			<div class="time-left">
 				<i class="time-node"></i>

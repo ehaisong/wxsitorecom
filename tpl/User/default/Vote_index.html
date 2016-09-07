@@ -19,15 +19,15 @@
           <div class="cLine">
             <div class="pageNavigator">
             <if condition="$ok eq 1">
-<a href=""  title="发起文字投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/text.png" class="vm">发起文字投票</a>　
+            <php>if($usertplid == 2){</php><i class="fa fa-picture-o"></i><php>}else{</php><img src="{vifnn::RES}/images/text.png" class="vm"><php>}</php>  发起文字投票</a>　
 <!--a href="" title="发起图片投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/pic.png" class="vm">发起图片投票</a-->
 <if condition="$is_scene gt 0">
 <a href=""  title="微现场投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/text.png" class="vm">微现场投票</a>
 </if>
             <else/>
-            <a href="{vifnn::U('Vote/add',array('type'=>'text'))}"  title="发起文字投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/text.png" class="vm">发起文字投票</a>　<!--a href="{vifnn::U('Voteimg/add_voteimg',array('type'=>'img'))}" title="发起图片投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/pic.png" class="vm">发起图片投票</a-->
+            <a href="{vifnn::U('Vote/add',array('type'=>'text'))}"  title="发起文字投票" class="btnGrayS vm bigbtn"><php>if($usertplid == 2){</php><i class="fa fa-picture-o"></i><php>}else{</php><img src="{vifnn::RES}/images/text.png" class="vm"><php>}</php> 发起文字投票</a>　<!--a href="{vifnn::U('Voteimg/add_voteimg',array('type'=>'img'))}" title="发起图片投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/pic.png" class="vm">发起图片投票</a-->
             <if condition="$is_scene gt 0">
-              <a href="{vifnn::U('Vote/add',array('type'=>'scene'))}"  title="微现场投票" class="btnGrayS vm bigbtn"><img src="{vifnn::RES}/images/text.png" class="vm">微现场投票</a>
+              <a href="{vifnn::U('Vote/add',array('type'=>'scene'))}"  title="微现场投票" class="btnGrayS vm bigbtn"><php>if($usertplid == 2){</php><i class="fa fa-picture-o"></i><php>}else{</php><img src="{vifnn::RES}/images/text.png" class="vm"><php>}</php>  微现场投票</a>
             </if>
 
             </if>
@@ -87,8 +87,8 @@
                         微现场投票
                       </if>
                   </td>
-                  <td>{vifnn:$list.statdate|date='Y-m-d',###}</td>
-                  <td>{vifnn:$list.enddate|date='Y-m-d',###}</td>
+                  <td><if condition="$list['type'] eq 'scene'">----<else />{vifnn:$list.statdate|date='Y-m-d',###}</if></td>
+                  <td><if condition="$list['type'] eq 'scene'">----<else />{vifnn:$list.enddate|date='Y-m-d',###}</if></td>
                   <td>{vifnn:$list.count}</td>
                   <td>                    
                     <if condition="$list['status'] eq 0">
@@ -100,6 +100,9 @@
                    <td class="norightborder">
                     <a href="{vifnn::U('Vote/totals',array('type'=>$list['type'],'id'=>$list['id']))}" title="投票结果">投票结果</a> |
                     <a href="{vifnn::U('Vote/edit',array('type'=>$list['type'],'id'=>$list['id']))}" title="编辑">编辑</a> |
+                       <eq name="tj_status" value="1">
+                           <a target="tongji" href="{vifnn::U('User/Index/goTongji',array('act_name'=>'vote','act_id'=>$list['id'],'act_token'=>$token))}" class="btnGreen">传播分析</a> |
+                       </eq>
                     <a href="javascript:drop_confirm('您确定要删除吗?删除会把投票结果也一起删除！', '{vifnn::U('Vote/del',array('type'=>$list['type'],'id'=>$list['id']))}');">删除</a> 
                   
                    </td>
