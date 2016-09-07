@@ -55,7 +55,7 @@ class UserAction extends BaseAction {
 		$this->assign('usertplid', session('usertplid'));
 
 		$this->user = $users;
-		$this->DjpfCashier($users);
+		// $this->DjpfCashier($users);
 		$this->token = session('token');
 		$this->assign('thisUser', $users);
 
