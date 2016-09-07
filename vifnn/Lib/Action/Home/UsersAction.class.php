@@ -97,19 +97,10 @@ class UsersAction extends BaseAction {
 
     public function checklogin() {
         $verifycode = $this->_post('verifycode2', 'md5', 0);
-		//dump($verifycode);
-	//	echo "<br>";
-	//	dump($_SESSION['codejm']);
-	  
-	 // unset($_SESSION['key']);
-	    if (empty($_POST['verifycode2'])){   //判断验证码是否存在传递
-			  $this->error('验证码错误',U('Index/login'));
-	    }elseif($verifycode != $_SESSION['loginverify']){
-			  unset($_SESSION['loginverify']);
-			  $this->error('验证码错误',U('Index/login'));
-		}elseif($_SESSION['codejm'] == $verifycode){
-			unset($_SESSION['loginverify']);
-			$this->error('验证码错误',U('Index/login'));
+		if (isset($_POST['verifycode2'])){   //判断验证码是否存在传递
+			if($verifycode != $_SESSION['loginverify']){
+				$this->error('验证码错误',U('Index/login'));
+			}
 		}
 		$_SESSION['codejm'] = $verifycode;
         $db = D('Users');
@@ -496,11 +487,10 @@ class UsersAction extends BaseAction {
 
         $info = M('User_group')->find(1);
         $verifycode = $this->_post('verifycode', 'md5', 0);
-		if (empty($_POST['verifycode'])){  //判断是否传验证码
+		if (isset($_POST['verifycode'])){
+			if($verifycode != $_SESSION['verify']){
 				$this->error('验证码错误',U('Index/login'));
-		}elseif($verifycode != $_SESSION['verify']){
-				$this->error('验证码错误',U('Index/login'));		
-		
+			}
 		}
         if($_POST['username'] == 'admin'){
             $this->error('用户名不能为admin');
