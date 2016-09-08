@@ -8,11 +8,11 @@ class MicrstoreAction extends WapAction{
 	{
 		parent::_initialize();
 		if(updateSync::getIfWeidian()){
-			$this->Micrstore_URL = C('weidian_domain') ? C('weidian_domain') : 'http://v.meihua.com';
-			$this->SALT = C('encryption') ? C('encryption') : 'vifnn';
+			$this->Micrstore_URL = C('weidian_domain') ? C('weidian_domain') : 'http://vd.vifnn.com';
+			$this->SALT = C('encryption') ? C('encryption') : 'vifnn.com';
 		}else{
-			$this->Micrstore_URL = 'http://v.meihua.com';
-			$this->SALT = 'vifnn';
+			$this->Micrstore_URL = 'http://vd.vifnn.com';
+			$this->SALT = 'vifnn.com';
 		}
 	}
 	public function api()

@@ -1,10 +1,9 @@
 <include file="Index:header"/>
-<!-- <script src="/tpl/static/jquery-1.4.2.min.js" type="text/javascript"></script> @VIFNNcms-->
+ <script src="/tpl/static/jquery-1.4.2.min.js" type="text/javascript"></script>
 <script src="/tpl/static/artDialog/jquery.artDialog.js?skin=default"></script>
 <script src="/tpl/static/artDialog/plugins/iframeTools.js"></script>
 <script src="/tpl/static/upyun.js?2013"></script>
 <script src="{vifnn:$staticPath}/tpl/static/upyun.js"></script>
-<script src="{vifnn:$staticPath}/tpl/static/layer/layer.js"></script>
 <script>
 <?php if($_GET['biz'] != 1 && $info['type'] != 1){?>
 $(function(){
@@ -215,7 +214,7 @@ $(function(){
             <td>
               <input type="radio" name="wx_coupons" value="0" <if condition="$info.wx_coupons neq 1">checked</if>>关闭
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" name="wx_coupons" value="1" <if condition="$info.wx_coupons eq 1">checked</if>>开启 (只有认证服务号和认证订阅号才可开启使用)
+              <input type="radio" name="wx_coupons" value="1" <if condition="$info.wx_coupons eq 1">checked</if>>开启 (只有认证服务号才可开启用)
             </td>
           </tr>
 		  <tr>
@@ -274,6 +273,4 @@ $(function(){
   <!--底部-->
     </div>
 <script src="{vifnn:$staticPath}/tpl/static/new/js/jquery-2.1.1.js"></script>
-
-
 <include file="Public:footer"/> 

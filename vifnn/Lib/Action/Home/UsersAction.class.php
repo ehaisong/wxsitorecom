@@ -774,18 +774,14 @@ class UsersAction extends BaseAction {
         $func = explode(",", $staff['func']);
         $first_func = $func[0];
         if (empty($staff)) {
-            $this->error('用户名不正确', U('Index/staff_login', array('token' => $token)));
-            exit;
-        }
-        $password = $this->_post('password', 'trim');
-        $password = md5($password . 'assistente');
-        if ($password != $staff['password']) {
-            $this->error('密码不正确', U('Index/staff_login', array('token' => $token)));
-            exit;
-        } elseif ($staff['pcorwap'] == 2) {
-            $this->error('您的权限类型只适用于手机端', U('Index/staff_login', array('token' => $token)));
-            exit;
-        } else {
+			$this->error('用户名不正确',U('Index/staff_login',array('token'=>$token)));exit;
+		}
+        $password = $this->_post('password', 'trim,md5');
+		if($password != $staff['password']){
+			$this->error('密码不正确',U('Index/staff_login',array('token'=>$token)));exit;
+		}elseif($staff['pcorwap'] == 2){
+			$this->error('您的权限类型只适用于手机端',U('Index/staff_login',array('token'=>$token)));exit;
+		}else{
             if ($wxuser = D('Wxuser')->where(array('token' => $staff['token']))->find()) {
                 $uid = $wxuser['uid'];
                 $db = D('Users');
@@ -801,8 +797,8 @@ class UsersAction extends BaseAction {
             session('staff_username', $staff['username']);
             session('first_func', $first_func);
         }
-        $this->success('登录成功', U('User/Function/welcome', array('id' => $wxuser['id'], 'token' => $staff['token'])));
-    }
+		$this->success('登录成功',U('User/Function/welcomedy',array('id'=>$wxuser['id'],'token'=>$staff['token'])));
+	}
 
     //退出
     public function staff_logout() {

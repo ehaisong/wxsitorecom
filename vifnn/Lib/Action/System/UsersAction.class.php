@@ -27,6 +27,96 @@ class UsersAction extends BackAction{
 		$this->assign('group',$g);
 		$this->display();
 	}
+
+	//获取代理商列表
+	public function assignAgent()
+	{
+		if(IS_GET)
+		{
+			$agentModel=M('Agent');
+			$where=array();
+			$keyword=$this->_get('keyword');
+			if($keyword!='')
+			{
+				$where['_string']='id=\''.$keyword.'\' OR name LIKE \'%'.$keyword.'%\'';
+			}
+			$count= $agentModel->where($where)->count();
+			$Page= new Page($count,15);
+			$show= $Page->show();
+			$list=$agentModel->where($where)->order('time desc')->field('id,name,siteurl')->limit($Page->firstRow.','.$Page->listRows)->select();
+			$this->assign('_list',$list);
+			$this->assign('page',$show);
+			$this->display();
+		}
+		elseif(IS_POST)
+		{
+			$aid=$this->_post('aid');
+			$uid=$this->_post('uid');
+			$agentModel=M('Agent');
+			$info=$agentModel->where(array('id'=>$aid))->field('id,name,is_package,reggid')->find();
+			if(empty($info))
+				$this->error('代理商不存在');
+			$data['agentid']=$aid;
+			if($info['is_package']=='1')
+			{
+				$data['gid']=$info['reggid'];
+			}
+			$num=M('Users')->where(array('id'=>$uid))->save($data);
+			if($num){
+				$num=M('wxuser')->where(array('uid'=>$uid))->save(array('agentid'=>$aid));
+				$this->success('分配给代理商成功');
+			}else{
+				$this->error('分配给代理商失败');
+			}
+			
+		}
+	}
+
+	public function assignGroup()
+	{
+		if(IS_GET)
+		{
+			$id=$this->_get('id');
+			if(empty($id))
+				$this->error('代理商不存在');
+			$agentModel=M('Agent');
+			$userGroup=M('UserGroup');
+			$where=array('id'=>$id);
+			$info=$agentModel->where($where)->field('id,name,is_package')->find();
+			if(empty($info))
+				$this->error('代理商不存在');
+			$agentWhere['agentid']=$info['is_package']=='1'?$info['id']:'0';
+			$count= $userGroup->where($agentWhere)->count();
+			$Page= new Page($count,15);
+			$show= $Page->show();
+			$list=$userGroup->where($agentWhere)->field('id,name')->limit($Page->firstRow.','.$Page->listRows)->select();
+			$this->assign('_list',$list);
+			$this->assign('_info',$info);
+			$this->assign('page',$show);
+			$this->display();
+		}
+		elseif(IS_POST)
+		{
+			$aid=$this->_post('aid');
+			$uid=$this->_post('uid');
+			$gid=$this->_post('gid');
+			$agentModel=M('Agent');
+			$userGroup=M('UserGroup');
+			$info=$agentModel->where(array('id'=>$aid))->field('id,name,is_package')->find();
+			if(empty($info))
+				$this->error('代理商不存在');
+			$groupRes=$userGroup->where(array('agentid'=>$info['is_package']=='1'?$info['id']:'0','id'=>$gid))->count();
+			if(!$groupRes)
+				$this->error('代理商用户分组不存在');
+			$num=M('Users')->where(array('id'=>$uid))->save(array('agentid'=>$aid,'gid'=>$gid));
+			if($num){
+				$num=M('wxuser')->where(array('uid'=>$uid))->save(array('agentid'=>$aid));
+				$this->success('分配给代理商成功');
+			}else{
+				$this->error('分配给代理商失败');
+			}
+		}
+	}
 	
 	// 添加用户
     public function add(){
@@ -132,7 +222,8 @@ class UsersAction extends BackAction{
 				if (intval($users['agentid'])){
 					unset($_POST['gid']);
 				}
-				if ('admin' == $_POST['username']) {
+				$is_syn = M('Users')->where(array('id'=>$_POST['id']))->getField('is_syn');
+				if ('admin' == $_POST['username'] || $is_syn) {
 					unset($_POST['username']);
 					unset($_POST['password']);
 					unset($_POST['repassword']);
@@ -154,6 +245,7 @@ class UsersAction extends BackAction{
 							}
 						}
 					}
+					S('checkVipTime_'.$_POST['id'], null);
                     $this->success('编辑成功！',U('Users/index'));
                 }else{
                      $this->error('编辑失败!');
@@ -208,6 +300,11 @@ class UsersAction extends BackAction{
         $thisUser=$UserDB->where(array('id'=>$id))->find();
         $where['uid']=$id;
         $wxUserCount=M('wxuser')->where($where)->count();
+        $is_syn = M('Users')->where(array('id'=>$id))->getField('is_syn');
+        if ($is_syn) {
+            $this->error('不允许删除对接的用户');
+            exit();
+        }
         if($UserDB->delete($id)){
         	//
         	if ($thisUser['agentid']){

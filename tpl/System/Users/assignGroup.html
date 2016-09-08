@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>分配给代理商</title>
+	<style type="text/css">
+		body
+		{
+			padding: 10px;
+			margin: 0px;
+			font-size: 14px;
+		}
+		a
+		{
+			color: #0a6aa1;
+			text-decoration: none;
+			font-size: 14px;
+		}
+		.tab_list
+		{
+			border-collapse: collapse;
+			border-spacing: 0;
+			border: solid 1px #dcdcdc;
+			border-top:none;
+			border-left: none;
+			width: 100%;
+		}
+		.tab_list td
+		{
+			padding: 0px 5px;
+			line-height: 30px;
+			border: solid 1px #dcdcdc;
+			border-bottom:none;
+			border-right: none;
+		}
+		.tab_list thead td
+		{
+			background-color: #f5f5f5;
+		}
+		.pageshow
+		{
+			margin-top: 10px;
+		}
+		.top
+		{
+			margin-bottom: 10px;
+		}
+		.search_text
+		{
+			border: solid 1px #dcdcdc;
+			background: #fff;
+			padding: 0px 5px ;
+			height: 30px;
+			line-height: 30px;
+			border-radius: 5px;
+			width: 150px;
+		}
+		.search_btn
+		{
+			display: inline-block;
+			height: 30px;
+			line-height: 30px;
+			width: 70px;
+			text-align: center;
+			background-color: #F5F5F5;
+			color: #555;
+			border: solid 1px #dcdcdc;
+			border-radius: 5px;
+			margin: 0px;
+			margin-left: 5px;
+		}
+	</style>
+	<script src="{vifnn::STATICS}/jquery.min.js" type="text/javascript"></script>
+	<script src="{vifnn::STATICS}/layer/layer.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="top">
+	请选择代理商：{vifnn:$_info.name}下面的用户分组：
+	<a style="float: right;display: inline-block;" href="javascript:history.back();">返回</a>
+</div>
+<table class="tab_list">
+	<thead>
+	<tr>
+		<td>ID</td>
+		<td>名称</td>
+		<td>操作</td>
+	</tr>
+	</thead>
+	<tbody>
+	<volist name="_list" id="vo">
+		<tr>
+			<td>{vifnn:$vo.id}</td>
+			<td>{vifnn:$vo.name}</td>
+			<td>
+				<a class="check_btn" href="javascript:;" data-aid="{vifnn:$_info.id}" data-uid="{vifnn::$_GET['uid']}" data-gid="{vifnn:$vo.id}">分配</a>
+			</td>
+		</tr>
+	</volist>
+	</tbody>
+</table>
+
+<div class="pageshow">{vifnn:$page}</div>
+
+<script>
+	$('.check_btn').click(function()
+	{
+		var aid=$(this).attr('data-aid');
+		var uid=$(this).attr('data-uid');
+		var gid=$(this).attr('data-gid');
+		$.post("{vifnn::U('assignGroup')}",{aid:aid,uid:uid,gid:gid},function(result)
+		{
+			try
+			{
+				result=JSON.parse(result);
+			}
+			catch (e)
+			{
+				result =false;
+			}
+			if(result&&result['status']=='1')
+			{
+				layer.msg('分配给代理商:{vifnn:$_info.name}成功！',{time:2000},function () {
+					if(typeof parent!='undefined')
+					{
+						parent.location.reload();
+					}
+				});
+			}
+			else
+			{
+				layer.msg('分配给代理商:{vifnn:$_info.name}失败！',{time:2000});
+			}
+		});
+	});
+</script>
+
+</body>
+</html>
