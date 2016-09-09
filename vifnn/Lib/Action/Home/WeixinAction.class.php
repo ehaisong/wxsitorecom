@@ -171,12 +171,12 @@ class WeixinAction extends Action
 	private function reply($data)
 	{
 		// 回复插件拦截代码开始
-		import("@.Model.ResponsePlugin.ResponsePluginModel");
-		$model = new ResponsePluginModel($this->wxuser, $this->data);
-		$rs = $model->run();
-		if (!empty($rs)) {
-			return $rs;
-		}
+		// import("@.Model.ResponsePlugin.ResponsePluginModel");
+		// $model = new ResponsePluginModel($this->wxuser, $this->data);
+		// $rs = $model->run();
+		// if (!empty($rs)) {
+		// 	return $rs;
+		// }
 		// 回复插件拦截代码结束
 
 		$userinfoData = M('Userinfo')->where(array('token' => $this->token, 'wecha_id' => $this->data['FromUserName']))->find();

@@ -28,12 +28,12 @@ class SCANEventReply
 	public function index()
 	{
 		// 回复插件拦截代码开始
-		import("@.Model.ResponsePlugin.ResponsePluginModel");
-		$model = new ResponsePluginModel($this->thisWxUser, $this->data);
-		$rs = $model->run();
-		if (!empty($rs)) {
-			return $rs;
-		}
+		// import("@.Model.ResponsePlugin.ResponsePluginModel");
+		// $model = new ResponsePluginModel($this->thisWxUser, $this->data);
+		// $rs = $model->run();
+		// if (!empty($rs)) {
+		// 	return $rs;
+		// }
 		// 回复插件拦截代码结束
 
 		$id = $this->id;
