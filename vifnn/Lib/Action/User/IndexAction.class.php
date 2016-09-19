@@ -134,7 +134,7 @@ class IndexAction extends UserAction{
 	}
 
 	public function createError() {
-		$this->error('您的VIP等级所能创建的公众号数量已经到达上线，请购买后再创建',U('User/Index/info'));exit();
+		$this->error('您的VIP等级所能创建的公众号数量已经到达上线，请购买后再创建',U('User/Index/index'));exit();
 	}
 
 	public function closeAD(){
@@ -650,7 +650,7 @@ public function frame(){
 		if($users['wechat_card_num']<$data['wechat_card_num']){
 
 		}else{
-			$this->error('您的VIP等级所能创建的公众号数量已经到达上线，请购买后再创建',U('User/Index/info'));exit();
+			$this->error('您的VIP等级所能创建的公众号数量已经到达上线，请购买后再创建',U('User/Index/index'));exit();
 		}
 		//$this->alli_nsert('Wxuser');
 		//
@@ -716,9 +716,9 @@ public function frame(){
 					D('Cmscashierkey')->CashierSynByToken($Dockingdatas,1);
 				}
 
-				$this->success('操作成功',U('Index/info'));
+				$this->success('操作成功',U('Index/index'));
 			}else{
-				$this->error('操作失败',U('Index/info'));
+				$this->error('操作失败',U('Index/index'));
 			}
 		}
 
@@ -755,9 +755,9 @@ public function frame(){
 			$data['password']=md5($pwd);
 			$data['id']=$_SESSION['uid'];
 			if(M('Users')->save($data)){
-				$this->success('密码修改成功！',U('Index/info'));
+				$this->success('密码修改成功！',U('Index/index'));
 			}else{
-				$this->error('密码修改失败！',U('Index/info'));
+				$this->error('密码修改失败！',U('Index/index'));
 			}
 		}else{
 			$this->error('密码不能为空!',U('Index/useredit'));
@@ -986,13 +986,13 @@ public function frame(){
 				}
 			}else {
 				if ($status) {
-					$this->success('公众号授权成功', U('Index/info'));
+					$this->success('公众号授权成功', U('Index/index'));
 				} else {
-					$this->error('公众号授权失败', U('Index/info'));
+					$this->error('公众号授权失败', U('Index/index'));
 				}
 			}
 		}else{
-			$this->error('授权错误',U('Index/info'));
+			$this->error('授权错误',U('Index/index'));
 		}
 	}
 
@@ -1045,7 +1045,7 @@ public function frame(){
 		}
 
 		if($users['wechat_card_num']>=$data['wechat_card_num']){
-			$this->error('您的VIP等级所能创建的公众号数量已经到达上线，请购买后再创建',U('User/Index/info'));exit();
+			$this->error('您的VIP等级所能创建的公众号数量已经到达上线，请购买后再创建',U('User/Index/index'));exit();
 		}
 
 		$db=D('Wxuser');
